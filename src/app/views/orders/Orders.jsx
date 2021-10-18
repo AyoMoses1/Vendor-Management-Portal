@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import { Breadcrumb } from 'matx'
 import MUIDataTable from 'mui-datatables'
+import { useDialog } from 'muibox'
+
 import { Grow, Icon, IconButton, TextField, Button } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 import http from '../../services/api'
+import './order-view.css'
+import { deleteInvoice } from './OrderService'
 
-const Orders = () => {
+const Orders = (props) => {
   const [isAlive, setIsAlive] = useState(true)
   const [orders, setOrders] = useState([])
+  const dialog = useDialog()
 
   useEffect(() => {
     http.get(`/afrimash/orders/`).then((response) => {
@@ -25,12 +30,20 @@ const Orders = () => {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
           let order = orders[dataIndex]
-          console.log(typeof order)
           return (
             <div className='flex items-center'>
-              <div className='ml-3'>
+              <Link
+                to={{
+                  pathname: '/order/details',
+                  state: {
+                    id: order.id,
+                    order,
+                  },
+                }}
+                className='ml-3'
+              >
                 <span className='my-0 text-15'>{order?.referenceNo}</span>
-              </div>
+              </Link>
             </div>
           )
         },
@@ -64,13 +77,22 @@ const Orders = () => {
         customBodyRenderLite: (dataIndex) => {
           let order = orders[dataIndex]
           return (
-            <div className='flex items-center'>
-              <div className='ml-3'>
+            <div className={`flex items-center ${order.status}`}>
+              <Link
+                to={{
+                  pathname: '/order/details',
+                  state: {
+                    id: order.id,
+                    order,
+                  },
+                }}
+                className='ml-3'
+              >
                 <span className='my-0 text-15'>
                   {' '}
                   {`${order.status}` || '-----'}
                 </span>
-              </div>
+              </Link>
             </div>
           )
         },
@@ -85,11 +107,20 @@ const Orders = () => {
           let order = orders[dataIndex]
           return (
             <div className='flex items-center'>
-              <div className='ml-3'>
+              <Link
+                to={{
+                  pathname: '/order/details',
+                  state: {
+                    id: order.id,
+                    order,
+                  },
+                }}
+                className='ml-3'
+              >
                 <span className='my-0'>
                   {order?.deliveryAddress?.address || '-----'}
                 </span>
-              </div>
+              </Link>
             </div>
           )
         },
@@ -104,9 +135,18 @@ const Orders = () => {
           let order = orders[dataIndex]
           return (
             <div className='flex items-center'>
-              <div className='ml-3'>
+              <Link
+                to={{
+                  pathname: '/order/details',
+                  state: {
+                    id: order.id,
+                    order,
+                  },
+                }}
+                className='ml-3'
+              >
                 <span className='my-0'>₦{order?.totalPrice}</span>
-              </div>
+              </Link>
             </div>
           )
         },
@@ -121,33 +161,23 @@ const Orders = () => {
           let order = orders[dataIndex]
           return (
             <div className='flex items-center'>
-              <div className='ml-3'>
+              <Link
+                to={{
+                  pathname: '/order/details',
+                  state: {
+                    id: order.id,
+                    order,
+                  },
+                }}
+                className='ml-3'
+              >
                 <span className='my-0 text-15'>{order?.createDate}</span>
-              </div>
+              </Link>
             </div>
           )
         },
       },
     },
-    // {
-    //   name: "seller",
-    //   label: "Seller",
-    //   options: {
-    //     filter: true,
-    //     customBodyRenderLite: (dataIndex) => {
-    //       let order = orders[dataIndex];
-    //       return (
-    //         <div className="flex items-center">
-    //           <div className="ml-3">
-    //             <span className="my-0 text-15">
-    //               {order.storeId.sellerId.name || "-----"}
-    //             </span>
-    //           </div>
-    //         </div>
-    //       );
-    //     },
-    //   },
-    // },
     {
       name: 'action',
       label: ' ',
@@ -189,16 +219,17 @@ const Orders = () => {
             data={orders}
             columns={columns}
             options={{
+              onRowsDelete: (data) =>
+                dialog
+                  .confirm('Are you sure you want to delete?')
+                  .then((value) => deleteInvoice(data.data))
+                  .catch(() => {
+                    return false
+                  }),
               filterType: 'textField',
               responsive: 'standard',
-              //   selectableRows: "none", // set checkbox for each row
-              //   search: false, // set search option
-              //   filter: false, // set data filter option
-              //   download: false, // set download option
-              //   print: false, // set print option
-              //   pagination: true, //set pagination option
-              //   viewColumns: false, // set column option
-              elevation: 0,
+              fixedHeader: true,
+              elevation: 5,
               rowsPerPageOptions: [10, 20, 40, 80, 100],
               customSearchRender: (
                 searchText,
@@ -253,5 +284,4 @@ const Orders = () => {
     </div>
   )
 }
-
 export default Orders

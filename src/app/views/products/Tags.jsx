@@ -1,87 +1,83 @@
-import React, { useState, useEffect } from "react";
-import { Breadcrumb } from "matx";
-import MUIDataTable from "mui-datatables";
-import { Grow, Icon, IconButton, TextField, Button } from "@material-ui/core";
-import { Link } from "react-router-dom";
-import http from "../../services/api";
-import CreateNew from "./CreateNew";
-import { makeStyles } from '@material-ui/core/styles';
+import React, { useState, useEffect } from 'react'
+import { Breadcrumb } from 'matx'
+import MUIDataTable from 'mui-datatables'
+import { Grow, Icon, IconButton, TextField, Button } from '@material-ui/core'
+import http from '../../services/api'
+import CreateNew from './CreateNew'
+import { valuesIn } from 'lodash'
+import { useDialog } from 'muibox'
 
-
-const fields = ["name", "description"];
+const fields = ['name', 'description']
 
 const Tags = () => {
-  const [isAlive, setIsAlive] = useState(true);
-  const [tags, setTags] = useState([]);
-  const [open, setOpen] = useState(false);
+  const [isAlive, setIsAlive] = useState(true)
+  const [tags, setTags] = useState([])
+  const [open, setOpen] = useState(false)
+  const dialog = useDialog()
 
   useEffect(() => {
     http.get(`/afrimash/tags/`).then((response) => {
-      let { data } = response;
-      if (isAlive) setTags(data.object);
-    });
-    return () => setIsAlive(false);
-  }, [isAlive]);
+      let { data } = response
+      if (isAlive) setTags(data.object)
+    })
+    return () => setIsAlive(false)
+  }, [isAlive])
 
   const handleModal = () => {
-    setOpen(!open);
-  };
+    setOpen(!open)
+  }
 
   const submit = (state) => {
-    return http.post("/afrimash/tags", state);
-  };
+    return http.post('/afrimash/tags', state)
+  }
 
   const columns = [
     {
-      name: "name", // field name in the row object
-      label: "Name", // column title that will be shown in table
+      name: 'name', // field name in the row object
+      label: 'Name', // column title that will be shown in table
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
-          let tag = tags[dataIndex];
-
+          let tag = tags[dataIndex]
           return (
-            <div className="flex items-center">
-              <div className="ml-3">
-                <h5 className="my-0 text-15">{`${tag?.name}`}</h5>
+            <div className='flex items-center'>
+              <div className='ml-3'>
+                <h5 className='my-0 text-15'>{`${tag?.name}`}</h5>
               </div>
             </div>
-          );
+          )
         },
       },
     },
     {
-        name: "description",
-        label: "Description",
-        options: {
-          filter: true,
-          customBodyRenderLite: (dataIndex) => {
-            let tag = tags[dataIndex];
-            return (
-              <div className="flex items-center">
-                <div className="ml-3">
-                  <h5 className="my-0 text-15">
-                    {" "}
-                    {tag.description || "-----"}
-                  </h5>
-                </div>
+      name: 'description',
+      label: 'Description',
+      options: {
+        filter: true,
+        customBodyRenderLite: (dataIndex) => {
+          let tag = tags[dataIndex]
+          return (
+            <div className='flex items-center'>
+              <div className='ml-3'>
+                <h5 className='my-0 text-15'> {tag.description || '-----'}</h5>
               </div>
-            );
-          },
+            </div>
+          )
         },
       },
+    },
     {
-      name: "action",
-      label: "Actions ",
+      name: 'action',
+      label: 'Actions ',
       options: {
         filter: false,
         customBodyRenderLite: (dataIndex) => {
           return (
-            <div className="flex items-center">
-              <div className="flex-grow">
-              <IconButton>
-                <Icon>delete</Icon>
-              </IconButton>
+            <div className='flex items-center'>
+              <div className='flex-grow'>
+                <IconButton>
+                  <Icon>delete</Icon>
+                </IconButton>
               </div>
               {/* <IconButton
                 variant="contained"
@@ -92,29 +88,34 @@ const Tags = () => {
               >
                 <Icon>edit</Icon>
               </IconButton> */}
-
-              
             </div>
-          );
+          )
         },
       },
     },
-  ];
+  ]
 
   return (
-    <div className="m-sm-30">
-      <div className="mb-sm-30">
-        <Breadcrumb routeSegments={[{ name: "Tags", path: "/tags" }]} />
+    <div className='m-sm-30'>
+      <div className='mb-sm-30'>
+        <Breadcrumb routeSegments={[{ name: 'Tags', path: '/tags' }]} />
       </div>
-      <div className="overflow-auto">
-        <div className="min-w-750">
+      <div className='overflow-auto'>
+        <div className='min-w-750'>
           <MUIDataTable
-            title={"Tags"}
+            title={'Tags'}
             data={tags}
             columns={columns}
             options={{
-              filterType: "textField",
-              responsive: "standard",
+              onRowsDelete: (data) =>
+                dialog
+                  .confirm('Are you sure you want to delete?')
+                  .then((value) => value)
+                  .catch(() => {
+                    return false
+                  }),
+              filterType: 'textField',
+              responsive: 'standard',
               //   selectableRows: "none", // set checkbox for each row
               //   search: false, // set search option
               //   filter: false, // set data filter option
@@ -133,8 +134,8 @@ const Tags = () => {
                 return (
                   <Grow appear in={true} timeout={300}>
                     <TextField
-                      variant="outlined"
-                      size="small"
+                      variant='outlined'
+                      size='small'
                       fullWidth
                       onChange={({ target: { value } }) => handleSearch(value)}
                       InputProps={{
@@ -142,29 +143,29 @@ const Tags = () => {
                           paddingRight: 0,
                         },
                         startAdornment: (
-                          <Icon className="mr-2" fontSize="small">
+                          <Icon className='mr-2' fontSize='small'>
                             search
                           </Icon>
                         ),
                         endAdornment: (
                           <IconButton onClick={hideSearch}>
-                            <Icon fontSize="small">clear</Icon>
+                            <Icon fontSize='small'>clear</Icon>
                           </IconButton>
                         ),
                       }}
                     />
                   </Grow>
-                );
+                )
               },
               customToolbar: () => {
                 return (
                   <>
                     <IconButton>
                       <Button
-                        variant="contained"
-                        color="primary"
+                        variant='contained'
+                        color='primary'
                         onClick={() => {
-                          handleModal();
+                          handleModal()
                         }}
                       >
                         <Icon>add</Icon>Add New
@@ -174,19 +175,19 @@ const Tags = () => {
                       states={tags}
                       isOpen={open}
                       handleClose={handleModal}
-                      name="Create Tag"
+                      name='Create Tag'
                       fields={fields}
                       onSubmit={submit}
                     />
                   </>
-                );
+                )
               },
             }}
           />
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Tags;
+export default Tags

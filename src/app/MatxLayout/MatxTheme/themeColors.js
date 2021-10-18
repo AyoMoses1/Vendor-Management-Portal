@@ -58,12 +58,12 @@ export const themeColors = {
     palette: {
       type: "light",
       primary: {
-        main: "#7467ef",
+        main: "#FFAF0F",
         contrastText: "#ffffff"
       },
       secondary: {
-        main: "#ff9e43",
-        contrastText: textLight.primary
+        main: "#204E09",
+        contrastText:' #fff'
       },
       text: textLight
     }

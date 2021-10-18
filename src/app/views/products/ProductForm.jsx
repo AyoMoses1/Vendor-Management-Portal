@@ -1,5 +1,5 @@
-import React, { useState, useEffect, Fragment, useCallback } from "react";
-import axios from "axios";
+import React, { useState, useEffect, useCallback } from 'react'
+import axios from 'axios'
 import {
   TextField,
   Button,
@@ -7,209 +7,183 @@ import {
   Grid,
   Checkbox,
   Icon,
-  Card,
-} from "@material-ui/core";
-import { getProductById, addProduct, updateProduct } from "./ProductService";
-import { useDropzone } from "react-dropzone";
-import clsx from "clsx";
-import { Formik, useFormik } from "formik";
-import * as yup from "yup";
-import { makeStyles } from "@material-ui/core/styles";
-import http from "../../services/api";
-import { useHistory } from "react-router-dom";
-import Notification from "../../components/Notification";
-import CheckBoxOutlineBlankIcon from "@material-ui/icons/CheckBoxOutlineBlank";
-import CheckBoxIcon from "@material-ui/icons/CheckBox";
-import Autocomplete from "@material-ui/lab/Autocomplete";
+} from '@material-ui/core'
+import { getProductById, createProduct } from './ProductService'
+import { useDropzone } from 'react-dropzone'
+import clsx from 'clsx'
+import { Formik } from 'formik'
+import * as yup from 'yup'
+import { makeStyles } from '@material-ui/core/styles'
+import http from '../../services/api'
+import { useHistory } from 'react-router-dom'
+import Notification from '../../components/Notification'
+import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank'
+import CheckBoxIcon from '@material-ui/icons/CheckBox'
+import Autocomplete from '@material-ui/lab/Autocomplete'
 
-const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-const checkedIcon = <CheckBoxIcon fontSize="small" />;
+const icon = <CheckBoxOutlineBlankIcon fontSize='small' />
+const checkedIcon = <CheckBoxIcon fontSize='small' />
 
 const usestyles = makeStyles(({ palette, ...theme }) => ({
   dropZone: {
-    transition: "all 350ms ease-in-out",
-    border: "2px dashed rgba(var(--body),0.3)",
-    "&:hover": {
-      background: "rgba(var(--body), 0.2) !important",
+    border: '2px dashed rgba(var(--body),0.3)',
+    '&:hover': {
+      background: 'rgba(var(--body), 0.2) !important',
     },
-    borderRadius: " 4px !important",
-    borderStyle: "dashed",
-    borderColor: "#DCDCDC",
-    height: "190px",
-    overflow: " hidden",
-    marginBottom: "1rem !important",
-    alignItems: "center",
-    width: "100%",
-    justifyContent: "center",
-    color: "rgba(52, 49, 76, 1)",
-    transition: "box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
-    backgroundColor: "#fff",
-    display: "flex",
-    boxSizing: "inherit",
-    marginTop: "2px",
+    borderRadius: ' 4px !important',
+    borderStyle: 'dashed',
+    borderColor: '#DCDCDC',
+    height: '190px',
+    overflow: ' hidden',
+    marginBottom: '1rem !important',
+    alignItems: 'center',
+    width: '100%',
+    justifyContent: 'center',
+    color: 'rgba(52, 49, 76, 1)',
+    transition: 'box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+    backgroundColor: '#fff',
+    display: 'flex',
+    boxSizing: 'inherit',
+    marginTop: '2px',
   },
-}));
+}))
 
-const productTypes = ["EXTERNAL", "GROUPED", "SIMPLE", "VARIANT"];
+const productTypes = ['EXTERNAL', 'GROUPED', 'SIMPLE', 'VARIANT']
 
 function NewProduct({ isNewProduct, id, Product }) {
   const initialState = {
     tags: [],
     productCategories: [],
-    brandId: "",
-    storeId: "",
-  };
+    brandId: '',
+    storeId: '',
+  }
   const initialValues = {
-    productType: "",
-    discountRate: "",
-    price: "",
-    sku: "",
-    name: "",
-    description: "",
-  };
+    productType: '',
+    discountRate: '',
+    price: '',
+    sku: '',
+    name: '',
+    description: '',
+  }
 
-  const history = useHistory();
+  const history = useHistory()
 
-  const classes = usestyles();
-  const [state, setState] = useState(initialState);
-  const [values, setValues] = useState(initialValues);
-  const [brands, setBrands] = useState([]);
-  const [tags, setTags] = useState([]);
-  const [stores, setStores] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [imageList, setImageList] = useState([]);
-  const [alert, setAlert] = useState("");
-  const [severity, setSeverity] = useState("");
-  const [product, setProduct] = useState(Product);
+  const classes = usestyles()
+  const [state, setState] = useState(initialState)
+  const [values, setValues] = useState(initialValues)
+  const [brands, setBrands] = useState([])
+  const [tags, setTags] = useState([])
+  const [stores, setStores] = useState([])
+  const [categories, setCategories] = useState([])
+  const [imageList, setImageList] = useState([])
+  const [alert, setAlert] = useState('')
+  const [severity, setSeverity] = useState('')
+  // const [product, setProduct] = useState(Product);
 
-  const onDrop = useCallback((acceptedFiles) => {
-    console.log(acceptedFiles);
-  }, []);
+  const onDrop = useCallback((acceptedFiles) => {}, [])
 
   const {
     getRootProps,
     getInputProps,
     isDragActive,
     acceptedFiles,
-  } = useDropzone({ accept: "image/*", onDrop });
+  } = useDropzone({ accept: 'image/*', onDrop })
 
-  const formik = useFormik({
-    handleChange: (values) => {},
-  });
+  // const formik = useFormik({
+  //   handleChange: (values) => {},
+  // });
 
   useEffect(() => {
-    getBrands();
-    getTags();
-    getStores();
-    getCategories();
-    setImageList(acceptedFiles);
+    getBrands()
+    getTags()
+    getStores()
+    getCategories()
+    setImageList(acceptedFiles)
     if (!isNewProduct) {
       getProductById(id).then(({ data }) => {
-        console.log(data.object);
-        setState(data.object);
-        console.log(state);
-        setValues(data.object);
-        console.log(values)
-      });
+        setState(data.object)
+        setValues(data.object)
+      })
     }
-  }, [acceptedFiles]);
+  }, [acceptedFiles, id, isNewProduct])
 
   const handleSelect = (newValue, fieldName) => {
-    const { id } = newValue;
-    setState({ ...state, [fieldName]: id });
-    console.log(state);
-  };
+    const { id } = newValue
+    setState({ ...state, [fieldName]: id })
+    console.log(state)
+  }
 
   const getBrands = () => {
     http
       .get(`/afrimash/brands/`)
       .then((response) => {
-        let { data } = response;
-        console.log(data);
-        setBrands(data);
-        console.log(brands);
+        let { data } = response
+        setBrands(data)
       })
       .catch((err) => {
-        setAlert("An Error Ocurred, Please Try Again");
-        setSeverity("error");
-      });
-  };
+        setAlert('An Error Ocurred, Please Try Again')
+        setSeverity('error')
+      })
+  }
 
   const getTags = () => {
     http
       .get(`/afrimash/tags/`)
       .then((response) => {
-        setTags(response.data.object);
+        setTags(response.data.object)
       })
       .catch((err) => {
-        setAlert("An Error Ocurred, Please Try Again");
-        setSeverity("error");
-      });
-  };
+        setAlert('An Error Ocurred, Please Try Again')
+        setSeverity('error')
+      })
+  }
 
   const getStores = () => {
     http
       .get(`afrimash/stores?page=1&size=100&search=search`)
       .then((response) => {
-        setStores(response.data.object);
+        setStores(response.data.object)
       })
       .catch((err) => {
-        setAlert("An Error Ocurred, Please Try Again");
-        setSeverity("error");
-      });
-  };
+        setAlert('An Error Ocurred, Please Try Again')
+        setSeverity('error')
+      })
+  }
 
   const getCategories = () => {
     http
       .get(`/afrimash/product-categories/search?`)
       .then((response) => {
-        setCategories(response.data.object);
+        setCategories(response.data.object)
       })
       .catch((err) => {
-        setAlert("An Error Ocurred, Please Try Again");
-        setSeverity("error");
-      });
-  };
+        setAlert('An Error Ocurred, Please Try Again')
+        setSeverity('error')
+      })
+  }
 
-  const onSubmit = (values, { setSubmitting }) => {
-    console.log(values);
-    const payload = { ...state, ...values };
-    console.log(payload);
-    const data = new FormData();
-    const token = localStorage.getItem("jwt_token");
-    //  console.log(state)
+  const handleSubmit = (values, { setSubmitting }) => {
+    const payload = { ...state, ...values }
+    console.log(values)
+    const data = new FormData()
 
-    data.append("product", JSON.stringify(payload));
+    data.append('product', JSON.stringify(payload))
 
     imageList.forEach((file, imageFile) => {
-      console.log(file);
-      data.append("imageFile", file);
-    });
-
-    axios({
-      method: "post",
-      url: "https://api.afrimash.com/afrimash/products",
-      data,
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: "Bearer " + token,
-      },
+      console.log(file)
+      data.append('imageFile', file)
     })
-      .then(function (response) {
-        history.push("/products");
-      })
-      .catch(function (response) {
-        setAlert("An Error Ocurred, Couldn't Create Product");
-        setSeverity("error");
-      });
-  };
+    console.log(data)
+    const res = createProduct(data)
+    console.log(res)
+  }
 
   return (
-    <div className="m-sm-30">
+    <div className='m-sm-30'>
       <Notification alert={alert} severity={severity} />
       <Formik
         initialValues={values}
-        onSubmit={onSubmit}
+        onSubmit={handleSubmit}
         enableReinitialize={true}
         validationSchema={productSchema}
       >
@@ -224,20 +198,20 @@ function NewProduct({ isNewProduct, id, Product }) {
           setSubmitting,
           setFieldValue,
         }) => (
-          <form className="px-4" onSubmit={handleSubmit}>
+          <form className='px-4' onSubmit={handleSubmit}>
             <Grid container spacing={3}>
               <Grid item sm={6} xs={12}>
                 <TextField
-                  className="mb-4"
-                  name="productType"
-                  label="Select Product Type"
-                  variant="outlined"
+                  className='mb-4'
+                  name='productType'
+                  label='Select Product Type'
+                  variant='outlined'
                   fullWidth
                   select
-                  margin="dense"
+                  margin='dense'
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  value={values.productType || ""}
+                  value={values.productType || ''}
                   error={Boolean(touched.productType && errors.productType)}
                   helperText={touched.productType && errors.productType}
                 >
@@ -247,57 +221,54 @@ function NewProduct({ isNewProduct, id, Product }) {
                     </MenuItem>
                   ))}
                 </TextField>
-
                 <TextField
-                  className="mb-4"
-                  name="price"
-                  label="Product Price(₦)"
-                  variant="outlined"
-                  margin="dense"
-                  size="small"
+                  className='mb-4'
+                  name='price'
+                  label='Product Price(₦)'
+                  variant='outlined'
+                  margin='dense'
+                  size='small'
                   fullWidth
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  value={values.price || ""}
+                  value={values.price || ''}
                   error={Boolean(touched.price && errors.price)}
                   helperText={touched.price && errors.price}
                 />
-
                 <TextField
-                  className="mb-4"
-                  name="discountRate"
-                  label="Discount Rate (%)"
-                  variant="outlined"
-                  margin="dense"
-                  size="small"
+                  className='mb-4'
+                  name='discountRate'
+                  label='Discount Rate (%)'
+                  variant='outlined'
+                  margin='dense'
+                  size='small'
                   fullWidth
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  value={values.discountRate || ""}
-                  error={Boolean(touched.discountRate && errors.discountRate)}
+                  value={values.discountRate || ''}
                   helperText={touched.discountRate && errors.discountRate}
                 />
 
                 <div
                   className={clsx({
                     [classes.dropZone]: true,
-                    "bg-light-gray": !isDragActive,
-                    "bg-gray": isDragActive,
+                    'bg-light-gray': !isDragActive,
+                    'bg-gray': isDragActive,
                   })}
                   {...getRootProps()}
                 >
                   <input {...getInputProps()} />
                   <div
-                    className="flex-column items-center"
+                    className='flex-column items-center'
                     style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
                     }}
                   >
                     <Icon
-                      className="text-muted text-48"
-                      style={{ fontSize: "48px" }}
+                      className='text-muted text-48'
+                      style={{ fontSize: '48px' }}
                     >
                       publish
                     </Icon>
@@ -311,76 +282,77 @@ function NewProduct({ isNewProduct, id, Product }) {
               </Grid>
               <Grid item sm={6} xs={12}>
                 <TextField
-                  className="mb-4"
-                  name="name"
-                  label="Product Name"
-                  variant="outlined"
-                  margin="dense"
-                  size="small"
+                  className='mb-4'
+                  name='name'
+                  label='Product Name'
+                  variant='outlined'
+                  margin='dense'
+                  size='small'
                   fullWidth
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  value={values.name || ""}
+                  value={values.name || ''}
                   error={Boolean(touched.name && errors.name)}
                   helperText={touched.name && errors.name}
                 />
                 <TextField
-                  className="mb-4"
-                  name="sku"
-                  label="SKU"
-                  variant="outlined"
-                  margin="dense"
-                  size="small"
+                  className='mb-4'
+                  name='sku'
+                  label='SKU'
+                  variant='outlined'
+                  margin='dense'
+                  size='small'
                   fullWidth
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  value={values.sku || ""}
+                  value={values.sku || ''}
                   error={Boolean(touched.sku && errors.sku)}
                   helperText={touched.sku && errors.sku}
                 />
                 <TextField
-                  className="mb-4"
-                  name="description"
-                  label="Description"
-                  variant="outlined"
-                  size="small"
-                  margin="dense"
+                  className='mb-4'
+                  name='description'
+                  label='Description'
+                  variant='outlined'
+                  size='small'
+                  margin='dense'
                   fullWidth
                   multiline
                   // rows={8}
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  value={values.description || ""}
+                  value={values.description || ''}
                   error={Boolean(touched.description && errors.description)}
                   helperText={touched.description && errors.description}
                 />
 
                 <Autocomplete
-                  id="storeId"
-                  name="storeId"
+                  id='storeId'
+                  name='storeId'
                   options={stores}
                   getOptionLabel={(option) => option.name}
+                  getOptionSelected={(option) => option.name}
                   onChange={(event, newValue) =>
-                    handleSelect(newValue, "storeId")
+                    handleSelect(newValue, 'storeId')
                   }
                   renderInput={(params) => (
                     <TextField
                       {...params}
-                      label="Select Store"
-                      variant="outlined"
-                      margin="dense"
+                      label='Select Store'
+                      variant='outlined'
+                      margin='dense'
                     />
                   )}
                 />
 
                 <Autocomplete
                   multiple
-                  id="tags"
+                  id='tags'
                   options={tags}
                   getOptionLabel={(option) => option.name}
+                  getOptionSelected={(option) => option.name}
                   onChange={(event, newValue) => {
-                    setState({ ...state, tags: newValue });
-                    console.log(state);
+                    setState({ ...state, tags: newValue })
                   }}
                   renderOption={(option, { selected }) => (
                     <React.Fragment>
@@ -396,40 +368,41 @@ function NewProduct({ isNewProduct, id, Product }) {
                   renderInput={(params) => (
                     <TextField
                       {...params}
-                      variant="outlined"
-                      label="Select Tags"
-                      placeholder="Tag"
+                      variant='outlined'
+                      label='Select Tags'
+                      placeholder='Tag'
                       fullWidth
-                      margin="dense"
+                      margin='dense'
                     />
                   )}
                 />
 
                 <Autocomplete
-                  id="brands"
+                  id='brands'
                   options={brands}
-                  getOptionLabel={(option) => option.name || ""}
+                  getOptionLabel={(option) => option.name || ''}
+                  getOptionSelected={(option) => option.name}
                   onChange={(event, newValue) =>
-                    handleSelect(newValue, "brandId")
+                    handleSelect(newValue, 'brandId')
                   }
                   renderInput={(params) => (
                     <TextField
                       {...params}
-                      variant="outlined"
-                      label="Select Brand"
-                      margin="dense"
+                      variant='outlined'
+                      label='Select Brand'
+                      margin='dense'
                     />
                   )}
                 />
                 <Autocomplete
                   multiple
-                  id="categoried"
+                  id='categoried'
                   options={categories}
                   onChange={(event, newValue) => {
-                    setState({ ...state, productCategories: newValue });
-                    console.log(state);
+                    setState({ ...state, productCategories: newValue })
                   }}
                   getOptionLabel={(option) => option.name}
+                  getOptionSelected={(option) => option.name}
                   renderOption={(option, { selected }) => (
                     <React.Fragment>
                       <Checkbox
@@ -444,22 +417,21 @@ function NewProduct({ isNewProduct, id, Product }) {
                   renderInput={(params) => (
                     <TextField
                       {...params}
-                      variant="outlined"
-                      label="Select Categories"
-                      placeholder="Category"
+                      variant='outlined'
+                      label='Select Categories'
+                      placeholder='Category'
                       fullWidth
-                      margin="dense"
+                      margin='dense'
                     />
                   )}
                 />
               </Grid>
             </Grid>
-
             <Button
-              className="mb-4 px-12"
-              variant="contained"
-              color="primary"
-              type="submit"
+              className='mb-4 px-12'
+              variant='contained'
+              color='primary'
+              type='submit'
             >
               Add Product
             </Button>
@@ -467,12 +439,19 @@ function NewProduct({ isNewProduct, id, Product }) {
         )}
       </Formik>
     </div>
-  );
+  )
 }
 
 const productSchema = yup.object().shape({
-  name: yup.string().required("Name is required"),
-  price: yup.number().required("Price is required"),
-});
+  name: yup.string().required('Name is required'),
+  price: yup.number().required('Price is required'),
+  description: yup
+    .string()
+    .min(10)
+    .required('Please enter a description of atleast 10 chars long'),
+  storeId: yup
+    .string()
+    .required('Please enter a valid store ID, this is required for tracking.'),
+})
 
-export default NewProduct;
+export default NewProduct

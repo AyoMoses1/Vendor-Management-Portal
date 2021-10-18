@@ -1,38 +1,39 @@
-import React, { useState, useEffect } from "react";
-import { Breadcrumb } from "matx";
-import MUIDataTable from "mui-datatables";
-import { Grow, Icon, IconButton, TextField, Button } from "@material-ui/core";
-import { Link } from "react-router-dom";
-import http from "../../services/api";
+import React, { useState, useEffect } from 'react'
+import { Breadcrumb } from 'matx'
+import MUIDataTable from 'mui-datatables'
+import { Grow, Icon, IconButton, TextField, Button } from '@material-ui/core'
+import { Link } from 'react-router-dom'
+import http from '../../services/api'
 
 const AbadonedOrders = () => {
-  const [isAlive, setIsAlive] = useState(true);
-  const [orders, setAbadonedOrders] = useState([]);
+  const [isAlive, setIsAlive] = useState(true)
+  const [orders, setAbadonedOrders] = useState([])
 
   useEffect(() => {
-    http.get(`/afrimash/abadoned-orders/`).then((response) => {
-      let { data } = response;
-      if (data) setAbadonedOrders(data.object.content);
-    });
-    return () => setIsAlive(false);
-  }, [isAlive]);
+    http.get(`/afrimash/abandoned-orders/`).then((response) => {
+      let { data } = response
+      console.log(response)
+      if (data) setAbadonedOrders(data.object.content)
+    })
+    return () => setIsAlive(false)
+  }, [isAlive])
 
   const columns = [
     {
-      name: "referenceNo", // field name in the row object
-      label: "Order", // column title that will be shown in table
+      name: 'referenceNo', // field name in the row object
+      label: 'Order', // column title that will be shown in table
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
-          let order = orders[dataIndex];
+          let order = orders[dataIndex]
           console.log(typeof order)
           return (
-            <div className="flex items-center">
-              <div className="ml-3">
-                <span className="my-0 text-15">{order?.referenceNo}</span>
+            <div className='flex items-center'>
+              <div className='ml-3'>
+                <span className='my-0 text-15'>{order?.referenceNo}</span>
               </div>
             </div>
-          );
+          )
         },
       },
     },
@@ -57,72 +58,75 @@ const AbadonedOrders = () => {
     //   },
     // },
     {
-      name: "status",
-      label: "Status",
+      name: 'status',
+      label: 'Status',
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
-          let order = orders[dataIndex];
+          let order = orders[dataIndex]
           return (
-            <div className="flex items-center">
-              <div className="ml-3">
-                <span className="my-0 text-15"> {`${order.status}` || "-----"}</span>
-              </div>
-            </div>
-          );
-        },
-      },
-    },
-    {
-      name: "deliveryAddress",
-      label: "Billing Address",
-      options: {
-        filter: true,
-        customBodyRenderLite: (dataIndex) => {
-          let order = orders[dataIndex];
-          return (
-            <div className="flex items-center">
-              <div className="ml-3">
-              <span className="my-0">{order?.deliveryAddress?.address || "-----" }</span>
-              </div>
-            </div>
-          );
-        },
-      },
-    },
-    {
-      name: "totalPrice",
-      label: "Gross Sales",
-      options: {
-        filter: true,
-        customBodyRenderLite: (dataIndex) => {
-          let order = orders[dataIndex];
-          return (
-            <div className="flex items-center">
-              <div className="ml-3">
-              <span className="my-0">
-                ₦{ order?.totalPrice }
+            <div className='flex items-center'>
+              <div className='ml-3'>
+                <span className='my-0 text-15'>
+                  {' '}
+                  {`${order.status}` || '-----'}
                 </span>
               </div>
             </div>
-          );
+          )
         },
       },
     },
     {
-      name: "createDate",
-      label: "Date",
+      name: 'deliveryAddress',
+      label: 'Billing Address',
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
-          let order = orders[dataIndex];
+          let order = orders[dataIndex]
           return (
-            <div className="flex items-center">
-              <div className="ml-3">
-                <span className="my-0 text-15">{order?.createDate}</span>
+            <div className='flex items-center'>
+              <div className='ml-3'>
+                <span className='my-0'>
+                  {order?.deliveryAddress?.address || '-----'}
+                </span>
               </div>
             </div>
-          );
+          )
+        },
+      },
+    },
+    {
+      name: 'totalPrice',
+      label: 'Gross Sales',
+      options: {
+        filter: true,
+        customBodyRenderLite: (dataIndex) => {
+          let order = orders[dataIndex]
+          return (
+            <div className='flex items-center'>
+              <div className='ml-3'>
+                <span className='my-0'>₦{order?.totalPrice}</span>
+              </div>
+            </div>
+          )
+        },
+      },
+    },
+    {
+      name: 'createDate',
+      label: 'Date',
+      options: {
+        filter: true,
+        customBodyRenderLite: (dataIndex) => {
+          let order = orders[dataIndex]
+          return (
+            <div className='flex items-center'>
+              <div className='ml-3'>
+                <span className='my-0 text-15'>{order?.createDate}</span>
+              </div>
+            </div>
+          )
         },
       },
     },
@@ -146,17 +150,17 @@ const AbadonedOrders = () => {
     //   },
     // },
     {
-      name: "action",
-      label: " ",
+      name: 'action',
+      label: ' ',
       options: {
         filter: false,
         customBodyRenderLite: (dataIndex) => {
-          let order = orders[dataIndex];
+          let order = orders[dataIndex]
           return (
-            <div className="flex items-center">
+            <div className='flex items-center'>
               <Link
                 to={{
-                  pathname: "/order/details",
+                  pathname: '/order/details',
                   state: {
                     id: order.id,
                     order,
@@ -168,31 +172,31 @@ const AbadonedOrders = () => {
                 </IconButton>
               </Link>
             </div>
-          );
+          )
         },
       },
     },
-  ];
+  ]
 
   return (
-    <div className="m-sm-30">
-      <div className="mb-sm-30">
-      <Breadcrumb
+    <div className='m-sm-30'>
+      <div className='mb-sm-30'>
+        <Breadcrumb
           routeSegments={[
-            { name: "Abadoned Orders", path: "/abandoned-orders" },
-            { name: "Abadoned Orders" },
+            { name: 'Abadoned Orders', path: '/abandoned-orders' },
+            { name: 'Abadoned Orders' },
           ]}
         />
       </div>
-      <div className="overflow-auto">
-        <div className="min-w-750">
+      <div className='overflow-auto'>
+        <div className='min-w-750'>
           <MUIDataTable
-            title={"All Abadoned Orders"}
+            title={'All Abadoned Orders'}
             data={orders}
             columns={columns}
             options={{
-              filterType: "textField",
-              responsive: "standard",
+              filterType: 'textField',
+              responsive: 'standard',
               //   selectableRows: "none", // set checkbox for each row
               //   search: false, // set search option
               //   filter: false, // set data filter option
@@ -211,8 +215,8 @@ const AbadonedOrders = () => {
                 return (
                   <Grow appear in={true} timeout={300}>
                     <TextField
-                      variant="outlined"
-                      size="small"
+                      variant='outlined'
+                      size='small'
                       fullWidth
                       onChange={({ target: { value } }) => handleSearch(value)}
                       InputProps={{
@@ -220,40 +224,40 @@ const AbadonedOrders = () => {
                           paddingRight: 0,
                         },
                         startAdornment: (
-                          <Icon className="mr-2" fontSize="small">
+                          <Icon className='mr-2' fontSize='small'>
                             search
                           </Icon>
                         ),
                         endAdornment: (
                           <IconButton onClick={hideSearch}>
-                            <Icon fontSize="small">clear</Icon>
+                            <Icon fontSize='small'>clear</Icon>
                           </IconButton>
                         ),
                       }}
                     />
                   </Grow>
-                );
+                )
               },
               customToolbar: () => {
                 return (
                   <Link
                     to={{
-                      pathname: "/order/new",
+                      pathname: '/order/new',
                       state: {},
                     }}
                   >
-                    <Button variant="contained" color="primary">
+                    <Button variant='contained' color='primary'>
                       <Icon>add</Icon>Add New
                     </Button>
                   </Link>
-                );
+                )
               },
             }}
           />
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default AbadonedOrders;
+export default AbadonedOrders

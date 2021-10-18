@@ -3,7 +3,7 @@ import http from "../../services/api"
 
 export const getInvoiceById = (id) => {
    return http 
-    .get(`/afrimash/orders/${id}`)      
+    .get(`/afrimash/orders/${id}`)
 }
 
 export const getAllInvoice = () => {

@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import {
-  FormControl,
-  InputLabel,
-  Input,
   Card,
   TextField,
   Button,
@@ -20,6 +17,10 @@ import Autocomplete from '@material-ui/lab/Autocomplete'
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank'
 import CheckBoxIcon from '@material-ui/icons/CheckBox'
 import Notification from '../../components/Notification'
+
+import './order-view.css'
+
+import { addInvoice } from './OrderService'
 
 const icon = <CheckBoxOutlineBlankIcon fontSize='small' />
 const checkedIcon = <CheckBoxIcon fontSize='small' />
@@ -77,21 +78,18 @@ function NewOrder() {
     orderItems: [],
     paymentMethod: '',
     shippingMethod: '',
-    paidAmount: '',
-    // deliveryAddress: "",
     appliedCoupons: [],
   }
 
   const history = useHistory()
-
-  const classes = useStyles()
   const [state, setState] = useState(initialState)
   const [customers, setCustomers] = useState([])
   const [products, setProducts] = useState([])
-  const [fields, setFields] = useState([{ productId: '', itemQuantity: '' }])
+  const [fields, setFields] = useState([{ productId: 0, itemQuantity: 0 }])
   const [coupons, setCoupons] = useState([])
   const [alert, setAlert] = useState('')
   const [severity, setSeverity] = useState('')
+  const [isIconTrue, setDisableIcon] = useState(false)
 
   useEffect(() => {
     getCustomers()
@@ -109,7 +107,7 @@ function NewOrder() {
     const values = [...fields]
     const { name, value } = event.target
     values[i][name] = value
-    let totalPrice = values[i][name] * values[i].itemQuantity
+    let totalPrice = values[i].itemPrice * parseInt(values[i].itemQuantity)
     values[i] = { ...values[i], totalPrice }
     setFields(values)
     console.log(fields)
@@ -118,11 +116,11 @@ function NewOrder() {
 
   const handleInputChange = (i, event, newValues) => {
     console.log(newValues)
-    let itemPrice = newValues.price
+    // let itemPrice = newValues.price
     const values = [...fields]
-    const { name, value } = event.target
+
     values[i].productId = newValues.id
-    values[i] = { ...values[i], itemPrice }
+    values[i] = { ...values[i] }
     setFields(values)
     console.log(fields)
     setState({ ...state, orderItems: fields })
@@ -135,9 +133,11 @@ function NewOrder() {
   const handleAddInput = () => {
     const values = [...fields]
     values.push({
-      productId: '',
-      itemQuantity: '',
+      productId: 0,
+      itemQuantity: 0,
     })
+    setDisableIcon(false)
+
     setFields(values)
     console.log(values)
     console.log(fields)
@@ -145,8 +145,13 @@ function NewOrder() {
 
   const handleRemoveInput = (i) => {
     const values = [...fields]
-    console.log(values)
+    console.log(values.length)
     values.splice(i, 1)
+
+    if (values.length === 0) {
+      setDisableIcon(true)
+      return
+    }
     setFields(values)
   }
 
@@ -169,7 +174,7 @@ function NewOrder() {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    http.post('/afrimash/orders', state).then((response) => {
+    addInvoice({ ...state }).then((response) => {
       if (response instanceof Object) {
         if (response.data.status === 'OK') {
           history.push('/orders')
@@ -221,7 +226,7 @@ function NewOrder() {
       <SimpleCard title='Create New Order'>
         <div className='w-100 overflow-auto'>
           <Card>
-            <form className='px-4'>
+            <form className='px-4' onSubmit={handleSubmit}>
               <TextField
                 onChange={handleChange}
                 // value={state.name}
@@ -232,6 +237,7 @@ function NewOrder() {
                 type='text'
                 fullWidth
                 variant='outlined'
+                onBlur={() => console.log('blurred')}
               >
                 {customers.map((customer) => (
                   <MenuItem
@@ -310,7 +316,7 @@ function NewOrder() {
                 <Grid item sm={6} xs={12}>
                   {fields.map((field, idx) => {
                     return (
-                      <div key={`${field}-${idx}`} className='maindiv'>
+                      <div key={`${field}-${idx}`} className='maindiv qty'>
                         <TextField
                           onChange={(e, newValues) => handleChangeInput(idx, e)}
                           value={fields.quantity}
@@ -323,11 +329,18 @@ function NewOrder() {
                           variant='outlined'
                         />
 
-                        <IconButton onClick={() => handleAddInput()}>
+                        <IconButton
+                          className='qty'
+                          onClick={() => handleAddInput()}
+                        >
                           <Icon color='success'>add</Icon>
                         </IconButton>
 
-                        <IconButton onClick={() => handleRemoveInput(idx)}>
+                        <IconButton
+                          disabled={isIconTrue}
+                          className='qty'
+                          onClick={() => handleRemoveInput(idx)}
+                        >
                           <Icon color='success'>remove</Icon>
                         </IconButton>
                       </div>
@@ -399,14 +412,16 @@ function NewOrder() {
                                 /> */}
                 </Grid>
               </Grid>
-              <Button
-                type='submit'
-                variant='contained'
-                color='primary'
-                onClick={handleSubmit}
-              >
-                Create
-              </Button>
+              <div className='d-flex'>
+                <Button
+                  type='submit'
+                  variant='contained'
+                  color='primary'
+                  onClick={handleSubmit}
+                >
+                  Create
+                </Button>
+              </div>
             </form>
           </Card>
         </div>

@@ -1,0 +1,30 @@
+.PENDING {
+  background-color: #fdd37d;
+  padding: 8px;
+  border-radius: 10px;
+  width: fit-content !important;
+  color: rgb(175, 171, 171) !important;
+  font-weight: 400 !important;
+}
+
+.PAID {
+  background-color: #91c053;
+  padding: 8px;
+  border-radius: 10px;
+  color: #fff !important;
+  width: fit-content !important;
+  font-weight: bold !important;
+}
+
+.qty {
+  padding: 7px !important;
+  padding-top: 12px !important ;
+}
+
+.d-flex {
+  margin-top: 30px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

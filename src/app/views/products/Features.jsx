@@ -1,107 +1,108 @@
-import React, { useState, useEffect } from "react";
-import { Breadcrumb } from "matx";
-import MUIDataTable from "mui-datatables";
-import { Grow, Icon, IconButton, TextField, Button } from "@material-ui/core";
-import { Link } from "react-router-dom";
-import http from "../../services/api";
-import CreateNew from "./CreateNew";
-import { makeStyles } from "@material-ui/core/styles";
+import React, { useState, useEffect } from 'react'
+import { Breadcrumb } from 'matx'
+import MUIDataTable from 'mui-datatables'
+import { Grow, Icon, IconButton, TextField, Button } from '@material-ui/core'
+import http from '../../services/api'
+import CreateNew from './CreateNew'
+import { useDialog } from 'muibox'
 
-const fields = ["name", "featureType"];
+const fields = ['name', 'featureType']
 
 const Features = () => {
-  const [isAlive, setIsAlive] = useState(true);
-  const [features, setFeatures] = useState([]);
-  const [open, setOpen] = useState(false);
+  const [isAlive, setIsAlive] = useState(true)
+  const [features, setFeatures] = useState([])
+  const [open, setOpen] = useState(false)
+
+  const dialog = useDialog()
 
   useEffect(() => {
     http.get(`/afrimash/features/`).then((response) => {
-      let { data } = response;
-      if (isAlive) setFeatures(data.object);
-    });
-    return () => setIsAlive(false);
-  }, [isAlive]);
+      let { data } = response
+      if (isAlive) setFeatures(data.object)
+    })
+    return () => setIsAlive(false)
+  }, [isAlive])
 
   const handleModal = () => {
-    setOpen(!open);
-  };
+    setOpen(!open)
+  }
 
   const submit = (state) => {
-    let feature_type = state.featureType;
-    let featureType = feature_type.toUpperCase();
-    let tempState = { ...state, featureType: featureType };
-    return http.post("/afrimash/features", tempState);
-  };
+    let feature_type = state.featureType
+    let featureType = feature_type.toUpperCase()
+    let tempState = { ...state, featureType: featureType }
+    return http.post('/afrimash/features', tempState)
+  }
 
   const columns = [
     {
-      name: "name", // field name in the row object
-      label: "Name", // column title that will be shown in table
+      name: 'name', // field name in the row object
+      label: 'Name', // column title that will be shown in table
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
-          let feature = features[dataIndex];
+          let feature = features[dataIndex]
 
           return (
-            <div className="flex items-center">
-              <div className="ml-3">
-                <h5 className="my-0 text-15">{`${feature?.name}`}</h5>
+            <div className='flex items-center'>
+              <div className='ml-3'>
+                <h5 className='my-0 text-15'>{`${feature?.name}`}</h5>
               </div>
             </div>
-          );
+          )
         },
       },
     },
     {
-      name: "description",
-      label: "Description",
+      name: 'description',
+      label: 'Description',
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
-          let feature = features[dataIndex];
+          let feature = features[dataIndex]
           return (
-            <div className="flex items-center">
-              <div className="ml-3">
-                <h5 className="my-0 text-15">
-                  {" "}
-                  {feature.description || "-----"}
+            <div className='flex items-center'>
+              <div className='ml-3'>
+                <h5 className='my-0 text-15'>
+                  {' '}
+                  {feature.description || '-----'}
                 </h5>
               </div>
             </div>
-          );
+          )
         },
       },
     },
     {
-      name: "featureType",
-      label: "Feature Type",
+      name: 'featureType',
+      label: 'Feature Type',
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
-          let feature = features[dataIndex];
+          let feature = features[dataIndex]
           return (
-            <div className="flex items-center">
-              <div className="ml-3">
-                <h5 className="my-0 text-15">
-                  {" "}
-                  {feature.featureType || "-----"}
+            <div className='flex items-center'>
+              <div className='ml-3'>
+                <h5 className='my-0 text-15'>
+                  {' '}
+                  {feature.featureType || '-----'}
                 </h5>
               </div>
             </div>
-          );
+          )
         },
       },
     },
     {
-      name: "action",
-      label: "Actions ",
+      name: 'action',
+      label: 'Actions ',
       options: {
         filter: false,
         customBodyRenderLite: (dataIndex) => {
-          let feature = features[dataIndex];
+          let feature = features[dataIndex]
           return (
-            <div className="flex items-center">
-              <div className="flex-grow"></div>
+            <div className='flex items-center'>
+              <div className='flex-grow'></div>
               {/* <IconButton
                 variant="contained"
                 color="primary"
@@ -116,26 +117,33 @@ const Features = () => {
                 <Icon>delete</Icon>
               </IconButton>
             </div>
-          );
+          )
         },
       },
     },
-  ];
+  ]
 
   return (
-    <div className="m-sm-30">
-      <div className="mb-sm-30">
-        <Breadcrumb routeSegments={[{ name: "Features", path: "/features" }]} />
+    <div className='m-sm-30'>
+      <div className='mb-sm-30'>
+        <Breadcrumb routeSegments={[{ name: 'Features', path: '/features' }]} />
       </div>
-      <div className="overflow-auto">
-        <div className="min-w-750">
+      <div className='overflow-auto'>
+        <div className='min-w-750'>
           <MUIDataTable
-            title={"Features"}
+            title={'Features'}
             data={features}
             columns={columns}
             options={{
-              filterType: "textField",
-              responsive: "standard",
+              onRowsDelete: (data) =>
+                dialog
+                  .confirm('Are you sure you want to delete?')
+                  .then((value) => value)
+                  .catch(() => {
+                    return false
+                  }),
+              filterType: 'textField',
+              responsive: 'standard',
               //   selectableRows: "none", // set checkbox for each row
               //   search: false, // set search option
               //   filter: false, // set data filter option
@@ -154,8 +162,8 @@ const Features = () => {
                 return (
                   <Grow appear in={true} timeout={300}>
                     <TextField
-                      variant="outlined"
-                      size="small"
+                      variant='outlined'
+                      size='small'
                       fullWidth
                       onChange={({ target: { value } }) => handleSearch(value)}
                       InputProps={{
@@ -163,29 +171,29 @@ const Features = () => {
                           paddingRight: 0,
                         },
                         startAdornment: (
-                          <Icon className="mr-2" fontSize="small">
+                          <Icon className='mr-2' fontSize='small'>
                             search
                           </Icon>
                         ),
                         endAdornment: (
                           <IconButton onClick={hideSearch}>
-                            <Icon fontSize="small">clear</Icon>
+                            <Icon fontSize='small'>clear</Icon>
                           </IconButton>
                         ),
                       }}
                     />
                   </Grow>
-                );
+                )
               },
               customToolbar: () => {
                 return (
                   <>
                     <IconButton>
                       <Button
-                        variant="contained"
-                        color="primary"
+                        variant='contained'
+                        color='primary'
                         onClick={() => {
-                          handleModal();
+                          handleModal()
                         }}
                       >
                         <Icon>add</Icon>Add New
@@ -195,19 +203,19 @@ const Features = () => {
                       states={features}
                       isOpen={open}
                       handleClose={handleModal}
-                      name="Create Feature"
+                      name='Create Feature'
                       fields={fields}
                       onSubmit={submit}
                     />
                   </>
-                );
+                )
               },
             }}
           />
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Features;
+export default Features

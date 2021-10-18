@@ -7,12 +7,6 @@ import {
   Divider,
   RadioGroup,
   Grid,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-  Card,
   TextField,
 } from '@material-ui/core'
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator'
@@ -21,8 +15,8 @@ import {
   KeyboardDatePicker,
 } from '@material-ui/pickers'
 import DateFnsUtils from '@date-io/date-fns'
-import { getInvoiceById, addInvoice, updateInvoice } from './OrderService'
-import { useParams, useHistory } from 'react-router-dom'
+import { getInvoiceById, updateInvoice } from './OrderService'
+import { useHistory } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
 import { useCallback } from 'react'
@@ -127,7 +121,6 @@ const OrderEditor = ({ isNewInvoice, toggleOrderEditor, id }) => {
     if (!isNewInvoice) {
       getInvoiceById(id).then(({ data }) => {
         if (isAlive) setState({ ...data.object })
-        console.log(state)
       })
     } else {
       generateRandomId()
@@ -137,18 +130,14 @@ const OrderEditor = ({ isNewInvoice, toggleOrderEditor, id }) => {
   useEffect(() => {
     return () => setIsAlive(false)
   }, [])
-
-  let subTotalCost = 0
   let {
     referenceNo,
-    buyer,
     customerId,
     deliveryAddress,
     // orderItems,
     status,
     createDate,
     loading,
-    subTotal,
   } = state
 
   return (
@@ -179,7 +168,6 @@ const OrderEditor = ({ isNewInvoice, toggleOrderEditor, id }) => {
               </Button>
             </div>
           </div>
-
           <div
             className={clsx(
               'viewer__order-info px-4 mb-4 flex justify-between',
@@ -290,7 +278,6 @@ const OrderEditor = ({ isNewInvoice, toggleOrderEditor, id }) => {
                   errorMessages={['this field is required']}
                 />
                 <TextValidator
-                  label='Seller Name'
                   type='text'
                   label='Delivery Address'
                   onChange={(event) =>
