@@ -4,10 +4,9 @@ import MUIDataTable from 'mui-datatables'
 import { Grow, Icon, IconButton, TextField, Button } from '@material-ui/core'
 import http from '../../services/api'
 import CreateNew from './CreateNew'
-import { valuesIn } from 'lodash'
 import { useDialog } from 'muibox'
 
-const fields = ['name', 'description']
+const fields = ['name']
 
 const Tags = () => {
   const [isAlive, setIsAlive] = useState(true)
@@ -28,7 +27,8 @@ const Tags = () => {
   }
 
   const submit = (state) => {
-    return http.post('/afrimash/tags', state)
+    const res = http.post('/afrimash/tags', state)
+    return res
   }
 
   const columns = [

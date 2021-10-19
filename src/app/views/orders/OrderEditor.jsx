@@ -141,9 +141,9 @@ const OrderEditor = ({ isNewInvoice, toggleOrderEditor, id }) => {
   } = state
 
   return (
-    <>
+    <ValidatorForm onSubmit={handleSubmit} onError={(errors) => null}>
       <div className={clsx('invoice-viewer py-4', classes.invoiceEditor)}>
-        <ValidatorForm onSubmit={handleSubmit} onError={(errors) => null}>
+        <>
           <div
             className='viewer_actions px-4'
             style={{ display: 'flex', justifyContent: 'flex-end' }}
@@ -292,107 +292,7 @@ const OrderEditor = ({ isNewInvoice, toggleOrderEditor, id }) => {
               </div>
             </Grid>
           </Grid>
-
-          {/* Item list for editing */}
-          {/* <Table className="mb-4">
-            <TableHead>
-              <TableRow className="bg-default">
-                <TableCell className="pl-sm-24">#</TableCell>
-                <TableCell className="px-0">Item Name</TableCell>
-                <TableCell className="px-0">Unit Price</TableCell>
-                <TableCell className="px-0">Unit</TableCell>
-                <TableCell className="px-0">Cost</TableCell>
-                <TableCell className="px-0">Action</TableCell>
-              </TableRow>
-            </TableHead>
-
-            <TableBody>
-              {orderItems.map((item, index) => {
-                subTotalCost += item.itemPrice * item.itemQuantity;
-                return (
-                  <TableRow key={index}>
-                    <TableCell className="pl-sm-24 capitalize" align="left">
-                      {index + 1}
-                    </TableCell>
-
-                    <TableCell className="pl-0 capitalize" align="left">
-                      <TextValidator
-                        label="Item Name"
-                        // onChange={(event) =>
-                        //     handleIvoiceListChange(
-                        //         event,
-                        //         index
-                        //     )
-                        // }
-                        disabled
-                        type="text"
-                        name="name"
-                        fullWidth
-                        value={item ? item.productId.name : null}
-                      />
-                    </TableCell>
-
-                    <TableCell className="pl-0 capitalize" align="left">
-                      <TextValidator
-                        label="Item Price"
-                        // onChange={(event) =>
-                        //     handleIvoiceListChange(
-                        //         event,
-                        //         index
-                        //     )
-                        // }
-                        disabled
-                        type="number"
-                        name="price"
-                        fullWidth
-                        value={item ? item.itemPrice : null}
-                      />
-                    </TableCell>
-
-                    <TableCell className="pl-0 capitalize" align="left">
-                      <TextValidator
-                        label="Item Unit"
-                        onChange={(event) =>
-                          handleIvoiceListChange(event, index)
-                        }
-                        type="number"
-                        name="unit"
-                        fullWidth
-                        value={item ? item.itemQuantity : null}
-      
-                        errorMessages={["this field is required"]}
-                      />
-                    </TableCell>
-
-                    <TableCell className="pl-0 capitalize" align="left">
-                      {item.itemQuantity * item.itemPrice}
-                    </TableCell>
-
-                    <TableCell className="pl-0 capitalize" align="left">
-                      <Button onClick={() => deleteItemFromInvoiceList(index)}>
-                        Delete
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table> */}
-
-          {/* total cost calculation */}
-          {/* <div
-            className="px-4"
-            style={{ display: "flex", justifyContent: "flex-end" }}
-          >
-            <div className="flex">
-              <div className="pr-12">
-                <strong>
-                  <p>Grand Total: {subTotal}</p>
-                </strong>
-              </div>
-            </div>
-          </div> */}
-        </ValidatorForm>
+        </>
       </div>
 
       <Divider />
@@ -424,7 +324,7 @@ const OrderEditor = ({ isNewInvoice, toggleOrderEditor, id }) => {
           />
         </FormControl>
       </div>
-    </>
+    </ValidatorForm>
   )
 }
 

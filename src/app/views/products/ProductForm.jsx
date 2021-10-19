@@ -8,7 +8,7 @@ import {
   Checkbox,
   Icon,
 } from '@material-ui/core'
-import { getProductById, createProduct } from './ProductService'
+import { getProductById, createProduct, updateProduct } from './ProductService'
 import { useDropzone } from 'react-dropzone'
 import clsx from 'clsx'
 import { Formik } from 'formik'
@@ -55,7 +55,6 @@ function NewProduct({ isNewProduct, id, Product }) {
     tags: [],
     productCategories: [],
     brandId: '',
-    storeId: '',
   }
   const initialValues = {
     productType: '',
@@ -164,7 +163,6 @@ function NewProduct({ isNewProduct, id, Product }) {
 
   const handleSubmit = (values, { setSubmitting }) => {
     const payload = { ...state, ...values }
-    console.log(values)
     const data = new FormData()
 
     data.append('product', JSON.stringify(payload))
@@ -173,9 +171,21 @@ function NewProduct({ isNewProduct, id, Product }) {
       console.log(file)
       data.append('imageFile', file)
     })
-    console.log(data)
-    const res = createProduct(data)
-    console.log(res)
+    if (!isNewProduct) {
+      updateProduct(data)
+        .then((res) => {
+          if (res.status === 200) history.push('/products')
+          else return
+        })
+        .catch((err) => console.error(err))
+    }
+
+    createProduct(data)
+      .then((res) => {
+        if (res.status === 200) history.push('/products')
+        else return
+      })
+      .then((err) => console.error(err))
   }
 
   return (
@@ -331,7 +341,7 @@ function NewProduct({ isNewProduct, id, Product }) {
                   name='storeId'
                   options={stores}
                   getOptionLabel={(option) => option.name}
-                  getOptionSelected={(option) => option.name}
+                  getOptionSelected={(option, value) => option.id === value.id}
                   onChange={(event, newValue) =>
                     handleSelect(newValue, 'storeId')
                   }
@@ -350,7 +360,7 @@ function NewProduct({ isNewProduct, id, Product }) {
                   id='tags'
                   options={tags}
                   getOptionLabel={(option) => option.name}
-                  getOptionSelected={(option) => option.name}
+                  getOptionSelected={(option, value) => option.id === value.id}
                   onChange={(event, newValue) => {
                     setState({ ...state, tags: newValue })
                   }}
@@ -381,7 +391,7 @@ function NewProduct({ isNewProduct, id, Product }) {
                   id='brands'
                   options={brands}
                   getOptionLabel={(option) => option.name || ''}
-                  getOptionSelected={(option) => option.name}
+                  getOptionSelected={(option, value) => option.id === value.id}
                   onChange={(event, newValue) =>
                     handleSelect(newValue, 'brandId')
                   }
@@ -402,7 +412,7 @@ function NewProduct({ isNewProduct, id, Product }) {
                     setState({ ...state, productCategories: newValue })
                   }}
                   getOptionLabel={(option) => option.name}
-                  getOptionSelected={(option) => option.name}
+                  getOptionSelected={(option, value) => option.id === value.id}
                   renderOption={(option, { selected }) => (
                     <React.Fragment>
                       <Checkbox
@@ -449,9 +459,6 @@ const productSchema = yup.object().shape({
     .string()
     .min(10)
     .required('Please enter a description of atleast 10 chars long'),
-  storeId: yup
-    .string()
-    .required('Please enter a valid store ID, this is required for tracking.'),
 })
 
 export default NewProduct

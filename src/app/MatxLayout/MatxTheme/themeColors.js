@@ -2,7 +2,8 @@ const textLight = {
   primary: "rgba(74, 70, 109, 0.87)",
   secondary: "rgba(74, 70, 109, 0.54)",
   disabled: "rgba(74, 70, 109, 0.38)",
-  hint: "rgba(74, 70, 109, 0.38)"
+  hint: "rgba(74, 70, 109, 0.38)",
+  extend: "rgb(255, 186, 8)"
 };
 
 export const themeColors = {
@@ -62,8 +63,8 @@ export const themeColors = {
         contrastText: "#ffffff"
       },
       secondary: {
-        main: "#204E09",
-        contrastText:' #fff'
+        main: textLight.extend,
+        contrastText:'#f8f9fa'
       },
       text: textLight
     }
