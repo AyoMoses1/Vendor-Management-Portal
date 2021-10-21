@@ -5,20 +5,18 @@ import { useDialog } from 'muibox'
 
 import { Grow, Icon, IconButton, TextField, Button } from '@material-ui/core'
 import { Link } from 'react-router-dom'
-import http from '../../services/api'
 import './order-view.css'
-import { deleteInvoice } from './OrderService'
+import { deleteInvoice, getAllInvoice } from './OrderService'
+import Loading from 'matx/components/MatxLoadable/Loading'
 
 const Orders = (props) => {
   const [isAlive, setIsAlive] = useState(true)
   const [orders, setOrders] = useState([])
+  const [loading, setLoading] = useState(false)
   const dialog = useDialog()
 
   useEffect(() => {
-    http.get(`/afrimash/orders/`).then((response) => {
-      let { data } = response
-      if (data) setOrders(data.object.content)
-    })
+    getAllInvoice(setOrders, setLoading)
     return () => setIsAlive(false)
   }, [isAlive])
 
@@ -43,6 +41,10 @@ const Orders = (props) => {
                 className='ml-3'
               >
                 <span className='my-0 text-15'>{order?.referenceNo}</span>
+                <br />
+                <small className='text-muted'>
+                  {order?.customerId.firstName}
+                </small>
               </Link>
             </div>
           )
@@ -214,71 +216,77 @@ const Orders = (props) => {
       </div>
       <div className='overflow-auto'>
         <div className='min-w-750'>
-          <MUIDataTable
-            title={'All Orders'}
-            data={orders}
-            columns={columns}
-            options={{
-              onRowsDelete: (data) =>
-                dialog
-                  .confirm('Are you sure you want to delete?')
-                  .then((value) => deleteInvoice(data.data))
-                  .catch(() => {
-                    return false
-                  }),
-              filterType: 'textField',
-              responsive: 'standard',
-              fixedHeader: true,
-              elevation: 5,
-              rowsPerPageOptions: [10, 20, 40, 80, 100],
-              customSearchRender: (
-                searchText,
-                handleSearch,
-                hideSearch,
-                options
-              ) => {
-                return (
-                  <Grow appear in={true} timeout={300}>
-                    <TextField
-                      variant='outlined'
-                      size='small'
-                      fullWidth
-                      onChange={({ target: { value } }) => handleSearch(value)}
-                      InputProps={{
-                        style: {
-                          paddingRight: 0,
-                        },
-                        startAdornment: (
-                          <Icon className='mr-2' fontSize='small'>
-                            search
-                          </Icon>
-                        ),
-                        endAdornment: (
-                          <IconButton onClick={hideSearch}>
-                            <Icon fontSize='small'>clear</Icon>
-                          </IconButton>
-                        ),
+          {loading ? (
+            <Loading />
+          ) : (
+            <MUIDataTable
+              title={'All Orders'}
+              data={orders}
+              columns={columns}
+              options={{
+                onRowsDelete: (data) =>
+                  dialog
+                    .confirm('Are you sure you want to delete?')
+                    .then((value) => deleteInvoice(data.data))
+                    .catch(() => {
+                      return false
+                    }),
+                filterType: 'textField',
+                responsive: 'standard',
+                fixedHeader: true,
+                elevation: 5,
+                rowsPerPageOptions: [10, 20, 40, 80, 100],
+                customSearchRender: (
+                  searchText,
+                  handleSearch,
+                  hideSearch,
+                  options
+                ) => {
+                  return (
+                    <Grow appear in={true} timeout={300}>
+                      <TextField
+                        variant='outlined'
+                        size='small'
+                        fullWidth
+                        onChange={({ target: { value } }) =>
+                          handleSearch(value)
+                        }
+                        InputProps={{
+                          style: {
+                            paddingRight: 0,
+                          },
+                          startAdornment: (
+                            <Icon className='mr-2' fontSize='small'>
+                              search
+                            </Icon>
+                          ),
+                          endAdornment: (
+                            <IconButton onClick={hideSearch}>
+                              <Icon fontSize='small'>clear</Icon>
+                            </IconButton>
+                          ),
+                        }}
+                      />
+                    </Grow>
+                  )
+                },
+                customToolbar: () => {
+                  return (
+                    <Link
+                      to={{
+                        pathname: '/order/new',
+                        state: {},
                       }}
-                    />
-                  </Grow>
-                )
-              },
-              customToolbar: () => {
-                return (
-                  <Link
-                    to={{
-                      pathname: '/order/new',
-                      state: {},
-                    }}
-                  >
-                    <Button variant='contained' color='primary'>
-                      <Icon>add</Icon>Add New
-                    </Button>
-                  </Link>
-                )
-              },
-            }}
-          />
+                    >
+                      <Button variant='contained' color='primary'>
+                        <Icon>add</Icon>Add New
+                      </Button>
+                    </Link>
+                  )
+                },
+              }}
+            />
+          )}
         </div>
       </div>
     </div>

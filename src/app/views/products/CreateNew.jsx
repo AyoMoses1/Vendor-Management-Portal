@@ -85,7 +85,7 @@ function CreateNew({
                   <TextField
                     className='capitalize'
                     onChange={handleChange}
-                    margin='dense'
+                    margin='normal'
                     id={field}
                     name={field}
                     label={field}

@@ -104,7 +104,6 @@ const CategoriesList = () => {
       options: {
         filter: false,
         customBodyRenderLite: (dataIndex) => {
-          let category = categories[dataIndex]
           return (
             <div className='flex items-center'>
               <div className='flex-grow items-center'></div>
@@ -156,13 +155,13 @@ const CategoriesList = () => {
                   }),
               filterType: 'textField',
               responsive: 'standard',
-              //   selectableRows: "none", // set checkbox for each row
-              //   search: false, // set search option
-              //   filter: false, // set data filter option
-              //   download: false, // set download option
-              //   print: false, // set print option
-              //   pagination: true, //set pagination option
-              //   viewColumns: false, // set column option
+              // selectableRows: "none", // set checkbox for each row
+              // search: false, // set search option
+              // filter: false, // set data filter option
+              // download: false, // set download option
+              // print: false, // set print option
+              // pagination: true, //set pagination option
+              // viewColumns: false, // set column option
               elevation: 0,
               rowsPerPageOptions: [10, 20, 40, 80, 100],
               customSearchRender: (

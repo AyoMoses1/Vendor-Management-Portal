@@ -218,7 +218,7 @@ function NewProduct({ isNewProduct, id, Product }) {
                   variant='outlined'
                   fullWidth
                   select
-                  margin='dense'
+                  margin='normal'
                   onBlur={handleBlur}
                   onChange={handleChange}
                   value={values.productType || ''}
@@ -236,8 +236,7 @@ function NewProduct({ isNewProduct, id, Product }) {
                   name='price'
                   label='Product Price(₦)'
                   variant='outlined'
-                  margin='dense'
-                  size='small'
+                  margin='normal'
                   fullWidth
                   onBlur={handleBlur}
                   onChange={handleChange}
@@ -250,8 +249,7 @@ function NewProduct({ isNewProduct, id, Product }) {
                   name='discountRate'
                   label='Discount Rate (%)'
                   variant='outlined'
-                  margin='dense'
-                  size='small'
+                  margin='normal'
                   fullWidth
                   onBlur={handleBlur}
                   onChange={handleChange}
@@ -296,8 +294,7 @@ function NewProduct({ isNewProduct, id, Product }) {
                   name='name'
                   label='Product Name'
                   variant='outlined'
-                  margin='dense'
-                  size='small'
+                  margin='normal'
                   fullWidth
                   onBlur={handleBlur}
                   onChange={handleChange}
@@ -310,8 +307,7 @@ function NewProduct({ isNewProduct, id, Product }) {
                   name='sku'
                   label='SKU'
                   variant='outlined'
-                  margin='dense'
-                  size='small'
+                  margin='normal'
                   fullWidth
                   onBlur={handleBlur}
                   onChange={handleChange}
@@ -324,8 +320,7 @@ function NewProduct({ isNewProduct, id, Product }) {
                   name='description'
                   label='Description'
                   variant='outlined'
-                  size='small'
-                  margin='dense'
+                  margin='normal'
                   fullWidth
                   multiline
                   // rows={8}
@@ -350,7 +345,7 @@ function NewProduct({ isNewProduct, id, Product }) {
                       {...params}
                       label='Select Store'
                       variant='outlined'
-                      margin='dense'
+                      margin='normal'
                     />
                   )}
                 />
@@ -382,7 +377,7 @@ function NewProduct({ isNewProduct, id, Product }) {
                       label='Select Tags'
                       placeholder='Tag'
                       fullWidth
-                      margin='dense'
+                      margin='normal'
                     />
                   )}
                 />
@@ -400,7 +395,7 @@ function NewProduct({ isNewProduct, id, Product }) {
                       {...params}
                       variant='outlined'
                       label='Select Brand'
-                      margin='dense'
+                      margin='normal'
                     />
                   )}
                 />
@@ -431,7 +426,7 @@ function NewProduct({ isNewProduct, id, Product }) {
                       label='Select Categories'
                       placeholder='Category'
                       fullWidth
-                      margin='dense'
+                      margin='normal'
                     />
                   )}
                 />

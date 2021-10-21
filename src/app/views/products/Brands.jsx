@@ -4,18 +4,24 @@ import MUIDataTable from 'mui-datatables'
 import { Grow, Icon, IconButton, TextField, Button } from '@material-ui/core'
 import http from '../../services/api'
 import CreateNew from './CreateNew'
+import Loading from 'matx/components/MatxLoadable/Loading'
 
 const fields = ['name', 'description']
 
 const Brands = () => {
   const [isAlive, setIsAlive] = useState(true)
+  const [loading, setLoading] = React.useState(false)
   const [brands, setBrands] = useState([])
   const [open, setOpen] = useState(false)
 
   useEffect(() => {
     http.get(`/afrimash/brands/`).then((response) => {
+      setLoading(true)
       let { data } = response
-      if (isAlive) setBrands(data)
+      if (data instanceof Object) {
+        setBrands(data)
+        setLoading(false)
+      }
     })
     return () => setIsAlive(false)
   }, [isAlive])
@@ -73,7 +79,6 @@ const Brands = () => {
       options: {
         filter: false,
         customBodyRenderLite: (dataIndex) => {
-          let brand = brands[dataIndex]
           return (
             <div className='flex items-center'>
               <div className='flex-grow'></div>
@@ -104,81 +109,87 @@ const Brands = () => {
       </div>
       <div className='overflow-auto'>
         <div className='min-w-750'>
-          <MUIDataTable
-            title={'All Brands'}
-            data={brands}
-            columns={columns}
-            options={{
-              filterType: 'textField',
-              responsive: 'standard',
-              //   selectableRows: "none", // set checkbox for each row
-              //   search: false, // set search option
-              //   filter: false, // set data filter option
-              //   download: false, // set download option
-              //   print: false, // set print option
-              //   pagination: true, //set pagination option
-              //   viewColumns: false, // set column option
-              elevation: 0,
-              rowsPerPageOptions: [10, 20, 40, 80, 100],
-              customSearchRender: (
-                searchText,
-                handleSearch,
-                hideSearch,
-                options
-              ) => {
-                return (
-                  <Grow appear in={true} timeout={300}>
-                    <TextField
-                      variant='outlined'
-                      size='small'
-                      fullWidth
-                      onChange={({ target: { value } }) => handleSearch(value)}
-                      InputProps={{
-                        style: {
-                          paddingRight: 0,
-                        },
-                        startAdornment: (
-                          <Icon className='mr-2' fontSize='small'>
-                            search
-                          </Icon>
-                        ),
-                        endAdornment: (
-                          <IconButton onClick={hideSearch}>
-                            <Icon fontSize='small'>clear</Icon>
-                          </IconButton>
-                        ),
-                      }}
-                    />
-                  </Grow>
-                )
-              },
-              customToolbar: () => {
-                return (
-                  <>
-                    <IconButton>
-                      <Button
-                        variant='contained'
-                        color='primary'
-                        onClick={() => {
-                          handleModal()
+          {loading ? (
+            <Loading />
+          ) : (
+            <MUIDataTable
+              title={'All Brands'}
+              data={brands}
+              columns={columns}
+              options={{
+                filterType: 'textField',
+                responsive: 'standard',
+                //   selectableRows: "none", // set checkbox for each row
+                //   search: false, // set search option
+                //   filter: false, // set data filter option
+                //   download: false, // set download option
+                //   print: false, // set print option
+                //   pagination: true, //set pagination option
+                //   viewColumns: false, // set column option
+                elevation: 0,
+                rowsPerPageOptions: [10, 20, 40, 80, 100],
+                customSearchRender: (
+                  searchText,
+                  handleSearch,
+                  hideSearch,
+                  options
+                ) => {
+                  return (
+                    <Grow appear in={true} timeout={300}>
+                      <TextField
+                        variant='outlined'
+                        size='small'
+                        fullWidth
+                        onChange={({ target: { value } }) =>
+                          handleSearch(value)
+                        }
+                        InputProps={{
+                          style: {
+                            paddingRight: 0,
+                          },
+                          startAdornment: (
+                            <Icon className='mr-2' fontSize='small'>
+                              search
+                            </Icon>
+                          ),
+                          endAdornment: (
+                            <IconButton onClick={hideSearch}>
+                              <Icon fontSize='small'>clear</Icon>
+                            </IconButton>
+                          ),
                         }}
-                      >
-                        <Icon>add</Icon>Add New
-                      </Button>
-                    </IconButton>
-                    <CreateNew
-                      states={brands}
-                      isOpen={open}
-                      handleClose={handleModal}
-                      name='Create Brand'
-                      fields={fields}
-                      onSubmit={submit}
-                    />
-                  </>
-                )
-              },
-            }}
-          />
+                      />
+                    </Grow>
+                  )
+                },
+                customToolbar: () => {
+                  return (
+                    <>
+                      <IconButton>
+                        <Button
+                          variant='contained'
+                          color='primary'
+                          onClick={() => {
+                            handleModal()
+                          }}
+                        >
+                          <Icon>add</Icon>Add New
+                        </Button>
+                      </IconButton>
+                      <CreateNew
+                        states={brands}
+                        isOpen={open}
+                        handleClose={handleModal}
+                        name='Create Brand'
+                        fields={fields}
+                        onSubmit={submit}
+                      />
+                    </>
+                  )
+                },
+              }}
+            />
+          )}
         </div>
       </div>
     </div>

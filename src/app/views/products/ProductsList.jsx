@@ -5,18 +5,17 @@ import { Grow, Icon, IconButton, TextField, Button } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 import http from '../../services/api'
 import { useDialog } from 'muibox'
-import { deleteProduct } from './ProductService'
+import { deleteProduct, getAllResults } from './ProductService'
+import Loading from 'matx/components/MatxLoadable/Loading'
 
 const Products = () => {
   const [isAlive, setIsAlive] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [products, setProducts] = useState([])
   const dialog = useDialog()
 
   useEffect(() => {
-    http.get(`/afrimash/products/`).then((response) => {
-      let { data } = response
-      if (isAlive) setProducts(data.object)
-    })
+    getAllResults(setProducts, setLoading, '/afrimash/products/')
     return () => setIsAlive(false)
   }, [isAlive])
 
@@ -244,70 +243,76 @@ const Products = () => {
       </div>
       <div className='overflow-auto'>
         <div className='min-w-750'>
-          <MUIDataTable
-            title={'All Products'}
-            data={products}
-            columns={columns}
-            options={{
-              onRowsDelete: (data) =>
-                dialog
-                  .confirm('Are you sure you want to delete?')
-                  .then((value) => deleteProduct(data.data))
-                  .catch(() => {
-                    return false
-                  }),
-              filterType: 'textField',
-              responsive: 'standard',
-              elevation: 0,
-              rowsPerPageOptions: [10, 20, 40, 80, 100],
-              customSearchRender: (
-                searchText,
-                handleSearch,
-                hideSearch,
-                options
-              ) => {
-                return (
-                  <Grow appear in={true} timeout={300}>
-                    <TextField
-                      variant='outlined'
-                      size='small'
-                      fullWidth
-                      onChange={({ target: { value } }) => handleSearch(value)}
-                      InputProps={{
-                        style: {
-                          paddingRight: 0,
-                        },
-                        startAdornment: (
-                          <Icon className='mr-2' fontSize='small'>
-                            search
-                          </Icon>
-                        ),
-                        endAdornment: (
-                          <IconButton onClick={hideSearch}>
-                            <Icon fontSize='small'>clear</Icon>
-                          </IconButton>
-                        ),
+          {loading ? (
+            <Loading />
+          ) : (
+            <MUIDataTable
+              title={'All Products'}
+              data={products}
+              columns={columns}
+              options={{
+                onRowsDelete: (data) =>
+                  dialog
+                    .confirm('Are you sure you want to delete?')
+                    .then((value) => deleteProduct(data.data))
+                    .catch(() => {
+                      return false
+                    }),
+                filterType: 'textField',
+                responsive: 'standard',
+                elevation: 0,
+                rowsPerPageOptions: [10, 20, 40, 80, 100],
+                customSearchRender: (
+                  searchText,
+                  handleSearch,
+                  hideSearch,
+                  options
+                ) => {
+                  return (
+                    <Grow appear in={true} timeout={300}>
+                      <TextField
+                        variant='outlined'
+                        size='small'
+                        fullWidth
+                        onChange={({ target: { value } }) =>
+                          handleSearch(value)
+                        }
+                        InputProps={{
+                          style: {
+                            paddingRight: 0,
+                          },
+                          startAdornment: (
+                            <Icon className='mr-2' fontSize='small'>
+                              search
+                            </Icon>
+                          ),
+                          endAdornment: (
+                            <IconButton onClick={hideSearch}>
+                              <Icon fontSize='small'>clear</Icon>
+                            </IconButton>
+                          ),
+                        }}
+                      />
+                    </Grow>
+                  )
+                },
+                customToolbar: () => {
+                  return (
+                    <Link
+                      to={{
+                        pathname: '/product/new',
+                        state: {},
                       }}
-                    />
-                  </Grow>
-                )
-              },
-              customToolbar: () => {
-                return (
-                  <Link
-                    to={{
-                      pathname: '/product/new',
-                      state: {},
-                    }}
-                  >
-                    <Button variant='contained' color='primary'>
-                      <Icon>add</Icon>Add New
-                    </Button>
-                  </Link>
-                )
-              },
-            }}
-          />
+                    >
+                      <Button variant='contained' color='primary'>
+                        <Icon>add</Icon>Add New
+                      </Button>
+                    </Link>
+                  )
+                },
+              }}
+            />
+          )}
         </div>
       </div>
     </div>

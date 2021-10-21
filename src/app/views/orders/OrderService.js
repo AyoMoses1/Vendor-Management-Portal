@@ -1,4 +1,4 @@
-import axios from 'axios';
+
 import http from "../../services/api"
 
 export const getInvoiceById = (id) => {
@@ -6,8 +6,12 @@ export const getInvoiceById = (id) => {
     .get(`/afrimash/orders/${id}`)
 }
 
-export const getAllInvoice = () => {
-    return http.get('/afrimash/orders/')
+export const getAllInvoice = (getOrders, setLoading) => {
+  setLoading(true)
+  return http.get('/afrimash/orders/').then(({ data }) => {
+    if (data instanceof Object) getOrders(data.object.content)
+    setLoading(false)
+    })
 }
 
 export const deleteInvoice = (order) => {
@@ -18,4 +22,21 @@ export const addInvoice = (order) => {
 }
 export const updateInvoice = (order) => {
     return http.put(`/afrimash/orders/`, order)
+}
+
+export const populate = (setCustomers, setAlert, setSeverity, url, setLoading) => {
+  if(!url) return
+  setLoading(true)
+  http.get(url).then((res) => {
+    if (res instanceof Object) {
+      if (res.data.object) {
+        setLoading(false)
+        setSeverity('success')
+        setCustomers(res.data.object)
+      }
+    }
+  }).catch((err) => {
+    setAlert('Ann error occurred while fetching data', err.message)
+    setSeverity('error')
+  })
 }

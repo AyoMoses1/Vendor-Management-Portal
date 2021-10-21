@@ -1,4 +1,3 @@
-import axios from 'axios';
 import http from "../../services/api"
 
 export const getProductById = (id) => {
@@ -6,8 +5,14 @@ export const getProductById = (id) => {
     .get(`/afrimash/products/${id}`)
 }
 
-export const getAllProduct = () => {
-  return http.get('/afrimash/products/')
+export const getAllResults = (setResults, setLoading, url) => {
+  setLoading(true)
+  return http.get(url).then(({ data }) => {
+    if (data instanceof Object) {
+      setResults(data.object)
+      setLoading(false)
+    }
+  })
 }
 
 export const createProduct = (payload) => {

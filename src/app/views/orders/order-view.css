@@ -19,6 +19,9 @@
 .qty {
   padding: 7px !important;
   padding-top: 12px !important ;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .d-flex {
