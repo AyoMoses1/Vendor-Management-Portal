@@ -6,17 +6,22 @@ import { Link } from 'react-router-dom'
 import http from '../../services/api'
 import { useDialog } from 'muibox'
 
+import Notification from '../../components/Notification'
+import { getAllSeller } from './SellerService'
+import Loading from 'matx/components/MatxLoadable/Loading'
+
 const SellerList = () => {
   const [isAlive, setIsAlive] = useState(true)
   const [userList, setUserList] = useState([])
+  const [loading, setLoading] = useState(false)
+
+  const [severity, setSeverity] = useState('')
+  const [alert, setAlert] = useState('')
 
   const dialog = useDialog()
 
   useEffect(() => {
-    http.get(`/afrimash/sellers/search`).then((response) => {
-      let { data } = response
-      if (isAlive) setUserList(data.object.content)
-    })
+    getAllSeller(setLoading, setUserList, setAlert, setSeverity)
     return () => setIsAlive(false)
   }, [isAlive])
 
@@ -128,92 +133,94 @@ const SellerList = () => {
       },
     },
   ]
-
+  const notification = () => {
+    return <Notification alert={alert} severity={severity && severity} />
+  }
   return (
     <div className='m-sm-30'>
       <div className='mb-sm-30'>
         <Breadcrumb
           routeSegments={[
-            { name: 'Sellers', path: '/vendors' },
-            { name: 'Sellers' },
+            { name: 'Vendors', path: '/vendors' },
+            { name: 'Vendors' },
           ]}
         />
       </div>
+      {severity === 'error' && notification()}
       <div className='overflow-auto'>
         <div className='min-w-750'>
-          <MUIDataTable
-            title={'All Vendors'}
-            data={userList}
-            columns={columns}
-            options={{
-              onRowsDelete: (data) =>
-                dialog
-                  .confirm('Are you sure you want to delete?')
-                  .then((value) => value)
-                  .catch(() => {
-                    return false
-                  }),
-              filterType: 'textField',
-              responsive: 'standard',
-              //   selectableRows: "none", // set checkbox for each row
-              //   search: false, // set search option
-              //   filter: false, // set data filter option
-              //   download: false, // set download option
-              //   print: false, // set print option
-              //   pagination: true, //set pagination option
-              //   viewColumns: false, // set column option
-              elevation: 0,
-              rowsPerPageOptions: [10, 20, 40, 80, 100],
-              customSearchRender: (
-                searchText,
-                handleSearch,
-                hideSearch,
-                options
-              ) => {
-                return (
-                  <Grow appear in={true} timeout={300}>
-                    <TextField
-                      variant='outlined'
-                      size='small'
-                      fullWidth
-                      onChange={({ target: { value } }) => handleSearch(value)}
-                      InputProps={{
-                        style: {
-                          paddingRight: 0,
-                        },
-                        startAdornment: (
-                          <Icon className='mr-2' fontSize='small'>
-                            search
-                          </Icon>
-                        ),
-                        endAdornment: (
-                          <IconButton onClick={hideSearch}>
-                            <Icon fontSize='small'>clear</Icon>
-                          </IconButton>
-                        ),
+          {loading ? (
+            <Loading />
+          ) : (
+            <MUIDataTable
+              title={'All Vendors'}
+              data={userList}
+              columns={columns}
+              options={{
+                onRowsDelete: (data) =>
+                  dialog
+                    .confirm('Are you sure you want to delete?')
+                    .then((value) => value)
+                    .catch(() => {
+                      return false
+                    }),
+                filterType: 'textField',
+                responsive: 'standard',
+                elevation: 0,
+                rowsPerPageOptions: [10, 20, 40, 80, 100],
+                customSearchRender: (
+                  searchText,
+                  handleSearch,
+                  hideSearch,
+                  options
+                ) => {
+                  return (
+                    <Grow appear in={true} timeout={300}>
+                      <TextField
+                        variant='outlined'
+                        size='small'
+                        fullWidth
+                        onChange={({ target: { value } }) =>
+                          handleSearch(value)
+                        }
+                        InputProps={{
+                          style: {
+                            paddingRight: 0,
+                          },
+                          startAdornment: (
+                            <Icon className='mr-2' fontSize='small'>
+                              search
+                            </Icon>
+                          ),
+                          endAdornment: (
+                            <IconButton onClick={hideSearch}>
+                              <Icon fontSize='small'>clear</Icon>
+                            </IconButton>
+                          ),
+                        }}
+                      />
+                    </Grow>
+                  )
+                },
+                customToolbar: () => {
+                  return (
+                    <Link
+                      to={{
+                        pathname: '/vendor/new',
+                        state: {},
                       }}
-                    />
-                  </Grow>
-                )
-              },
-              customToolbar: () => {
-                return (
-                  <Link
-                    to={{
-                      pathname: '/vendor/new',
-                      state: {},
-                    }}
-                  >
-                    <IconButton>
-                      <Button variant='contained' color='primary'>
-                        <Icon>add</Icon>Add New
-                      </Button>
-                    </IconButton>
-                  </Link>
-                )
-              },
-            }}
-          />
+                    >
+                      <IconButton>
+                        <Button variant='contained' color='primary'>
+                          <Icon>add</Icon>Add New
+                        </Button>
+                      </IconButton>
+                    </Link>
+                  )
+                },
+              }}
+            />
+          )}
         </div>
       </div>
     </div>

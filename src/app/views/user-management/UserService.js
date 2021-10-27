@@ -1,13 +1,19 @@
-import axios from 'axios';
 import http from "../../services/api"
+import { errorState } from "../helpers/error-state"
 
 export const getUserById = (id) => {
    return http 
     .get(`/afrimash/users/${id}`)      
 }
 
-export const getAllUser = () => {
-    return http.get('/afrimash/users/')
+export const getAllUser = (setData, isLoading, setAlert, setSeverity) => {
+  isLoading(true)
+  http.get('/afrimash/users/search/').then(({ data }) => {
+       setData(data.object.content)
+     isLoading(false)
+  }).catch((err) => {
+      errorState(setAlert, setSeverity)
+    })
 }
 
 export const deleteUser = (user) => {

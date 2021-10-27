@@ -1,30 +1,23 @@
 import React, { useState, useEffect } from 'react'
 import MUIDataTable from 'mui-datatables'
 import { Grow, Icon, IconButton, TextField, Button } from '@material-ui/core'
-import http from '../../../services/api'
 import ShopForm from './ShopForm'
 import { useDialog } from 'muibox'
+import { getShops } from './shop-service'
+import Loading from 'matx/components/MatxLoadable/Loading'
 
 const SellerShop = ({ id }) => {
   const [isAlive, setIsAlive] = useState(true)
-  const [userList, setUserList] = useState([])
+  const [loading, isLoading] = useState(false)
   const [shop, setShops] = useState([])
   const [isOpen, setIsOpen] = useState(false)
 
   const dialog = useDialog()
 
   useEffect(() => {
-    http.get(`/afrimash/stores/search`).then((response) => {
-      let { data } = response
-      let shops = data.object.content
-      if (isAlive) setUserList(data.object.content)
-      let sellerShop = shops.filter((shop) => {
-        return shop.sellerId.id === id
-      })
-      setShops(sellerShop)
-    })
+    getShops(id, isLoading, setShops)
     return () => setIsAlive(false)
-  }, [isAlive, id, shop])
+  }, [id])
 
   const handleModal = () => {
     setIsOpen(!isOpen)
@@ -86,133 +79,90 @@ const SellerShop = ({ id }) => {
         },
       },
     },
-    // {
-    //   name: "action",
-    //   label: " ",
-    //   options: {
-    //     filter: false,
-    //     customBodyRenderLite: (dataIndex) => {
-    //       let Shop = shop[dataIndex];
-    //       return (
-    //         <div className="flex items-center">
-    //           <div className="flex-grow"></div>
-    //           <Link
-    //             to={{
-    //               pathname: "/vendor/shop/edit",
-    //               state: {
-    //                 id: Shop.id,
-    //                 Shop,
-    //               },
-    //             }}
-    //           >
-    //             <IconButton>
-    //               <Icon>edit</Icon>
-    //             </IconButton>
-    //           </Link>
-    //           <Link
-    //             to={{
-    //               pathname: "/vendor/shop/details",
-    //               state: {
-    //                 id: Shop.id,
-    //               },
-    //             }}
-    //           >
-    //             <IconButton>
-    //               <Icon>arrow_right_alt</Icon>
-    //             </IconButton>
-    //           </Link>
-    //         </div>
-    //       );
-    //     },
-    //   },
-    // },
   ]
 
   return (
     <div className='m-sm-30'>
       <div className='overflow-auto'>
         <div className='min-w-750'>
-          <MUIDataTable
-            title={'Shops'}
-            data={shop}
-            columns={columns}
-            options={{
-              onRowsDelete: (data) =>
-                dialog
-                  .confirm('Are you sure you want to delete?')
-                  .then((value) => value)
-                  .catch(() => {
-                    return false
-                  }),
-              filterType: 'textField',
-              responsive: 'standard',
-              //   selectableRows: "none", // set checkbox for each row
-              //   search: false, // set search option
-              //   filter: false, // set data filter option
-              //   download: false, // set download option
-              //   print: false, // set print option
-              //   pagination: true, //set pagination option
-              //   viewColumns: false, // set column option
-              elevation: 0,
-              rowsPerPageOptions: [10, 20, 40, 80, 100],
-              customSearchRender: (
-                searchText,
-                handleSearch,
-                hideSearch,
-                options
-              ) => {
-                return (
-                  <Grow appear in={true} timeout={300}>
-                    <TextField
-                      variant='outlined'
-                      size='small'
-                      fullWidth
-                      onChange={({ target: { value } }) => handleSearch(value)}
-                      InputProps={{
-                        style: {
-                          paddingRight: 0,
-                        },
-                        startAdornment: (
-                          <Icon className='mr-2' fontSize='small'>
-                            search
-                          </Icon>
-                        ),
-                        endAdornment: (
-                          <IconButton onClick={hideSearch}>
-                            <Icon fontSize='small'>clear</Icon>
-                          </IconButton>
-                        ),
-                      }}
-                    />
-                  </Grow>
-                )
-              },
-              customToolbar: () => {
-                return (
-                  <>
-                    <IconButton>
-                      <Button
-                        variant='contained'
-                        color='primary'
+          {loading ? (
+            <Loading />
+          ) : (
+            <MUIDataTable
+              title={'Shops'}
+              data={shop}
+              columns={columns}
+              options={{
+                onRowsDelete: (data) =>
+                  dialog
+                    .confirm('Are you sure you want to delete?')
+                    .then((value) => value)
+                    .catch(() => {
+                      return false
+                    }),
+                filterType: 'textField',
+                responsive: 'standard',
+                elevation: 0,
+                rowsPerPageOptions: [10, 20, 40, 80, 100],
+                customSearchRender: (
+                  searchText,
+                  handleSearch,
+                  hideSearch,
+                  options
+                ) => {
+                  return (
+                    <Grow appear in={true} timeout={300}>
+                      <TextField
+                        variant='outlined'
+                        size='small'
+                        fullWidth
+                        onChange={({ target: { value } }) =>
+                          handleSearch(value)
+                        }
+                        InputProps={{
+                          style: {
+                            paddingRight: 0,
+                          },
+                          startAdornment: (
+                            <Icon className='mr-2' fontSize='small'>
+                              search
+                            </Icon>
+                          ),
+                          endAdornment: (
+                            <IconButton onClick={hideSearch}>
+                              <Icon fontSize='small'>clear</Icon>
+                            </IconButton>
+                          ),
+                        }}
+                      />
+                    </Grow>
+                  )
+                },
+                customToolbar: () => {
+                  return (
+                    <>
+                      <IconButton
                         onClick={() => {
                           handleModal()
                         }}
                       >
-                        <Icon>add</Icon>Add New
-                      </Button>
-                    </IconButton>
-                    <ShopForm
-                      states={shop}
-                      isOpen={isOpen}
-                      handleClose={handleModal}
-                      name='Create Shop'
-                      id={id}
-                    />
-                  </>
-                )
-              },
-            }}
-          />
+                        <Button variant='contained' color='primary'>
+                          <Icon>add</Icon>Add New
+                        </Button>
+                      </IconButton>
+                      <ShopForm
+                        states={shop}
+                        isOpen={isOpen}
+                        handleClose={handleModal}
+                        name='Create Shop'
+                        id={id}
+                      />
+                    </>
+                  )
+                },
+              }}
+            />
+          )}
         </div>
       </div>
     </div>

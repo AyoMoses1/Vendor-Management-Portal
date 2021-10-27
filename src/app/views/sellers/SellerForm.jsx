@@ -73,8 +73,9 @@ function NewVendor({ isNewSeller, id, Seller }) {
         history.push(`/vendors`)
       })
     else
-      updateSeller(seller).then(() => {
+      updateSeller(seller).then((res) => {
         setState({ ...state })
+        history.push(`/vendors`)
       })
   }
 
@@ -122,7 +123,6 @@ function NewVendor({ isNewSeller, id, Seller }) {
                   error={Boolean(touched.name && errors.name)}
                   helperText={touched.name && errors.name}
                 />
-
                 <TextField
                   onChange={handleChange}
                   value={values.email || ''}

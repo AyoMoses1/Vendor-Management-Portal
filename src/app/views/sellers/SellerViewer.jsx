@@ -39,7 +39,6 @@ const SellerViewer = ({location}) => {
                 ))}
             </Tabs>
             <Divider className="mb-6" />
-
             {tabIndex === 0 && <SellerInfo id={id} />}
             {tabIndex === 1 && <SellerShop id={id} />}
         </div>
@@ -49,4 +48,3 @@ const SellerViewer = ({location}) => {
 const tabList = ['Details', 'Shops']
 
 export default SellerViewer
-
