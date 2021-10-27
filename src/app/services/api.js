@@ -1,5 +1,4 @@
 import Axios from "axios"
-import axios from "axios";
 export default new (class Http {
   API_URL = "https://api.afrimash.com/"
 

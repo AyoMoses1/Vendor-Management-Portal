@@ -28,10 +28,18 @@ const CustomerList = () => {
           let user = userList[dataIndex]
           return (
             <div className='flex items-center'>
-              <div className='ml-3'>
+              <Link
+                to={{
+                  pathname: '/customer/details',
+                  state: {
+                    id: user.id,
+                  },
+                }}
+                className='ml-3'
+              >
                 <h5 className='my-0 text-15'>{`${user?.firstName} ${user?.lastName}`}</h5>
                 <small className='text-muted'>{user?.email}</small>
-              </div>
+              </Link>
             </div>
           )
         },
@@ -46,9 +54,17 @@ const CustomerList = () => {
           let user = userList[dataIndex]
           return (
             <div className='flex items-center'>
-              <div className='ml-3'>
+              <Link
+                to={{
+                  pathname: '/customer/details',
+                  state: {
+                    id: user.id,
+                  },
+                }}
+                className='ml-3'
+              >
                 <h5 className='my-0 text-muted'>{user.address || '-----'}</h5>
-              </div>
+              </Link>
             </div>
           )
         },
@@ -63,9 +79,17 @@ const CustomerList = () => {
           let user = userList[dataIndex]
           return (
             <div className='flex items-center'>
-              <div className='ml-3'>
+              <Link
+                to={{
+                  pathname: '/customer/details',
+                  state: {
+                    id: user.id,
+                  },
+                }}
+                className='ml-3'
+              >
                 <h5 className='my-0 text-muted'> {user.mobileNo || '-----'}</h5>
-              </div>
+              </Link>
             </div>
           )
         },
@@ -80,12 +104,20 @@ const CustomerList = () => {
           let user = userList[dataIndex]
           return (
             <div className='flex items-center'>
-              <div className='ml-3'>
+              <Link
+                to={{
+                  pathname: '/customer/details',
+                  state: {
+                    id: user.id,
+                  },
+                }}
+                className='ml-3'
+              >
                 <h5 className='my-0 text-muted'>
                   {' '}
                   {user.lastActivity || '-----'}
                 </h5>
-              </div>
+              </Link>
             </div>
           )
         },
@@ -112,18 +144,6 @@ const CustomerList = () => {
               >
                 <IconButton>
                   <Icon>edit</Icon>
-                </IconButton>
-              </Link>
-              <Link
-                to={{
-                  pathname: '/customer/details',
-                  state: {
-                    id: user.id,
-                  },
-                }}
-              >
-                <IconButton>
-                  <Icon>arrow_right_alt</Icon>
                 </IconButton>
               </Link>
             </div>

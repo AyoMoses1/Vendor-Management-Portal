@@ -7,12 +7,6 @@ import {
   Divider,
   RadioGroup,
   Grid,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-  Card,
   TextField,
 } from '@material-ui/core'
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator'
@@ -21,8 +15,8 @@ import {
   KeyboardDatePicker,
 } from '@material-ui/pickers'
 import DateFnsUtils from '@date-io/date-fns'
-import { getInvoiceById, addInvoice, updateInvoice } from './OrderService'
-import { useParams, useHistory } from 'react-router-dom'
+import { getInvoiceById, updateInvoice } from './OrderService'
+import { useHistory } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
 import { useCallback } from 'react'
@@ -127,7 +121,6 @@ const OrderEditor = ({ isNewInvoice, toggleOrderEditor, id }) => {
     if (!isNewInvoice) {
       getInvoiceById(id).then(({ data }) => {
         if (isAlive) setState({ ...data.object })
-        console.log(state)
       })
     } else {
       generateRandomId()
@@ -137,24 +130,20 @@ const OrderEditor = ({ isNewInvoice, toggleOrderEditor, id }) => {
   useEffect(() => {
     return () => setIsAlive(false)
   }, [])
-
-  let subTotalCost = 0
   let {
     referenceNo,
-    buyer,
     customerId,
     deliveryAddress,
     // orderItems,
     status,
     createDate,
     loading,
-    subTotal,
   } = state
 
   return (
-    <>
+    <ValidatorForm onSubmit={handleSubmit} onError={(errors) => null}>
       <div className={clsx('invoice-viewer py-4', classes.invoiceEditor)}>
-        <ValidatorForm onSubmit={handleSubmit} onError={(errors) => null}>
+        <>
           <div
             className='viewer_actions px-4'
             style={{ display: 'flex', justifyContent: 'flex-end' }}
@@ -179,7 +168,6 @@ const OrderEditor = ({ isNewInvoice, toggleOrderEditor, id }) => {
               </Button>
             </div>
           </div>
-
           <div
             className={clsx(
               'viewer__order-info px-4 mb-4 flex justify-between',
@@ -290,7 +278,6 @@ const OrderEditor = ({ isNewInvoice, toggleOrderEditor, id }) => {
                   errorMessages={['this field is required']}
                 />
                 <TextValidator
-                  label='Seller Name'
                   type='text'
                   label='Delivery Address'
                   onChange={(event) =>
@@ -305,107 +292,7 @@ const OrderEditor = ({ isNewInvoice, toggleOrderEditor, id }) => {
               </div>
             </Grid>
           </Grid>
-
-          {/* Item list for editing */}
-          {/* <Table className="mb-4">
-            <TableHead>
-              <TableRow className="bg-default">
-                <TableCell className="pl-sm-24">#</TableCell>
-                <TableCell className="px-0">Item Name</TableCell>
-                <TableCell className="px-0">Unit Price</TableCell>
-                <TableCell className="px-0">Unit</TableCell>
-                <TableCell className="px-0">Cost</TableCell>
-                <TableCell className="px-0">Action</TableCell>
-              </TableRow>
-            </TableHead>
-
-            <TableBody>
-              {orderItems.map((item, index) => {
-                subTotalCost += item.itemPrice * item.itemQuantity;
-                return (
-                  <TableRow key={index}>
-                    <TableCell className="pl-sm-24 capitalize" align="left">
-                      {index + 1}
-                    </TableCell>
-
-                    <TableCell className="pl-0 capitalize" align="left">
-                      <TextValidator
-                        label="Item Name"
-                        // onChange={(event) =>
-                        //     handleIvoiceListChange(
-                        //         event,
-                        //         index
-                        //     )
-                        // }
-                        disabled
-                        type="text"
-                        name="name"
-                        fullWidth
-                        value={item ? item.productId.name : null}
-                      />
-                    </TableCell>
-
-                    <TableCell className="pl-0 capitalize" align="left">
-                      <TextValidator
-                        label="Item Price"
-                        // onChange={(event) =>
-                        //     handleIvoiceListChange(
-                        //         event,
-                        //         index
-                        //     )
-                        // }
-                        disabled
-                        type="number"
-                        name="price"
-                        fullWidth
-                        value={item ? item.itemPrice : null}
-                      />
-                    </TableCell>
-
-                    <TableCell className="pl-0 capitalize" align="left">
-                      <TextValidator
-                        label="Item Unit"
-                        onChange={(event) =>
-                          handleIvoiceListChange(event, index)
-                        }
-                        type="number"
-                        name="unit"
-                        fullWidth
-                        value={item ? item.itemQuantity : null}
-      
-                        errorMessages={["this field is required"]}
-                      />
-                    </TableCell>
-
-                    <TableCell className="pl-0 capitalize" align="left">
-                      {item.itemQuantity * item.itemPrice}
-                    </TableCell>
-
-                    <TableCell className="pl-0 capitalize" align="left">
-                      <Button onClick={() => deleteItemFromInvoiceList(index)}>
-                        Delete
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table> */}
-
-          {/* total cost calculation */}
-          {/* <div
-            className="px-4"
-            style={{ display: "flex", justifyContent: "flex-end" }}
-          >
-            <div className="flex">
-              <div className="pr-12">
-                <strong>
-                  <p>Grand Total: {subTotal}</p>
-                </strong>
-              </div>
-            </div>
-          </div> */}
-        </ValidatorForm>
+        </>
       </div>
 
       <Divider />
@@ -437,7 +324,7 @@ const OrderEditor = ({ isNewInvoice, toggleOrderEditor, id }) => {
           />
         </FormControl>
       </div>
-    </>
+    </ValidatorForm>
   )
 }
 

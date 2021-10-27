@@ -1,39 +1,39 @@
-import {MatxLoadable} from "matx";
+import { MatxLoadable } from 'matx'
 
 const Orders = MatxLoadable({
-  loader: () => import("./Orders")
-});
+  loader: () => import('./Orders'),
+})
 const OrderDetails = MatxLoadable({
-  loader: () => import("./OrderDetails")
-});
+  loader: () => import('./OrderDetails'),
+})
 const NewOrder = MatxLoadable({
-  loader: () => import("./NewOrder")
+  loader: () => import('./NewOrder'),
 })
 const AbadonedOrders = MatxLoadable({
-  loader: () => import("./AbadonedOrder")
+  loader: () => import('./AbadonedOrder'),
 })
 
 const orderRoutes = [
   {
-    path: "/orders",
-    component: Orders
+    path: '/orders',
+    component: Orders,
   },
   {
-    path: "/order/details",
-    component: OrderDetails
-  }, 
+    path: '/order/details',
+    component: OrderDetails,
+  },
   {
-    path: "/order/new",
+    path: '/order/new',
     component: NewOrder,
   },
   {
-    path: "/abadoned-orders",
-    component: AbadonedOrders
+    path: '/abadoned-orders',
+    component: AbadonedOrders,
   },
   {
-    path: "/abadoned-order/details",
-    component: OrderDetails
-  }, 
-];
+    path: '/abadoned-order/details',
+    component: OrderDetails,
+  },
+]
 
-export default orderRoutes;
+export default orderRoutes

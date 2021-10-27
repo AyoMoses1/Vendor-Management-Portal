@@ -182,38 +182,38 @@ export const navigations = [
     ]
   },
 
-  // {
-  //   name: "Reports",
-  //   icon: "border_color",
-  //   children: [
-  //     {
-  //       name: "Users List",
-  //       path: "/forms/basic",
-  //       iconText: "B"
-  //     },
-  //     {
-  //       name: "New User",
-  //       path: "/forms/editor",
-  //       iconText: "E"
-  //     }
-  //   ]
-  // },
+  {
+    name: "Reports",
+    icon: "border_color",
+    children: [
+      {
+        name: "Users List",
+        path: "/forms/basic",
+        iconText: "B"
+      },
+      {
+        name: "New User",
+        path: "/forms/editor",
+        iconText: "E"
+      }
+    ]
+  },
 
-  // {
-  //   name: "Support",
-  //   icon: "border_color",
-  //   children: [
-  //     {
-  //       name: "Users List",
-  //       path: "/forms/basic",
-  //       iconText: "B"
-  //     },
-  //     {
-  //       name: "New User",
-  //       path: "/forms/editor",
-  //       iconText: "E"
-  //     }
-  //   ]
-  // },
+  {
+    name: "Support",
+    icon: "border_color",
+    children: [
+      {
+        name: "Users List",
+        path: "/forms/basic",
+        iconText: "B"
+      },
+      {
+        name: "New User",
+        path: "/forms/editor",
+        iconText: "E"
+      }
+    ]
+  },
   
 ];

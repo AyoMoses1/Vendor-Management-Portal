@@ -1,17 +1,17 @@
-import Loadable from "react-loadable";
-import Loading from "./Loading";
+import Loadable from 'react-loadable'
+import Loading from './Loading'
 
-const MatxLoadable = opts => {
+const MatxLoadable = (opts) => {
   return Loadable(
     Object.assign(
       {
         loading: Loading,
-        delay: 100,
-        timeout: 10000
+        delay: 1000,
+        timeout: 10000,
       },
       opts
     )
-  );
-};
+  )
+}
 
-export default MatxLoadable;
+export default MatxLoadable

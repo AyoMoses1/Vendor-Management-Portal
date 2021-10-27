@@ -94,6 +94,11 @@ const themeOptions = {
       root: {
         fontSize: "0.875rem"
       }
+    },
+    MUIDataTableHeadCell: {
+      root: {
+       marginLeft: 0,
+     }
     }
   }
 };
