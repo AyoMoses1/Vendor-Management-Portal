@@ -1,4 +1,5 @@
 import http from "../../services/api"
+import { errorState } from "../helpers/error-state"
 
 export const getProductById = (id) => {
   return http
@@ -46,4 +47,23 @@ export const addProductCategory = (product) => {
 }
 export const updateProductCategory = (product) => {
   return http.put(`/afrimash/product-catergories/`, product)
+}
+
+export const getData = (url, setData, setAlert, setSeverity) => {
+  http.get(url).then(({data}) => {
+    setData(data.object)
+  }).catch((err) => {
+    errorState(setAlert, setSeverity)
+  })
+}
+
+export const getBrands = (setAlert, setSeverity, setBrands) => {
+  http
+    .get(`/afrimash/brands/`)
+    .then(({data}) => {
+      setBrands(data)
+    })
+    .catch((err) => {
+      errorState(setAlert, setSeverity)
+    })
 }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Card, Divider, Grid, Icon } from '@material-ui/core'
+import { Divider, Grid, Icon } from '@material-ui/core'
 import { Breadcrumb, SimpleCard } from 'matx'
 import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
@@ -67,7 +67,7 @@ const ProductDetails = ({ location }) => {
               <img
                 className='max-w-full mb-4 max-h-400'
                 src={selectedImage}
-                alt='Product Image'
+                alt='selected img'
               />
               <div className='flex justify-center items-center'>
                 {imageList.map((imgUrl) => (
@@ -77,7 +77,7 @@ const ProductDetails = ({ location }) => {
                       [classes.imageBorder]: selectedImage === imgUrl.imageUrl,
                     })}
                     src={imgUrl.imageUrl}
-                    alt='Product Image'
+                    alt='Product'
                     key={imgUrl.imageUrl}
                     onClick={() => setSelectedImage(imgUrl.imageUrl)}
                   />

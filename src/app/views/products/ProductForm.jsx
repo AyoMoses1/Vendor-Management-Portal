@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import axios from 'axios'
 import {
   TextField,
   Button,
@@ -8,13 +7,18 @@ import {
   Checkbox,
   Icon,
 } from '@material-ui/core'
-import { getProductById, createProduct, updateProduct } from './ProductService'
+import {
+  getProductById,
+  createProduct,
+  updateProduct,
+  getData,
+  getBrands,
+} from './ProductService'
 import { useDropzone } from 'react-dropzone'
 import clsx from 'clsx'
 import { Formik } from 'formik'
 import * as yup from 'yup'
 import { makeStyles } from '@material-ui/core/styles'
-import http from '../../services/api'
 import { useHistory } from 'react-router-dom'
 import Notification from '../../components/Notification'
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank'
@@ -79,6 +83,25 @@ function NewProduct({ isNewProduct, id, Product }) {
   const [severity, setSeverity] = useState('')
   // const [product, setProduct] = useState(Product);
 
+  const urls = [
+    {
+      url: `afrimash/stores?page=1&size=100&search=search`,
+      set: setStores,
+    },
+    {
+      url: `/afrimash/product-categories/search?`,
+      set: setCategories,
+    },
+    {
+      url: `/afrimash/product-categories/search?`,
+      set: setCategories,
+    },
+    {
+      url: `/afrimash/tags/`,
+      set: setTags,
+    },
+  ]
+
   const onDrop = useCallback((acceptedFiles) => {}, [])
 
   const {
@@ -88,15 +111,18 @@ function NewProduct({ isNewProduct, id, Product }) {
     acceptedFiles,
   } = useDropzone({ accept: 'image/*', onDrop })
 
-  // const formik = useFormik({
-  //   handleChange: (values) => {},
-  // });
+  /**
+   * maps through a list of urls and callbacks
+   * @returns void
+   * @set the data returned to state variables
+   */
+  const getRessult = () => {
+    urls.map((val) => getData(val.url, val.set, setAlert, setSeverity))
+  }
 
   useEffect(() => {
-    getBrands()
-    getTags()
-    getStores()
-    getCategories()
+    getBrands(setAlert, setSeverity, setBrands)
+    getRessult()
     setImageList(acceptedFiles)
     if (!isNewProduct) {
       getProductById(id).then(({ data }) => {
@@ -110,55 +136,6 @@ function NewProduct({ isNewProduct, id, Product }) {
     const { id } = newValue
     setState({ ...state, [fieldName]: id })
     console.log(state)
-  }
-
-  const getBrands = () => {
-    http
-      .get(`/afrimash/brands/`)
-      .then((response) => {
-        let { data } = response
-        setBrands(data)
-      })
-      .catch((err) => {
-        setAlert('An Error Ocurred, Please Try Again')
-        setSeverity('error')
-      })
-  }
-
-  const getTags = () => {
-    http
-      .get(`/afrimash/tags/`)
-      .then((response) => {
-        setTags(response.data.object)
-      })
-      .catch((err) => {
-        setAlert('An Error Ocurred, Please Try Again')
-        setSeverity('error')
-      })
-  }
-
-  const getStores = () => {
-    http
-      .get(`afrimash/stores?page=1&size=100&search=search`)
-      .then((response) => {
-        setStores(response.data.object)
-      })
-      .catch((err) => {
-        setAlert('An Error Ocurred, Please Try Again')
-        setSeverity('error')
-      })
-  }
-
-  const getCategories = () => {
-    http
-      .get(`/afrimash/product-categories/search?`)
-      .then((response) => {
-        setCategories(response.data.object)
-      })
-      .catch((err) => {
-        setAlert('An Error Ocurred, Please Try Again')
-        setSeverity('error')
-      })
   }
 
   const handleSubmit = (values, { setSubmitting }) => {
@@ -190,7 +167,7 @@ function NewProduct({ isNewProduct, id, Product }) {
 
   return (
     <div className='m-sm-30'>
-      <Notification alert={alert} severity={severity} />
+      <Notification alert={alert} severity={severity || ''} />
       <Formik
         initialValues={values}
         onSubmit={handleSubmit}

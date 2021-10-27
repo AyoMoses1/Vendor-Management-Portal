@@ -1,160 +1,142 @@
-import React, { useState, useEffect, useCallback } from "react";
-import axios from "axios";
-import {
-  FormControl,
-  Card,
-  TextField,
-  Button,
-  Grid,
-  Checkbox,
-  Icon,
-} from "@material-ui/core";
-import {
-  getProductCategoryById,
-  addProductCategory,
-  updateProductCategory,
-} from "./ProductService";
-import { makeStyles } from "@material-ui/core/styles";
-import http from "../../services/api";
-import { useHistory } from "react-router-dom";
-import { Formik, useFormik } from "formik";
-import CheckBoxOutlineBlankIcon from "@material-ui/icons/CheckBoxOutlineBlank";
-import CheckBoxIcon from "@material-ui/icons/CheckBox";
-import Autocomplete from "@material-ui/lab/Autocomplete";
-import * as yup from "yup";
-import { useDropzone } from "react-dropzone";
-import clsx from "clsx";
-
-const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-const checkedIcon = <CheckBoxIcon fontSize="small" />;
+import React, { useState, useEffect, useCallback } from 'react'
+import axios from 'axios'
+import { Card, TextField, Button, Grid, Icon } from '@material-ui/core'
+import { getProductCategoryById } from './ProductService'
+import { makeStyles } from '@material-ui/core/styles'
+import http from '../../services/api'
+import { useHistory } from 'react-router-dom'
+import { Formik } from 'formik'
+import Autocomplete from '@material-ui/lab/Autocomplete'
+import * as yup from 'yup'
+import { useDropzone } from 'react-dropzone'
+import clsx from 'clsx'
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    "& .MuiTextField-root": {
+    '& .MuiTextField-root': {
       margin: theme.spacing(2),
-      width: "63ch",
+      width: '63ch',
       formcontrol: {
-        minWidth: "100%",
+        minWidth: '100%',
       },
     },
   },
   dropZone: {
-    transition: "all 350ms ease-in-out",
-    border: "2px dashed rgba(var(--body),0.3)",
-    "&:hover": {
-      background: "rgba(var(--body), 0.2) !important",
+    border: '2px dashed rgba(var(--body),0.3)',
+    '&:hover': {
+      background: 'rgba(var(--body), 0.2) !important',
     },
-    borderRadius: " 4px !important",
-    borderStyle: "dashed",
-    borderColor: "#DCDCDC",
-    height: "190px",
-    overflow: " hidden",
-    marginBottom: "1rem !important",
-    alignItems: "center",
-    width: "100%",
-    justifyContent: "center",
-    color: "rgba(52, 49, 76, 1)",
-    transition: "box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
-    backgroundColor: "#fff",
-    display: "flex",
-    boxSizing: "inherit",
-    marginTop: "2px",
+    borderRadius: ' 4px !important',
+    borderStyle: 'dashed',
+    borderColor: '#DCDCDC',
+    height: '190px',
+    overflow: ' hidden',
+    marginBottom: '1rem !important',
+    alignItems: 'center',
+    width: '100%',
+    justifyContent: 'center',
+    color: 'rgba(52, 49, 76, 1)',
+    transition: 'box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+    backgroundColor: '#fff',
+    display: 'flex',
+    boxSizing: 'inherit',
+    marginTop: '2px',
   },
-}));
+}))
 
 function NewCategory({ isNewCategory, id, Category }) {
   const initialValues = {
-    name: "",
-    translatedName: "",
-  };
+    name: '',
+    translatedName: '',
+  }
 
   const initialState = {
-    parentCategoryId: "",
-  };
+    parentCategoryId: '',
+  }
 
-  const history = useHistory();
-  const classes = useStyles();
-  const [state, setState] = useState(initialState);
-  const [categories, setCategories] = useState([]);
-  const [imageList, setImageList] = useState([]);
-  const [category, setCategory] = useState([]);
+  const history = useHistory()
+  const classes = useStyles()
+  const [state, setState] = useState(initialState)
+  const [categories, setCategories] = useState([])
+  const [imageList, setImageList] = useState([])
+  const [category, setCategory] = useState([])
 
   const onDrop = useCallback((acceptedFiles) => {
-    console.log(acceptedFiles);
-  }, []);
+    console.log(acceptedFiles)
+  }, [])
 
   const {
     getRootProps,
     getInputProps,
     isDragActive,
     acceptedFiles,
-  } = useDropzone({ accept: "image/*", onDrop });
+  } = useDropzone({ accept: 'image/*', onDrop })
 
   useEffect(() => {
     if (!isNewCategory) {
       getProductCategoryById(id).then(({ data }) => {
-        setCategory(data.object);
-      });
+        setCategory(data.object)
+      })
     }
-    getCategories();
-    setImageList(acceptedFiles);
-  }, [acceptedFiles]);
+    getCategories()
+    setImageList(acceptedFiles)
+  }, [acceptedFiles])
 
   const handleSelect = (newValue, fieldName) => {
     console.log(newValue)
-    const { id } = newValue;
-    setState({ ...state, [fieldName]: id });
-    console.log(state);
-  };
+    const { id } = newValue
+    setState({ ...state, [fieldName]: id })
+    console.log(state)
+  }
 
   const onSubmit = (values) => {
-    console.log(state);
-    console.log(values);
+    console.log(state)
+    console.log(values)
     if (isNewCategory) {
-      const payload = { ...state, ...values };
-      console.log(payload);
-      const data = new FormData();
-      const token = localStorage.getItem("jwt_token");
-      data.append("productCategory", JSON.stringify(payload));
+      const payload = { ...state, ...values }
+      console.log(payload)
+      const data = new FormData()
+      const token = localStorage.getItem('jwt_token')
+      data.append('productCategory', JSON.stringify(payload))
       imageList.forEach((file, imageFile) => {
-        console.log(file);
-        data.append("imageFile", file);
-      });
+        console.log(file)
+        data.append('imageFile', file)
+      })
 
       axios({
-        method: "post",
-        url: "https://api.afrimash.com/afrimash/product-categories",
+        method: 'post',
+        url: 'https://api.afrimash.com/afrimash/product-categories',
         data,
         headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: "Bearer " + token,
+          'Content-Type': 'multipart/form-data',
+          Authorization: 'Bearer ' + token,
         },
       })
         .then(function (response) {
-          history.push("/product-categories");
+          history.push('/product-categories')
         })
         .catch(function (response) {
-          console.log(response);
-        });
-    } 
-  };
+          console.log(response)
+        })
+    }
+  }
 
   const getCategories = () => {
     http
       .get(`/afrimash/product-categories/search?`)
       .then((response) => {
-        console.log(response.data);
-        setCategories(response.data.object);
+        console.log(response.data)
+        setCategories(response.data.object)
       })
       .catch((err) => {
-        setCategories([]);
-        alert(err.response.data);
-      });
-  };
+        setCategories([])
+        alert(err.response.data)
+      })
+  }
 
   return (
-    <div className="m-sm-30">
-      <div className="w-100 overflow-auto">
+    <div className='m-sm-30'>
+      <div className='w-100 overflow-auto'>
         <Card>
           <Formik
             initialValues={initialValues}
@@ -173,36 +155,34 @@ function NewCategory({ isNewCategory, id, Category }) {
               setSubmitting,
               setFieldValue,
             }) => (
-              <form className="px-4" onSubmit={handleSubmit}>
+              <form className='px-4' onSubmit={handleSubmit}>
                 <Grid container spacing={3}>
                   <Grid item sm={6} xs={12}>
                     <TextField
-                      className="mb-4"
-                      name="name"
-                      label="Name"
-                      variant="outlined"
-                      margin="dense"
-                      size="small"
+                      className='mb-4'
+                      name='name'
+                      label='Name'
+                      variant='outlined'
+                      margin='normal'
                       fullWidth
                       onBlur={handleBlur}
                       onChange={handleChange}
-                      value={values.name || category.name || ""}
+                      value={values.name || category.name || ''}
                       error={Boolean(touched.name && errors.name)}
                       helperText={touched.name && errors.name}
                     />
 
                     <TextField
-                      className="mb-4"
-                      name="translatedName"
-                      label="Translated Name"
-                      variant="outlined"
-                      margin="dense"
-                      size="small"
+                      className='mb-4'
+                      name='translatedName'
+                      label='Translated Name'
+                      variant='outlined'
+                      margin='normal'
                       fullWidth
                       onBlur={handleBlur}
                       onChange={handleChange}
                       value={
-                        values.translatedName || category.translatedName || ""
+                        values.translatedName || category.translatedName || ''
                       }
                       error={Boolean(
                         touched.translatedName && errors.translatedName
@@ -213,29 +193,29 @@ function NewCategory({ isNewCategory, id, Category }) {
                     />
 
                     <Autocomplete
-                      id="parentCategoryId"
-                      name="parentCategoryId"
+                      id='parentCategoryId'
+                      name='parentCategoryId'
                       options={categories}
                       getOptionLabel={(option) => option.name}
-                      onChange={(event, newValue) =>{
+                      onChange={(event, newValue) => {
                         console.log(newValue)
-                        handleSelect(newValue, "parentCategoryId")
+                        handleSelect(newValue, 'parentCategoryId')
                       }}
                       renderInput={(params) => (
                         <TextField
                           {...params}
-                          label="Select Parent Category"
-                          variant="outlined"
-                          margin="dense"
+                          label='Select Parent Category'
+                          variant='outlined'
+                          margin='normal'
                         />
                       )}
                     />
 
                     <Button
-                      className="mt-4 mb-4 px-12"
-                      variant="contained"
-                      color="primary"
-                      type="submit"
+                      className='mt-4 mb-4 px-12'
+                      variant='contained'
+                      color='primary'
+                      type='submit'
                     >
                       Add Product
                     </Button>
@@ -244,23 +224,23 @@ function NewCategory({ isNewCategory, id, Category }) {
                     <div
                       className={clsx({
                         [classes.dropZone]: true,
-                        "bg-light-gray": !isDragActive,
-                        "bg-gray": isDragActive,
+                        'bg-light-gray': !isDragActive,
+                        'bg-gray': isDragActive,
                       })}
                       {...getRootProps()}
                     >
                       <input {...getInputProps()} />
                       <div
-                        className="flex-column items-center"
+                        className='flex-column items-center'
                         style={{
-                          display: "flex",
-                          flexDirection: "column",
-                          alignItems: "center",
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'center',
                         }}
                       >
                         <Icon
-                          className="text-muted text-48"
-                          style={{ fontSize: "48px" }}
+                          className='text-muted text-48'
+                          style={{ fontSize: '48px' }}
                         >
                           publish
                         </Icon>
@@ -279,12 +259,12 @@ function NewCategory({ isNewCategory, id, Category }) {
         </Card>
       </div>
     </div>
-  );
+  )
 }
 
 const categorySchema = yup.object().shape({
-  name: yup.string().required("Name is required"),
-  translatedName: yup.string().required("Translated Name is required"),
-});
+  name: yup.string().required('Name is required'),
+  translatedName: yup.string().required('Translated Name is required'),
+})
 
-export default NewCategory;
+export default NewCategory

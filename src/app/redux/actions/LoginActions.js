@@ -19,7 +19,6 @@ export function loginWithEmailAndPassword(state) {
       .loginWithEmailAndPassword(userlog)
       .then(user => {
         dispatch(setUserData(user));
-        console.log(user)
         history.push({
           pathname: "/dashboard/analytics"
         });

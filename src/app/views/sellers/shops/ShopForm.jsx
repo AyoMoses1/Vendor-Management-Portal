@@ -1,25 +1,21 @@
 import React from 'react'
-import {
-  TextField,
-  Modal,
-  Button
-} from "@material-ui/core";
-import { makeStyles } from '@material-ui/core/styles';
-import {addShop} from "./ShopServices";
+import { TextField, Modal, Button } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
+import { addShop } from './shop-service'
 
 function rand() {
-  return Math.round(Math.random() * 20) - 10;
+  return Math.round(Math.random() * 20) - 10
 }
 
 function getModalStyle() {
-  const top = 50 + rand();
-  const left = 50 + rand();
+  const top = 50 + rand()
+  const left = 50 + rand()
 
   return {
     top: `${top}%`,
     left: `${left}%`,
     transform: `translate(-${top}%, -${left}%)`,
-  };
+  }
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -31,57 +27,54 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: theme.shadows[2],
     padding: theme.spacing(2, 4, 3),
   },
-}));
+}))
 
-
-function CreateNew({name, handleClose, isOpen, id}) {
-  const classes = useStyles();
-  const [modalStyle] = React.useState(getModalStyle);
-  const [state, setState] = React.useState({name: "", sellerId: id})
-
+function CreateNew({ name, handleClose, isOpen, id }) {
+  const classes = useStyles()
+  const [modalStyle] = React.useState(getModalStyle)
+  const [state, setState] = React.useState({ name: '', sellerId: id })
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
     console.log(state)
-    setState({ ...state, [name]: value });
-  };
+    setState({ ...state, [name]: value })
+  }
 
   const submit = () => {
-    addShop(state). then(()=>{
-        handleClose()
+    addShop(state).then(() => {
+      handleClose()
     })
   }
-    const body = (
+  const body = (
     <div style={modalStyle} className={classes.paper}>
-      <h4 id="simple-modal-title">{name}</h4>
+      <h4 id='simple-modal-title'>{name}</h4>
       <form>
-        <div>                
-         <TextField
-            className="capitalize"
+        <div>
+          <TextField
+            className='capitalize'
             onChange={handleChange}
             autoFocus
-            margin="dense"
-            id="name"
-            name="name"
-            label="Name"
-            type="text"
-            fullWidth />
-         <Button onClick={submit}  variant="contained" color="primary">Create</Button>
+            margin='dense'
+            id='name'
+            name='name'
+            label='Name'
+            type='text'
+            fullWidth
+          />
+          <Button onClick={submit} variant='contained' color='primary'>
+            Create
+          </Button>
         </div>
       </form>
     </div>
-  );
-    return (
-        <div>
-            <Modal 
-                open={isOpen}
-                onClose={handleClose}
-            >
-               {body}
-                
-            </Modal>
-        </div>
-    )
+  )
+  return (
+    <div>
+      <Modal open={isOpen} onClose={handleClose}>
+        {body}
+      </Modal>
+    </div>
+  )
 }
 
 export default CreateNew

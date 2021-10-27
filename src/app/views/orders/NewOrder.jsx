@@ -160,7 +160,7 @@ function NewOrder() {
           ]}
         />
       </div>
-      {severity === 'error' && notification}
+      {severity === 'error' && notification()}
       {loading ? (
         <Loader />
       ) : (
