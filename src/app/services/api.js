@@ -7,6 +7,7 @@ export default new (class Http {
     const token = localStorage.getItem("jwt_token")
     const axiosInstance = Axios.create({
       baseURL: this.API_URL,
+      timeout: 20000
     })
     axiosInstance.defaults.headers.common.Authorization = "Bearer " + token;
     axiosInstance.interceptors.response.use(
