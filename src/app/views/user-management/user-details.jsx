@@ -7,68 +7,58 @@ import {
   TableRow,
 } from '@material-ui/core'
 import { SimpleCard, Breadcrumb } from 'matx'
-import { getCustomerById } from './CustomerService'
+import { getUserById } from './UserService'
 
-const CustomerInfo = ({ location }) => {
+const UserInfo = ({ location }) => {
   const { id } = location.state
-  const [customer, setCustomer] = useState([])
-  const [customerInfo, setCustomerInfo] = useState([])
+  const [user, setUser] = useState([])
+
   useEffect(() => {
-    getCustomerById(id).then(({ data }) => {
-      setCustomer(data.object)
-      setCustomerInfo(data.object.deliveryAddresses)
-      console.log(customer)
+    getUserById(id).then(({ data }) => {
+      console.log(data)
+      setUser(data.object)
     })
-  }, [id, customer])
+  }, [id])
   return (
     <div className='m-sm-30'>
       <div className='mb-sm-30'>
         <Breadcrumb
           routeSegments={[
-            { name: 'Customers', path: '/customers' },
-            { name: 'View Customer' },
+            { name: 'User', path: '/users' },
+            { name: 'View User' },
           ]}
         />
       </div>
-
       <SimpleCard>
-        <div className='flex-column items-center mb-6'>
-          <h5 className='mt-4 mb-2'>{`${customer.firstName} ${customer.lastName}`}</h5>
-        </div>
-
         <Divider />
         <Table className='mb-4'>
           <TableBody>
             <TableRow>
               <TableCell className='pl-4'>Email</TableCell>
               <TableCell>
-                <div>{customer.email}</div>
+                <div>{user.email}</div>
               </TableCell>
             </TableRow>
             <TableRow>
               <TableCell className='pl-4'>Phone Number</TableCell>
               <TableCell>
-                <div>{customer.mobileNo}</div>
+                <div>{user.phoneNo}</div>
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell className='pl-4'>State</TableCell>
+              <TableCell className='pl-4'>Name</TableCell>
               <TableCell>
-                <div>{customer.state}</div>
+                <div>
+                  {user.firstName} {user.lastName}
+                </div>
               </TableCell>
             </TableRow>
-            <TableRow>
-              <TableCell className='pl-4'>Country</TableCell>
-              <TableCell>
-                <div>{customer.country}</div>
-              </TableCell>
-            </TableRow>
-            {customerInfo.map((item, ind) => (
+            {/* {userInfo.map((item, ind) => (
               <TableRow key={ind}>
                 <TableCell className='pl-4'>{`Address ${ind + 1}`}</TableCell>
                 <TableCell>{item.address}</TableCell>
               </TableRow>
-            ))}
+            ))} */}
           </TableBody>
         </Table>
       </SimpleCard>
@@ -76,4 +66,4 @@ const CustomerInfo = ({ location }) => {
   )
 }
 
-export default CustomerInfo
+export default UserInfo

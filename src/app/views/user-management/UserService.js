@@ -3,7 +3,7 @@ import { errorState } from "../helpers/error-state"
 
 export const getUserById = (id) => {
    return http 
-    .get(`/afrimash/users/${id}`)      
+    .get(`/afrimash/users/${id}`)
 }
 
 export const getAllUser = (setData, isLoading, setAlert, setSeverity) => {
