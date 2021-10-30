@@ -56,13 +56,16 @@ const productTypes = ['EXTERNAL', 'GROUPED', 'SIMPLE', 'VARIANT']
 
 function NewProduct({ isNewProduct, id, Product }) {
   const initialState = {
-    tags: [],
-    productCategories: [],
-    brandId: '',
+    brandId: null,
+    rating: null,
+    translatedName: null,
+    productCode: null,
   }
   const initialValues = {
     productType: '',
     discountRate: '',
+    tags: [],
+    productCategories: [],
     price: '',
     sku: '',
     name: '',
@@ -140,16 +143,28 @@ function NewProduct({ isNewProduct, id, Product }) {
 
   const handleSubmit = (values, { setSubmitting }) => {
     const payload = { ...state, ...values }
+    console.log(state)
     const data = new FormData()
-
+    const updateData = {
+      id: state.id,
+      name: values?.name || state.name,
+      description: values?.description || state.description,
+      sku: values?.sku || state.sku,
+      translatedName: state.translatedName,
+      productCode: state.productCode,
+      brandId: state.brandId,
+      buyPrice: state.buyPrice,
+      rating: state.rating,
+      price: values?.price || state.price,
+      discountRate: values?.discountRate || state.discountRate,
+    }
     data.append('product', JSON.stringify(payload))
 
     imageList.forEach((file, imageFile) => {
-      console.log(file)
       data.append('imageFile', file)
     })
     if (!isNewProduct) {
-      updateProduct(data)
+      updateProduct(updateData)
         .then((res) => {
           if (res.status === 200) history.push('/products')
           else return
@@ -326,7 +341,6 @@ function NewProduct({ isNewProduct, id, Product }) {
                     />
                   )}
                 />
-
                 <Autocomplete
                   multiple
                   id='tags'
