@@ -136,6 +136,7 @@ function NewOrder() {
     e.preventDefault()
 
     addInvoice({ ...state }).then((response) => {
+      console.log(state)
       if (response instanceof Object) {
         if (response.data.status === 'OK') {
           history.push('/orders')

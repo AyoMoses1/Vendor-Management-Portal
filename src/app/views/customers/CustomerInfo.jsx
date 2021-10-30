@@ -17,9 +17,9 @@ const CustomerInfo = ({ location }) => {
     getCustomerById(id).then(({ data }) => {
       setCustomer(data.object)
       setCustomerInfo(data.object.deliveryAddresses)
-      console.log(customer)
+      console.log(data.object)
     })
-  }, [id, customer])
+  }, [id])
   return (
     <div className='m-sm-30'>
       <div className='mb-sm-30'>
