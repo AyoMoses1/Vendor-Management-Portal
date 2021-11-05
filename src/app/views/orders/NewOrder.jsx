@@ -178,32 +178,9 @@ function NewOrder() {
                   variant='outlined'
                 >
                   {customers.map((customer, idx) => (
-                    // <MenuItem
-                    //   name='customer'
-                    //   key={idx}
-                    //   value={customer.id}
-                    // >{`${customer.firstName} ${customer.lastName}`}</MenuItem>
-                    <Autocomplete
-                      id='customer'
-                      key={`${customer}-${idx}`}
-                      name='customer'
-                      defaultValue=''
-                      options={customer}
-                      value={customer.id}
-                      getOptionLabel={(option) => option.name || ''}
-                      onChange={(e, newValues) =>
-                        handleInputChange(idx, e, newValues)
-                      }
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          label='Customer name'
-                          name='customerId'
-                          margin='normal'
-                          variant='outlined'
-                        />
-                      )}
-                    />
+                    <MenuItem name='customer' key={idx} value={customer.id}>
+                      {`${customer.firstName} ${customer.lastName}`}
+                    </MenuItem>
                   ))}
                 </TextField>
                 <Grid container spacing={3}>
