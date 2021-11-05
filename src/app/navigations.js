@@ -79,126 +79,20 @@ export const navigations = [
         name: "Users",
         path: "/users",
         iconText: "B"
-      },
-      // {
-      //   name: "Manager",
-      //   path: "/managers",
-      //   iconText: "E"
-      // },
-      // {
-      //   name: "Group",
-      //   path: "/groups",
-      //   iconText: "E"
-      // },
-      // {
-      //   name: "Membership",
-      //   path: "/membership",
-      //   iconText: "E"
-      // },
-      // {
-      //   name: "Followers",
-      //   path: "/followers",
-      //   iconText: "E"
-      // }
-    ]
-  },
-  // {
-  //   name: "Refund",
-  //   icon: "cached",
-  //   path: '/refund_requests'
-  // },
-
-
-  // {
-  //   name: "Tags",
-  //   icon: "local_offer",
-  //   children: [
-  //     {
-  //       name: "Tags List",
-  //       path: "/forms/basic",
-  //       iconText: "B"
-  //     },
-  //     {
-  //       name: "New Tags",
-  //       path: "/forms/editor",
-  //       iconText: "E"
-  //     }
-  //   ]
-  // },
-  // {
-  //   name: "Inventory Management",
-  //   icon: "store",
-  //   path: "/others/drag-and-drop"
-  // },  
-
-  // {
-  //   name: "Shipping",
-  //   icon: "local_shipping",
-  //   children: [
-  //     {
-  //       name: "Users List",
-  //       path: "/forms/basic",
-  //       iconText: "B"
-  //     },
-  //     {
-  //       name: "New User",
-  //       path: "/forms/editor",
-  //       iconText: "E"
-  //     }
-  //   ]
-  // },
-
-  //  {
-  //   name: "Draft Orders",
-  //   icon: "border_color",
-  //   children: [
-  //     {
-  //       name: "Users List",
-  //       path: "/forms/basic",
-  //       iconText: "B"
-  //     },
-  //     {
-  //       name: "New User",
-  //       path: "/forms/editor",
-  //       iconText: "E"
-  //     }
-  //   ]
-  // },
-    
-  {
-    name: "Reviews",
-    icon: "border_color",
-    children: [
-      {
-        name: "Product Review",
-        path: "/product-reviews",
-        iconText: "B"
-      },
-      {
-        name: "Store Review",
-        path: "/store-reviews",
-        iconText: "E"
       }
     ]
   },
-
   {
-    name: "Reports",
+    name: "Agent Network",
     icon: "border_color",
     children: [
       {
-        name: "Users List",
-        path: "/forms/basic",
+        name: "All Agents",
+        path: "/agents",
         iconText: "B"
       },
-      {
-        name: "New User",
-        path: "/forms/editor",
-        iconText: "E"
-      }
     ]
   },
-
   {
     name: "Support",
     icon: "border_color",

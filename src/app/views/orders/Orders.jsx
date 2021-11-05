@@ -9,14 +9,23 @@ import './order-view.css'
 import { deleteInvoice, getAllInvoice } from './OrderService'
 import Loading from 'matx/components/MatxLoadable/Loading'
 
+import { GET_ALL_ORDERS } from '../../redux/actions/EcommerceActions'
+
+import { useSelector, useDispatch } from 'react-redux'
+
 const Orders = (props) => {
   const [isAlive, setIsAlive] = useState(true)
   const [orders, setOrders] = useState([])
   const [loading, setLoading] = useState(false)
   const dialog = useDialog()
+  const dispatch = useDispatch()
+
+  // const productList = useSelector((state) => state.ecommerce)
+  // const { orderList } = productList
 
   useEffect(() => {
     getAllInvoice(setOrders, setLoading)
+    dispatch({ type: GET_ALL_ORDERS })
     return () => setIsAlive(false)
   }, [isAlive])
 
@@ -51,26 +60,6 @@ const Orders = (props) => {
         },
       },
     },
-    // {
-    //   name: "orderItems",
-    //   label: "Purchased",
-    //   options: {
-    //     filter: true,
-    //     customBodyRenderLite: (dataIndex) => {
-    //       let order = orders[dataIndex];
-    //       return (
-    //         <div className="flex items-center">
-    //           <div className="ml-3">
-    //             <span className="my-0">
-    //             {order.orderItems.length ? `${order.orderItems.length} items` : "------"}
-    //             {/* { `${order.orderItems?.length} items` || "------"} */}
-    //             </span>
-    //           </div>
-    //         </div>
-    //       );
-    //     },
-    //   },
-    // },
     {
       name: 'status',
       label: 'Status',

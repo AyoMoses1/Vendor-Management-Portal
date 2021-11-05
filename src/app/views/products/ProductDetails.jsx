@@ -27,7 +27,6 @@ const ProductDetails = ({ location }) => {
       .get(`/afrimash/products/${id}`)
       .then((response) => {
         if (response.data) {
-          console.log(response.data)
           const { brandId, storeId, productImages } = response.data.object
           setProduct(response.data?.object)
           setBrand(brandId)

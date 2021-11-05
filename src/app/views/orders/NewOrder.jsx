@@ -104,10 +104,6 @@ function NewOrder() {
     }
   }
 
-  //   const handleCoupons = (i, event, newValues) =>{
-
-  //   }
-
   const handleAddInput = () => {
     const values = [...fields]
     values.push({
@@ -182,11 +178,9 @@ function NewOrder() {
                   variant='outlined'
                 >
                   {customers.map((customer, idx) => (
-                    <MenuItem
-                      name='customer'
-                      key={idx}
-                      value={customer.id}
-                    >{`${customer.firstName} ${customer.lastName}`}</MenuItem>
+                    <MenuItem name='customer' key={idx} value={customer.id}>
+                      {`${customer.firstName} ${customer.lastName}`}
+                    </MenuItem>
                   ))}
                 </TextField>
                 <Grid container spacing={3}>
@@ -218,7 +212,6 @@ function NewOrder() {
                         </div>
                       )
                     })}
-
                     <TextField
                       onChange={handleChange}
                       name='paymentMethod'

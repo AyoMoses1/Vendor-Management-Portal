@@ -1,5 +1,5 @@
 import {
-  SET_LAYOUT_SETTINGS,
+  SET_LAYOUT_SETTINGS, 
   SET_DEFAULT_LAYOUT_SETTINGS
 } from "../actions/LayoutActions";
 import { MatxLayoutSettings } from "../../MatxLayout/settings";

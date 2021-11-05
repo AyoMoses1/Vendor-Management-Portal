@@ -1,26 +1,35 @@
 import {
-  GET_PRODUCT_LIST,
+  GET_ALL_ORDERS,
   GET_CART_LIST,
   ADD_PRODUCT_TO_CART,
   DELETE_PRODUCT_FROM_CART,
   UPDATE_CART_AMOUNT,
   GET_CATEGORY_LIST,
   GET_RATING_LIST,
-  GET_BRAND_LIST
+  GET_BRAND_LIST,
+  ERROR_FETCH_ORDER
 } from "../actions/EcommerceActions";
 
 const initialState = {
-  productList: [],
-  cartList: []
+  orderList: [],
+  cartList: [],
+  error: null,
+  loading: false
 };
 
 const EcommerceReducer = function(state = initialState, action) {
   switch (action.type) {
-    case GET_PRODUCT_LIST: {
+    case GET_ALL_ORDERS: {
       return {
         ...state,
-        productList: [...action.payload]
+        orderList: action.payload
       };
+    }
+    case ERROR_FETCH_ORDER: {
+      return {
+        ...state,
+        error: action.payload
+      }
     }
     case GET_CATEGORY_LIST: {
       return {
