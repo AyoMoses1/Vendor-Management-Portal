@@ -15,7 +15,6 @@ export const getAllResults = (setResults, setLoading, url) => {
     }
   })
 }
-
 export const createProduct = (payload) => {
   return http.post('/afrimash/products/', payload)
 }

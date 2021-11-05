@@ -1,51 +1,52 @@
-import React from "react";
-import { Redirect } from "react-router-dom";
+import React from 'react'
+import { Redirect } from 'react-router-dom'
 
-import dashboardRoutes from "./views/dashboard/DashboardRoutes";
-import utilitiesRoutes from "./views/utilities/UtilitiesRoutes";
-import sessionRoutes from "./views/sessions/SessionRoutes";
+import dashboardRoutes from './views/dashboard/DashboardRoutes'
+import utilitiesRoutes from './views/utilities/UtilitiesRoutes'
+import sessionRoutes from './views/sessions/SessionRoutes'
 
-import orderRoutes from "./views/orders/OrderRoutes";
+import orderRoutes from './views/orders/OrderRoutes'
 
-import productRoutes from "./views/products/ProductRoutes";
+import productRoutes from './views/products/ProductRoutes'
 
-import customerRoutes from "./views/customers/CustomerRoutes"
+import customerRoutes from './views/customers/CustomerRoutes'
 
-import paymentAndFulfilmentRoutes from "./views/Payment&Fulfilment/PaymentAndFulfilmentRoutes"
+import paymentAndFulfilmentRoutes from './views/Payment&Fulfilment/PaymentAndFulfilmentRoutes'
 
-import userRoutes from "./views/user-management/UserRoutes"
+import userRoutes from './views/user-management/UserRoutes'
 
-import materialRoutes from "./views/material-kit/MaterialRoutes";
-import dragAndDropRoute from "./views/Drag&Drop/DragAndDropRoute";
+import materialRoutes from './views/material-kit/MaterialRoutes'
+import dragAndDropRoute from './views/Drag&Drop/DragAndDropRoute'
 
-import formsRoutes from "./views/forms/FormsRoutes";
-import mapRoutes from "./views/map/MapRoutes";
+import formsRoutes from './views/forms/FormsRoutes'
+import mapRoutes from './views/map/MapRoutes'
 
-import reviewRoutes from "./views/reviews/ReviewRoutes";
+import reviewRoutes from './views/reviews/ReviewRoutes'
 
-import sellerRoutes from "./views/sellers/SellerRoutes"
+import sellerRoutes from './views/sellers/SellerRoutes'
+import agentsRoutes from './views/agent/agent-routes'
 
 const redirectRoute = [
   {
-    path: "/dashboard/analytics",
+    path: '/dashboard/analytics',
     exact: true,
-    component: () => <Redirect to="/dashboard/analytics" />
-  }
-];
+    component: () => <Redirect to='/dashboard/analytics' />,
+  },
+]
 
 const mainRoute = [
   {
-    path: "/",
+    path: '/',
     exact: true,
-    component: () => <Redirect to="/signin" />
-  }
-];
+    component: () => <Redirect to='/signin' />,
+  },
+]
 
 const errorRoute = [
   {
-    component: () => <Redirect to="/404" />
-  }
-];
+    component: () => <Redirect to='/404' />,
+  },
+]
 
 const routes = [
   ...sessionRoutes,
@@ -57,6 +58,7 @@ const routes = [
   ...paymentAndFulfilmentRoutes,
   ...userRoutes,
   ...customerRoutes,
+  ...agentsRoutes,
   ...materialRoutes,
   ...utilitiesRoutes,
   ...dragAndDropRoute,
@@ -64,7 +66,7 @@ const routes = [
   ...mapRoutes,
   ...mainRoute,
   ...redirectRoute,
-  ...errorRoute
-];
+  ...errorRoute,
+]
 
-export default routes;
+export default routes

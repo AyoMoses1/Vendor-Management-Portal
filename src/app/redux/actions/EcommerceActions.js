@@ -1,23 +1,31 @@
 import axios from "axios";
 
-export const GET_PRODUCT_LIST = "GET_PRODUCT_LIST";
+import http from "../../services/api"
+
+export const GET_ALL_ORDERS = "GET_ALL_ORDERS";
 export const GET_CART_LIST = "GET_CART_LIST";
 export const GET_CATEGORY_LIST = "GET_CATEGORY_LIST";
 export const GET_RATING_LIST = "GET_RATING_LIST";
 export const GET_BRAND_LIST = "GET_BRAND_LIST";
+export const ERROR_FETCH_ORDER = "ERROR_FETCH_ORDER";
 
 export const ADD_PRODUCT_TO_CART = "ADD_PRODUCT_TO_CART";
 export const DELETE_PRODUCT_FROM_CART = "DELETE_PRODUCT_FROM_CART";
 
 export const UPDATE_CART_AMOUNT = "UPDATE_CART_AMOUNT";
 
-export const getProductList = () => dispatch => {
-  axios.get("/api/ecommerce/get-product-list").then(res => {
+export const getAllOrders = () => dispatch => {
+  http.get("/afrimash/orders/").then(({data}) => {
     dispatch({
-      type: GET_PRODUCT_LIST,
-      payload: res.data
+      type: GET_ALL_ORDERS,
+      payload: data.object.content
     });
-  });
+  }).catch((err) => {
+    dispatch({
+      type: ERROR_FETCH_ORDER,
+      payload: err
+    })
+  })
 };
 
 export const getCategoryList = () => dispatch => {

@@ -104,10 +104,6 @@ function NewOrder() {
     }
   }
 
-  //   const handleCoupons = (i, event, newValues) =>{
-
-  //   }
-
   const handleAddInput = () => {
     const values = [...fields]
     values.push({
@@ -182,11 +178,32 @@ function NewOrder() {
                   variant='outlined'
                 >
                   {customers.map((customer, idx) => (
-                    <MenuItem
+                    // <MenuItem
+                    //   name='customer'
+                    //   key={idx}
+                    //   value={customer.id}
+                    // >{`${customer.firstName} ${customer.lastName}`}</MenuItem>
+                    <Autocomplete
+                      id='customer'
+                      key={`${customer}-${idx}`}
                       name='customer'
-                      key={idx}
+                      defaultValue=''
+                      options={customer}
                       value={customer.id}
-                    >{`${customer.firstName} ${customer.lastName}`}</MenuItem>
+                      getOptionLabel={(option) => option.name || ''}
+                      onChange={(e, newValues) =>
+                        handleInputChange(idx, e, newValues)
+                      }
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label='Customer name'
+                          name='customerId'
+                          margin='normal'
+                          variant='outlined'
+                        />
+                      )}
+                    />
                   ))}
                 </TextField>
                 <Grid container spacing={3}>
@@ -218,7 +235,6 @@ function NewOrder() {
                         </div>
                       )
                     })}
-
                     <TextField
                       onChange={handleChange}
                       name='paymentMethod'
