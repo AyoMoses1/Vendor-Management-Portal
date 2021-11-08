@@ -17,7 +17,7 @@ const defaultOption = {
     axisPointer: {
       type: 'cross',
       lineStyle: {
-        opacity: 0,
+        opacity: 0.7,
       },
     },
     crossStyle: {
@@ -29,8 +29,8 @@ const defaultOption = {
       areaStyle: {},
       smooth: true,
       lineStyle: {
-        width: 2,
-        color: '#fff',
+        width: 4,
+        color: '#34812a',
       },
     },
   ],
@@ -40,8 +40,9 @@ const defaultOption = {
     showGrid: false,
     boundaryGap: false,
     axisLabel: {
-      color: '#FFAF0F',
+      color: '#000',
       margin: 20,
+      fontSize: 14,
     },
     axisLine: {
       show: false,
@@ -55,15 +56,16 @@ const defaultOption = {
     min: 10,
     max: 60,
     axisLabel: {
-      color: '#FFAF0F',
+      color: '#000',
       margin: 20,
-      fontSize: 13,
+      fontSize: 15,
       fontFamily: 'roboto',
     },
     splitLine: {
       show: true,
       lineStyle: {
-        color: 'rgba(255, 255, 255, .1)',
+        width: 1,
+        color: '#edf2f4',
       },
     },
 
@@ -84,11 +86,11 @@ const defaultOption = {
       colorStops: [
         {
           offset: 0,
-          color: 'rgba(255,255,255,0.3)', // color at 0% position
+          color: '#363636', // color at 0% position
         },
         {
           offset: 1,
-          color: 'rgba(255,255,255,0)', // color at 100% position
+          color: '#a39e9e', // color at 100% position
         },
       ],
       global: false, // false by default
