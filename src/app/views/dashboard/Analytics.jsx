@@ -19,7 +19,7 @@ class Dashboard1 extends Component {
 
     return (
       <Fragment>
-        <div className='pb-86 pt-30 px-30 bg-primary'>
+        <div className='pb-86 pt-30 px-30 bg-analytics'>
           <ModifiedAreaChart
             height='280px'
             option={{
