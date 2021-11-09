@@ -90,14 +90,14 @@ function NewOrder() {
   }
 
   const handleInputChange = (i, event, newValues, reason) => {
-    setNewProduct(newValues)
     if (reason === 'reset') {
       setFields([])
       return
     } else {
       const values = [...fields]
-      values[i].productId = newValues.id
-
+      if (!newValues) return
+      else values[i].productId = newValues.id
+      setNewProduct(newValues)
       values[i] = { ...values[i] }
       setFields(fields)
       setState({ ...state, orderItems: fields })
@@ -132,12 +132,11 @@ function NewOrder() {
     e.preventDefault()
 
     addInvoice({ ...state }).then((response) => {
-      console.log(state)
       if (response instanceof Object) {
-        if (response.data.status === 'OK') {
+        if (response.status === 200) {
           history.push('/orders')
         }
-      } else if (response) {
+      } else if (!response) {
         setAlert('An Error Ocurred, Could not Create Order. Try Again')
         setSeverity('error')
       }
@@ -146,7 +145,6 @@ function NewOrder() {
   const notification = () => {
     return <Notification alert={alert} severity={severity && severity} />
   }
-
   return (
     <div className='m-sm-30'>
       <div className='mb-sm-30'>
@@ -165,26 +163,34 @@ function NewOrder() {
           <div className='w-100 overflow-auto'>
             <Card>
               <form className='px-4' onSubmit={handleSubmit}>
-                <TextField
-                  onChange={handleChange}
-                  // value={state.name}
-                  name='customerId'
-                  defaultValue=''
-                  fullWidth
-                  select
-                  margin='normal'
-                  label='Select a Customer'
-                  type='text'
-                  variant='outlined'
-                >
-                  {customers.map((customer, idx) => (
-                    <MenuItem name='customer' key={idx} value={customer.id}>
-                      {`${customer.firstName} ${customer.lastName}`}
-                    </MenuItem>
-                  ))}
-                </TextField>
                 <Grid container spacing={3}>
                   <Grid item sm={6} xs={12}>
+                    <TextField
+                      onChange={handleChange}
+                      name='customerId'
+                      defaultValue=''
+                      select
+                      fullWidth
+                      margin='normal'
+                      label='Select a Customer'
+                      type='text'
+                      variant='outlined'
+                    >
+                      {customers.map((customer, idx) => (
+                        <MenuItem
+                          divider
+                          name='customer'
+                          key={idx}
+                          value={customer.id}
+                          style={{ flexDirection: 'column' }}
+                        >
+                          <h5>{`${customer.firstName} ${customer.lastName}`}</h5>
+                          <small className='text-muted'>
+                            {customer.mobileNo} {customer.email}
+                          </small>
+                        </MenuItem>
+                      ))}
+                    </TextField>
                     {fields.map((field, idx) => {
                       return (
                         <div key={`${field}-${idx}`} className='maindiv'>
@@ -195,7 +201,11 @@ function NewOrder() {
                             defaultValue=''
                             options={products}
                             value={fields.product}
-                            getOptionLabel={(option) => option.name || ''}
+                            getOptionLabel={(option) =>
+                              `Name: ${option.name || ''} Vendor: ${
+                                option.storeId?.name || ''
+                              }` || ''
+                            }
                             onChange={(e, newValues) =>
                               handleInputChange(idx, e, newValues)
                             }
