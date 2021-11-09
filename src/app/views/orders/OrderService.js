@@ -8,7 +8,7 @@ export const getInvoiceById = (id) => {
 
 export const getAllInvoice = (getOrders, setLoading) => {
   setLoading(true)
-  return http.get('/afrimash/orders/').then(({ data }) => {
+  return http.get('/afrimash/orders?size=100').then(({ data }) => {
     if (data instanceof Object) getOrders(data.object.content)
     setLoading(false)
   })
