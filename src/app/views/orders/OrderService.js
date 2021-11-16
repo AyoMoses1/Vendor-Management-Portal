@@ -6,10 +6,13 @@ export const getInvoiceById = (id) => {
     .get(`/afrimash/orders/${id}`)
 }
 
-export const getAllInvoice = (getOrders, setLoading) => {
+export const getAllInvoice = (getOrders, setLoading, page,setCount) => {
   setLoading(true)
-  return http.get('/afrimash/orders?size=100').then(({ data }) => {
-    if (data instanceof Object) getOrders(data.object.content)
+  return http.get(`afrimash/orders?page=${page}`).then(({ data }) => {
+    if (data instanceof Object) {
+      getOrders(data.object.content)
+     setCount(data.object.totalElements);
+    }
     setLoading(false)
   })
 }

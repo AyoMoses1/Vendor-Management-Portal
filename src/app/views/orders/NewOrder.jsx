@@ -8,6 +8,7 @@ import {
   Grid,
   Icon,
   Checkbox,
+  Paper,
 } from '@material-ui/core'
 import { Breadcrumb, SimpleCard } from 'matx'
 import { useHistory } from 'react-router-dom'
@@ -22,6 +23,7 @@ import Loader from '../../../matx/components/MatxLoadable/Loading'
 import { paymentMethod, shippingMethod, calculateTotal } from './utils'
 
 import { addInvoice, populate } from './OrderService'
+import { Box } from '@material-ui/core'
 
 const icon = <CheckBoxOutlineBlankIcon fontSize='small' />
 const checkedIcon = <CheckBoxIcon fontSize='small' />
@@ -145,6 +147,12 @@ function NewOrder() {
   const notification = () => {
     return <Notification alert={alert} severity={severity && severity} />
   }
+  const PaperComponent = ({ children }) => (
+    <Card>
+      {children}
+      <div>content </div>
+    </Card>
+  )
   return (
     <div className='m-sm-30'>
       <div className='mb-sm-30'>
@@ -201,10 +209,15 @@ function NewOrder() {
                             defaultValue=''
                             options={products}
                             value={fields.product}
+                            PaperComponent={({ children }) => (
+                              <Paper style={{ fontWeight: 'bold' }}>
+                                {children}
+                              </Paper>
+                            )}
                             getOptionLabel={(option) =>
                               `Name: ${option.name || ''} Vendor: ${
                                 option.storeId?.name || ''
-                              }` || ''
+                              }`
                             }
                             onChange={(e, newValues) =>
                               handleInputChange(idx, e, newValues)

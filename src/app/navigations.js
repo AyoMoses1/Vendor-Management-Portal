@@ -94,20 +94,19 @@ export const navigations = [
     ]
   },
   {
-    name: "Support",
+    name: "Settings",
     icon: "border_color",
     children: [
       {
-        name: "Users List",
-        path: "/forms/basic",
+        name: "Account settings",
+        path: "/user-settings",
         iconText: "B"
       },
       {
-        name: "New User",
+        name: "Layout settings",
         path: "/forms/editor",
         iconText: "E"
       }
     ]
   },
-  
 ];

@@ -15,12 +15,19 @@ const Users = () => {
   const [loading, isLoading] = useState()
   const [alert, setAlert] = useState('')
   const [severity, setSeverity] = useState('')
+  const [page, setPage] = useState(0)
+  const [count, setCount] = useState(0)
 
   useEffect(() => {
-    getAllUser(setUserList, isLoading, setAlert, setSeverity)
+    getAllUser(setUserList, isLoading, setAlert, setSeverity, setCount, page)
     console.log(userList)
     return () => setIsAlive(false)
-  }, [isAlive])
+  }, [isAlive, page])
+
+  const onPageChange = (page) => {
+    getAllUser(setUserList, isLoading, setAlert, setSeverity, setCount, page)
+    setPage(page)
+  }
 
   const columns = [
     {
@@ -159,6 +166,14 @@ const Users = () => {
                 filterType: 'textField',
                 responsive: 'standard',
                 elevation: 0,
+                serverSide: true,
+                count,
+                page,
+                onTableChange: (action, tableState) => {
+                  if (action === 'changePage') {
+                    onPageChange(tableState.page)
+                  }
+                },
                 rowsPerPageOptions: [10, 20, 40, 80, 100],
                 customSearchRender: (
                   searchText,
