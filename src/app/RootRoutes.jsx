@@ -25,6 +25,7 @@ import reviewRoutes from './views/reviews/ReviewRoutes'
 
 import sellerRoutes from './views/sellers/SellerRoutes'
 import agentsRoutes from './views/agent/agent-routes'
+import settingsRoutes from './views/user-settings/settings-route'
 
 const redirectRoute = [
   {
@@ -47,7 +48,6 @@ const errorRoute = [
     component: () => <Redirect to='/404' />,
   },
 ]
-
 const routes = [
   ...sessionRoutes,
   ...dashboardRoutes,
@@ -59,6 +59,7 @@ const routes = [
   ...userRoutes,
   ...customerRoutes,
   ...agentsRoutes,
+  ...settingsRoutes,
   ...materialRoutes,
   ...utilitiesRoutes,
   ...dragAndDropRoute,

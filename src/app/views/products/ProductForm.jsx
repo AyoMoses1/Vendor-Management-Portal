@@ -107,12 +107,8 @@ function NewProduct({ isNewProduct, id, Product }) {
 
   const onDrop = useCallback((acceptedFiles) => {}, [])
 
-  const {
-    getRootProps,
-    getInputProps,
-    isDragActive,
-    acceptedFiles,
-  } = useDropzone({ accept: 'image/*', onDrop })
+  const { getRootProps, getInputProps, isDragActive, acceptedFiles } =
+    useDropzone({ accept: 'image/*', onDrop })
 
   /**
    * maps through a list of urls and callbacks
@@ -143,7 +139,6 @@ function NewProduct({ isNewProduct, id, Product }) {
 
   const handleSubmit = (values, { setSubmitting }) => {
     const payload = { ...state, ...values }
-    console.log(state)
     const data = new FormData()
     const updateData = {
       id: state.id,

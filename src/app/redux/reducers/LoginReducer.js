@@ -2,9 +2,11 @@ import {
   LOGIN_SUCCESS,
   LOGIN_ERROR,
   LOGIN_LOADING,
+  USER_LOADED,
   RESET_PASSWORD
 } from "../actions/LoginActions";
-
+import localStorageService from "../../services/localStorageService";
+import axios from 'axios'
 const initialState = {
   success: false,
   loading: false,
@@ -23,6 +25,8 @@ const LoginReducer = function(state = initialState, action) {
       };
     }
     case LOGIN_SUCCESS: {
+      localStorage.setItem("jwt_token", action.payload.jwt);
+      axios.defaults.headers.common["Authorization"] = "Bearer " + action.payload.jwt;
       return {
         ...state,
         success: true,
@@ -37,11 +41,21 @@ const LoginReducer = function(state = initialState, action) {
       };
     }
     case LOGIN_ERROR: {
+      localStorage.removeItem("jwt_token");
+      delete axios.defaults.headers.common["Authorization"];
       return {
         success: false,
         loading: false,
-        error: action.data
+        error: action.payload
       };
+    }
+    case USER_LOADED: {
+      localStorageService.setItem('auth_user',action.payload)
+      return {
+        ...state,
+        success: true,
+        loading: false
+      }
     }
     default: {
       return state;

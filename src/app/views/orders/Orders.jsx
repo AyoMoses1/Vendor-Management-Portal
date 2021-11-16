@@ -11,12 +11,14 @@ import Loading from 'matx/components/MatxLoadable/Loading'
 
 import { GET_ALL_ORDERS } from '../../redux/actions/EcommerceActions'
 
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 const Orders = (props) => {
   const [isAlive, setIsAlive] = useState(true)
   const [orders, setOrders] = useState([])
   const [loading, setLoading] = useState(false)
+  const [page, setPage] = useState(0)
+  const [count, setCount] = useState(0)
   const dialog = useDialog()
   const dispatch = useDispatch()
 
@@ -24,10 +26,15 @@ const Orders = (props) => {
   // const { orderList } = productList
 
   useEffect(() => {
-    getAllInvoice(setOrders, setLoading)
+    getAllInvoice(setOrders, setLoading, page, setCount)
     dispatch({ type: GET_ALL_ORDERS })
     return () => setIsAlive(false)
-  }, [isAlive])
+  }, [isAlive, page])
+
+  const onChangePage = (page) => {
+    getAllInvoice(setOrders, setLoading, page, setCount)
+    setPage(page)
+  }
 
   const columns = [
     {
@@ -223,8 +230,16 @@ const Orders = (props) => {
                 filterType: 'textField',
                 responsive: 'standard',
                 fixedHeader: true,
+                rowsPerPage: 50,
+                serverSide: true,
+                count,
+                page,
+                onTableChange: (action, tableState) => {
+                  if (action === 'changePage') {
+                    onChangePage(tableState.page)
+                  }
+                },
                 elevation: 5,
-                rowsPerPageOptions: [10, 20, 40, 80, 100],
                 customSearchRender: (
                   searchText,
                   handleSearch,

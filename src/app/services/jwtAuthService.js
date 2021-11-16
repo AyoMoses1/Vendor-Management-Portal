@@ -1,36 +1,35 @@
 import axios from "axios";
-import localStorageService from "./localStorageService";
+import localStorageService from "../services/localStorageService";
 import http from "./api";
 import history from "history.js";
 
 
 class JwtAuthService {
-  constructor (props){
-  
-  }
 
-  
-  
- 
   loginWithEmailAndPassword = (userlog) => {
-     axios.post(`https://api.afrimash.com/afrimash/authenticate`, userlog)
-      .then(response => {
-       if(response.status === 200){
-        const {jwt} = response.data
-        this.setSession(jwt)
-        http
-        .get("/afrimash/users/logged-in-details")
-        .then((response)=>{
-          if(response.status === 200){
-            history.push("/dashboard/analytics")
-            this.setUser(response.data.object)
-            return this.user
-          } else if (response.data.errorMsg != null){
-            return
+    axios.post(`https://api.afrimash.com/afrimash/authenticate`, userlog)
+      .then(
+        response => {
+          if (response.status === 200) {
+            const { jwt } = response.data
+            this.setSession(jwt)
+            http
+              .get("/afrimash/users/logged-in-details")
+              .then((response) => {
+                if (response.status === 200) {
+                  history.push("/dashboard/analytics")
+                  this.setUser(response.data.object)
+                  return this.user
+                } else if (response.data.errorMsg != null) {
+                  return
+                }
+              })
           }
-        })
-      }
-    })
+        },
+        error => {
+          if (error) return
+        }
+      )
   }
 
 
@@ -51,9 +50,12 @@ class JwtAuthService {
   };
 
   // Save user to localstorage
-  setUser = (user) => {    
+  setUser = (user) => {
     localStorageService.setItem("auth_user", user);
   }
+  // setError = (err) => {
+
+  // }
   // Remove user from localstorage
   removeUser = () => {
     localStorage.removeItem("auth_user");

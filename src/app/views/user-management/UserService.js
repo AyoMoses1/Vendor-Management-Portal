@@ -6,10 +6,11 @@ export const getUserById = (id) => {
     .get(`/afrimash/users/${id}`)
 }
 
-export const getAllUser = (setData, isLoading, setAlert, setSeverity) => {
+export const getAllUser = (setData, isLoading, setAlert, setSeverity, setCount, page) => {
   isLoading(true)
-  http.get('/afrimash/users/search/').then(({ data }) => {
-       setData(data.object.content)
+  http.get(`/afrimash/users/search?page=${page}`).then(({ data }) => {
+    setData(data.object.content)
+    setCount(data.object.totalElements);
      isLoading(false)
   }).catch((err) => {
       errorState(setAlert, setSeverity)

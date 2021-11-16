@@ -1,7 +1,7 @@
-import SignUp from "./SignUp";
 import SignIn from "./SignIn";
 import NotFound from "./NotFound";
 import ForgotPassword from "./ForgotPassword";
+import Profile from "./Profile";
 
 const settings = {
   activeLayout: "layout1",
@@ -26,11 +26,7 @@ const settings = {
 };
 
 const sessionRoutes = [
-  {
-    path: "/signup",
-    component: SignUp,
-    settings
-  },
+
   {
     path: "/signin",
     component: SignIn,
