@@ -9,7 +9,8 @@ const initialState = {
   agentList: [],
   error: null,
   loading: false,
-  severity: ''
+  severity: '',
+  count: 0,
 };
 
 export const agentReducer = (state = initialState, action) => {
@@ -21,8 +22,9 @@ export const agentReducer = (state = initialState, action) => {
     case GET_ALL_AGENTS_SUCCESS:
       return {
         ...state,
-        agentList: action.payload,
-        loading: false
+        agentList: action.payload.content,
+        count: action.payload.numberOfElements,
+        loading: false,
       }
     case ERROR_FETCH_AGENT:
       return {

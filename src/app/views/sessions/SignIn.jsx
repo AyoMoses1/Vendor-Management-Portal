@@ -1,9 +1,15 @@
 import React, { Component } from 'react'
-import { withStyles, CircularProgress } from '@material-ui/core'
+import {
+  withStyles,
+  CircularProgress,
+  useTheme,
+  useMediaQuery,
+} from '@material-ui/core'
 import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator'
 import { connect } from 'react-redux'
 import { PropTypes } from 'prop-types'
 import { withRouter } from 'react-router-dom'
+
 import Notification from 'app/components/Notification'
 
 import './style.scss'

@@ -14,7 +14,7 @@ export const getAllAgents = (search = '', size = '',page = '') => dispatch => {
   http.get(`/afrimash/agents/search?=${search}&size=${size}&page=${page}`).then(({ data }) => {
     dispatch({
       type: GET_ALL_AGENTS_SUCCESS,
-      payload: data.object.content,
+      payload: data.object,
     })
   }).catch((err) => { dispatch({ type: ERROR_FETCH_AGENT, payload: err }) })
 }

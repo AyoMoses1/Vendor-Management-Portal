@@ -14,15 +14,16 @@ import Loading from 'matx/components/MatxLoadable/Loading'
 
 const AgentsInfo = ({ location, match }) => {
   const dispatch = useDispatch()
+  const { id } = location.state
 
   const agentDetail = useSelector((state) => state.agentDetails)
   const { agentDetails, error, loading, severity } = agentDetail
 
   useEffect(() => {
     setTimeout(() => {
-      dispatch(getAgentById(match.params.id))
+      dispatch(getAgentById(id))
     }, 1500)
-  }, [dispatch, match])
+  }, [dispatch, id])
 
   console.log(agentDetails)
   return (
@@ -72,10 +73,20 @@ const AgentsInfo = ({ location, match }) => {
                     <div>{agentDetails && agentDetails['state']}</div>
                   </TableCell>
                 </TableRow>
+                <TableRow>
+                  <TableCell className='pl-4'>Agent Type</TableCell>
+                  <TableCell>
+                    <div>
+                      {agentDetails && agentDetails['agentType'] === 'BD_AGENT'
+                        ? 'BDA AGENT'
+                        : 'LEAD AGENT'}
+                    </div>
+                  </TableCell>
+                </TableRow>
               </TableBody>
             </Table>
           </SimpleCard>
-          <SimpleCard>
+          {/* <SimpleCard>
             <h1 className='pl-4 text-center'>Agent User's</h1>
             <Divider />
             <Table>
@@ -92,12 +103,12 @@ const AgentsInfo = ({ location, match }) => {
                 </TableRow>
               </TableBody>
             </Table>
-          </SimpleCard>
+          </SimpleCard> */}
           <SimpleCard>
             <h1 className='pl-4 text-center'>Agent Adress</h1>
             <Divider />
             <Table>
-              <TableBody>
+              {/* <TableBody>
                 {agentDetails &&
                   agentDetails?.deliveryAddresses.map((item, idx) => (
                     <TableRow key={idx}>
@@ -109,7 +120,7 @@ const AgentsInfo = ({ location, match }) => {
                       </TableCell>
                     </TableRow>
                   ))}
-              </TableBody>
+              </TableBody> */}
             </Table>
           </SimpleCard>
         </>

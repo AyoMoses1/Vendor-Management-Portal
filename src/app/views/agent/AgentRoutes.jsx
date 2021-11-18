@@ -8,14 +8,22 @@ const AgentsInfo = MatxLoadable({
   loader: () => import('./AgentInfo'),
 })
 
+const NewAgent = MatxLoadable({
+  loader: () => import('./NewAgent'),
+})
+
 const agentsRoutes = [
   {
     path: '/agents',
     component: Agents,
   },
   {
-    path: '/agent/:id',
+    path: '/agent/details',
     component: AgentsInfo,
+  },
+  {
+    path: '/agent/new',
+    component: NewAgent,
   },
 ]
 export default agentsRoutes

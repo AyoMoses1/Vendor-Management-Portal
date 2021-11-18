@@ -10,6 +10,7 @@ import axios from 'axios'
 const initialState = {
   success: false,
   loading: false,
+  isAuthenticated: false,
   error: {
     username: null,
     password: null
@@ -30,6 +31,7 @@ const LoginReducer = function(state = initialState, action) {
       return {
         ...state,
         success: true,
+        isAuthenticated: true,
         loading: false
       };
     }
@@ -45,6 +47,7 @@ const LoginReducer = function(state = initialState, action) {
       delete axios.defaults.headers.common["Authorization"];
       return {
         success: false,
+        isAuthenticated: false,
         loading: false,
         error: action.payload
       };
@@ -53,6 +56,7 @@ const LoginReducer = function(state = initialState, action) {
       localStorageService.setItem('auth_user',action.payload)
       return {
         ...state,
+        isAuthenticated: true,
         success: true,
         loading: false
       }

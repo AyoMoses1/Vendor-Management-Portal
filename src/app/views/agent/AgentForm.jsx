@@ -1,31 +1,83 @@
 import React from 'react'
-import { TextField, Button, Grid } from '@material-ui/core'
-import { Formik } from 'formik'
-import * as yup from 'yup'
-import { MenuItem } from 'material-ui'
-import { Label } from 'recharts'
+import {
+  TextField,
+  Button,
+  Grid,
+  MenuItem,
+  InputLabel,
+} from '@material-ui/core'
+import http from '../../services/api'
 
-const agentTypes = ['Lead Agent', 'Bussiness Development Agent']
+import { Formik } from 'formik'
+
+import * as yup from 'yup'
+import { set } from 'lodash'
+import { useHistory } from 'react-router-dom/cjs/react-router-dom'
+
+const agentTypes = [
+  { type: 'Lead Agent', value: 'LEAD_AGENT' },
+  { type: 'Bussiness Development Agent', value: 'BD_AGENT' },
+]
 
 const AgentForm = () => {
+  const history = useHistory()
   const initialState = {
     password: 'password',
     secretAnswer: 'secret',
   }
+  const filesObject = {
+    passportPhotoUrl: '',
+    bankAccountProofUrl: '',
+    addressProofUrl: '',
+    identityProofUrl: '',
+  }
+
   const initialValues = {
     agentType: '',
     firstName: '',
     lastName: '',
     mobileNo: '',
-    name: '',
     email: '',
     state: '',
   }
 
   const [state, setState] = React.useState(initialState)
+  const [files, setFiles] = React.useState(filesObject)
   const [values, setValues] = React.useState(initialValues)
 
-  const handleSubmit = () => {}
+  const fileUploadHandler = async (e) => {
+    const file = e.target.files[0]
+    const { name } = e.target
+    setFiles({
+      ...files,
+      [name]: file,
+    })
+    console.log(files)
+  }
+
+  const handleSubmit = (values, { setSubmitting }) => {
+    const agentData = { ...state, ...values }
+    const formData = new FormData()
+    console.log(files)
+    console.log(agentData)
+    formData.append('agent', JSON.stringify(agentData))
+    formData.append('passportPhotoUrl', files.passportPhotoUrl)
+    formData.append('bankAccountProofUrl', files.bankAccountProofUrl)
+    formData.append('addressProofUrl', files.addressProofUrl)
+    formData.append('identityProofUrl', files.identityProofUrl)
+
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    }
+    const res = http.post(`/afrimash/agents`, formData, config).then((res) => {
+      if (res.status === 200) {
+        history.push('/agents')
+      }
+    })
+    console.log(res)
+  }
 
   return (
     <div className='m-sm-30'>
@@ -33,7 +85,7 @@ const AgentForm = () => {
         initialValues={values}
         onSubmit={handleSubmit}
         enableReinitialize={true}
-        validationSchema={productSchema}
+        validationSchema={agentSchema}
       >
         {({
           values,
@@ -48,9 +100,10 @@ const AgentForm = () => {
         }) => (
           <form className='px-4' onSubmit={handleSubmit}>
             <Grid container spacing={3}>
-              <h1>Agent personal details</h1>
+              <Grid container item>
+                <h1>Agent personal details</h1>
+              </Grid>
               <Grid item sm={6} xs={12}>
-                <Label>Select Agent Type</Label>
                 <TextField
                   className='mb-4'
                   name='agentType'
@@ -66,87 +119,144 @@ const AgentForm = () => {
                   helperText={touched.agentType && errors.agentType}
                 >
                   {agentTypes.map((agentType, idx) => (
-                    <MenuItem key={idx} value={agentType}>
-                      {agentType}
+                    <MenuItem key={idx} value={agentType.value}>
+                      {agentType.type}
                     </MenuItem>
                   ))}
                 </TextField>
                 <TextField
                   className='mb-4'
-                  name='price'
-                  label='Product Price(₦)'
+                  name='firstName'
+                  label='First Name'
                   variant='outlined'
                   margin='normal'
                   fullWidth
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  value={values.price || ''}
-                  error={Boolean(touched.price && errors.price)}
-                  helperText={touched.price && errors.price}
+                  value={values.firstName || ''}
+                  error={Boolean(touched.firstName && errors.firstName)}
+                  helperText={touched.firstName && errors.price}
                 />
                 <TextField
                   className='mb-4'
-                  name='discountRate'
-                  label='Discount Rate (%)'
+                  name='mobileNo'
+                  label='Mobile Number'
                   variant='outlined'
                   margin='normal'
                   fullWidth
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  value={values.discountRate || ''}
-                  helperText={touched.discountRate && errors.discountRate}
+                  value={values.mobileNo || ''}
+                  error={Boolean(touched.mobileNo && errors.mobileNo)}
+                  helperText={touched.mobileNo && errors.mobileNo}
                 />
               </Grid>
               <Grid item sm={6} xs={12}>
                 <TextField
                   className='mb-4'
-                  name='name'
-                  label='Product Name'
+                  name='lastName'
+                  label='Last Name'
                   variant='outlined'
                   margin='normal'
                   fullWidth
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  value={values.name || ''}
-                  error={Boolean(touched.name && errors.name)}
-                  helperText={touched.name && errors.name}
+                  value={values.lastName || ''}
+                  helperText={touched.lastName && errors.lastName}
                 />
                 <TextField
                   className='mb-4'
-                  name='sku'
-                  label='SKU'
+                  name='email'
+                  label='Email'
                   variant='outlined'
                   margin='normal'
                   fullWidth
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  value={values.sku || ''}
-                  error={Boolean(touched.sku && errors.sku)}
-                  helperText={touched.sku && errors.sku}
+                  value={values.email || ''}
+                  error={Boolean(touched.email && errors.email)}
+                  helperText={touched.email && errors.email}
                 />
                 <TextField
                   className='mb-4'
-                  name='description'
-                  label='Description'
+                  name='state'
+                  label='State'
                   variant='outlined'
                   margin='normal'
                   fullWidth
                   multiline
-                  // rows={8}
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  value={values.description || ''}
-                  error={Boolean(touched.description && errors.description)}
-                  helperText={touched.description && errors.description}
+                  value={values.state || ''}
+                  error={Boolean(touched.state && errors.state)}
+                  helperText={touched.state && errors.state}
                 />
               </Grid>
+            </Grid>
+            <h3 className='mt-4'>Agent documents uploads</h3>
+            <Grid container spacing={3}>
+              <Grid item sm={6} xs={12}>
+                <InputLabel htmlFor='bootstrap-input'>
+                  Passport Photo Image
+                </InputLabel>
+                <TextField
+                  className='mb-4 mr-4'
+                  name='passportPhotoUrl'
+                  type='file'
+                  fullWidth
+                  variant='outlined'
+                  margin='normal'
+                  onChange={fileUploadHandler}
+                />
+                <InputLabel htmlFor='bootstrap-input'>
+                  Bank Account Proof File
+                </InputLabel>
+                <TextField
+                  className='mb-4'
+                  name='bankAccountProofUrl'
+                  fullWidth
+                  type='file'
+                  variant='outlined'
+                  margin='normal'
+                  onChange={fileUploadHandler}
+                />
+              </Grid>
+              <Grid item sm={6} xs={12}>
+                <InputLabel htmlFor='bootstrap-input'>
+                  Address Proof File
+                </InputLabel>
+                <TextField
+                  className='mb-4 mr-4'
+                  name='addressProofUrl'
+                  fullWidth
+                  type='file'
+                  variant='outlined'
+                  margin='normal'
+                  onChange={fileUploadHandler}
+                />
+                <InputLabel htmlFor='bootstrap-input'>
+                  Identity Proof File
+                </InputLabel>
+                <TextField
+                  className='mb-4'
+                  name='identityProofUrl'
+                  fullWidth
+                  type='file'
+                  variant='outlined'
+                  margin='normal'
+                  onBlur={handleBlur}
+                  onChange={fileUploadHandler}
+                />
+              </Grid>
+            </Grid>
+            <Grid item container justify='center' alignItems='center'>
               <Button
-                className='mb-4 px-12'
+                className='w-220 mt-4'
                 variant='contained'
                 color='primary'
                 type='submit'
               >
-                Add Product
+                Create Agent
               </Button>
             </Grid>
           </form>
@@ -155,14 +265,20 @@ const AgentForm = () => {
     </div>
   )
 }
-
-const productSchema = yup.object().shape({
-  name: yup.string().required('Name is required'),
-  price: yup.number().required('Price is required'),
-  description: yup
+const phoneValidation = /^234[0-9]{10}$/
+const agentSchema = yup.object().shape({
+  firstName: yup.string().required('First Name is required'),
+  lastName: yup.string().required('Last Name is required'),
+  mobileNo: yup
     .string()
-    .min(10)
-    .required('Please enter a description of atleast 10 chars long'),
+    .matches(phoneValidation, 'Please enter a valid number i.e 2348012345678')
+    .required('Phone number cannot be blank'),
+  email: yup
+    .string()
+    .email('Please enterr a valid email address')
+    .required('Email cannot be blank'),
+  state: yup.string().required('Please enterr a valid state. i.e Lagos'),
+  agentType: yup.string().required('Please select agent type'),
 })
 
 export default AgentForm

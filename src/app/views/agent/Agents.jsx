@@ -12,17 +12,23 @@ import Notification from 'app/components/Notification'
 
 const Agents = () => {
   const agents = useSelector((state) => state.agents)
-  const { agentList, error, severity, loading } = agents
+  const { agentList, count, error, severity, loading } = agents
   const [id, setId] = React.useState(0)
+  // const [count, setCount] = React.useState(0)
+  const [page, setPage] = React.useState(0)
 
   const dialog = useDialog()
 
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(getAllAgents())
+    dispatch(getAllAgents(page))
   }, [dispatch])
 
+  const onPageChange = (page) => {
+    dispatch(getAllAgents(page))
+    setPage(page)
+  }
   const columns = [
     {
       name: 'firstname', // field name in the row object
@@ -35,7 +41,7 @@ const Agents = () => {
           return (
             <Link
               to={{
-                pathname: `/agent/${user.id}`,
+                pathname: `/agent/details/${user.id}`,
                 state: {
                   id: user.id,
                 },
@@ -44,9 +50,6 @@ const Agents = () => {
             >
               <div className='ml-3'>
                 <h5 className='my-0 text-15'>{`${user?.firstName} ${user?.lastName}`}</h5>
-                <small className='text-muted'>{user?.email}</small>
-                <br />
-                <small className='text-muted'>{user?.mobileNo}</small>
               </div>
             </Link>
           )
@@ -54,31 +57,57 @@ const Agents = () => {
       },
     },
     {
-      name: 'deliveryAddresses',
-      label: 'Delivery Address',
+      name: 'mobileNo', // field name in the row object
+      label: 'Contact', // column title that will be shown in table
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
           let user = agentList[dataIndex]
-          let address = user.deliveryAddresses.map((name) => name.address)
-          let state = user.deliveryAddresses.map((name) => name.state)
+          setId(user.id)
           return (
             <Link
               to={{
-                pathname: `/agent/${user.id}`,
+                pathname: `/agent/details/${user.id}`,
                 state: {
                   id: user.id,
                 },
               }}
               className='flex items-center'
             >
-              <div className='ml-3 w-50'>
-                <p className='my-0 text-overflow text-muted'>
-                  {address && address.join(' , ')}
-                </p>
-                <strong className='my-0 text-overflow text-muted'>
-                  {state && state.join(' , ')}
-                </strong>
+              <div className='w-220'>
+                <h6>
+                  <strong>Email:</strong> {user?.email}
+                </h6>
+                <br />
+                <h5 className='my-0'>Phone: {user?.mobileNo}</h5>
+              </div>
+            </Link>
+          )
+        },
+      },
+    },
+    {
+      name: 'agentType', // field name in the row object
+      label: 'Agent Type', // column title that will be shown in table
+      options: {
+        filter: true,
+        customBodyRenderLite: (dataIndex) => {
+          let user = agentList[dataIndex]
+          setId(user.id)
+          return (
+            <Link
+              to={{
+                pathname: `/agent/details/${user.id}`,
+                state: {
+                  id: user.id,
+                },
+              }}
+              className='flex items-center'
+            >
+              <div className='ml-10'>
+                <h5 className='my-0'>
+                  {user?.agentType === 'BD_AGENT' ? 'BDA AGENT' : 'LEAD AGENT'}
+                </h5>
               </div>
             </Link>
           )
@@ -95,7 +124,7 @@ const Agents = () => {
           return (
             <Link
               to={{
-                pathname: `/agent/${user.id}`,
+                pathname: `/agent/details/${user.id}`,
                 state: {
                   id: user.id,
                 },
@@ -118,8 +147,7 @@ const Agents = () => {
         customBodyRenderLite: (dataIndex) => {
           let user = agentList[dataIndex]
           return (
-            <div className='flex items-center'>
-              <div className='flex-grow'></div>
+            <div>
               <Link
                 to={{
                   pathname: '/agent/edit',
@@ -170,6 +198,13 @@ const Agents = () => {
                     .catch(() => {
                       return false
                     }),
+                count,
+                page,
+                onTableChange: (action, tableState) => {
+                  if (action === 'changePage') {
+                    onPageChange(tableState.page)
+                  }
+                },
                 filterType: 'textField',
                 responsive: 'standard',
                 elevation: 0,
@@ -217,7 +252,7 @@ const Agents = () => {
                       }}
                     >
                       <Button variant='contained' color='primary'>
-                        <Icon>add</Icon>Add New
+                        Add New
                       </Button>
                     </Link>
                   )
