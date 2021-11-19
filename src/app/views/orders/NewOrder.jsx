@@ -28,7 +28,7 @@ import { Box } from '@material-ui/core'
 const icon = <CheckBoxOutlineBlankIcon fontSize='small' />
 const checkedIcon = <CheckBoxIcon fontSize='small' />
 
-function NewOrder() {
+function NewOrders() {
   const initialState = {
     customerId: '',
     orderItems: [],
@@ -377,4 +377,4 @@ function NewOrder() {
   )
 }
 
-export default NewOrder
+export default NewOrders

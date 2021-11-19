@@ -15,7 +15,7 @@ export default new (class Http {
         return response
       },
       (error) => {
-        return Promise.reject(error)
+        return error
       }
     )
     return axiosInstance

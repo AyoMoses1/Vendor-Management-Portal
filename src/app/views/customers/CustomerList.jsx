@@ -234,7 +234,7 @@ const CustomerList = () => {
                     >
                       <IconButton>
                         <Button variant='contained' color='primary'>
-                          <Icon>add</Icon>Add New
+                          Add New
                         </Button>
                       </IconButton>
                     </Link>

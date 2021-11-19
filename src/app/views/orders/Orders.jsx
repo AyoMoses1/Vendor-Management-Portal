@@ -283,7 +283,7 @@ const Orders = (props) => {
                       }}
                     >
                       <Button variant='contained' color='primary'>
-                        <Icon>add</Icon>Add New
+                        Add New
                       </Button>
                     </Link>
                   )

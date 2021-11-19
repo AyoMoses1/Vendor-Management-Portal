@@ -13,7 +13,7 @@ export const getAllUser = (setData, isLoading, setAlert, setSeverity, setCount, 
     setCount(data.object.totalElements);
      isLoading(false)
   }).catch((err) => {
-      errorState(setAlert, setSeverity)
+      errorState(setAlert, setSeverity) 
     })
 }
 

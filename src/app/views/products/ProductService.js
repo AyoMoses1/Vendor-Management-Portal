@@ -10,7 +10,7 @@ export const getAllResults = (setResults, setLoading, url) => {
   setLoading(true)
   return http.get(url).then(({ data }) => {
     if (data instanceof Object) {
-      setResults(data.object)
+      setResults(data.object.content)
       setLoading(false)
     }
   })

@@ -305,7 +305,7 @@ const Products = () => {
                       }}
                     >
                       <Button variant='contained' color='primary'>
-                        <Icon>add</Icon>Add New
+                        Add New
                       </Button>
                     </Link>
                   )
