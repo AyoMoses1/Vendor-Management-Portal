@@ -18,6 +18,7 @@ const Agents = () => {
   const [page, setPage] = React.useState(0)
 
   const dialog = useDialog()
+  console.log(agentList)
 
   const dispatch = useDispatch()
 
@@ -44,6 +45,7 @@ const Agents = () => {
                 pathname: `/agent/details/${user.id}`,
                 state: {
                   id: user.id,
+                  agentCode: user.agentCode,
                 },
               }}
               className='flex items-center'
@@ -70,6 +72,7 @@ const Agents = () => {
                 pathname: `/agent/details/${user.id}`,
                 state: {
                   id: user.id,
+                  agentCode: user.agentCode,
                 },
               }}
               className='flex items-center'
@@ -100,6 +103,7 @@ const Agents = () => {
                 pathname: `/agent/details/${user.id}`,
                 state: {
                   id: user.id,
+                  agentCode: user.agentCode,
                 },
               }}
               className='flex items-center'
@@ -127,6 +131,7 @@ const Agents = () => {
                 pathname: `/agent/details/${user.id}`,
                 state: {
                   id: user.id,
+                  agentCode: user.agentCode,
                 },
               }}
               className='flex items-center'
