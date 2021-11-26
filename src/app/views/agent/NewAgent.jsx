@@ -8,7 +8,7 @@ function NewAgent({ location }) {
       <div className='mb-sm-30'>
         <Breadcrumb
           routeSegments={[
-            { name: 'Products', path: '/agents' },
+            { name: 'Agents', path: '/agents' },
             { name: 'New Agent' },
           ]}
         />

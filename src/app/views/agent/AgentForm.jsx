@@ -11,16 +11,19 @@ import http from '../../services/api'
 import { Formik } from 'formik'
 
 import * as yup from 'yup'
-import { set } from 'lodash'
 import { useHistory } from 'react-router-dom/cjs/react-router-dom'
+
+import { useDispatch, useSelector } from 'react-redux'
+import { getAgentById } from 'app/redux/actions/agents-action'
 
 const agentTypes = [
   { type: 'Lead Agent', value: 'LEAD_AGENT' },
   { type: 'Bussiness Development Agent', value: 'BD_AGENT' },
 ]
 
-const AgentForm = () => {
+const AgentForm = ({ isEdit, id, agent }) => {
   const history = useHistory()
+  const dispatch = useDispatch()
   const initialState = {
     password: 'password',
     secretAnswer: 'secret',
@@ -45,6 +48,9 @@ const AgentForm = () => {
   const [files, setFiles] = React.useState(filesObject)
   const [values, setValues] = React.useState(initialValues)
 
+  const agentDetail = useSelector((state) => state.agentDetails)
+  const { agentDetails } = agentDetail
+
   const fileUploadHandler = async (e) => {
     const file = e.target.files[0]
     const { name } = e.target
@@ -58,18 +64,28 @@ const AgentForm = () => {
   const handleSubmit = (values, { setSubmitting }) => {
     const agentData = { ...state, ...values }
     const formData = new FormData()
-    console.log(files)
-    console.log(agentData)
+
     formData.append('agent', JSON.stringify(agentData))
     formData.append('passportPhotoUrl', files.passportPhotoUrl)
     formData.append('bankAccountProofUrl', files.bankAccountProofUrl)
     formData.append('addressProofUrl', files.addressProofUrl)
     formData.append('identityProofUrl', files.identityProofUrl)
 
+    const updateData = {
+      id,
+      ...values,
+      ...files,
+    }
+    console.log(updateData)
     const config = {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
+    }
+    if (isEdit) {
+      const res = http.put(`/afrimash/agents/`, updateData)
+      console.log(res)
+      return
     }
     const res = http.post(`/afrimash/agents`, formData, config).then((res) => {
       if (res.status === 200) {
@@ -78,6 +94,17 @@ const AgentForm = () => {
     })
     console.log(res)
   }
+
+  React.useEffect(() => {
+    dispatch(getAgentById(id))
+  }, [dispatch, id, isEdit])
+
+  React.useEffect(() => {
+    setTimeout(() => {
+      setValues(agentDetails)
+      setFiles(agentDetails)
+    }, 500)
+  }, [agentDetails])
 
   return (
     <div className='m-sm-30'>
@@ -114,7 +141,7 @@ const AgentForm = () => {
                   margin='normal'
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  value={values.agentType || ''}
+                  value={values?.agentType}
                   error={Boolean(touched.agentType && errors.agentType)}
                   helperText={touched.agentType && errors.agentType}
                 >
@@ -133,7 +160,7 @@ const AgentForm = () => {
                   fullWidth
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  value={values.firstName || ''}
+                  value={agentDetails?.firstName}
                   error={Boolean(touched.firstName && errors.firstName)}
                   helperText={touched.firstName && errors.price}
                 />
@@ -146,7 +173,7 @@ const AgentForm = () => {
                   fullWidth
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  value={values.mobileNo || ''}
+                  value={values?.mobileNo}
                   error={Boolean(touched.mobileNo && errors.mobileNo)}
                   helperText={touched.mobileNo && errors.mobileNo}
                 />
@@ -161,7 +188,7 @@ const AgentForm = () => {
                   fullWidth
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  value={values.lastName || ''}
+                  value={values?.lastName}
                   helperText={touched.lastName && errors.lastName}
                 />
                 <TextField
@@ -173,7 +200,7 @@ const AgentForm = () => {
                   fullWidth
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  value={values.email || ''}
+                  value={values?.email}
                   error={Boolean(touched.email && errors.email)}
                   helperText={touched.email && errors.email}
                 />
@@ -187,7 +214,7 @@ const AgentForm = () => {
                   multiline
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  value={values.state || ''}
+                  value={values?.state}
                   error={Boolean(touched.state && errors.state)}
                   helperText={touched.state && errors.state}
                 />
@@ -256,7 +283,7 @@ const AgentForm = () => {
                 color='primary'
                 type='submit'
               >
-                Create Agent
+                {isEdit ? 'Update Agent' : 'Create Agent'}
               </Button>
             </Grid>
           </form>

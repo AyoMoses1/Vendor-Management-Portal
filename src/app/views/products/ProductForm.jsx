@@ -166,7 +166,6 @@ function NewProduct({ isNewProduct, id, Product }) {
         })
         .catch((err) => console.error(err))
     }
-    console.log(data.getAll('product'))
     createProduct(data)
       .then((res) => {
         if (res.status === 200) history.push('/products')
