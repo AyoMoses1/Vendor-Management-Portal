@@ -3,7 +3,10 @@ import {
   ERROR_FETCH_AGENT, GET_AGENT_DETAILS_REQUEST,
   GET_AGENT_DETAILS_SUCCESS,
   ERROR_FETCH_DETILS_AGENT,
-  GET_AGENT_CUSTOMER_SUCCESS
+  GET_AGENT_CUSTOMER_SUCCESS,
+  AGENT_ORDERS_REQUEST,
+  AGENT_ORDERS_SUCCESS,
+  AGENT_ORDERS_FAILED
 } from '../actions/agents-action'
 
 const initialState = {
@@ -67,7 +70,32 @@ export const agentCustomersReducer = (state = { agentCustomers: [], loading: tru
       return {
         ...state,
         agentCustomers: action.payload
-    }
+      }
+    default:
+      return state
+  }
+}
+
+export const agentOrdersReducer = (state = { agentOrders: [], loading: false, count: 0 }, action) => {
+  switch (action.type) {
+    case AGENT_ORDERS_REQUEST:
+      return {
+        ...state,
+        loading: true
+      }
+    case AGENT_ORDERS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        agentOrders: action.payload.content,
+        count: action.payload.totalElements
+      }
+    case AGENT_ORDERS_FAILED:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload
+      }
     default:
       return state
   }

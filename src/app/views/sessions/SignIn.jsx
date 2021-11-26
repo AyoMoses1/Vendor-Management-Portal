@@ -1,10 +1,5 @@
 import React, { Component } from 'react'
-import {
-  withStyles,
-  CircularProgress,
-  useTheme,
-  useMediaQuery,
-} from '@material-ui/core'
+import { withStyles, CircularProgress } from '@material-ui/core'
 import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator'
 import { connect } from 'react-redux'
 import { PropTypes } from 'prop-types'
@@ -68,6 +63,7 @@ class SignIn extends Component {
               type='email'
               name='username'
               value={username}
+              disabled={this.props.login.loading}
               validators={['required', 'isEmail']}
               errorMessages={['this field is required', 'User is not valid']}
             />
@@ -77,6 +73,7 @@ class SignIn extends Component {
               variant='outlined'
               onChange={this.handleChange}
               name='password'
+              disabled={this.props.login.loading}
               type='password'
               value={password}
               validators={['required']}

@@ -12,6 +12,10 @@ export const ERROR_FETCH_DETILS_AGENT = "ERROR_FETCH_DETILS_AGENT";
 export const GET_AGENT_CUSTOMER_SUCCESS = "GET_AGENT_CUSTOMER_SUCCESS";
 export const GET_AGENT_CUSTOMER_FAILED = "GET_AGENT_CUSTOMER_FAILED";
 
+export const AGENT_ORDERS_REQUEST = 'AGENT_ORDERS_REQUEST'
+export const AGENT_ORDERS_SUCCESS = 'AGENT_ORDERS_SUCCESS'
+export const AGENT_ORDERS_FAILED = 'AGENT_ORDERS_FAILED'
+
 export const getAllAgents = (search = '', size = '', page = '') => dispatch => {
   dispatch({ type: GET_AGENT_REQUEST })
   http.get(`/afrimash/agents/search?=${search}&size=${size}&page=${page}`).then(({ data }) => {
@@ -30,7 +34,9 @@ export const getAgentById = (id) => dispatch => {
       type: GET_AGENT_DETAILS_SUCCESS,
       payload: data.object,
     })
-  }).catch((err) => { dispatch({ type: ERROR_FETCH_DETILS_AGENT, payload: err }) })
+  }).catch((err) => {
+    dispatch({ type: ERROR_FETCH_DETILS_AGENT, payload: err })
+  })
 }
 
 export const getAgentCustomers = (agentCode) => dispatch => {
@@ -40,4 +46,14 @@ export const getAgentCustomers = (agentCode) => dispatch => {
       payload: data.object
     })
   }).catch((err) => { dispatch({ type: GET_AGENT_CUSTOMER_FAILED, payload: err }) })
+}
+
+export const getAgentOrders = (agentId, page=0) => dispatch => {
+  dispatch({type: AGENT_ORDERS_REQUEST})
+  http.get(`/afrimash/orders?agentId=${agentId}&page=${page}`).then(({data}) => {
+    dispatch({
+      type: AGENT_ORDERS_SUCCESS,
+      payload: data.object
+    })
+  }).catch((err) => {dispatch({type: AGENT_ORDERS_FAILED, payload: err})})
 }

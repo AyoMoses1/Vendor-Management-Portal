@@ -76,6 +76,7 @@ function NewCustomer({ isNewCustomer, id, Customer }) {
           errorState(setAlert, setSeverity)
         }
         setState({ ...state })
+        history.push('/customers')
       })
   }
 

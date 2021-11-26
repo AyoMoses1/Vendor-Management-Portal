@@ -29,7 +29,7 @@ const Orders = (props) => {
     getAllInvoice(setOrders, setLoading, page, setCount)
     dispatch({ type: GET_ALL_ORDERS })
     return () => setIsAlive(false)
-  }, [isAlive, page])
+  }, [dispatch, isAlive, page])
 
   const onChangePage = (page) => {
     getAllInvoice(setOrders, setLoading, page, setCount)
