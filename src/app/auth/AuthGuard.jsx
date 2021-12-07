@@ -15,13 +15,30 @@ class AuthGuard extends Component {
   }
 
   componentDidMount() {
-    if (!this.state.authenticated) {
-      this.redirectRoute(this.props)
+    const { location, history } = this.props
+    const { pathname } = location
+    const token = localStorage.getItem('jwt_token')
+    if (token) {
+      this.setState({
+        authenticated: true,
+      })
+    }
+    if (this.state.authenticated || token) {
+      history.push({
+        pathname: '/dashboard/analytics',
+        state: { redirectUrl: pathname },
+      })
+    } else {
+      history.push({
+        pathname: '/signin',
+        state: { redirectUrl: pathname },
+      })
     }
   }
 
   componentDidUpdate() {
-    if (!this.state.authenticated) {
+    const token = localStorage.getItem('jwt_token')
+    if (!this.state.authenticated || !token) {
       this.redirectRoute(this.props)
     }
   }

@@ -3,7 +3,14 @@ import { Breadcrumb } from 'matx'
 import MUIDataTable from 'mui-datatables'
 import { useDialog } from 'muibox'
 
-import { Grow, Icon, IconButton, TextField, Button } from '@material-ui/core'
+import {
+  Grow,
+  Icon,
+  IconButton,
+  TextField,
+  Button,
+  MenuItem,
+} from '@material-ui/core'
 import { Link } from 'react-router-dom'
 import './order-view.css'
 import { deleteInvoice, getAllInvoice } from './OrderService'
@@ -21,15 +28,37 @@ const Orders = (props) => {
   const [count, setCount] = useState(0)
   const dialog = useDialog()
   const dispatch = useDispatch()
+  const [source, setSource] = useState('')
 
   // const productList = useSelector((state) => state.ecommerce)
   // const { orderList } = productList
-
+  const sourceTypes = [
+    {
+      type: 'USSD',
+      value: 'USSD',
+    },
+    {
+      type: 'ADMIN',
+      value: 'ADMIN',
+    },
+    {
+      type: 'AGENT APP',
+      value: 'AGENT_APP',
+    },
+    {
+      type: 'CUSTOMER APP',
+      value: 'CUSTOMER_APP',
+    },
+    {
+      type: 'MARKET PLACE',
+      value: 'MARKET_PLACE',
+    },
+  ]
   useEffect(() => {
-    getAllInvoice(setOrders, setLoading, page, setCount)
+    getAllInvoice(setOrders, setLoading, page, setCount, source)
     dispatch({ type: GET_ALL_ORDERS })
     return () => setIsAlive(false)
-  }, [dispatch, isAlive, page])
+  }, [dispatch, isAlive, page, source])
 
   const onChangePage = (page) => {
     getAllInvoice(setOrders, setLoading, page, setCount)
@@ -276,16 +305,37 @@ const Orders = (props) => {
                 },
                 customToolbar: () => {
                   return (
-                    <Link
-                      to={{
-                        pathname: '/order/new',
-                        state: {},
-                      }}
-                    >
-                      <Button variant='contained' color='primary'>
-                        Add New
-                      </Button>
-                    </Link>
+                    <>
+                      <Link
+                        to={{
+                          pathname: '/order/new',
+                          state: {},
+                        }}
+                      >
+                        <Button variant='contained' color='primary'>
+                          Add New
+                        </Button>
+                      </Link>
+                      <div className='w-220 flex-end'>
+                        <TextField
+                          className='mb-4'
+                          name='mobileNo'
+                          label='Filter by source'
+                          variant='outlined'
+                          margin='normal'
+                          select
+                          fullWidth
+                          value={source}
+                          onChange={(e) => setSource(e.target.value)}
+                        >
+                          {sourceTypes.map((sourceType, idx) => (
+                            <MenuItem key={idx} value={sourceType.value}>
+                              {sourceType.type}
+                            </MenuItem>
+                          ))}
+                        </TextField>
+                      </div>
+                    </>
                   )
                 },
               }}

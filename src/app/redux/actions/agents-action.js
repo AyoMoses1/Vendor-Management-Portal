@@ -27,7 +27,6 @@ export const getAllAgents = (search = '', size = '', page = '') => dispatch => {
 }
 
 export const getAgentById = (id) => dispatch => {
-
   dispatch({ type: GET_AGENT_DETAILS_REQUEST })
   http.get(`/afrimash/agents/${id}`).then(({ data }) => {
     dispatch({
