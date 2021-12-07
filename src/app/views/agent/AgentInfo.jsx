@@ -47,6 +47,8 @@ const AgentsInfo = ({ location, match }) => {
     }, 1500)
   }, [dispatch, id, agentCode, page])
 
+  console.log(agentOrders)
+
   const columns = [
     {
       name: 'firstname', // field name in the row object

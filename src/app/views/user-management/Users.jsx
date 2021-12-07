@@ -37,7 +37,6 @@ const Users = () => {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
           let user = userList[dataIndex]
-
           return (
             <Link
               to={{

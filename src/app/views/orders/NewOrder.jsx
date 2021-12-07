@@ -8,7 +8,6 @@ import {
   Grid,
   Icon,
   Checkbox,
-  Paper,
 } from '@material-ui/core'
 import { Breadcrumb, SimpleCard } from 'matx'
 import { useHistory } from 'react-router-dom'
@@ -22,8 +21,7 @@ import Loader from '../../../matx/components/MatxLoadable/Loading'
 
 import { paymentMethod, shippingMethod, calculateTotal } from './utils'
 
-import { addInvoice, populate } from './OrderService'
-import { Box } from '@material-ui/core'
+import { addInvoice, populate, getProductsData } from './OrderService'
 
 const icon = <CheckBoxOutlineBlankIcon fontSize='small' />
 const checkedIcon = <CheckBoxIcon fontSize='small' />
@@ -35,6 +33,7 @@ function NewOrders() {
     paymentMethod: '',
     shippingMethod: '',
     appliedCoupons: [],
+    orderSource: 'ADMIN',
   }
 
   const history = useHistory()
@@ -60,13 +59,6 @@ function NewOrders() {
       setLoading
     )
     populate(
-      setProducts,
-      setAlert,
-      setSeverity,
-      '/afrimash/products/',
-      setLoading
-    )
-    populate(
       setCoupons,
       setAlert,
       setSeverity,
@@ -77,7 +69,9 @@ function NewOrders() {
 
   useEffect(() => {
     getAllDetails()
+    getProductsData(setLoading, '/afrimash/products/', setProducts)
   }, [])
+  console.log(products.content)
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -150,7 +144,7 @@ function NewOrders() {
   const PaperComponent = ({ children }) => (
     <Card>
       {children}
-      <div>content </div>
+      <div>content</div>
     </Card>
   )
   return (
@@ -209,11 +203,11 @@ function NewOrders() {
                             defaultValue=''
                             options={products}
                             value={fields.product}
-                            PaperComponent={({ children }) => (
-                              <Paper style={{ fontWeight: 'bold' }}>
-                                {children}
-                              </Paper>
-                            )}
+                            // PaperComponent={({ children }) => (
+                            //   <Paper style={{ fontWeight: 'bold' }}>
+                            //     {children}
+                            //   </Paper>
+                            // )}
                             getOptionLabel={(option) =>
                               `Name: ${option.name || ''} Vendor: ${
                                 option.storeId?.name || ''
