@@ -32,7 +32,7 @@ const Agents = () => {
   }
   const columns = [
     {
-      name: 'firstname', // field name in the row object
+      name: 'firstName', // field name in the row object
       label: 'Name', // column title that will be shown in table
       options: {
         filter: true,
@@ -210,7 +210,7 @@ const Agents = () => {
                     onPageChange(tableState.page)
                   }
                 },
-                filterType: 'textField',
+                filterType: 'dropdown',
                 responsive: 'standard',
                 elevation: 0,
                 rowsPerPageOptions: [10, 20, 40, 80, 100],

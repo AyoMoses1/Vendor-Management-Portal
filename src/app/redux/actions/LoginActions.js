@@ -1,5 +1,3 @@
-import http from "../../services/api";
-import jwtAuthService from "../../services/jwtAuthService";
 import FirebaseAuthService from "../../services/firebase/firebaseAuthService";
 import { setUserData } from "./UserActions";
 import history from "history.js";
@@ -50,7 +48,6 @@ export function loginWithEmailAndPassword(state){
           axios.get("https://api.afrimash.com/afrimash/users/logged-in-details").then(
             (response) => {
               if (response.status === 200) {
-                console.log(response.data.object);
                 dispatch({
                   type: USER_LOADED,
                   payload: response.data.object
