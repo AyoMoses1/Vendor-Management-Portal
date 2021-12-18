@@ -11,6 +11,7 @@ import './style.scss'
 import afrimash2 from './assets/svg/afrimash2.0.svg'
 import { loginWithEmailAndPassword } from '../../redux/actions/LoginActions'
 import Sidebar from './sidebar/Sidebar'
+import history from 'history.js'
 
 const styles = (theme) => ({
   buttonProgress: {
@@ -32,6 +33,12 @@ class SignIn extends Component {
     this.setState({
       [event.target.name]: event.target.value,
     })
+  }
+  componentDidMount() {
+    const token = localStorage.getItem('jwt_token')
+    if (token) {
+      history.push('/dashboard/analytics')
+    }
   }
   handleFormSubmit = (event) => {
     this.props.loginWithEmailAndPassword({ ...this.state })
