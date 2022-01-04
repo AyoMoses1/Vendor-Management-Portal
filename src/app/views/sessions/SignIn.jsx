@@ -38,6 +38,8 @@ class SignIn extends Component {
     const token = localStorage.getItem('jwt_token')
     if (token) {
       history.push('/dashboard/analytics')
+    } else {
+      history.push('/signin')
     }
   }
   handleFormSubmit = (event) => {
