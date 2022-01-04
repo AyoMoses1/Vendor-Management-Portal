@@ -76,7 +76,7 @@ const AgentForm = ({ isEdit, id, agent }) => {
       ...values,
       ...files,
     }
-    console.log(updateData)
+    console.log(formData)
     const config = {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -100,11 +100,13 @@ const AgentForm = ({ isEdit, id, agent }) => {
   }, [dispatch, id, isEdit])
 
   React.useEffect(() => {
-    setTimeout(() => {
-      setValues(agentDetails)
-      setFiles(agentDetails)
-    }, 500)
-  }, [agentDetails])
+    if (isEdit) {
+      setTimeout(() => {
+        setValues(agentDetails)
+        setFiles(agentDetails)
+      }, 500)
+    }
+  }, [agentDetails, isEdit])
 
   return (
     <div className='m-sm-30'>
@@ -141,7 +143,7 @@ const AgentForm = ({ isEdit, id, agent }) => {
                   margin='normal'
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  value={values?.agentType}
+                  value={values?.agentType || ''}
                   error={Boolean(touched.agentType && errors.agentType)}
                   helperText={touched.agentType && errors.agentType}
                 >
