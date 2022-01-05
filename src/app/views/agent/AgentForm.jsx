@@ -14,7 +14,10 @@ import * as yup from 'yup'
 import { useHistory } from 'react-router-dom/cjs/react-router-dom'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { getAgentById } from 'app/redux/actions/agents-action'
+import { getAgentById, createAgent } from 'app/redux/actions/agents-action'
+import Notification from '../../components/Notification'
+import { errorState } from '../helpers/error-state'
+import { states } from '../../../utils/states'
 
 const agentTypes = [
   { type: 'Lead Agent', value: 'LEAD_AGENT' },
@@ -24,6 +27,7 @@ const agentTypes = [
 const AgentForm = ({ isEdit, id, agent }) => {
   const history = useHistory()
   const dispatch = useDispatch()
+
   const initialState = {
     password: 'password',
     secretAnswer: 'secret',
@@ -47,8 +51,12 @@ const AgentForm = ({ isEdit, id, agent }) => {
   const [state, setState] = React.useState(initialState)
   const [files, setFiles] = React.useState(filesObject)
   const [values, setValues] = React.useState(initialValues)
+  const [error, setError] = React.useState('')
+  const [severity, setSeverity] = React.useState('')
+  const [loading, setLoading] = React.useState(false)
 
   const agentDetail = useSelector((state) => state.agentDetails)
+
   const { agentDetails } = agentDetail
 
   const fileUploadHandler = async (e) => {
@@ -61,7 +69,8 @@ const AgentForm = ({ isEdit, id, agent }) => {
     console.log(files)
   }
 
-  const handleSubmit = (values, { setSubmitting }) => {
+  const handleSubmit = async (values, { setSubmitting }) => {
+    setLoading(true)
     const agentData = { ...state, ...values }
     const formData = new FormData()
 
@@ -76,7 +85,6 @@ const AgentForm = ({ isEdit, id, agent }) => {
       ...values,
       ...files,
     }
-    console.log(formData)
     const config = {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -87,12 +95,19 @@ const AgentForm = ({ isEdit, id, agent }) => {
       console.log(res)
       return
     }
-    const res = http.post(`/afrimash/agents`, formData, config).then((res) => {
+    http.post(`/afrimash/agents`, formData, config).then((res) => {
+      setLoading(false)
       if (res.status === 200) {
         history.push('/agents')
+      } else if (res.status === 'BAD_REQUEST') {
+        if (res.errorCode === 'ENTITY_EXISTS_ERROR') {
+          const message = 'User with details already exist'
+          errorState(setError, setSeverity, message)
+        } else {
+          setError('Something went wrong with your request.')
+        }
       }
     })
-    console.log(res)
   }
 
   React.useEffect(() => {
@@ -110,6 +125,7 @@ const AgentForm = ({ isEdit, id, agent }) => {
 
   return (
     <div className='m-sm-30'>
+      <Notification alert={error} severity={severity || ''} />
       <Formik
         initialValues={values}
         onSubmit={handleSubmit}
@@ -212,14 +228,20 @@ const AgentForm = ({ isEdit, id, agent }) => {
                   label='State'
                   variant='outlined'
                   margin='normal'
+                  select
                   fullWidth
-                  multiline
                   onBlur={handleBlur}
                   onChange={handleChange}
                   value={values?.state}
                   error={Boolean(touched.state && errors.state)}
                   helperText={touched.state && errors.state}
-                />
+                >
+                  {states.map((state, idx) => (
+                    <MenuItem key={idx} value={state}>
+                      {state}
+                    </MenuItem>
+                  ))}
+                </TextField>
               </Grid>
             </Grid>
             <h3 className='mt-4'>Agent documents uploads</h3>
@@ -235,6 +257,8 @@ const AgentForm = ({ isEdit, id, agent }) => {
                   fullWidth
                   variant='outlined'
                   margin='normal'
+                  required
+                  aria-required='true'
                   onChange={fileUploadHandler}
                 />
                 <InputLabel htmlFor='bootstrap-input'>
@@ -247,6 +271,8 @@ const AgentForm = ({ isEdit, id, agent }) => {
                   type='file'
                   variant='outlined'
                   margin='normal'
+                  required
+                  aria-required='true'
                   onChange={fileUploadHandler}
                 />
               </Grid>
@@ -259,8 +285,10 @@ const AgentForm = ({ isEdit, id, agent }) => {
                   name='addressProofUrl'
                   fullWidth
                   type='file'
+                  required
                   variant='outlined'
                   margin='normal'
+                  aria-required='true'
                   onChange={fileUploadHandler}
                 />
                 <InputLabel htmlFor='bootstrap-input'>
@@ -273,6 +301,8 @@ const AgentForm = ({ isEdit, id, agent }) => {
                   type='file'
                   variant='outlined'
                   margin='normal'
+                  required
+                  aria-required='true'
                   onBlur={handleBlur}
                   onChange={fileUploadHandler}
                 />
@@ -281,6 +311,7 @@ const AgentForm = ({ isEdit, id, agent }) => {
             <Grid item container justify='center' alignItems='center'>
               <Button
                 className='w-220 mt-4'
+                disabled={loading}
                 variant='contained'
                 color='primary'
                 type='submit'
@@ -308,6 +339,7 @@ const agentSchema = yup.object().shape({
     .required('Email cannot be blank'),
   state: yup.string().required('Please enterr a valid state. i.e Lagos'),
   agentType: yup.string().required('Please select agent type'),
+  passportPhotoUrl: yup.string().required('please select a file'),
 })
 
 export default AgentForm

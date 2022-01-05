@@ -5,7 +5,7 @@ import LayoutReducer from "./LayoutReducer";
 import ScrumBoardReducer from "./ScrumBoardReducer";
 import NotificationReducer from "./NotificationReducer";
 import EcommerceReducer from "./EcommerceReducer";
-import { agentReducer, agentDetailsReducer, agentCustomersReducer, agentOrdersReducer} from "./agents-reducer";
+import { agentReducer, createAgentReducer, agentDetailsReducer, agentCustomersReducer, agentOrdersReducer} from "./agents-reducer";
 
 const RootReducer = combineReducers({
   login: LoginReducer,
@@ -17,7 +17,8 @@ const RootReducer = combineReducers({
   agents: agentReducer,
   agentDetails: agentDetailsReducer,
   agentCustomers: agentCustomersReducer,
-  agentOrder: agentOrdersReducer
+  agentOrder: agentOrdersReducer,
+  createAgent: createAgentReducer
 });
 
 export default RootReducer;

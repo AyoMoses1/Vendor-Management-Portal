@@ -1,8 +1,6 @@
 import Axios from "axios"
 export default new (class Http {
   API_URL = "https://api.afrimash.com/"
-
-
   AxiosSetup = () => {
     const token = localStorage.getItem("jwt_token")
     const axiosInstance = Axios.create({
@@ -15,7 +13,7 @@ export default new (class Http {
         return response
       },
       (error) => {
-        return error
+         return Promise.reject(error)
       }
     )
     return axiosInstance
@@ -24,14 +22,10 @@ export default new (class Http {
   post = async (urlpath, data, config) => {
     try {
       const response = await this.AxiosSetup().post(urlpath, data, config)
-      if (
-        response.data.errorMsg !== null
-      ) {
-        // localStorage.removeItem("jwt_token")
-        // window.location.reload()
-      }
       return response
-    } catch (err) {
+    } catch (error) {
+      let err
+        err = error.response.data
       return err
     }
   }
