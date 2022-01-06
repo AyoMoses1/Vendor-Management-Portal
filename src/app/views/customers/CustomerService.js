@@ -13,8 +13,9 @@ export const getAllCustomer = (setData, isLoading, setAlert, setSeverity) => {
     if (data instanceof Object) {
       setData(data.object)
       isLoading(false)
+    } else {
+      errorState(setAlert, setSeverity)
     }
-     errorState(setAlert, setSeverity)
   })
 }
 

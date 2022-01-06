@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Card, TextField, Button } from '@material-ui/core'
+import { Card, TextField, Button, MenuItem } from '@material-ui/core'
 import { getCustomerById, addCustomer, updateCustomer } from './CustomerService'
 
 import { useHistory } from 'react-router-dom'
@@ -9,6 +9,7 @@ import * as yup from 'yup'
 import Loading from 'matx/components/MatxLoadable/Loading'
 import Notification from '../../components/Notification'
 import { errorState } from '../helpers/error-state'
+import { states } from '../../../utils/states'
 
 function NewCustomer({ isNewCustomer, id, Customer }) {
   const initialValues = {
@@ -70,14 +71,18 @@ function NewCustomer({ isNewCustomer, id, Customer }) {
       } else if (!result) {
         errorState(setAlert, setSeverity)
       }
-    } else
-      updateCustomer(customer).then((res) => {
-        if (res.status !== 'OK') {
+    } else {
+      delete values.loyaltyNo
+      delete values.loyaltyPoint
+      updateCustomer(values).then((res) => {
+        setState({ ...state })
+        if (res.status === 200) {
+          history.push('/customers')
+        } else if (res.status !== 200) {
           errorState(setAlert, setSeverity)
         }
-        setState({ ...state })
-        history.push('/customers')
       })
+    }
   }
 
   useEffect(() => {
@@ -204,19 +209,25 @@ function NewCustomer({ isNewCustomer, id, Customer }) {
                 </div>
                 <div>
                   <TextField
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.state}
+                    className='mb-4'
                     name='state'
-                    margin='normal'
                     label='State'
-                    fullWidth
-                    type='text'
                     variant='outlined'
+                    margin='normal'
+                    select
+                    fullWidth
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values?.state}
                     error={Boolean(touched.state && errors.state)}
                     helperText={touched.state && errors.state}
-                  />
-
+                  >
+                    {states.map((state, idx) => (
+                      <MenuItem key={idx} value={state}>
+                        {state}
+                      </MenuItem>
+                    ))}
+                  </TextField>
                   <TextField
                     onChange={handleChange}
                     onBlur={handleBlur}
