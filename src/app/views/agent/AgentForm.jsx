@@ -101,10 +101,11 @@ const AgentForm = ({ isEdit, id, agent }) => {
         history.push('/agents')
       } else if (res.status === 'BAD_REQUEST') {
         if (res.errorCode === 'ENTITY_EXISTS_ERROR') {
-          const message = 'User with details already exist'
+          let message = 'User with details already exist'
           errorState(setError, setSeverity, message)
         } else {
-          setError('Something went wrong with your request.')
+          let message = 'Something went wrong with that request.'
+          errorState(setError, setSeverity, message)
         }
       }
     })
