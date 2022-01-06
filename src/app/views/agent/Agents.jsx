@@ -18,7 +18,6 @@ const Agents = () => {
   const [page, setPage] = React.useState(0)
 
   const dialog = useDialog()
-  console.log(agentList)
 
   const dispatch = useDispatch()
 

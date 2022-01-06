@@ -66,7 +66,6 @@ const AgentForm = ({ isEdit, id, agent }) => {
       ...files,
       [name]: file,
     })
-    console.log(files)
   }
 
   const handleSubmit = async (values, { setSubmitting }) => {
@@ -92,7 +91,6 @@ const AgentForm = ({ isEdit, id, agent }) => {
     }
     if (isEdit) {
       const res = http.put(`/afrimash/agents/`, updateData)
-      console.log(res)
       return
     }
     http.post(`/afrimash/agents`, formData, config).then((res) => {

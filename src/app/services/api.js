@@ -33,14 +33,10 @@ export default new (class Http {
   put = async (urlpath, data, config) => {
     try {
       const response = await this.AxiosSetup().put(urlpath, data, config)
-      if (
-        response.data.errorMsg !== null
-      ) {
-        // localStorage.removeItem("jwt_token")
-        // window.location.reload()
-      }
       return response
-    } catch (err) {
+    } catch (error) {
+      let err
+      err = error.response.data
       return err
     }
   }
