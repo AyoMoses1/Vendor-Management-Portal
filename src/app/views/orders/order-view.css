@@ -1,6 +1,6 @@
 .PENDING {
   background-color: #fdd37d;
-  padding: 8px;
+  padding: 5px;
   border-radius: 10px;
   width: fit-content !important;
   color: rgb(175, 171, 171) !important;
@@ -9,7 +9,7 @@
 
 .PAID {
   background-color: #91c053;
-  padding: 8px;
+  padding: 5px;
   border-radius: 10px;
   color: #fff !important;
   width: fit-content !important;

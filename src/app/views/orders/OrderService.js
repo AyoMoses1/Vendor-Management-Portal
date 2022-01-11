@@ -24,7 +24,7 @@ export const addInvoice = (order) => {
   return http.post('/afrimash/orders/', order)
 }
 export const updateInvoice = (order) => {
-  return http.put(`/afrimash/orders/`, order)
+  return http.patch(`/afrimash/orders/`, order)
 }
 
 export const populate = (setCustomers, setAlert, setSeverity, url, setLoading) => {

@@ -4,10 +4,7 @@ import {
   Radio,
   FormControl,
   FormControlLabel,
-  Divider,
   RadioGroup,
-  Grid,
-  TextField,
 } from '@material-ui/core'
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator'
 import {
@@ -20,6 +17,8 @@ import { useHistory } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
 import { useCallback } from 'react'
+import { errorState } from '../helpers/error-state'
+import Notification from 'app/components/Notification'
 
 const useStyles = makeStyles(({ palette, ...theme }) => ({
   invoiceEditor: {
@@ -37,9 +36,55 @@ const useStyles = makeStyles(({ palette, ...theme }) => ({
   },
 }))
 
+const orderStatus = [
+  {
+    label: 'Processing',
+    value: 'PROCESSING',
+  },
+  {
+    label: 'Pending',
+    value: 'PENDING',
+  },
+  {
+    label: 'Completed',
+    value: 'COMPLETED',
+  },
+  {
+    label: 'Delivered',
+    value: 'DELIVERED',
+  },
+  {
+    label: 'On Hold',
+    value: 'ON_HOLD',
+  },
+  {
+    label: 'Disputed',
+    value: 'DISPUTED',
+  },
+  {
+    label: 'Awaiting Payment',
+    value: 'AWAITING_PAYMENT',
+  },
+  {
+    label: 'Awaiting Fulfilment',
+    value: 'AWAITING_FULFILMENT',
+  },
+  {
+    label: 'Manual Verification Required',
+    value: 'MANUAL_VERIFICATION_RQUIRED',
+  },
+  {
+    label: 'Paid',
+    value: 'PAID',
+  },
+]
+
 const OrderEditor = ({ isNewInvoice, toggleOrderEditor, id }) => {
   const [isAlive, setIsAlive] = useState(true)
   const [state, setState] = useState(initialValues)
+  const [invoiceStatus, setInvoiceStatus] = useState('')
+  const [error, setError] = React.useState('')
+  const [severity, setSeverity] = React.useState('')
 
   const history = useHistory()
 
@@ -53,54 +98,8 @@ const OrderEditor = ({ isNewInvoice, toggleOrderEditor, id }) => {
 
   const handleChange = (event) => {
     event.persist()
+    setInvoiceStatus(event.target.value)
     setState({ ...state, [event.target.name]: event.target.value })
-  }
-
-  const handleSellerBuyerChange = (event, fieldName) => {
-    event.persist()
-    setState({
-      ...state,
-      [fieldName]: {
-        ...state[fieldName],
-        [event.target.name]: event.target.value,
-      },
-    })
-  }
-
-  const handleIvoiceListChange = (event, index) => {
-    let tempItemList = [...state.item]
-    tempItemList.map((element, i) => {
-      if (index === i) element[event.target.name] = event.target.value
-      return element
-    })
-
-    setState({
-      ...state,
-      item: tempItemList,
-    })
-  }
-
-  // const addItemToInvoiceList = () => {
-  //   let tempItemList = [...state.orderItems];
-  //   tempItemList.push({
-  //     name: "",
-  //     unit: "",
-  //     price: "",
-  //   });
-  //   setState({
-  //     ...state,
-  //     item: tempItemList,
-  //   });
-  // };
-
-  const deleteItemFromInvoiceList = (index) => {
-    let tempItemList = [...state.item]
-    tempItemList.splice(index, 1)
-
-    setState({
-      ...state,
-      item: tempItemList,
-    })
   }
 
   const handleDateChange = (date) => {
@@ -108,12 +107,22 @@ const OrderEditor = ({ isNewInvoice, toggleOrderEditor, id }) => {
   }
 
   const handleSubmit = () => {
-    setState({ ...state, loading: true })
-    let tempState = { ...state }
-    delete tempState.loading
-    updateInvoice(tempState).then(() => {
-      setState({ ...state, loading: false })
-      toggleOrderEditor()
+    const auth = JSON.parse(localStorage.getItem('auth_user'))
+    if (auth.role.name !== 'ROLE_ADMIN') {
+      let msg = 'You dont have enough permission to perform action'
+      errorState(setError, setSeverity, msg)
+      return
+    } else if (auth.role.name !== 'ROLE_MANAGER') {
+      let msg = 'You dont have enough permission to perform action'
+      errorState(setError, setSeverity, msg)
+      return
+    }
+    let tempState = { status: invoiceStatus, id: id }
+    updateInvoice(tempState).then((res) => {
+      console.log(res)
+      if (res.status === 200) {
+        history.push('/orders')
+      }
     })
   }
 
@@ -130,18 +139,11 @@ const OrderEditor = ({ isNewInvoice, toggleOrderEditor, id }) => {
   useEffect(() => {
     return () => setIsAlive(false)
   }, [])
-  let {
-    referenceNo,
-    customerId,
-    deliveryAddress,
-    // orderItems,
-    status,
-    createDate,
-    loading,
-  } = state
+  let { referenceNo, status, createDate, loading } = state
 
   return (
     <ValidatorForm onSubmit={handleSubmit} onError={(errors) => null}>
+      <Notification alert={error} severity={severity || ''} />
       <div className={clsx('invoice-viewer py-4', classes.invoiceEditor)}>
         <>
           <div
@@ -195,43 +197,22 @@ const OrderEditor = ({ isNewInvoice, toggleOrderEditor, id }) => {
                   value={status}
                   onChange={handleChange}
                 >
-                  <FormControlLabel
-                    className='h-32'
-                    value='PENDING'
-                    control={<Radio color='secondary' />}
-                    label='Pending'
-                    labelPlacement='start'
-                  />
-                  <FormControlLabel
-                    className='h-32'
-                    value='PROCESSING'
-                    control={<Radio color='secondary' />}
-                    label='Processing'
-                    labelPlacement='start'
-                  />
-                  <FormControlLabel
-                    className='h-32'
-                    value='ON_HOLD'
-                    control={<Radio color='secondary' />}
-                    label='ON HOLD'
-                    labelPlacement='start'
-                  />
-                  <FormControlLabel
-                    className='h-32'
-                    value='DELIVERED'
-                    control={<Radio color='secondary' />}
-                    label='Delivered'
-                    labelPlacement='start'
-                  />
+                  {orderStatus.map((value) => (
+                    <FormControlLabel
+                      className='h-32'
+                      value={value.value}
+                      control={<Radio color='secondary' />}
+                      label={value.label}
+                      labelPlacement='start'
+                    />
+                  ))}
                 </RadioGroup>
               </FormControl>
-
               <div className='text-right'>
                 <h5 className='font-normal'>
                   <strong>Order date: </strong>
                 </h5>
               </div>
-
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <KeyboardDatePicker
                   margin='none'
@@ -251,78 +232,7 @@ const OrderEditor = ({ isNewInvoice, toggleOrderEditor, id }) => {
               </MuiPickersUtilsProvider>
             </div>
           </div>
-
-          <Divider />
-          <br />
-          <Grid
-            className='px-4 py-5'
-            container
-            justify='space-between'
-            spacing={4}
-          >
-            <Grid item>
-              <div>
-                <h5 className='mb-5'>Bill From</h5>
-                <TextValidator
-                  className='mb-5'
-                  label='Customer Name'
-                  disabled
-                  type='text'
-                  name='name'
-                  fullWidth
-                  value={
-                    customerId
-                      ? `${customerId.firstName} ${customerId.lastName}`
-                      : null
-                  }
-                  errorMessages={['this field is required']}
-                />
-                <TextValidator
-                  type='text'
-                  label='Delivery Address'
-                  onChange={(event) =>
-                    handleSellerBuyerChange(event, 'deliveryAddress')
-                  }
-                  name='address'
-                  fullWidth
-                  multiline={true}
-                  rowsMax={4}
-                  value={deliveryAddress ? deliveryAddress?.address : null}
-                />
-              </div>
-            </Grid>
-          </Grid>
         </>
-      </div>
-
-      <Divider />
-      <br />
-      <div>
-        <FormControl component='fieldset' className='w-full  mb-4'>
-          <h4>Add Note</h4>
-          <TextField
-            className='mb-4'
-            variant='outlined'
-            margin='dense'
-            name=''
-            rows={4}
-            multiline
-            rowsMax={8}
-            placeholder='Add Note Customer '
-          />
-
-          <h4>Add Private Note</h4>
-          <TextField
-            className='mb-4'
-            variant='outlined'
-            margin='dense'
-            name=''
-            rows={4}
-            multiline
-            rowsMax={8}
-            placeholder=''
-          />
-        </FormControl>
       </div>
     </ValidatorForm>
   )
