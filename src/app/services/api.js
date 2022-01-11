@@ -57,6 +57,17 @@ export default new (class Http {
     }
   }
 
+  patch = async (urlpath, data) => {
+    try {
+      const response = await this.AxiosSetup().patch(urlpath, data)
+      return response
+    } catch (error) {
+      let err
+      err = error.response.data
+      return err
+    }
+  }
+
   delete = async (urlpath, data) => {
     try {
       const response = await this.AxiosSetup().delete(urlpath, data)

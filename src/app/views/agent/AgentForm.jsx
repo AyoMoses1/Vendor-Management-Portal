@@ -14,7 +14,7 @@ import * as yup from 'yup'
 import { useHistory } from 'react-router-dom/cjs/react-router-dom'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { getAgentById, createAgent } from 'app/redux/actions/agents-action'
+import { getAgentById } from 'app/redux/actions/agents-action'
 import Notification from '../../components/Notification'
 import { errorState } from '../helpers/error-state'
 import { states } from '../../../utils/states'
