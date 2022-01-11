@@ -108,22 +108,19 @@ const OrderEditor = ({ isNewInvoice, toggleOrderEditor, id }) => {
 
   const handleSubmit = () => {
     const auth = JSON.parse(localStorage.getItem('auth_user'))
-    if (auth.role.name !== 'ROLE_ADMIN') {
-      let msg = 'You dont have enough permission to perform action'
-      errorState(setError, setSeverity, msg)
-      return
-    } else if (auth.role.name !== 'ROLE_MANAGER') {
+    if (auth.role.name === 'ROLE_ADMIN' || auth.role.name === 'ROLE_MANAGER') {
+      let tempState = { status: invoiceStatus, id: id }
+      updateInvoice(tempState).then((res) => {
+        console.log(res)
+        if (res.status === 200) {
+          history.push('/orders')
+        }
+      })
+    } else {
       let msg = 'You dont have enough permission to perform action'
       errorState(setError, setSeverity, msg)
       return
     }
-    let tempState = { status: invoiceStatus, id: id }
-    updateInvoice(tempState).then((res) => {
-      console.log(res)
-      if (res.status === 200) {
-        history.push('/orders')
-      }
-    })
   }
 
   useEffect(() => {
