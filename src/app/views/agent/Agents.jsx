@@ -238,7 +238,7 @@ const Agents = () => {
                 },
                 filter: true,
                 sort: true,
-
+                sortOrder: { name: 'id', direction: 'desc' },
                 filterType: 'dropdown',
                 responsive: 'standard',
                 elevation: 0,
