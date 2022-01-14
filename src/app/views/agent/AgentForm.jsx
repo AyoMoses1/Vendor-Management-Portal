@@ -95,6 +95,7 @@ const AgentForm = ({ isEdit, id, agent }) => {
     }
     http.post(`/afrimash/agents`, formData, config).then((res) => {
       setLoading(false)
+      console.log(res)
       if (res.status === 200) {
         history.push('/agents')
       } else if (res.status === 'BAD_REQUEST') {
@@ -302,7 +303,6 @@ const AgentForm = ({ isEdit, id, agent }) => {
                   margin='normal'
                   required
                   aria-required='true'
-                  onBlur={handleBlur}
                   onChange={fileUploadHandler}
                 />
               </Grid>
@@ -338,7 +338,6 @@ const agentSchema = yup.object().shape({
     .required('Email cannot be blank'),
   state: yup.string().required('Please enterr a valid state. i.e Lagos'),
   agentType: yup.string().required('Please select agent type'),
-  passportPhotoUrl: yup.string().required('please select a file'),
 })
 
 export default AgentForm
