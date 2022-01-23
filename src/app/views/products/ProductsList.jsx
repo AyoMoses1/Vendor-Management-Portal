@@ -44,23 +44,23 @@ const Products = () => {
         },
       },
     },
-    // {
-    //   name: "sku",
-    //   label: "Sku",
-    //   options: {
-    //     filter: true,
-    //     customBodyRenderLite: (dataIndex) => {
-    //       let product = products[dataIndex];
-    //       return (
-    //         <div className="flex items-center">
-    //           <div className="ml-3">
-    //             <span className="my-0 text-15"> {product?.sku || "-----"}</span>
-    //           </div>
-    //         </div>
-    //       );
-    //     },
-    //   },
-    // },
+    {
+      name: 'sku',
+      label: 'Sku',
+      options: {
+        filter: true,
+        customBodyRenderLite: (dataIndex) => {
+          let product = products[dataIndex]
+          return (
+            <div className='flex items-center'>
+              <div className='ml-3'>
+                <span className='my-0 text-15'> {product?.sku || '-----'}</span>
+              </div>
+            </div>
+          )
+        },
+      },
+    },
     {
       name: 'price',
       label: 'Price',
@@ -233,6 +233,31 @@ const Products = () => {
         },
       },
     },
+    {
+      name: 'id', // field name in the row object
+      label: '', // column title that will be shown in table
+      options: {
+        filter: false,
+        customBodyRenderLite: (dataIndex) => {
+          let product = products[dataIndex]
+          return (
+            <Link
+              to={{
+                pathname: `/agent/details/${product.id}`,
+                state: {
+                  id: product.id,
+                  agentCode: product.agentCode,
+                },
+              }}
+            >
+              <div>
+                {/* <h5 className='my-0 text-15'>{`${user?.id}`}</h5> */}
+              </div>
+            </Link>
+          )
+        },
+      },
+    },
   ]
 
   return (
@@ -257,6 +282,8 @@ const Products = () => {
                     .catch(() => {
                       return false
                     }),
+                sort: true,
+                sortOrder: { name: 'id', direction: 'desc' },
                 filterType: 'textField',
                 responsive: 'standard',
                 elevation: 0,

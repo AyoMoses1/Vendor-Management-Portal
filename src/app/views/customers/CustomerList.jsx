@@ -154,6 +154,31 @@ const CustomerList = () => {
         },
       },
     },
+    {
+      name: 'id', // field name in the row object
+      label: '', // column title that will be shown in table
+      options: {
+        filter: false,
+        customBodyRenderLite: (dataIndex) => {
+          let user = userList[dataIndex]
+          return (
+            <Link
+              to={{
+                pathname: `/agent/details/${user.id}`,
+                state: {
+                  id: user.id,
+                  user: user.user,
+                },
+              }}
+            >
+              <div>
+                {/* <h5 className='my-0 text-15'>{`${user?.id}`}</h5> */}
+              </div>
+            </Link>
+          )
+        },
+      },
+    },
   ]
 
   return (
@@ -181,6 +206,8 @@ const CustomerList = () => {
               options={{
                 filterType: 'textField',
                 responsive: 'standard',
+                sort: true,
+                sortOrder: { name: 'id', direction: 'desc' },
                 //   selectableRows: "none", // set checkbox for each row
                 //   search: false, // set search option
                 //   filter: false, // set data filter option

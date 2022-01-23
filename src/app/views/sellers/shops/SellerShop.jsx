@@ -5,6 +5,7 @@ import ShopForm from './ShopForm'
 import { useDialog } from 'muibox'
 import { getShops } from './shop-service'
 import Loading from 'matx/components/MatxLoadable/Loading'
+import { Link } from 'react-router-dom'
 
 const SellerShop = ({ id }) => {
   const [isAlive, setIsAlive] = useState(true)
@@ -79,6 +80,31 @@ const SellerShop = ({ id }) => {
         },
       },
     },
+    {
+      name: 'id', // field name in the row object
+      label: '', // column title that will be shown in table
+      options: {
+        filter: false,
+        customBodyRenderLite: (dataIndex) => {
+          let user = shop[dataIndex]
+          return (
+            <Link
+              to={{
+                pathname: `/agent/details/${user.id}`,
+                state: {
+                  id: user.id,
+                  user: user.user,
+                },
+              }}
+            >
+              <div>
+                {/* <h5 className='my-0 text-15'>{`${user?.id}`}</h5> */}
+              </div>
+            </Link>
+          )
+        },
+      },
+    },
   ]
 
   return (
@@ -101,6 +127,8 @@ const SellerShop = ({ id }) => {
                       return false
                     }),
                 filterType: 'textField',
+                sort: true,
+                sortOrder: { name: 'id', direction: 'desc' },
                 responsive: 'standard',
                 elevation: 0,
                 rowsPerPageOptions: [10, 20, 40, 80, 100],

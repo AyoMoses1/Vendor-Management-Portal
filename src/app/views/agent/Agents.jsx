@@ -31,33 +31,6 @@ const Agents = () => {
   }
   const columns = [
     {
-      name: 'id', // field name in the row object
-      label: 'S/N', // column title that will be shown in table
-      options: {
-        filter: true,
-        customBodyRenderLite: (dataIndex) => {
-          let user = agentList[dataIndex]
-          setId(user.id)
-          return (
-            <Link
-              to={{
-                pathname: `/agent/details/${user.id}`,
-                state: {
-                  id: user.id,
-                  agentCode: user.agentCode,
-                },
-              }}
-              className='flex items-center'
-            >
-              <div className='ml-3'>
-                <h5 className='my-0 text-15'>{`${user?.id}`}</h5>
-              </div>
-            </Link>
-          )
-        },
-      },
-    },
-    {
       name: 'firstName', // field name in the row object
       label: 'Name', // column title that will be shown in table
       options: {
@@ -193,6 +166,32 @@ const Agents = () => {
                 </IconButton>
               </Link>
             </div>
+          )
+        },
+      },
+    },
+    {
+      name: 'id', // field name in the row object
+      label: '', // column title that will be shown in table
+      options: {
+        filter: false,
+        customBodyRenderLite: (dataIndex) => {
+          let user = agentList[dataIndex]
+          setId(user.id)
+          return (
+            <Link
+              to={{
+                pathname: `/agent/details/${user.id}`,
+                state: {
+                  id: user.id,
+                  agentCode: user.agentCode,
+                },
+              }}
+            >
+              <div>
+                {/* <h5 className='my-0 text-15'>{`${user?.id}`}</h5> */}
+              </div>
+            </Link>
           )
         },
       },

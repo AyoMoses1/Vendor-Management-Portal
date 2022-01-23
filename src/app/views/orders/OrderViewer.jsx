@@ -1,17 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import {
-  Icon,
-  Button,
-  Divider,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-  IconButton,
-  Card,
-} from '@material-ui/core'
-import { Link, useParams } from 'react-router-dom'
+import { Icon, Button, Divider, IconButton } from '@material-ui/core'
+import { Link } from 'react-router-dom'
 import { getInvoiceById } from './OrderService'
 import { format } from 'date-fns'
 import { makeStyles } from '@material-ui/core/styles'
@@ -73,13 +62,9 @@ const OrderViewer = ({ toggleOrderEditor, id }) => {
 
   let {
     referenceNo,
-    buyer,
     customerId,
     status,
-    vat,
     createDate,
-    totalDiscount,
-    subTotal,
     deliveryAddress,
     shippingMethod,
   } = state
@@ -130,12 +115,12 @@ const OrderViewer = ({ toggleOrderEditor, id }) => {
               <p className='mb-4'>Reference Number</p>
               <p className='mb-0'># {referenceNo}</p>
             </div>
-            <div className='text-right'>
-              <h5 className={`font-normal mb-4 capitalize ${status}`}>
-                <strong>Order status:</strong> {status}
-              </h5>
+            <div className={`text-right`}>
+              <span className={`mb-4 ORDER ${status}`}>
+                Order status: {status}
+              </span>
               <h5 className='font-normal capitalize'>
-                <strong>Order date: </strong>{' '}
+                <strong>Order date: </strong>
                 <span>
                   {createDate
                     ? format(new Date(createDate).getTime(), 'MMMM dd, yyyy')
