@@ -104,7 +104,7 @@ const Orders = (props) => {
         customBodyRenderLite: (dataIndex) => {
           let order = orders[dataIndex]
           return (
-            <div className={`flex items-center ${order.status}`}>
+            <div className={`items-center ORDER ${order.status}`}>
               <Link
                 to={{
                   pathname: '/order/details',
@@ -115,7 +115,7 @@ const Orders = (props) => {
                 }}
                 className='ml-3'
               >
-                <span className='my-0 text-15'>
+                <span className={`my-0 text-15 ORDER ${order.status}`}>
                   {' '}
                   {`${order.status}` || '-----'}
                 </span>
@@ -232,6 +232,18 @@ const Orders = (props) => {
         },
       },
     },
+    {
+      name: 'id', // field name in the row object
+      label: '', // column title that will be shown in table
+      options: {
+        filter: false,
+        customBodyRenderLite: (dataIndex) => {
+          return (
+            <div>{/* <h5 className='my-0 text-15'>{`${user?.id}`}</h5> */}</div>
+          )
+        },
+      },
+    },
   ]
 
   return (
@@ -256,6 +268,8 @@ const Orders = (props) => {
                     .catch(() => {
                       return false
                     }),
+                sort: true,
+                sortOrder: { name: 'id', direction: 'desc' },
                 filterType: 'textField',
                 responsive: 'standard',
                 fixedHeader: true,

@@ -23,17 +23,17 @@ class AuthGuard extends Component {
         authenticated: true,
       })
     }
-    if (this.state.authenticated || token) {
-      history.push({
-        pathname: '/dashboard/analytics',
-        state: { redirectUrl: pathname },
-      })
-    } else {
-      history.push({
-        pathname: '/signin',
-        state: { redirectUrl: pathname },
-      })
-    }
+    // if (this.state.authenticated || token) {
+    //   history.push({
+    //     pathname: '/dashboard/analytics',
+    //     state: { redirectUrl: pathname },
+    //   })
+    // } else {
+    //   history.push({
+    //     pathname: '/signin',
+    //     state: { redirectUrl: pathname },
+    //   })
+    // }
   }
 
   componentDidUpdate() {

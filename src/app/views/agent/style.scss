@@ -12,3 +12,17 @@
   text-overflow: ellipsis;
   white-space: normal;
 }
+
+.deactivate-button {
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.SUSPENDED {
+  background-color: #008a16;
+  color: #fff;
+}
+
+.ACTIVE {
+  border-color: #ed1515 !important;
+}

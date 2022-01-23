@@ -10,12 +10,14 @@ import {
 } from '@material-ui/core'
 import MUIDataTable from 'mui-datatables'
 import { Link } from 'react-router-dom'
+import http from '../../services/api'
 
 import { useDialog } from 'muibox'
 
 import { SimpleCard, Breadcrumb } from 'matx'
 
 import { useDispatch, useSelector } from 'react-redux'
+
 import {
   getAgentById,
   getAgentCustomers,
@@ -23,10 +25,14 @@ import {
 } from 'app/redux/actions/agents-action'
 import Loading from 'matx/components/MatxLoadable/Loading'
 import { Box } from '@material-ui/core'
+import { Button } from '@material-ui/core'
+
+import './style.scss'
 
 const AgentsInfo = ({ location, match }) => {
   const dispatch = useDispatch()
   const [page, setPage] = React.useState(0)
+  const [agentStatus, setAgentStatus] = React.useState('')
 
   const { id, agentCode } = location.state
   const dialog = useDialog()
@@ -45,9 +51,7 @@ const AgentsInfo = ({ location, match }) => {
       dispatch(getAgentCustomers(agentCode))
       dispatch(getAgentOrders(id, page))
     }, 1500)
-  }, [dispatch, id, agentCode, page])
-
-  console.log(agentOrders)
+  }, [dispatch, id, agentCode, page, agentStatus])
 
   const columns = [
     {
@@ -266,6 +270,46 @@ const AgentsInfo = ({ location, match }) => {
     dispatch(getAgentOrders(id, page))
     setPage(page)
   }
+
+  const onDeactivateAccount = (id, action) => {
+    if (agentDetails.status === 'ACTIVE') {
+      dialog
+        .confirm('Are you sure you want to deactivate this agent account?')
+        .then(() =>
+          http.patch(`/afrimash/agents/${id}/status/SUSPENDED`).then((res) => {
+            if (res.status === 200) {
+              setAgentStatus('SUSPENDED')
+            }
+          })
+        )
+        .catch((error) => console.error(error))
+    } else if (agentDetails.status === 'SUSPENDED') {
+      dialog
+        .confirm('Activate Agent account?')
+        .then(() =>
+          http.patch(`/afrimash/agents/${id}/status/ACTIVE`).then((res) => {
+            if (res.status === 200) {
+              setAgentStatus('ACTIVE')
+            }
+          })
+        )
+        .catch((error) => console.log(error))
+    } else {
+      return
+    }
+  }
+
+  const generateAgentAccount = (id) => {
+    if (agentDetails.virtualAccount === null) {
+      http
+        .patch(`/afrimash/agents/${id}/provision-virtual-account`)
+        .then((res) => {
+          if (res.status === 200) {
+            setAgentStatus('Acount_created')
+          }
+        })
+    }
+  }
   return (
     <div className='m-sm-30'>
       <div className='mb-sm-30'>
@@ -281,8 +325,39 @@ const AgentsInfo = ({ location, match }) => {
       ) : (
         <>
           <SimpleCard>
-            <h5 className='pl-4 text-left'>Agent Details</h5>
-            <Divider />
+            <div className='flex flex-space-between flex-middle'>
+              <h5 className='pl-4 text-left'>Agent Details</h5>
+              <div>
+                {agentDetails.virtualAccount === null && (
+                  <Button
+                    onClick={() => generateAgentAccount(agentDetails.id)}
+                    variant='contained'
+                    color='primary'
+                  >
+                    Generate Account
+                  </Button>
+                )}
+                {(agentDetails.status === 'ACTIVE' ||
+                  agentDetails.status === 'SUSPENDED') && (
+                  <Button
+                    onClick={() => onDeactivateAccount(agentDetails.id)}
+                    variant={
+                      agentDetails.status === 'ACTIVE'
+                        ? `outlined`
+                        : 'contained'
+                    }
+                    className={`deactivate-button ${agentDetails.status}`}
+                  >
+                    {agentDetails.status === 'ACTIVE'
+                      ? 'Deactivate Account'
+                      : agentDetails.status === 'SUSPENDED'
+                      ? 'Activate Agent'
+                      : ''}
+                  </Button>
+                )}
+              </div>
+            </div>
+            <Divider className='mt-4' />
             <Table className='mb-4'>
               <TableBody>
                 <TableRow>
@@ -308,7 +383,13 @@ const AgentsInfo = ({ location, match }) => {
                   </TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell className='pl-4'>State</TableCell>
+                  <TableCell className='pl-4'>Virtual Account</TableCell>
+                  <TableCell>
+                    <div>{agentDetails && agentDetails['virtualAccount']}</div>
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell className='pl-4'>Agent State</TableCell>
                   <TableCell>
                     <div>{agentDetails && agentDetails['state']}</div>
                   </TableCell>

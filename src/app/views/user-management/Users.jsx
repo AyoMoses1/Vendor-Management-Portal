@@ -140,6 +140,18 @@ const Users = () => {
         },
       },
     },
+    {
+      name: 'id', // field name in the row object
+      label: '', // column title that will be shown in table
+      options: {
+        filter: false,
+        customBodyRenderLite: (dataIndex) => {
+          return (
+            <div>{/* <h5 className='my-0 text-15'>{`${user?.id}`}</h5> */}</div>
+          )
+        },
+      },
+    },
   ]
 
   return (
@@ -167,6 +179,8 @@ const Users = () => {
                 elevation: 0,
                 serverSide: true,
                 count,
+                sort: true,
+                sortOrder: { name: 'id', direction: 'desc' },
                 page,
                 onTableChange: (action, tableState) => {
                   if (action === 'changePage') {
