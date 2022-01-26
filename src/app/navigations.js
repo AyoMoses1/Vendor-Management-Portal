@@ -51,11 +51,27 @@ export const navigations = [
       }
    ]
   },
-  // {
-  //   name: "Withdrawal",
-  //   icon: "credit_card",
-  //   path: "/withdrawal"
-  // },
+  {
+    name: "Shippment",
+    icon: "card_giftcard",
+    children: [
+      {
+        name: "Shipping Classes",
+        path: "/shipping-classes",
+        iconText: "C"
+      },
+      {
+        name: "Shipping Options",
+        path: "/shipping-options",
+        iconText: "O"
+      },
+      {
+        name: "Shipping Zones",
+        path: "/shipping-zones",
+        iconText: "Z"
+      },
+    ]
+  },
   {
     name: "Coupons",
     icon: "card_giftcard",
