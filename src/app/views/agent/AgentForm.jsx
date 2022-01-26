@@ -180,7 +180,7 @@ const AgentForm = ({ isEdit, id, agent }) => {
                   onChange={handleChange}
                   value={agentDetails?.firstName}
                   error={Boolean(touched.firstName && errors.firstName)}
-                  helperText={touched.firstName && errors.price}
+                  helperText={touched.firstName && errors.firstName}
                 />
                 <TextField
                   className='mb-4'

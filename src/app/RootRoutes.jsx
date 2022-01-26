@@ -26,6 +26,7 @@ import reviewRoutes from './views/reviews/ReviewRoutes'
 import sellerRoutes from './views/sellers/SellerRoutes'
 import agentsRoutes from './views/agent/AgentRoutes'
 import settingsRoutes from './views/user-settings/settings-route'
+import shippingRoutes from './views/shipping/shipping-routes'
 
 const redirectRoute = [
   {
@@ -57,6 +58,7 @@ const routes = [
   ...reviewRoutes,
   ...paymentAndFulfilmentRoutes,
   ...userRoutes,
+  ...shippingRoutes,
   ...customerRoutes,
   ...agentsRoutes,
   ...settingsRoutes,
