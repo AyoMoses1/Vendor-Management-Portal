@@ -1,0 +1,280 @@
+import React from 'react'
+import { TextField, Button, Grid, MenuItem } from '@material-ui/core'
+import http from '../../../services/api'
+
+import { Formik } from 'formik'
+
+import * as yup from 'yup'
+import { useHistory } from 'react-router-dom/cjs/react-router-dom'
+import Autocomplete from '@material-ui/lab/Autocomplete'
+
+import Notification from '../../../components/Notification'
+import { errorState } from '../../helpers/error-state'
+
+const CreateShippingOption = () => {
+  const history = useHistory()
+
+  const initialValues = {
+    name: '',
+    methodCondition: '',
+    baseCost: '',
+    additionalCost: '',
+    additionalCostOnEvery: '',
+    criteriaValue: '',
+    calculationUnit: '',
+  }
+  const initialState = {
+    shippingClass: '',
+    shippingZone: '',
+  }
+  const calculationUnit = ['WEIGHT', 'SHIPPING_CLASS', 'DIMENSION', 'VOLUME']
+  const methodCondition = ['GREATER_THAN', 'LESS_THAN', 'EQUAL_TO']
+
+  const [values, setValues] = React.useState(initialValues)
+  const [state, setState] = React.useState(initialState)
+  const [error, setError] = React.useState('')
+  const [severity, setSeverity] = React.useState('')
+  const [loading, setLoading] = React.useState(false)
+  const [shippingZones, setShippingZones] = React.useState()
+  const [shippingClass, setShippingClass] = React.useState()
+
+  const handleSubmit = async (values, { setSubmitting }) => {
+    const payload = { ...state, ...values }
+    setLoading(true)
+    http.post(`/afrimash/shipping-option`, payload).then((res) => {
+      setLoading(false)
+      if (res.status === 200) {
+        history.push('/shipping-options')
+      } else if (res.status === 'BAD_REQUEST') {
+        let message = 'Somthing went wrong with that request'
+        errorState(setError, setSeverity, message)
+      }
+    })
+  }
+
+  const handleSelect = (newValue, fieldName) => {
+    const { id } = newValue
+    setState({ ...state, [fieldName]: id })
+  }
+
+  const getAllShippingZones = () => {
+    setLoading(true)
+    http.get('/afrimash/shipping-zone').then((res) => {
+      setShippingZones(res?.data.object)
+      setLoading(false)
+    })
+  }
+  const getAllShippingClasses = () => {
+    setLoading(true)
+    http.get('/afrimash/shipping-class').then((res) => {
+      setShippingClass(res?.data.object)
+      setLoading(false)
+    })
+  }
+
+  React.useEffect(() => {
+    getAllShippingClasses()
+    getAllShippingZones()
+  }, [])
+
+  return (
+    <div className='m-sm-30'>
+      <Notification alert={error} severity={severity || ''} />
+      <Formik
+        initialValues={values}
+        onSubmit={handleSubmit}
+        enableReinitialize={true}
+        validationSchema={shippingZonesSchema}
+      >
+        {({
+          values,
+          errors,
+          touched,
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          isSubmitting,
+          setSubmitting,
+          setFieldValue,
+        }) => (
+          <form className='px-4' onSubmit={handleSubmit}>
+            <Grid container spacing={3}>
+              <Grid container item>
+                <h1>Create new Shipping Option</h1>
+              </Grid>
+              <Grid item sm={6} xs={12}>
+                <TextField
+                  className='mb-4'
+                  name='name'
+                  label='Option Name'
+                  variant='outlined'
+                  margin='normal'
+                  fullWidth
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.name}
+                  error={Boolean(touched.name && errors.name)}
+                  helperText={touched.name && errors.name}
+                />
+                <TextField
+                  className='mb-4'
+                  name='methodCondition'
+                  label='Select Method Condition'
+                  variant='outlined'
+                  select
+                  margin='normal'
+                  fullWidth
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.methodCondition}
+                >
+                  {methodCondition.map((method) => (
+                    <MenuItem value={method} key={method}>
+                      {method}
+                    </MenuItem>
+                  ))}
+                </TextField>
+                <TextField
+                  className='mb-4'
+                  name='calculationUnit'
+                  label='Select Method Condition'
+                  variant='outlined'
+                  select
+                  margin='normal'
+                  fullWidth
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.calculationUnit}
+                >
+                  {calculationUnit.map((unit) => (
+                    <MenuItem value={unit} key={unit}>
+                      {unit}
+                    </MenuItem>
+                  ))}
+                </TextField>
+                <TextField
+                  className='mb-4'
+                  name='additionalCost'
+                  label='Additional Cost'
+                  variant='outlined'
+                  margin='normal'
+                  fullWidth
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.additionalCost}
+                  error={Boolean(
+                    touched.additionalCost && errors.additionalCost
+                  )}
+                  helperText={touched.additionalCost && errors.additionalCost}
+                />
+                <TextField
+                  className='mb-4'
+                  name='criteriaValue'
+                  label='Criteria value'
+                  variant='outlined'
+                  margin='normal'
+                  fullWidth
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.criteriaValue}
+                  error={Boolean(touched.criteriaValue && errors.criteriaValue)}
+                  helperText={touched.criteriaValue && errors.criteriaValue}
+                />
+              </Grid>
+              <Grid item sm={6} xs={12}>
+                <Autocomplete
+                  id='shippingClassId'
+                  name='shippingClass'
+                  options={shippingClass}
+                  getOptionLabel={(option) => option.name}
+                  getOptionSelected={(option, value) => option.id === value.id}
+                  onChange={(event, newValue) =>
+                    handleSelect(newValue, 'shippingClass')
+                  }
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label='Select Shipping class'
+                      variant='outlined'
+                      margin='normal'
+                    />
+                  )}
+                />
+                <Autocomplete
+                  id='shippingZoneId'
+                  name='shippingZone'
+                  options={shippingZones}
+                  getOptionLabel={(option) => option.name}
+                  getOptionSelected={(option, value) => option.id === value.id}
+                  onChange={(event, newValue) =>
+                    handleSelect(newValue, 'shippingZone')
+                  }
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label='Select Shipping zone'
+                      variant='outlined'
+                      margin='normal'
+                    />
+                  )}
+                />
+                <TextField
+                  className='mb-4'
+                  name='baseCost'
+                  label='Base Cost'
+                  variant='outlined'
+                  margin='normal'
+                  fullWidth
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.baseCost}
+                  error={Boolean(touched.baseCost && errors.baseCost)}
+                  helperText={touched.baseCost && errors.baseCost}
+                />
+                <TextField
+                  className='mb-4'
+                  name='additionalCostOnEvery'
+                  label='Additional Cost on every'
+                  variant='outlined'
+                  margin='normal'
+                  fullWidth
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.additionalCostOnEvery}
+                  error={Boolean(
+                    touched.additionalCostOnEvery &&
+                      errors.additionalCostOnEvery
+                  )}
+                  helperText={
+                    touched.additionalCostOnEvery &&
+                    errors.additionalCostOnEvery
+                  }
+                />
+              </Grid>
+            </Grid>
+            <Grid item container justify='center' alignItems='center'>
+              <Button
+                className='w-220 mt-4'
+                disabled={loading}
+                variant='contained'
+                color='primary'
+                type='submit'
+              >
+                Create shipping option
+              </Button>
+            </Grid>
+          </form>
+        )}
+      </Formik>
+    </div>
+  )
+}
+
+const shippingZonesSchema = yup.object().shape({
+  name: yup.string().required('please enter a valid name'),
+  baseCost: yup.string().required('Please enter a valid base cost'),
+  additionalCost: yup.string().required('Please enter a valid additional cost'),
+  criteriaValue: yup.string().required('Please enter a valid criteria value'),
+})
+
+export default CreateShippingOption

@@ -7,7 +7,6 @@ import http from '../../../services/api'
 
 import Loading from 'matx/components/MatxLoadable/Loading'
 import Notification from 'app/components/Notification'
-import axios from 'axios'
 
 const GetAllShippingOptions = () => {
   const [shippinOptions, setShippingOptions] = React.useState([])
@@ -17,27 +16,9 @@ const GetAllShippingOptions = () => {
 
   const getAllShippingOptions = async () => {
     setLoading(true)
-    // http.get('/afrimash/shipping-option').then((res) => {
-    //   console.log(typeof res.data)
-    //   setShippingOptions(res?.data.object)
-    //   setLoading(false)
-    // })
-    const token = localStorage.getItem('jwt_token')
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    }
-    await fetch('https://api.afrimash.com/afrimash/shipping-option', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    }).then(async (res) => {
-      const result = await res.json()
-      console.log(result)
+    http.get('/afrimash/shipping-option').then((res) => {
+      setShippingOptions(res?.data.object)
+      setLoading(false)
     })
   }
 
@@ -46,28 +27,6 @@ const GetAllShippingOptions = () => {
   }, [])
 
   const columns = [
-    {
-      name: 'methodCondition', // field name in the row object
-      label: 'Method Condition', // column title that will be shown in table
-      options: {
-        filter: true,
-        customBodyRenderLite: (dataIndex) => {
-          const shippingOptions = shippinOptions[dataIndex]
-          return (
-            <Link
-              to={{
-                pathname: `/shipping-option/details/`,
-              }}
-              className='flex items-center'
-            >
-              <div className='ml-3'>
-                <p className='my-0 text-10'>{`${shippingOptions.methodCondition}`}</p>
-              </div>
-            </Link>
-          )
-        },
-      },
-    },
     {
       name: 'name', // field name in the row object
       label: 'Name', // column title that will be shown in table
@@ -78,7 +37,10 @@ const GetAllShippingOptions = () => {
           return (
             <Link
               to={{
-                pathname: `/shipping-option/details/`,
+                pathname: `/shipping-option/details/${shippingZone.id}`,
+                state: {
+                  id: shippingZone.id,
+                },
               }}
               className='flex items-center'
             >
@@ -100,7 +62,10 @@ const GetAllShippingOptions = () => {
           return (
             <Link
               to={{
-                pathname: `/shipping-class/details/`,
+                pathname: `/shipping-option/details/${shippingZone.id}`,
+                state: {
+                  id: shippingZone.id,
+                },
               }}
               className='flex items-center'
             >
@@ -113,8 +78,8 @@ const GetAllShippingOptions = () => {
       },
     },
     {
-      name: 'shippingZone', // field name in the row object
-      label: 'Shipping Zone', // column title that will be shown in table
+      name: 'methodCondition', // field name in the row object
+      label: 'Method Condition', // column title that will be shown in table
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
@@ -122,12 +87,15 @@ const GetAllShippingOptions = () => {
           return (
             <Link
               to={{
-                pathname: `/shipping-option/details/`,
+                pathname: `/shipping-option/details/${shippingZone.id}`,
+                state: {
+                  id: shippingZone.id,
+                },
               }}
               className='flex items-center'
             >
               <div className='ml-3'>
-                <p className='my-0 text-10'>{`${shippingZone?.shippingZone.name}`}</p>
+                <p className='my-0 text-10'>{`${shippingZone?.methodCondition}`}</p>
               </div>
             </Link>
           )
@@ -135,8 +103,8 @@ const GetAllShippingOptions = () => {
       },
     },
     {
-      name: 'shippingZone', // field name in the row object
-      label: 'Shipping Zone', // column title that will be shown in table
+      name: 'calculationUnit', // field name in the row object
+      label: 'Calculation Unit', // column title that will be shown in table
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
@@ -144,12 +112,15 @@ const GetAllShippingOptions = () => {
           return (
             <Link
               to={{
-                pathname: `/shipping-option/details/`,
+                pathname: `/shipping-option/details/${shippingZone.id}`,
+                state: {
+                  id: shippingZone.id,
+                },
               }}
               className='flex items-center'
             >
               <div className='ml-3'>
-                <p className='my-0 text-10'>{`${shippingZone?.shippingClass.name}`}</p>
+                <p className='my-0 text-10'>{`${shippingZone?.calculationUnit}`}</p>
               </div>
             </Link>
           )
@@ -162,17 +133,18 @@ const GetAllShippingOptions = () => {
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
-          const shippingClass = shippinOptions[dataIndex]
+          const shippingZone = shippinOptions[dataIndex]
           return (
             <Link
               to={{
-                pathname: `/shipping-option/details/`,
+                pathname: `/shipping-option/details/${shippingZone.id}`,
+                state: {
+                  id: shippingZone.id,
+                },
               }}
               className='flex items-center'
             >
-              <div className='ml-3'>
-                <h5 className='my-0 text-10'>{`${shippingClass?.id}`}</h5>
-              </div>
+              <div className='ml-3'></div>
             </Link>
           )
         },
@@ -185,7 +157,7 @@ const GetAllShippingOptions = () => {
       <div className='mb-sm-30'>
         <Breadcrumb
           routeSegments={[
-            { name: 'Shipping Options', path: '/shipping-option' },
+            { name: 'Shipping Options', path: '/shipping-options' },
             { name: 'Shipping Options' },
           ]}
         />
@@ -203,20 +175,6 @@ const GetAllShippingOptions = () => {
               data={shippinOptions}
               columns={columns}
               options={{
-                // onRowsDelete: (data) =>
-                //   dialog
-                //     .confirm('Are you sure you want to delete?')
-                //     .then((value) => console.log('delete'))
-                //     .catch(() => {
-                //       return false
-                //     }),
-                // count,
-                // page,
-                // onTableChange: (action, tableState) => {
-                //   if (action === 'changePage') {
-                //     onPageChange(tableState.page)
-                //   }
-                // },
                 filter: true,
                 sort: true,
                 sortOrder: { name: 'id', direction: 'desc' },
