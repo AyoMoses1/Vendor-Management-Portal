@@ -333,28 +333,28 @@ const AgentsInfo = ({ location, match }) => {
                     onClick={() => generateAgentAccount(agentDetails.id)}
                     variant='contained'
                     color='primary'
+                    className='mr-4'
                   >
                     Generate Account
                   </Button>
                 )}
-                {(agentDetails.status === 'ACTIVE' ||
-                  agentDetails.status === 'SUSPENDED') && (
-                  <Button
-                    onClick={() => onDeactivateAccount(agentDetails.id)}
-                    variant={
-                      agentDetails.status === 'ACTIVE'
-                        ? `outlined`
-                        : 'contained'
-                    }
-                    className={`deactivate-button ${agentDetails.status}`}
-                  >
-                    {agentDetails.status === 'ACTIVE'
-                      ? 'Deactivate Account'
-                      : agentDetails.status === 'SUSPENDED'
-                      ? 'Activate Agent'
-                      : ''}
-                  </Button>
-                )}
+                <Button
+                  onClick={() => onDeactivateAccount(agentDetails.id)}
+                  variant={
+                    agentDetails.status === 'ACTIVE' ? `outlined` : 'contained'
+                  }
+                  disabled={
+                    !agentDetails.status === 'ACTIVE' ||
+                    !agentDetails.status === 'SUSPENDED'
+                  }
+                  className={`deactivate-button ${agentDetails.status}`}
+                >
+                  {agentDetails.status === 'ACTIVE'
+                    ? 'Deactivate Account'
+                    : agentDetails.status === 'SUSPENDED'
+                    ? 'Activate Agent'
+                    : agentDetails.status}
+                </Button>
               </div>
             </div>
             <Divider className='mt-4' />

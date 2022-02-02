@@ -16,12 +16,20 @@ const CreateShippingOptions = MatxLoadable({
   loader: () => import('./ShippingOptions/CreateShippingOptions'),
 })
 
+const ShippingOptionsDetails = MatxLoadable({
+  loader: () => import('./ShippingOptions/ShippinpOptionsDetails'),
+})
+
 const CreateShippingZones = MatxLoadable({
   loader: () => import('./ShippingZones/CreateShippingZone'),
 })
 
 const GetAllShippingZones = MatxLoadable({
   loader: () => import('./ShippingZones/GetAllShippingZones'),
+})
+
+const GetShippingZoneDetails = MatxLoadable({
+  loader: () => import('./ShippingZones/GetShippingZoneDetails'),
 })
 
 const shippingRoutes = [
@@ -38,7 +46,7 @@ const shippingRoutes = [
     component: CreateShippingClass,
   },
   {
-    path: '/shipping-options/new',
+    path: '/shipping-option/new',
     component: CreateShippingOptions,
   },
   {
@@ -48,6 +56,14 @@ const shippingRoutes = [
   {
     path: '/shipping-zones',
     component: GetAllShippingZones,
+  },
+  {
+    path: '/shipping-option/details',
+    component: ShippingOptionsDetails,
+  },
+  {
+    path: '/shipping-zone/details',
+    component: GetShippingZoneDetails,
   },
 ]
 export default shippingRoutes

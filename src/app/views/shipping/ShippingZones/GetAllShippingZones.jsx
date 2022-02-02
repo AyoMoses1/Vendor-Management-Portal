@@ -28,28 +28,6 @@ const GetAllShippingZones = () => {
 
   const columns = [
     {
-      name: 'shippingRegion', // field name in the row object
-      label: 'Shippin Region', // column title that will be shown in table
-      options: {
-        filter: true,
-        customBodyRenderLite: (dataIndex) => {
-          const shippingZones = shippinZones[dataIndex]
-          return (
-            <Link
-              to={{
-                pathname: `/shipping-zones`,
-              }}
-              className='flex items-center'
-            >
-              <div className='ml-3'>
-                <p className='my-0 text-10'>{`${shippingZones.shippingRegion}`}</p>
-              </div>
-            </Link>
-          )
-        },
-      },
-    },
-    {
       name: 'name', // field name in the row object
       label: 'Name', // column title that will be shown in table
       options: {
@@ -59,7 +37,10 @@ const GetAllShippingZones = () => {
           return (
             <Link
               to={{
-                pathname: `/shipping-zones`,
+                pathname: `/shipping-zone/details/${shippingZone.id}`,
+                state: {
+                  id: shippingZone.id,
+                },
               }}
               className='flex items-center'
             >
@@ -81,7 +62,10 @@ const GetAllShippingZones = () => {
           return (
             <Link
               to={{
-                pathname: `/shipping-zones`,
+                pathname: `/shipping-zone/details/${shippingZone.id}`,
+                state: {
+                  id: shippingZone.id,
+                },
               }}
               className='flex items-center'
             >
@@ -99,17 +83,18 @@ const GetAllShippingZones = () => {
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
-          const shippingClass = shippinZones[dataIndex]
+          const shippingZone = shippinZones[dataIndex]
           return (
             <Link
               to={{
-                pathname: `/shipping-zones`,
+                pathname: `/shipping-zone/details/${shippingZone.id}`,
+                state: {
+                  id: shippingZone.id,
+                },
               }}
               className='flex items-center'
             >
-              <div className='ml-3'>
-                <h5 className='my-0 text-10'>{`${shippingClass?.id}`}</h5>
-              </div>
+              <div className='ml-3'></div>
             </Link>
           )
         },

@@ -28,7 +28,6 @@ const AgentForm = ({ isEdit, id, agent }) => {
     setLoading(true)
     http.post(`/afrimash/shipping-class`, values).then((res) => {
       setLoading(false)
-      console.log(res)
       if (res.status === 200) {
         history.push('/shipping-classes')
       } else if (res.status === 'BAD_REQUEST') {

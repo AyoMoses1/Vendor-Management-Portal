@@ -10,7 +10,7 @@ import { useHistory } from 'react-router-dom/cjs/react-router-dom'
 import Notification from '../../../components/Notification'
 import { errorState } from '../../helpers/error-state'
 
-const AgentForm = ({ isEdit, id, agent }) => {
+const CreateShippingZone = () => {
   const history = useHistory()
 
   const initialValues = {
@@ -28,7 +28,6 @@ const AgentForm = ({ isEdit, id, agent }) => {
     setLoading(true)
     http.post(`/afrimash/shipping-zone`, values).then((res) => {
       setLoading(false)
-      console.log(res)
       if (res.status === 200) {
         history.push('/shipping-zones')
       } else if (res.status === 'BAD_REQUEST') {
@@ -133,4 +132,4 @@ const shippingZonesSchema = yup.object().shape({
   description: yup.string().required('Please enter a valid description'),
 })
 
-export default AgentForm
+export default CreateShippingZone
