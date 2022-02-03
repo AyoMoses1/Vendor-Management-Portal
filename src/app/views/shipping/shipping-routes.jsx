@@ -32,10 +32,18 @@ const GetShippingZoneDetails = MatxLoadable({
   loader: () => import('./ShippingZones/GetShippingZoneDetails'),
 })
 
+const GetShippingClassDetails = MatxLoadable({
+  loader: () => import('./ShippingClass/GetShippingClassDetails'),
+})
+
 const shippingRoutes = [
   {
     path: '/shipping-classes',
     component: GetAllShippingClass,
+  },
+  {
+    path: '/shipping-class',
+    component: GetShippingClassDetails,
   },
   {
     path: '/shipping-options',
