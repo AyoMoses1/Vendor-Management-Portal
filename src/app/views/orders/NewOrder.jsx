@@ -203,11 +203,6 @@ function NewOrders() {
                             defaultValue=''
                             options={products}
                             value={fields.product}
-                            // PaperComponent={({ children }) => (
-                            //   <Paper style={{ fontWeight: 'bold' }}>
-                            //     {children}
-                            //   </Paper>
-                            // )}
                             getOptionLabel={(option) =>
                               `Name: ${option.name || ''} Vendor: ${
                                 option.storeId?.name || ''

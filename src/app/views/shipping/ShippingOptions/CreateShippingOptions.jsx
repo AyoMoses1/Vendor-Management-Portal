@@ -16,27 +16,28 @@ const CreateShippingOption = () => {
 
   const initialValues = {
     name: '',
-    methodCondition: '',
     baseCost: '',
     additionalCost: '',
     additionalCostOnEvery: '',
     criteriaValue: '',
-    calculationUnit: '',
   }
   const initialState = {
     shippingClass: '',
     shippingZone: '',
+    methodCondition: '',
+    calculationUnit: '',
   }
   const calculationUnit = ['WEIGHT', 'SHIPPING_CLASS', 'DIMENSION', 'VOLUME']
   const methodCondition = ['GREATER_THAN', 'LESS_THAN', 'EQUAL_TO']
 
-  const [values, setValues] = React.useState(initialValues)
+  const [value, setValues] = React.useState(initialValues)
   const [state, setState] = React.useState(initialState)
   const [error, setError] = React.useState('')
   const [severity, setSeverity] = React.useState('')
   const [loading, setLoading] = React.useState(false)
   const [shippingZones, setShippingZones] = React.useState()
   const [shippingClass, setShippingClass] = React.useState()
+  const [shipping, setShipping] = React.useState(false)
 
   const handleSubmit = async (values, { setSubmitting }) => {
     const payload = { ...state, ...values }
@@ -53,8 +54,20 @@ const CreateShippingOption = () => {
   }
 
   const handleSelect = (newValue, fieldName) => {
-    const { id } = newValue
-    setState({ ...state, [fieldName]: id })
+    if (newValue) {
+      const { id } = newValue
+      setState({ ...state, [fieldName]: id })
+    }
+  }
+
+  const handleAutoCompleteSelect = (e, name) => {
+    console.log(e)
+    setState({ ...state, [name]: e.target.value })
+    if (e.target.value === 'SHIPPING_CLASS') {
+      setShipping(true)
+    } else {
+      setShipping(false)
+    }
   }
 
   const getAllShippingZones = () => {
@@ -81,7 +94,7 @@ const CreateShippingOption = () => {
     <div className='m-sm-30'>
       <Notification alert={error} severity={severity || ''} />
       <Formik
-        initialValues={values}
+        initialValues={value}
         onSubmit={handleSubmit}
         enableReinitialize={true}
         validationSchema={shippingZonesSchema}
@@ -116,6 +129,26 @@ const CreateShippingOption = () => {
                   error={Boolean(touched.name && errors.name)}
                   helperText={touched.name && errors.name}
                 />
+                <Autocomplete
+                  id='shippingClassId'
+                  name='shippingClass'
+                  options={shippingClass}
+                  disabled={!shipping}
+                  getOptionLabel={(option) => option.name}
+                  getOptionSelected={(option, value) => option.id === value.id}
+                  onChange={(event, newValue) =>
+                    handleSelect(newValue, 'shippingClass')
+                  }
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label='Select Shipping class'
+                      variant='outlined'
+                      required={!shipping}
+                      margin='normal'
+                    />
+                  )}
+                />
                 <TextField
                   className='mb-4'
                   name='methodCondition'
@@ -125,8 +158,10 @@ const CreateShippingOption = () => {
                   margin='normal'
                   fullWidth
                   onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.methodCondition}
+                  onChange={(e) =>
+                    handleAutoCompleteSelect(e, 'methodCondition')
+                  }
+                  value={state.methodCondition}
                 >
                   {methodCondition.map((method) => (
                     <MenuItem value={method} key={method}>
@@ -134,24 +169,7 @@ const CreateShippingOption = () => {
                     </MenuItem>
                   ))}
                 </TextField>
-                <TextField
-                  className='mb-4'
-                  name='calculationUnit'
-                  label='Select Method Condition'
-                  variant='outlined'
-                  select
-                  margin='normal'
-                  fullWidth
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.calculationUnit}
-                >
-                  {calculationUnit.map((unit) => (
-                    <MenuItem value={unit} key={unit}>
-                      {unit}
-                    </MenuItem>
-                  ))}
-                </TextField>
+
                 <TextField
                   className='mb-4'
                   name='additionalCost'
@@ -182,24 +200,26 @@ const CreateShippingOption = () => {
                 />
               </Grid>
               <Grid item sm={6} xs={12}>
-                <Autocomplete
-                  id='shippingClassId'
-                  name='shippingClass'
-                  options={shippingClass}
-                  getOptionLabel={(option) => option.name}
-                  getOptionSelected={(option, value) => option.id === value.id}
-                  onChange={(event, newValue) =>
-                    handleSelect(newValue, 'shippingClass')
+                <TextField
+                  className='mb-4'
+                  name='calculationUnit'
+                  label='Select Calculation unit'
+                  variant='outlined'
+                  select
+                  margin='normal'
+                  fullWidth
+                  onBlur={handleBlur}
+                  onChange={(e) =>
+                    handleAutoCompleteSelect(e, 'calculationUnit')
                   }
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label='Select Shipping class'
-                      variant='outlined'
-                      margin='normal'
-                    />
-                  )}
-                />
+                  value={state.calculationUnit}
+                >
+                  {calculationUnit.map((unit) => (
+                    <MenuItem value={unit} key={unit}>
+                      {unit}
+                    </MenuItem>
+                  ))}
+                </TextField>
                 <Autocomplete
                   id='shippingZoneId'
                   name='shippingZone'

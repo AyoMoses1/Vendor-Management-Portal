@@ -37,7 +37,10 @@ const GetAllShippingClass = () => {
           return (
             <Link
               to={{
-                pathname: `/shipping-classes`,
+                pathname: `/shipping-class`,
+                state: {
+                  id: shippingClass.id,
+                },
               }}
               className='flex items-center'
             >
@@ -59,7 +62,10 @@ const GetAllShippingClass = () => {
           return (
             <Link
               to={{
-                pathname: `/shipping-classes`,
+                pathname: `/shipping-class`,
+                state: {
+                  id: shippingClass.id,
+                },
               }}
               className='flex items-center'
             >
@@ -81,12 +87,15 @@ const GetAllShippingClass = () => {
           return (
             <Link
               to={{
-                pathname: `/shipping-classes`,
+                pathname: `/shipping-class`,
+                state: {
+                  id: shippingClass.id,
+                },
               }}
               className='flex items-center'
             >
               <div className='ml-3'>
-                <p className='my-0 text-10'>{`${shippingClass?.description}`}</p>
+                <p className='my-0 text-10'>{`${shippingClass?.id}`}</p>
               </div>
             </Link>
           )
@@ -103,7 +112,10 @@ const GetAllShippingClass = () => {
           return (
             <Link
               to={{
-                pathname: `/shipping-classes`,
+                pathname: `/shipping-class`,
+                state: {
+                  id: shippingClass.id,
+                },
               }}
               className='flex items-center'
             >
