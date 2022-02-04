@@ -42,7 +42,7 @@ const shippingRoutes = [
     component: GetAllShippingClass,
   },
   {
-    path: '/shipping-class',
+    path: '/shipping-class/details',
     component: GetShippingClassDetails,
   },
   {

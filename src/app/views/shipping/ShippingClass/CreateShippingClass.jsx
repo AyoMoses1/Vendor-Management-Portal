@@ -10,7 +10,7 @@ import { useHistory } from 'react-router-dom/cjs/react-router-dom'
 import Notification from '../../../components/Notification'
 import { errorState } from '../../helpers/error-state'
 
-const AgentForm = ({ isEdit, id, agent }) => {
+const ShippingClassDetails = ({ isEdit, id, agent }) => {
   const history = useHistory()
 
   const initialValues = {
@@ -130,4 +130,4 @@ const shippingClassSchema = yup.object().shape({
   description: yup.string().required('Please enter a valid description'),
 })
 
-export default AgentForm
+export default ShippingClassDetails
