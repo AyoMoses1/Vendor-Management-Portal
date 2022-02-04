@@ -37,7 +37,7 @@ const GetAllShippingClass = () => {
           return (
             <Link
               to={{
-                pathname: `/shipping-class`,
+                pathname: `/shipping-class/details`,
                 state: {
                   id: shippingClass.id,
                 },
@@ -62,7 +62,7 @@ const GetAllShippingClass = () => {
           return (
             <Link
               to={{
-                pathname: `/shipping-class`,
+                pathname: `/shipping-class/details`,
                 state: {
                   id: shippingClass.id,
                 },
@@ -87,7 +87,7 @@ const GetAllShippingClass = () => {
           return (
             <Link
               to={{
-                pathname: `/shipping-class`,
+                pathname: `/shipping-class/details`,
                 state: {
                   id: shippingClass.id,
                 },
@@ -112,7 +112,7 @@ const GetAllShippingClass = () => {
           return (
             <Link
               to={{
-                pathname: `/shipping-class`,
+                pathname: `/shipping-class/details`,
                 state: {
                   id: shippingClass.id,
                 },
