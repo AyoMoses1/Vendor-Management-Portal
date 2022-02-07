@@ -125,20 +125,6 @@ const GetAllShippingZones = () => {
               data={shippinZones}
               columns={columns}
               options={{
-                // onRowsDelete: (data) =>
-                //   dialog
-                //     .confirm('Are you sure you want to delete?')
-                //     .then((value) => console.log('delete'))
-                //     .catch(() => {
-                //       return false
-                //     }),
-                // count,
-                // page,
-                // onTableChange: (action, tableState) => {
-                //   if (action === 'changePage') {
-                //     onPageChange(tableState.page)
-                //   }
-                // },
                 filter: true,
                 sort: true,
                 sortOrder: { name: 'id', direction: 'desc' },

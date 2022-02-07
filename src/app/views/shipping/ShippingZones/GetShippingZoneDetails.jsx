@@ -6,10 +6,13 @@ import {
   TableCell,
   TableRow,
   Button,
+  Box,
+  TextField,
+  Grow,
 } from '@material-ui/core'
 
 import http from '../../../services/api'
-
+import MUIDataTable from 'mui-datatables'
 import { SimpleCard, Breadcrumb } from 'matx'
 
 import Loading from 'matx/components/MatxLoadable/Loading'
@@ -36,6 +39,26 @@ const ShippingZoneDetails = ({ location, match }) => {
   useEffect(() => {
     getShippingZoneDetails(id)
   }, [id])
+
+  const columns = [
+    {
+      name: 'name', // field name in the row object
+      label: 'Name', // column title that will be shown in table
+      options: {
+        filter: true,
+        customBodyRenderLite: (dataIndex) => {
+          let state = shippingZone?.stateList[dataIndex]
+          return (
+            <dix className='flex items-center'>
+              <div>
+                <h5 className='my-0'>{state?.name}</h5>
+              </div>
+            </dix>
+          )
+        },
+      },
+    },
+  ]
 
   return (
     <div className='m-sm-30'>
@@ -89,6 +112,40 @@ const ShippingZoneDetails = ({ location, match }) => {
             </Table>
           </SimpleCard>
           <Divider />
+          <Box mt={5}>
+            <SimpleCard>
+              <MUIDataTable
+                title={'Zone States'}
+                data={shippingZone?.stateList}
+                columns={columns}
+                options={{
+                  filterType: 'textField',
+                  responsive: 'standard',
+                  elevation: 5,
+                  rowsPerPageOptions: [10, 20, 40, 80, 100],
+                  customSearchRender: (
+                    searchText,
+                    handleSearch,
+                    hideSearch,
+                    options
+                  ) => {
+                    return (
+                      <Grow appear in={true} timeout={300}>
+                        <TextField
+                          variant='outlined'
+                          size='small'
+                          fullWidth
+                          onChange={({ target: { value } }) =>
+                            handleSearch(value)
+                          }
+                        />
+                      </Grow>
+                    )
+                  },
+                }}
+              />
+            </SimpleCard>
+          </Box>
         </>
       )}
     </div>
