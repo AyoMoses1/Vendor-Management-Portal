@@ -283,7 +283,10 @@ const AgentsInfo = ({ location, match }) => {
           })
         )
         .catch((error) => console.error(error))
-    } else if (agentDetails.status === 'SUSPENDED') {
+    } else if (
+      agentDetails.status === 'SUSPENDED' ||
+      agentDetails.status === 'IN_ACTIVE'
+    ) {
       dialog
         .confirm('Activate Agent account?')
         .then(() =>
@@ -345,7 +348,8 @@ const AgentsInfo = ({ location, match }) => {
                   }
                   disabled={
                     !agentDetails.status === 'ACTIVE' ||
-                    !agentDetails.status === 'SUSPENDED'
+                    !agentDetails.status === 'SUSPENDED' ||
+                    !agentDetails.status === 'IN_ACTIVE'
                   }
                   className={`deactivate-button ${agentDetails.status}`}
                 >
@@ -353,7 +357,7 @@ const AgentsInfo = ({ location, match }) => {
                     ? 'Deactivate Account'
                     : agentDetails.status === 'SUSPENDED'
                     ? 'Activate Agent'
-                    : agentDetails.status}
+                    : 'Activate Agent'}
                 </Button>
               </div>
             </div>

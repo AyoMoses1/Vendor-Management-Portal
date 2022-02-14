@@ -25,11 +25,19 @@ const CreateShippingOption = () => {
     shippingClass: '',
     shippingZone: '',
     methodCondition: '',
+    dimensionUnit: '',
     calculationUnit: '',
   }
-  const calculationUnit = ['WEIGHT', 'SHIPPING_CLASS', 'DIMENSION', 'VOLUME']
+  const calculationUnit = [
+    'WEIGHT',
+    'WIDTH',
+    'SHIPPING_CLASS',
+    'VOLUME',
+    'HEIGHT',
+    'VOLUME',
+  ]
   const methodCondition = ['GREATER_THAN', 'LESS_THAN', 'EQUAL_TO']
-
+  const dimensionUnit = ['ML', 'CM', 'M', 'KM', 'G', 'KG', 'T', 'CL', 'L', 'KL']
   const [value, setValues] = React.useState(initialValues)
   const [state, setState] = React.useState(initialState)
   const [error, setError] = React.useState('')
@@ -61,7 +69,6 @@ const CreateShippingOption = () => {
   }
 
   const handleAutoCompleteSelect = (e, name) => {
-    console.log(e)
     setState({ ...state, [name]: e.target.value })
     if (e.target.value === 'SHIPPING_CLASS') {
       setShipping(true)
@@ -129,47 +136,52 @@ const CreateShippingOption = () => {
                   error={Boolean(touched.name && errors.name)}
                   helperText={touched.name && errors.name}
                 />
-                <Autocomplete
-                  id='shippingClassId'
-                  name='shippingClass'
-                  options={shippingClass}
-                  disabled={!shipping}
-                  getOptionLabel={(option) => option.name}
-                  getOptionSelected={(option, value) => option.id === value.id}
-                  onChange={(event, newValue) =>
-                    handleSelect(newValue, 'shippingClass')
-                  }
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label='Select Shipping class'
-                      variant='outlined'
-                      required={!shipping}
-                      margin='normal'
-                    />
-                  )}
-                />
-                <TextField
-                  className='mb-4'
-                  name='methodCondition'
-                  label='Select Method Condition'
-                  variant='outlined'
-                  select
-                  margin='normal'
-                  fullWidth
-                  onBlur={handleBlur}
-                  onChange={(e) =>
-                    handleAutoCompleteSelect(e, 'methodCondition')
-                  }
-                  value={state.methodCondition}
-                >
-                  {methodCondition.map((method) => (
-                    <MenuItem value={method} key={method}>
-                      {method}
-                    </MenuItem>
-                  ))}
-                </TextField>
-
+                {shipping && (
+                  <Autocomplete
+                    id='shippingClassId'
+                    name='shippingClass'
+                    options={shippingClass}
+                    disabled={!shipping}
+                    getOptionLabel={(option) => option.name}
+                    getOptionSelected={(option, value) =>
+                      option.id === value.id
+                    }
+                    onChange={(event, newValue) =>
+                      handleSelect(newValue, 'shippingClass')
+                    }
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label='Select Shipping class'
+                        variant='outlined'
+                        required={!shipping}
+                        margin='normal'
+                      />
+                    )}
+                  />
+                )}
+                {!shipping && (
+                  <TextField
+                    className='mb-4'
+                    name='methodCondition'
+                    label='Select Method Condition'
+                    variant='outlined'
+                    select
+                    margin='normal'
+                    fullWidth
+                    onBlur={handleBlur}
+                    onChange={(e) =>
+                      handleAutoCompleteSelect(e, 'methodCondition')
+                    }
+                    value={state.methodCondition}
+                  >
+                    {methodCondition.map((method) => (
+                      <MenuItem value={method} key={method}>
+                        {method}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                )}
                 <TextField
                   className='mb-4'
                   name='additionalCost'
@@ -180,32 +192,16 @@ const CreateShippingOption = () => {
                   onBlur={handleBlur}
                   onChange={handleChange}
                   value={values.additionalCost}
-                  error={Boolean(
-                    touched.additionalCost && errors.additionalCost
-                  )}
-                  helperText={touched.additionalCost && errors.additionalCost}
-                />
-                <TextField
-                  className='mb-4'
-                  name='criteriaValue'
-                  label='Criteria value'
-                  variant='outlined'
-                  margin='normal'
-                  fullWidth
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.criteriaValue}
-                  error={Boolean(touched.criteriaValue && errors.criteriaValue)}
-                  helperText={touched.criteriaValue && errors.criteriaValue}
                 />
               </Grid>
               <Grid item sm={6} xs={12}>
                 <TextField
                   className='mb-4'
                   name='calculationUnit'
-                  label='Select Calculation unit'
+                  label='Select calculation unit'
                   variant='outlined'
                   select
+                  required
                   margin='normal'
                   fullWidth
                   onBlur={handleBlur}
@@ -220,24 +216,23 @@ const CreateShippingOption = () => {
                     </MenuItem>
                   ))}
                 </TextField>
-                <Autocomplete
-                  id='shippingZoneId'
-                  name='shippingZone'
-                  options={shippingZones}
-                  getOptionLabel={(option) => option.name}
-                  getOptionSelected={(option, value) => option.id === value.id}
-                  onChange={(event, newValue) =>
-                    handleSelect(newValue, 'shippingZone')
-                  }
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label='Select Shipping zone'
-                      variant='outlined'
-                      margin='normal'
-                    />
-                  )}
-                />
+                {!shipping && (
+                  <TextField
+                    className='mb-4'
+                    name='criteriaValue'
+                    label='Criteria value'
+                    variant='outlined'
+                    margin='normal'
+                    fullWidth
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.criteriaValue}
+                    error={Boolean(
+                      touched.criteriaValue && errors.criteriaValue
+                    )}
+                    helperText={touched.criteriaValue && errors.criteriaValue}
+                  />
+                )}
                 <TextField
                   className='mb-4'
                   name='baseCost'
@@ -251,25 +246,49 @@ const CreateShippingOption = () => {
                   error={Boolean(touched.baseCost && errors.baseCost)}
                   helperText={touched.baseCost && errors.baseCost}
                 />
-                <TextField
-                  className='mb-4'
-                  name='additionalCostOnEvery'
-                  label='Additional Cost on every'
-                  variant='outlined'
-                  margin='normal'
-                  fullWidth
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.additionalCostOnEvery}
-                  error={Boolean(
-                    touched.additionalCostOnEvery &&
+                {values.additionalCost > 1 && (
+                  <TextField
+                    className='mb-4'
+                    name='additionalCostOnEvery'
+                    label='Additional Cost on every'
+                    variant='outlined'
+                    margin='normal'
+                    fullWidth
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.additionalCostOnEvery}
+                    error={Boolean(
+                      touched.additionalCostOnEvery &&
+                        errors.additionalCostOnEvery
+                    )}
+                    helperText={
+                      touched.additionalCostOnEvery &&
                       errors.additionalCostOnEvery
-                  )}
-                  helperText={
-                    touched.additionalCostOnEvery &&
-                    errors.additionalCostOnEvery
-                  }
-                />
+                    }
+                  />
+                )}
+                {values.additionalCost > 1 && (
+                  <TextField
+                    className='mb-4'
+                    name='dimensionUnit'
+                    label='Select dimension unit'
+                    variant='outlined'
+                    select
+                    margin='normal'
+                    fullWidth
+                    onBlur={handleBlur}
+                    onChange={(e) =>
+                      handleAutoCompleteSelect(e, 'dimensionUnit')
+                    }
+                    value={state.dimensionUnit}
+                  >
+                    {dimensionUnit.map((unit) => (
+                      <MenuItem value={unit} key={unit}>
+                        {unit}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                )}
               </Grid>
             </Grid>
             <Grid item container justify='center' alignItems='center'>
@@ -293,8 +312,6 @@ const CreateShippingOption = () => {
 const shippingZonesSchema = yup.object().shape({
   name: yup.string().required('please enter a valid name'),
   baseCost: yup.string().required('Please enter a valid base cost'),
-  additionalCost: yup.string().required('Please enter a valid additional cost'),
-  criteriaValue: yup.string().required('Please enter a valid criteria value'),
 })
 
 export default CreateShippingOption

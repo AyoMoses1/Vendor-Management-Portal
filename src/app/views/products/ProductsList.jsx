@@ -283,6 +283,7 @@ const Products = () => {
                       return false
                     }),
                 sort: true,
+                filter: true,
                 sortOrder: { name: 'id', direction: 'desc' },
                 filterType: 'textField',
                 responsive: 'standard',

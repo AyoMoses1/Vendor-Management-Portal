@@ -28,6 +28,7 @@ const ShippingZoneDetails = ({ location, match }) => {
     setLoading(true)
     http.get(`/afrimash/shipping-zone/${zoneId}`).then((res) => {
       setShippingZone(res?.data.object)
+      console.log(res?.data.object)
       setLoading(false)
     })
   }
