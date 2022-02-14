@@ -57,6 +57,7 @@ const Orders = (props) => {
   useEffect(() => {
     getAllInvoice(setOrders, setLoading, page, setCount, source)
     dispatch({ type: GET_ALL_ORDERS })
+
     return () => setIsAlive(false)
   }, [dispatch, isAlive, page, source])
 
@@ -238,8 +239,11 @@ const Orders = (props) => {
       options: {
         filter: false,
         customBodyRenderLite: (dataIndex) => {
+          let order = orders[dataIndex]
           return (
-            <div>{/* <h5 className='my-0 text-15'>{`${user?.id}`}</h5> */}</div>
+            <div>
+              <h5 className='my-0 text-15'>{`${order?.id}`}</h5>
+            </div>
           )
         },
       },
@@ -269,12 +273,12 @@ const Orders = (props) => {
                       return false
                     }),
                 sort: true,
+                filter: true,
                 sortOrder: { name: 'id', direction: 'desc' },
                 filterType: 'textField',
                 responsive: 'standard',
                 fixedHeader: true,
-                rowsPerPage: 50,
-                serverSide: true,
+                rowsPerPageOptions: [10, 20, 40, 80, 100],
                 count,
                 page,
                 onTableChange: (action, tableState) => {
@@ -282,7 +286,7 @@ const Orders = (props) => {
                     onChangePage(tableState.page)
                   }
                 },
-                elevation: 5,
+                elevation: 0,
                 customSearchRender: (
                   searchText,
                   handleSearch,
