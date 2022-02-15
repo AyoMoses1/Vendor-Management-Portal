@@ -20,6 +20,7 @@ const CreateShippingOption = () => {
     additionalCost: '',
     additionalCostOnEvery: '',
     criteriaValue: '',
+    description: '',
   }
   const initialState = {
     shippingClass: '',
@@ -27,6 +28,7 @@ const CreateShippingOption = () => {
     methodCondition: '',
     dimensionUnit: '',
     calculationUnit: '',
+    description: '',
   }
   const calculationUnit = [
     'WEIGHT',
@@ -49,6 +51,13 @@ const CreateShippingOption = () => {
 
   const handleSubmit = async (values, { setSubmitting }) => {
     const payload = { ...state, ...values }
+    if (shipping) {
+      delete payload.criteriaValue
+      delete payload.methodCondition
+    } else {
+      delete payload.shippingClass
+    }
+    console.log(payload)
     setLoading(true)
     http.post(`/afrimash/shipping-option`, payload).then((res) => {
       setLoading(false)
@@ -75,6 +84,10 @@ const CreateShippingOption = () => {
     } else {
       setShipping(false)
     }
+  }
+
+  const handleDimensionSelect = (e, name) => {
+    setState({ ...state, [name]: e.target.value })
   }
 
   const getAllShippingZones = () => {
@@ -184,14 +197,16 @@ const CreateShippingOption = () => {
                 )}
                 <TextField
                   className='mb-4'
-                  name='additionalCost'
-                  label='Additional Cost'
+                  name='baseCost'
+                  label='Base Cost'
                   variant='outlined'
                   margin='normal'
                   fullWidth
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  value={values.additionalCost}
+                  value={values.baseCost}
+                  error={Boolean(touched.baseCost && errors.baseCost)}
+                  helperText={touched.baseCost && errors.baseCost}
                 />
               </Grid>
               <Grid item sm={6} xs={12}>
@@ -233,18 +248,35 @@ const CreateShippingOption = () => {
                     helperText={touched.criteriaValue && errors.criteriaValue}
                   />
                 )}
+                <Autocomplete
+                  id='shippingZoneId'
+                  name='shippingZone'
+                  options={shippingZones}
+                  getOptionLabel={(option) => option.name}
+                  getOptionSelected={(option, value) => option.id === value.id}
+                  onChange={(event, newValue) =>
+                    handleSelect(newValue, 'shippingZone')
+                  }
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label='Select Shipping zone'
+                      variant='outlined'
+                      margin='normal'
+                    />
+                  )}
+                />
+
                 <TextField
                   className='mb-4'
-                  name='baseCost'
-                  label='Base Cost'
+                  name='additionalCost'
+                  label='Additional Cost'
                   variant='outlined'
                   margin='normal'
                   fullWidth
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  value={values.baseCost}
-                  error={Boolean(touched.baseCost && errors.baseCost)}
-                  helperText={touched.baseCost && errors.baseCost}
+                  value={values.additionalCost}
                 />
                 {values.additionalCost > 1 && (
                   <TextField
@@ -277,9 +309,7 @@ const CreateShippingOption = () => {
                     margin='normal'
                     fullWidth
                     onBlur={handleBlur}
-                    onChange={(e) =>
-                      handleAutoCompleteSelect(e, 'dimensionUnit')
-                    }
+                    onChange={(e) => handleDimensionSelect(e, 'dimensionUnit')}
                     value={state.dimensionUnit}
                   >
                     {dimensionUnit.map((unit) => (
@@ -289,6 +319,18 @@ const CreateShippingOption = () => {
                     ))}
                   </TextField>
                 )}
+                <TextField
+                  multiline
+                  className='mb-4'
+                  name='description'
+                  label='Option Description'
+                  variant='outlined'
+                  margin='normal'
+                  fullWidth
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.description}
+                />
               </Grid>
             </Grid>
             <Grid item container justify='center' alignItems='center'>
