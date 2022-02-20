@@ -10,38 +10,64 @@ import { useHistory } from 'react-router-dom/cjs/react-router-dom'
 import Notification from '../../../components/Notification'
 import { errorState } from '../../helpers/error-state'
 
-const CreateShippingZone = () => {
+const CreateShippingZone = ({ location }) => {
   const history = useHistory()
-
+  const { id } = location?.state
   const initialValues = {
     name: '',
     shippingRegion: '',
     description: '',
   }
+  const [shippinZones, setShippingZones] = React.useState(initialValues)
 
-  const [values, setValues] = React.useState(initialValues)
   const [error, setError] = React.useState('')
   const [severity, setSeverity] = React.useState('')
   const [loading, setLoading] = React.useState(false)
 
   const handleSubmit = async (values, { setSubmitting }) => {
     setLoading(true)
-    http.post(`/afrimash/shipping-zone`, values).then((res) => {
+    if (id) {
+      http.put(`/afrimash/shipping-zone`, values).then((res) => {
+        setLoading(false)
+        if (res.status === 200) {
+          history.push('/shipping-zones')
+        } else if (res.status === 'BAD_REQUEST') {
+          let message = 'Somthing went wrong with that request'
+          errorState(setError, setSeverity, message)
+        }
+      })
+    } else {
+      http.post(`/afrimash/shipping-zone`, values).then((res) => {
+        setLoading(false)
+        if (res.status === 200) {
+          history.push('/shipping-zones')
+        } else if (res.status === 'BAD_REQUEST') {
+          let message = 'Somthing went wrong with that request'
+          errorState(setError, setSeverity, message)
+        }
+      })
+    }
+  }
+
+  const getAllShippingZones = (zoneId) => {
+    setLoading(true)
+    http.get(`/afrimash/shipping-zone/${zoneId}`).then((res) => {
+      setShippingZones(res?.data.object)
       setLoading(false)
-      if (res.status === 200) {
-        history.push('/shipping-zones')
-      } else if (res.status === 'BAD_REQUEST') {
-        let message = 'Somthing went wrong with that request'
-        errorState(setError, setSeverity, message)
-      }
     })
   }
+
+  React.useEffect(() => {
+    if (id) {
+      getAllShippingZones(id)
+    }
+  }, [])
 
   return (
     <div className='m-sm-30'>
       <Notification alert={error} severity={severity || ''} />
       <Formik
-        initialValues={values}
+        initialValues={shippinZones}
         onSubmit={handleSubmit}
         enableReinitialize={true}
         validationSchema={shippingZonesSchema}
@@ -90,23 +116,6 @@ const CreateShippingZone = () => {
                   helperText={touched.description && errors.description}
                 />
               </Grid>
-              <Grid item sm={6} xs={12}>
-                <TextField
-                  className='mb-4'
-                  name='shippingRegion'
-                  label='Shipping Region'
-                  variant='outlined'
-                  margin='normal'
-                  fullWidth
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values?.shippingRegion}
-                  error={Boolean(
-                    touched.shippingRegion && errors.shippingRegion
-                  )}
-                  helperText={touched.shippingRegion && errors.shippingRegion}
-                />
-              </Grid>
             </Grid>
             <Grid item container justify='center' alignItems='center'>
               <Button
@@ -116,7 +125,7 @@ const CreateShippingZone = () => {
                 color='primary'
                 type='submit'
               >
-                Create new zone
+                {id ? 'Update Zone' : 'Create new zone'}
               </Button>
             </Grid>
           </form>

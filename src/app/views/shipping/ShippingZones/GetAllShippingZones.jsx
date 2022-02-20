@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom'
 import http from '../../../services/api'
 
 import Loading from 'matx/components/MatxLoadable/Loading'
+import { useDialog } from 'muibox'
+
 import Notification from 'app/components/Notification'
 
 const GetAllShippingZones = () => {
@@ -13,6 +15,7 @@ const GetAllShippingZones = () => {
   const [error, setError] = React.useState(false)
   const [loading, setLoading] = React.useState(false)
   const [severity, setSeverirty] = React.useState('')
+  const dialog = useDialog()
 
   const getAllShippingZones = () => {
     setLoading(true)
@@ -78,6 +81,31 @@ const GetAllShippingZones = () => {
       },
     },
     {
+      name: 'shippingRegion', // field name in the row object
+      label: 'Shipping Region', // column title that will be shown in table
+      options: {
+        filter: true,
+        customBodyRenderLite: (dataIndex) => {
+          const shippingZone = shippinZones[dataIndex]
+          return (
+            <Link
+              to={{
+                pathname: `/shipping-zone/details/${shippingZone.id}`,
+                state: {
+                  id: shippingZone.id,
+                },
+              }}
+              className='flex items-center'
+            >
+              <div className='ml-3'>
+                <p className='my-0 text-10'>{`${shippingZone?.shippingRegion}`}</p>
+              </div>
+            </Link>
+          )
+        },
+      },
+    },
+    {
       name: 'id', // field name in the row object
       label: 'ID', // column title that will be shown in table
       options: {
@@ -96,6 +124,64 @@ const GetAllShippingZones = () => {
             >
               <div className='ml-3'></div>
             </Link>
+          )
+        },
+      },
+    },
+    {
+      name: 'action',
+      label: ' ',
+      options: {
+        filter: false,
+        customBodyRenderLite: (dataIndex) => {
+          let user = shippinZones[dataIndex]
+          return (
+            <div className='flex items-center'>
+              <div>
+                <IconButton
+                  onClick={() =>
+                    dialog
+                      .confirm('Are you sure you want to delete?')
+                      .then((value) => {
+                        http
+                          .delete(`afrimash/shipping-zone/${user.id}`)
+                          .then(() => window.location.reload())
+                      })
+                      .catch(() => {
+                        return false
+                      })
+                  }
+                >
+                  <Icon>delete</Icon>
+                </IconButton>
+              </div>
+            </div>
+          )
+        },
+      },
+    },
+    {
+      name: 'action',
+      label: ' ',
+      options: {
+        filter: false,
+        customBodyRenderLite: (dataIndex) => {
+          let shippindZone = shippinZones[dataIndex]
+          return (
+            <div className='flex items-center ml-10'>
+              <Link
+                to={{
+                  pathname: `/shipping-zones/new`,
+                  state: {
+                    id: shippindZone.id,
+                  },
+                }}
+              >
+                <IconButton>
+                  <Icon>edit</Icon>
+                </IconButton>
+              </Link>
+            </div>
           )
         },
       },
