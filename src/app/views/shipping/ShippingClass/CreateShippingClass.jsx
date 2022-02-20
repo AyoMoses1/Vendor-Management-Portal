@@ -10,38 +10,65 @@ import { useHistory } from 'react-router-dom/cjs/react-router-dom'
 import Notification from '../../../components/Notification'
 import { errorState } from '../../helpers/error-state'
 
-const ShippingClassDetails = ({ isEdit, id, agent }) => {
+const initialValues = {
+  name: '',
+  priority: '',
+  description: '',
+}
+const CreatesShippingClass = ({ location }) => {
   const history = useHistory()
+  const [shippingClass, setShippingClass] = React.useState(initialValues)
 
-  const initialValues = {
-    name: '',
-    priority: '',
-    description: '',
+  const { id } = location?.state
+
+  const getShippingClassDetails = (classId) => {
+    setLoading(true)
+    http.get(`/afrimash/shipping-class/${classId}`).then((res) => {
+      setShippingClass(res?.data.object)
+      setLoading(false)
+    })
   }
 
-  const [values, setValues] = React.useState(initialValues)
+  React.useEffect(() => {
+    if (id) {
+      getShippingClassDetails(id)
+    }
+  }, [])
+
   const [error, setError] = React.useState('')
   const [severity, setSeverity] = React.useState('')
   const [loading, setLoading] = React.useState(false)
 
   const handleSubmit = async (values, { setSubmitting }) => {
     setLoading(true)
-    http.post(`/afrimash/shipping-class`, values).then((res) => {
-      setLoading(false)
-      if (res.status === 200) {
-        history.push('/shipping-classes')
-      } else if (res.status === 'BAD_REQUEST') {
-        let message = 'Somthin went wrong with that request'
-        errorState(setError, setSeverity, message)
-      }
-    })
+    if (id) {
+      http.put(`/afrimash/shipping-class`, values).then((res) => {
+        setLoading(false)
+        if (res.status === 200) {
+          history.push('/shipping-classes')
+        } else if (res.status === 'BAD_REQUEST') {
+          let message = 'Somthing went wrong with that request'
+          errorState(setError, setSeverity, message)
+        }
+      })
+    } else {
+      http.post(`/afrimash/shipping-class`, values).then((res) => {
+        setLoading(false)
+        if (res.status === 200) {
+          history.push('/shipping-classes')
+        } else if (res.status === 'BAD_REQUEST') {
+          let message = 'Somthing went wrong with that request'
+          errorState(setError, setSeverity, message)
+        }
+      })
+    }
   }
 
   return (
     <div className='m-sm-30'>
       <Notification alert={error} severity={severity || ''} />
       <Formik
-        initialValues={values}
+        initialValues={shippingClass}
         onSubmit={handleSubmit}
         enableReinitialize={true}
         validationSchema={shippingClassSchema}
@@ -114,7 +141,7 @@ const ShippingClassDetails = ({ isEdit, id, agent }) => {
                 color='primary'
                 type='submit'
               >
-                Create Class
+                {id ? 'Update Class' : 'Create Class'}
               </Button>
             </Grid>
           </form>
@@ -130,4 +157,4 @@ const shippingClassSchema = yup.object().shape({
   description: yup.string().required('Please enter a valid description'),
 })
 
-export default ShippingClassDetails
+export default CreatesShippingClass

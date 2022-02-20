@@ -3,6 +3,8 @@ import { Breadcrumb } from 'matx'
 import MUIDataTable from 'mui-datatables'
 import { Grow, Icon, IconButton, TextField, Button } from '@material-ui/core'
 import { Link } from 'react-router-dom'
+import { useDialog } from 'muibox'
+
 import http from '../../../services/api'
 
 import Loading from 'matx/components/MatxLoadable/Loading'
@@ -13,6 +15,7 @@ const GetAllShippingOptions = () => {
   const [error, setError] = React.useState(false)
   const [loading, setLoading] = React.useState(false)
   const [severity, setSeverirty] = React.useState('')
+  const dialog = useDialog()
 
   const getAllShippingOptions = async () => {
     setLoading(true)
@@ -146,6 +149,64 @@ const GetAllShippingOptions = () => {
             >
               <div className='ml-3'></div>
             </Link>
+          )
+        },
+      },
+    },
+    {
+      name: 'action',
+      label: ' ',
+      options: {
+        filter: false,
+        customBodyRenderLite: (dataIndex) => {
+          let shippingZone = shippinOptions[dataIndex]
+          return (
+            <div className='flex items-center'>
+              <div>
+                <IconButton
+                  onClick={() =>
+                    dialog
+                      .confirm('Are you sure you want to delete?')
+                      .then((value) => {
+                        http
+                          .delete(`afrimash/shipping-option/${shippingZone.id}`)
+                          .then(() => window.location.reload())
+                      })
+                      .catch(() => {
+                        return false
+                      })
+                  }
+                >
+                  <Icon>delete</Icon>
+                </IconButton>
+              </div>
+            </div>
+          )
+        },
+      },
+    },
+    {
+      name: 'action',
+      label: ' ',
+      options: {
+        filter: false,
+        customBodyRenderLite: (dataIndex) => {
+          let shippingOption = shippinOptions[dataIndex]
+          return (
+            <div className='flex items-center ml-10'>
+              <Link
+                to={{
+                  pathname: `/shipping-option/new`,
+                  state: {
+                    id: shippingOption.id,
+                  },
+                }}
+              >
+                <IconButton>
+                  <Icon>edit</Icon>
+                </IconButton>
+              </Link>
+            </div>
           )
         },
       },

@@ -11,8 +11,9 @@ import Autocomplete from '@material-ui/lab/Autocomplete'
 import Notification from '../../../components/Notification'
 import { errorState } from '../../helpers/error-state'
 
-const CreateShippingOption = () => {
+const CreateShippingOption = ({ location }) => {
   const history = useHistory()
+  const { id } = location?.state
 
   const initialValues = {
     name: '',
@@ -21,6 +22,8 @@ const CreateShippingOption = () => {
     additionalCostOnEvery: '',
     criteriaValue: '',
     description: '',
+    width: '',
+    length: '',
   }
   const initialState = {
     shippingClass: '',
@@ -29,17 +32,14 @@ const CreateShippingOption = () => {
     dimensionUnit: '',
     calculationUnit: '',
     description: '',
+    width: '',
+    length: '',
   }
-  const calculationUnit = [
-    'WEIGHT',
-    'WIDTH',
-    'SHIPPING_CLASS',
-    'VOLUME',
-    'HEIGHT',
-    'VOLUME',
-  ]
+  const calculationUnit = ['WEIGHT', 'SHIPPING_CLASS', 'VOLUME', 'DIMENSION']
   const methodCondition = ['GREATER_THAN', 'LESS_THAN', 'EQUAL_TO']
-  const dimensionUnit = ['ML', 'CM', 'M', 'KM', 'G', 'KG', 'T', 'CL', 'L', 'KL']
+  const dimensionUnit = ['ML', 'CM', 'G']
+  const [shippingOption, setShippingOptionDetails] =
+    React.useState(initialValues)
   const [value, setValues] = React.useState(initialValues)
   const [state, setState] = React.useState(initialState)
   const [error, setError] = React.useState('')
@@ -48,6 +48,7 @@ const CreateShippingOption = () => {
   const [shippingZones, setShippingZones] = React.useState()
   const [shippingClass, setShippingClass] = React.useState()
   const [shipping, setShipping] = React.useState(false)
+  const [isDimension, setDimension] = React.useState(false)
 
   const handleSubmit = async (values, { setSubmitting }) => {
     const payload = { ...state, ...values }
@@ -57,17 +58,32 @@ const CreateShippingOption = () => {
     } else {
       delete payload.shippingClass
     }
-    console.log(payload)
+    if (!isDimension) {
+      delete payload.width
+      delete payload.length
+    }
     setLoading(true)
-    http.post(`/afrimash/shipping-option`, payload).then((res) => {
+    if (id) {
       setLoading(false)
-      if (res.status === 200) {
-        history.push('/shipping-options')
-      } else if (res.status === 'BAD_REQUEST') {
-        let message = 'Somthing went wrong with that request'
-        errorState(setError, setSeverity, message)
-      }
-    })
+      http.put(`/afrimash/shipping-option`, payload).then((res) => {
+        if (res.status === 200) {
+          history.push('/shipping-options')
+        } else if (res.status === 'BAD_REQUEST') {
+          let message = 'Somthing went wrong with that request'
+          errorState(setError, setSeverity, message)
+        }
+      })
+    } else {
+      setLoading(false)
+      http.post(`/afrimash/shipping-option`, payload).then((res) => {
+        if (res.status === 200) {
+          history.push('/shipping-options')
+        } else if (res.status === 'BAD_REQUEST') {
+          let message = 'Somthing went wrong with that request'
+          errorState(setError, setSeverity, message)
+        }
+      })
+    }
   }
 
   const handleSelect = (newValue, fieldName) => {
@@ -81,9 +97,17 @@ const CreateShippingOption = () => {
     setState({ ...state, [name]: e.target.value })
     if (e.target.value === 'SHIPPING_CLASS') {
       setShipping(true)
+    } else if (e.target.value === 'DIMENSION') {
+      setDimension(true)
+      setShipping(false)
     } else {
+      setDimension(false)
       setShipping(false)
     }
+  }
+
+  const handleMethodCondition = (e, name) => {
+    setState({ ...state, [name]: e.target.value })
   }
 
   const handleDimensionSelect = (e, name) => {
@@ -105,16 +129,27 @@ const CreateShippingOption = () => {
     })
   }
 
+  const getShippingOptionDetails = (optionId) => {
+    setLoading(true)
+    http.get(`/afrimash/shipping-option/${optionId}`).then((res) => {
+      setShippingOptionDetails(res?.data.object)
+      setLoading(false)
+    })
+  }
+
   React.useEffect(() => {
     getAllShippingClasses()
     getAllShippingZones()
+    if (id) {
+      getShippingOptionDetails(id)
+    }
   }, [])
 
   return (
     <div className='m-sm-30'>
       <Notification alert={error} severity={severity || ''} />
       <Formik
-        initialValues={value}
+        initialValues={shippingOption}
         onSubmit={handleSubmit}
         enableReinitialize={true}
         validationSchema={shippingZonesSchema}
@@ -184,7 +219,7 @@ const CreateShippingOption = () => {
                     fullWidth
                     onBlur={handleBlur}
                     onChange={(e) =>
-                      handleAutoCompleteSelect(e, 'methodCondition')
+                      handleMethodCondition(e, 'methodCondition')
                     }
                     value={state.methodCondition}
                   >
@@ -208,6 +243,32 @@ const CreateShippingOption = () => {
                   error={Boolean(touched.baseCost && errors.baseCost)}
                   helperText={touched.baseCost && errors.baseCost}
                 />
+                {isDimension && (
+                  <TextField
+                    className='mb-4'
+                    name='width'
+                    label='Dimension width'
+                    variant='outlined'
+                    margin='normal'
+                    fullWidth
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.width}
+                  />
+                )}
+                {isDimension && (
+                  <TextField
+                    className='mb-4'
+                    name='length'
+                    label='Dimension length'
+                    variant='outlined'
+                    margin='normal'
+                    fullWidth
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.length}
+                  />
+                )}
               </Grid>
               <Grid item sm={6} xs={12}>
                 <TextField
@@ -248,6 +309,7 @@ const CreateShippingOption = () => {
                     helperText={touched.criteriaValue && errors.criteriaValue}
                   />
                 )}
+
                 <Autocomplete
                   id='shippingZoneId'
                   name='shippingZone'
@@ -266,7 +328,6 @@ const CreateShippingOption = () => {
                     />
                   )}
                 />
-
                 <TextField
                   className='mb-4'
                   name='additionalCost'
@@ -341,7 +402,7 @@ const CreateShippingOption = () => {
                 color='primary'
                 type='submit'
               >
-                Create shipping option
+                {id ? 'Update shipping option' : ' Create shipping option'}
               </Button>
             </Grid>
           </form>

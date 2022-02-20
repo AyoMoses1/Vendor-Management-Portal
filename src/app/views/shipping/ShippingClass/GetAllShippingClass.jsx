@@ -2,17 +2,20 @@ import React, { useEffect } from 'react'
 import { Breadcrumb } from 'matx'
 import MUIDataTable from 'mui-datatables'
 import { Grow, Icon, IconButton, TextField, Button } from '@material-ui/core'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import http from '../../../services/api'
+import { useDialog } from 'muibox'
 
 import Loading from 'matx/components/MatxLoadable/Loading'
 import Notification from 'app/components/Notification'
 
 const GetAllShippingClass = () => {
   const [shippinClasses, setShippingClasses] = React.useState([])
+  const history = useHistory()
   const [error, setError] = React.useState(false)
   const [loading, setLoading] = React.useState(false)
   const [severity, setSeverirty] = React.useState('')
+  const dialog = useDialog()
 
   const getAllShippingClasses = () => {
     setLoading(true)
@@ -95,7 +98,7 @@ const GetAllShippingClass = () => {
               className='flex items-center'
             >
               <div className='ml-3'>
-                <p className='my-0 text-10'>{`${shippingClass?.id}`}</p>
+                <p className='my-0 text-10'></p>
               </div>
             </Link>
           )
@@ -119,10 +122,66 @@ const GetAllShippingClass = () => {
               }}
               className='flex items-center'
             >
-              <div className='ml-3'>
-                <h5 className='my-0 text-10'>{`${shippingClass?.id}`}</h5>
-              </div>
+              <div className='ml-3'></div>
             </Link>
+          )
+        },
+      },
+    },
+    {
+      name: 'action',
+      label: ' ',
+      options: {
+        filter: false,
+        customBodyRenderLite: (dataIndex) => {
+          let user = shippinClasses[dataIndex]
+          return (
+            <div className='flex items-center'>
+              <div>
+                <IconButton
+                  onClick={() =>
+                    dialog
+                      .confirm('Are you sure you want to delete?')
+                      .then((value) => {
+                        http
+                          .delete(`afrimash/shipping-class/${user.id}`)
+                          .then(() => window.location.reload())
+                      })
+                      .catch(() => {
+                        return false
+                      })
+                  }
+                >
+                  <Icon>delete</Icon>
+                </IconButton>
+              </div>
+            </div>
+          )
+        },
+      },
+    },
+    {
+      name: 'action',
+      label: ' ',
+      options: {
+        filter: false,
+        customBodyRenderLite: (dataIndex) => {
+          let shippingClass = shippinClasses[dataIndex]
+          return (
+            <div className='flex items-center ml-10'>
+              <Link
+                to={{
+                  pathname: `/shipping-class/new`,
+                  state: {
+                    id: shippingClass.id,
+                  },
+                }}
+              >
+                <IconButton>
+                  <Icon>edit</Icon>
+                </IconButton>
+              </Link>
+            </div>
           )
         },
       },
