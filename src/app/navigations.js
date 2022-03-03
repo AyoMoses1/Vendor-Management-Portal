@@ -70,6 +70,11 @@ export const navigations = [
         path: "/shipping-zones",
         iconText: "Z"
       },
+      {
+        name: "Shipping Option Group",
+        path: "/shipping-group",
+        iconText: "y"
+      },
     ]
   },
   {
