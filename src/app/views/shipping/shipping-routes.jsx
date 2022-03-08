@@ -36,6 +36,17 @@ const GetShippingClassDetails = MatxLoadable({
   loader: () => import('./ShippingClass/GetShippingClassDetails'),
 })
 
+
+const GetShippingOptionGroup = MatxLoadable({
+  loader: () => import('./ShippingGroup/GetShippingOptionGroup'),
+})
+
+const CreateShippingOptionGroup = MatxLoadable({
+  loader: () => import('./ShippingGroup/CreateShippingOptionGroup'),
+})
+
+
+
 const shippingRoutes = [
   {
     path: '/shipping-classes',
@@ -73,5 +84,14 @@ const shippingRoutes = [
     path: '/shipping-zone/details',
     component: GetShippingZoneDetails,
   },
+  {
+    path: '/shipping-group',
+    component: GetShippingOptionGroup,
+  },
+  {
+    path: '/shipping-groups/new',
+    component: CreateShippingOptionGroup,
+  },
+ 
 ]
 export default shippingRoutes

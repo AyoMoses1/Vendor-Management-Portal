@@ -73,7 +73,7 @@ export const navigations = [
       {
         name: "Shipping Option Group",
         path: "/shipping-group",
-        iconText: "y"
+        iconText: "G"
       },
     ]
   },
