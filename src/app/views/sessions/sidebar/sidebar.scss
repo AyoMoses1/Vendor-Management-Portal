@@ -1,0 +1,43 @@
+.wrapper {
+  width: 35%;
+  .image__background {
+    width: 35%;
+    height: 100%;
+    position: fixed;
+    background-image: url('./assets/img/frimashside.png');
+    background-position: bottom;
+    background-repeat: no-repeat;
+    background-blend-mode: normal;
+    background-size: cover;
+    opacity: 0.9;
+  }
+
+  .text__container {
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    width: 310px;
+    height: 96px;
+    left: 85px;
+    top: 50%;
+    user-select: none;
+  }
+  .text_welcome {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 36px;
+    line-height: 48px;
+    text-align: center;
+    color: #000;
+  }
+  .text_header {
+    font-family: sans-serif;
+    font-style: normal;
+    font-weight: bolder;
+    font-size: 49px;
+    line-height: 48px;
+    text-align: center;
+    color: #fff;
+    user-select: none;
+  }
+}
