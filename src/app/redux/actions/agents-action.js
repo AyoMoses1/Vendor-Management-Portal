@@ -25,9 +25,9 @@ export const UPDATE_AGENT_REQUEST = 'UPDATE_AGENT_REQUEST'
 export const UPDATE_AGENT_SUCCESS = 'UPDATE_AGENT_SUCCESS'
 export const UPDATE_AGENT_FAILED = 'UPDATE_AGENT_FAILED'
 
-export const getAllAgents = (search = '', size = '', page = '') => dispatch => {
+export const getAllAgents = ({search = '', size = '', page = ''}) => dispatch => {
   dispatch({ type: GET_AGENT_REQUEST })
-  http.get(`/afrimash/agents/search?=${search}&size=${size}&page=${page}`).then(({ data }) => {
+  http.get(`/afrimash/agents/?=search?${search}&size=${size}&page=${page}`).then(({ data }) => {
     dispatch({
       type: GET_ALL_AGENTS_SUCCESS,
       payload: data.object,
