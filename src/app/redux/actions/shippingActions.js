@@ -4,6 +4,7 @@ import http from "../../services/api"
 export const CREATE_GROUP_REQUEST = 'CREATE_GROUP_REQUEST'
 export const CREATE_GROUP_SUCCESS = 'CREATE_GROUP_SUCCESS'
 export const CREATE_GROUP_FAILED = 'CREATE_GROUP_FAILED'
+export const CREATE_GROUP_RESET = 'CREATE_GROUP_RESET'
 
 export const GET_GROUP_LIST_REQUEST = 'GET_GROUP_LIST_REQUEST'
 export const GET_GROUP_LIST_SUCCESS = 'GET_GROUP_LIST_SUCCESS'
@@ -40,7 +41,7 @@ export const getShippingOptionGroup = () => dispatch => {
     (res) => {
     dispatch({
       type: GET_GROUP_LIST_SUCCESS,
-      payload: res?.data.object
+      payload: res?.data.object.reverse()
     })
   },
   err => {
