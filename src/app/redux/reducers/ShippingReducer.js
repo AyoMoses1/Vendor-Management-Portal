@@ -1,4 +1,4 @@
-import { CREATE_GROUP_FAILED, CREATE_GROUP_REQUEST, CREATE_GROUP_SUCCESS, GET_GROUP_LIST_FAILED, GET_GROUP_LIST_REQUEST, GET_GROUP_LIST_SUCCESS } from "../actions/shippingActions"
+import { CREATE_GROUP_FAILED, CREATE_GROUP_REQUEST, CREATE_GROUP_RESET, CREATE_GROUP_SUCCESS, GET_GROUP_LIST_FAILED, GET_GROUP_LIST_REQUEST, GET_GROUP_LIST_SUCCESS } from "../actions/shippingActions"
 
 
 
@@ -27,6 +27,8 @@ export const shippingGroupCreateReducer = (state = {}, action) => {
         error: action.payload,
         loading: false,
       }
+      case CREATE_GROUP_RESET:
+        return {};
     default:
       return state
   }
