@@ -8,7 +8,6 @@ steps:
   - npm install
   - npm test
 
-
 - name: build-static-files
   image: node:12-alpine
   commands:
