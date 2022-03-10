@@ -9,6 +9,9 @@ import {
   MenuList,
 } from "@material-ui/core";
 import http from "../../../services/api";
+// or
+import Divider from '@material-ui/core/Divider';
+
 
 import { Formik } from "formik";
 
@@ -45,7 +48,7 @@ const CreateShippingOption = ({ location }) => {
     width: "",
     length: "",
   };
-  const calculationUnit = ["SHIPPING_CLASS", "DIMENSION"];
+  const calculationUnit = ["SHIPPING_CLASS", "DIMENSION", "VOLUME", "WEIGHT"];
   const methodCondition = ["GREATER_THAN", "LESS_THAN", "EQUAL_TO"];
   const dimensionUnit = ["ML", "CM", "G"];
   const [shippingOption, setShippingOptionDetails] =
@@ -244,7 +247,7 @@ const CreateShippingOption = ({ location }) => {
                     )}
                   />
                 )}
-                {shipping && (
+                {!shipping && (
                   <TextField
                     className="mb-4"
                     name="methodCondition"
@@ -345,12 +348,11 @@ const CreateShippingOption = ({ location }) => {
                     helperText={touched.criteriaValue && errors.criteriaValue}
                   />
                 )}
-         {shipping && (
                   <Autocomplete
                     id="shippingZoneId"
                     name="shippingZone"
                     options={shippingZones}
-                    disabled={!shipping}
+                   // disabled={!shipping}
                     getOptionLabel={(option) => option.name}
                     getOptionSelected={(option, value) =>
                       option.id === value.id
@@ -368,7 +370,6 @@ const CreateShippingOption = ({ location }) => {
                       />
                     )}
                   />
-                )}
                 <TextField
                   className="mb-4"
                   name="additionalCost"
@@ -438,6 +439,7 @@ const CreateShippingOption = ({ location }) => {
                   value={values.description}
                 />
               </Grid>
+                <Divider />
               <Autocomplete
                   id="shippingOptionGroup"
                   options={shippingGroup.filter(i => i.description && i.name)}
