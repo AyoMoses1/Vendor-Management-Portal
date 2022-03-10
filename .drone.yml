@@ -1,0 +1,57 @@
+kind: pipeline
+name: build-pipeline-afrimash-admin
+
+steps:
+- name: frontend-test
+  image: node:12-alpine
+  commands:
+  - npm install
+  - npm test
+  when:
+    branch:
+    - master
+
+- name: build-static-files
+  image: node:12-alpine
+  commands:
+  - npm run-script build
+  when:
+    branch:
+    - master
+    event:
+    - push
+
+- name: build-docker-image
+  image: plugins/docker
+  settings:
+    auto_tag: true
+    dockerfile: Dockerfile.dev
+    repo: akinoyedotun/afrimashadmin
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+
+- name: deploy
+  image: docker
+  environment:
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+  commands:
+    - echo $PASSWORD |docker login -u $USERNAME --password-stdin
+    - docker pull akinoyedotun/afrimashadmin
+    - docker-compose up -d
+  volumes:
+  - name: docker
+    path: /var/run/docker.sock
+  image_pull_secrets:
+  - dockerconfig
+
+volumes:
+- name: docker
+  host:
+    path: /var/run/docker.sock
+image_pull_secrets:
+- dockerconfig
