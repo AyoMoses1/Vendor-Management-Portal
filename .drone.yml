@@ -7,19 +7,13 @@ steps:
   commands:
   - npm install
   - npm test
-  when:
-    branch:
-    - master
+
 
 - name: build-static-files
   image: node:12-alpine
   commands:
   - npm run-script build
-  when:
-    branch:
-    - master
-    event:
-    - push
+
 
 - name: build-docker-image
   image: plugins/docker
