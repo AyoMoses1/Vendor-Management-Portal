@@ -33,6 +33,8 @@ steps:
   commands:
 #    - echo $PASSWORD |docker login -u $USERNAME --password-stdin
     - docker pull akinoyedotun/afrimashadmin
+    - docker stop afrimashadmin_test || true 
+    - docker rm afrimashadmin_test || true
     - docker run --rm -d -p 3030:3000 -e "REACT_APP_SKIP_PREFLIGHT_CHECK=true" -e "CHOKIDAR_USEPOLLING=true" --name afrimashadmin_test akinoyedotun/afrimashadmin
   volumes:
   - name: docker
