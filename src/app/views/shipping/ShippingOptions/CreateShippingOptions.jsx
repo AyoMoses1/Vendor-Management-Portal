@@ -85,7 +85,7 @@ const CreateShippingOption = ({ location }) => {
     const payload = { ...state, ...values };
     if (shipping) {
       delete payload.criteriaValue;
-     //delete payload.methodCondition;
+     delete payload.methodCondition;
     } else {
       delete payload.shippingClass;
     }
