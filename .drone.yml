@@ -13,7 +13,15 @@ steps:
       from_secret: docker_username
     password:
       from_secret: docker_password
-
+- name: publish
+  image: plugins/docker
+  settings:
+    repo: akinoyedotun/afrimashadmin
+    auto_tag: true
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
 - name: deploy
   image: docker
   environment:
