@@ -3,11 +3,6 @@ name: build-pipeline-afrimash-admin
 type: docker
 
 steps:
-- name: build-static-files
-  image: node:12-alpine
-  commands:
-  - npm run-script build
-
 - name: build-docker-image
   image: plugins/docker
   settings:
