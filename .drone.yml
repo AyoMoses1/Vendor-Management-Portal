@@ -33,7 +33,7 @@ steps:
   commands:
 #    - echo $PASSWORD |docker login -u $USERNAME --password-stdin
     - docker pull akinoyedotun/afrimashadmin
-    - docker-compose up -d
+    - docker run --rm -d -p 3000:3000 -e "REACT_APP_SKIP_PREFLIGHT_CHECK=true" -e "CHOKIDAR_USEPOLLING=true" --name afrimashadmin_test akinoyedotun/afrimashadmin
   volumes:
   - name: docker
     path: /var/run/docker.sock
