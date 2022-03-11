@@ -1,5 +1,6 @@
 kind: pipeline
 name: build-pipeline-afrimash-admin
+type: docker
 
 steps:
 - name: frontend-test
