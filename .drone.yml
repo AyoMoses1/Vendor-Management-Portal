@@ -1,42 +1,34 @@
+name: build-pipeline-afrimash
 kind: pipeline
-name: build-pipeline-afrimash-admin
 type: docker
 
 steps:
-- name: frontend-test
-  image: node:12-alpine
+- name: afrimash_build_pipeline
+  image: maven:3.8.1-jdk-8
   commands:
-  - npm install
-  - npm test
-
-- name: build-static-files
-  image: node:12-alpine
-  commands:
-  - npm run-script build
-
-
-- name: build-docker-image
+  - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+- name: publish
   image: plugins/docker
   settings:
+    repo: akinoyedotun/afrimash-commerce
     auto_tag: true
-    dockerfile: Dockerfile.dev
-    repo: akinoyedotun/afrimashadmin
     username:
       from_secret: docker_username
     password:
       from_secret: docker_password
-
 - name: deploy
   image: docker
-  environment:
-    username:
-      from_secret: docker_username
-    password:
-      from_secret: docker_password
   commands:
-    - echo $PASSWORD |docker login -u $USERNAME --password-stdin
-    - docker pull akinoyedotun/afrimashadmin
-    - docker-compose up -d
+  - echo $PASSWORD |docker login -u $USERNAME --password-stdin
+  - docker pull akinoyedotun/afrimash-commerce
+  - docker stop afrimash_commerce_test || true 
+  - docker rm afrimash_commerce_test || true
+  - docker run --rm -d -p 8090:8080 -e "SPRING_PROFILES_ACTIVE=test" --name afrimash_commerce_test akinoyedotun/afrimash-commerce
+  environment:
+    USERNAME:
+      from_secret: docker_username
+    PASSWORD:
+      from_secret: docker_password
   volumes:
   - name: docker
     path: /var/run/docker.sock
@@ -46,6 +38,6 @@ steps:
 volumes:
 - name: docker
   host:
-    path: /var/run/docker.sock
+    path: /var/run/docker.sock  
 image_pull_secrets:
 - dockerconfig
