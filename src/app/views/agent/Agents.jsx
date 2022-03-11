@@ -22,11 +22,11 @@ const Agents = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(getAllAgents(page))
+    dispatch(getAllAgents({page}))
   }, [dispatch])
 
   const onPageChange = (page) => {
-    dispatch(getAllAgents(page))
+    dispatch(getAllAgents({page}))
     setPage(page)
   }
   const columns = [

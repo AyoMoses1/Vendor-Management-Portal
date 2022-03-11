@@ -9,7 +9,7 @@ import * as yup from 'yup'
 import Notification from '../../../components/Notification'
 import { errorState } from '../../helpers/error-state'
 import { useDispatch, useSelector } from 'react-redux'
-import { addShippingGroup } from 'app/redux/actions/shippingActions'
+import { addShippingGroup, CREATE_GROUP_RESET } from 'app/redux/actions/shippingActions'
 import { useHistory } from 'react-router-dom/cjs/react-router-dom'
 
 const initialValues = {
@@ -34,6 +34,7 @@ const CreateShippingOptionGroup = () => {
 useEffect(() => {
 if(shippingCreate) {
     history.push('/shipping-group')
+    dispatch({ type: CREATE_GROUP_RESET });
 }
 }, [shippingCreate])
 
