@@ -18,7 +18,7 @@ steps:
   image: plugins/docker
   settings:
     auto_tag: true
-    dockerfile: Dockerfile.dev
+    dockerfile: Dockerfile
     repo: akinoyedotun/afrimashadmin
     username:
       from_secret: docker_username
