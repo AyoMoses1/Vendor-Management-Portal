@@ -1,19 +1,8 @@
 kind: pipeline
 name: build-pipeline-afrimash-admin
+type: docker
 
 steps:
-- name: frontend-test
-  image: node:12-alpine
-  commands:
-  - npm install
-  - npm test
-
-- name: build-static-files
-  image: node:12-alpine
-  commands:
-  - npm run-script build
-
-
 - name: build-docker-image
   image: plugins/docker
   settings:
@@ -24,7 +13,16 @@ steps:
       from_secret: docker_username
     password:
       from_secret: docker_password
-
+- name: publish
+  image: plugins/docker
+  settings:
+    repo: akinoyedotun/afrimashadmin
+    dockerfile: Dockerfile
+    auto_tag: true
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
 - name: deploy
   image: docker
   environment:
@@ -33,9 +31,11 @@ steps:
     password:
       from_secret: docker_password
   commands:
-    - echo $PASSWORD |docker login -u $USERNAME --password-stdin
+#    - echo $PASSWORD |docker login -u $USERNAME --password-stdin
     - docker pull akinoyedotun/afrimashadmin
-    - docker-compose up -d
+    - docker stop afrimashadmin_test || true 
+    - docker rm afrimashadmin_test || true
+    - docker run --rm -d -p 3030:3000 -e "REACT_APP_SKIP_PREFLIGHT_CHECK=true" -e "CHOKIDAR_USEPOLLING=true" --name afrimashadmin_test akinoyedotun/afrimashadmin
   volumes:
   - name: docker
     path: /var/run/docker.sock
