@@ -40,11 +40,11 @@ steps:
   - name: docker
     path: /var/run/docker.sock
   image_pull_secrets:
-  - dockerconfig
+  - dockerconfigjson
 
 volumes:
 - name: docker
   host:
     path: /var/run/docker.sock
 image_pull_secrets:
-- dockerconfig
+- dockerconfigjson
