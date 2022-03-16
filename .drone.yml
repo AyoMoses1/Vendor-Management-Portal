@@ -27,10 +27,16 @@ steps:
 - name: deploy
   image: docker
   commands:
+    - docker login -u $USERNAME --password $PASSWORD
     - docker pull akinoyedotun/afrimashadmin
     - docker stop afrimashadmin_test || true 
     - docker rm afrimashadmin_test || true
     - docker run --rm -d -p 3030:3000 -e "REACT_APP_SKIP_PREFLIGHT_CHECK=true" -e "CHOKIDAR_USEPOLLING=true" --name afrimashadmin_test akinoyedotun/afrimashadmin
+  environment:
+    USERNAME:
+      from_secret: docker_username
+    PASSWORD:
+      from_secret: docker_password
   volumes:
   - name: docker
     path: /var/run/docker.sock
