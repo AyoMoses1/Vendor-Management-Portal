@@ -23,25 +23,24 @@ steps:
       from_secret: docker_username
     password:
       from_secret: docker_password
-- name: deploy
+- name: pull_image
   # image: docker
   image: akinoyedotun/afrimashadmin
-  environment:
-    username:
-      from_secret: docker_username
-    password:
-      from_secret: docker_password
+  volumes:
+  - name: docker
+    path: /var/run/docker.sock
+  image_pull_secrets:
+  - dockerconfigjson
+
+- name: deploy
+  image: docker
   commands:
-    # - echo $PASSWORD |docker login -u $USERNAME --password-stdin
-    # - docker pull akinoyedotun/afrimashadmin
     - docker stop afrimashadmin_test || true 
     - docker rm afrimashadmin_test || true
     - docker run --rm -d -p 3030:3000 -e "REACT_APP_SKIP_PREFLIGHT_CHECK=true" -e "CHOKIDAR_USEPOLLING=true" --name afrimashadmin_test akinoyedotun/afrimashadmin
   volumes:
   - name: docker
     path: /var/run/docker.sock
-  image_pull_secrets:
-  - dockerconfigjson
 
 volumes:
 - name: docker
