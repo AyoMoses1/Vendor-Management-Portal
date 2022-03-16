@@ -3,16 +3,7 @@ name: build-pipeline-afrimash-admin
 type: docker
 
 steps:
-- name: build-docker-image
-  image: plugins/docker
-  settings:
-    dockerfile: Dockerfile
-    repo: akinoyedotun/afrimashadmin
-    username:
-      from_secret: docker_username
-    password:
-      from_secret: docker_password
-- name: publish
+- name: build-publish
   image: plugins/docker
   settings:
     repo: akinoyedotun/afrimashadmin
