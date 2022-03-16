@@ -31,7 +31,7 @@ steps:
     password:
       from_secret: docker_password
   commands:
-#    - echo $PASSWORD |docker login -u $USERNAME --password-stdin
+    - echo $PASSWORD |docker login -u $USERNAME --password-stdin
     - docker pull akinoyedotun/afrimashadmin
     - docker stop afrimashadmin_test || true 
     - docker rm afrimashadmin_test || true
