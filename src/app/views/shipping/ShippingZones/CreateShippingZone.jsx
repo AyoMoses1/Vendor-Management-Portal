@@ -15,10 +15,10 @@ const CreateShippingZone = ({ location }) => {
   const { id } = location?.state
   const initialValues = {
     name: '',
-    shippingRegion: '',
+   // shippingRegion: '',
     description: '',
   }
-  const [shippinZones, setShippingZones] = React.useState(initialValues)
+  const [shippingZones, setShippingZones] = React.useState(initialValues)
 
   const [error, setError] = React.useState('')
   const [severity, setSeverity] = React.useState('')
@@ -38,6 +38,7 @@ const CreateShippingZone = ({ location }) => {
       })
     } else {
       http.post(`/afrimash/shipping-zone`, values).then((res) => {
+        //console.log(values)
         setLoading(false)
         if (res.status === 200) {
           history.push('/shipping-zones')
@@ -46,7 +47,9 @@ const CreateShippingZone = ({ location }) => {
           errorState(setError, setSeverity, message)
         }
       })
+
     }
+    console.log(values)
   }
 
   const getAllShippingZones = (zoneId) => {
@@ -67,7 +70,7 @@ const CreateShippingZone = ({ location }) => {
     <div className='m-sm-30'>
       <Notification alert={error} severity={severity || ''} />
       <Formik
-        initialValues={shippinZones}
+        initialValues={shippingZones}
         onSubmit={handleSubmit}
         enableReinitialize={true}
         validationSchema={shippingZonesSchema}
@@ -117,7 +120,7 @@ const CreateShippingZone = ({ location }) => {
                 />
               </Grid>
             </Grid>
-            <Grid item container justify='center' alignItems='center'>
+            <Grid item container  alignItems='center'>
               <Button
                 className='w-220 mt-4'
                 disabled={loading}
@@ -137,7 +140,7 @@ const CreateShippingZone = ({ location }) => {
 
 const shippingZonesSchema = yup.object().shape({
   name: yup.string().required('please enter a valid name'),
-  shippingRegion: yup.string().required('this field cannot be null'),
+  //shippingRegion: yup.string().required('this field cannot be null'),
   description: yup.string().required('Please enter a valid description'),
 })
 
