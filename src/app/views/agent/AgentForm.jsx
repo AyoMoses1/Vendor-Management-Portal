@@ -18,11 +18,15 @@ import { getAgentById } from 'app/redux/actions/agents-action'
 import Notification from '../../components/Notification'
 import { errorState } from '../helpers/error-state'
 import { states } from '../../../utils/states'
+import getAgeBracket from '../../../utils/getAgeBracket';
 
 const agentTypes = [
   { type: 'Lead Agent', value: 'LEAD_AGENT' },
   { type: 'Bussiness Development Agent', value: 'BD_AGENT' },
 ]
+
+const gender = ['MALE', 'FEMALE', 'OTHER'];
+const ageBracket = ['18 - 24', '25 - 30', '31 - 40', '40+']
 
 const AgentForm = ({ isEdit, id, agent }) => {
   const history = useHistory()
@@ -70,6 +74,8 @@ const AgentForm = ({ isEdit, id, agent }) => {
 
   const handleSubmit = async (values, { setSubmitting }) => {
     setLoading(true)
+    values.ageBracket = getAgeBracket(values.ageBracket);
+    console.log({values});
     const agentData = { ...state, ...values }
     const formData = new FormData()
 
@@ -78,6 +84,8 @@ const AgentForm = ({ isEdit, id, agent }) => {
     formData.append('bankAccountProofUrl', files.bankAccountProofUrl)
     formData.append('addressProofUrl', files.addressProofUrl)
     formData.append('identityProofUrl', files.identityProofUrl)
+
+   
 
     const updateData = {
       id,
@@ -89,8 +97,10 @@ const AgentForm = ({ isEdit, id, agent }) => {
         'Content-Type': 'multipart/form-data',
       },
     }
+
+   
     if (isEdit) {
-      const res = http.put(`/afrimash/agents/`, updateData)
+       http.put(`/afrimash/agents/`, updateData)
       return
     }
     http.post(`/afrimash/agents`, formData, config).then((res) => {
@@ -195,6 +205,26 @@ const AgentForm = ({ isEdit, id, agent }) => {
                   error={Boolean(touched.mobileNo && errors.mobileNo)}
                   helperText={touched.mobileNo && errors.mobileNo}
                 />
+                 <TextField
+                  className='mb-4'
+                  name='ageBracket'
+                  label='Age'
+                  variant='outlined'
+                  margin='normal'
+                  select
+                  fullWidth
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values?.ageBracket}
+                  error={Boolean(touched.ageBracket && errors.ageBracket)}
+                  helperText={touched.ageBracket && errors.ageBracket}
+                >
+                  {ageBracket.map((age, idx) => (
+                    <MenuItem key={idx} value={age}>
+                      {age}
+                    </MenuItem>
+                  ))}
+                </TextField>
               </Grid>
               <Grid item sm={6} xs={12}>
                 <TextField
@@ -242,6 +272,27 @@ const AgentForm = ({ isEdit, id, agent }) => {
                     </MenuItem>
                   ))}
                 </TextField>
+                <TextField
+                  className='mb-4'
+                  name='gender'
+                  label='Gender'
+                  variant='outlined'
+                  margin='normal'
+                  select
+                  fullWidth
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values?.gender}
+                  error={Boolean(touched.gender && errors.gender)}
+                  helperText={touched.gender && errors.gender}
+                >
+                  {gender.map((gen, idx) => (
+                    <MenuItem key={idx} value={gen}>
+                      {gen}
+                    </MenuItem>
+                  ))}
+                </TextField>
+               
               </Grid>
             </Grid>
             <h3 className='mt-4'>Agent documents uploads</h3>
