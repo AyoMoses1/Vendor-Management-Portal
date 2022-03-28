@@ -42,6 +42,7 @@ steps:
   commands:
     - docker stop afrimashadmin || true 
     - docker rm afrimashadmin || true
+    - sleep 10s
     - docker run --rm -d -p 3040:3000 -e "REACT_APP_SKIP_PREFLIGHT_CHECK=true" -e "CHOKIDAR_USEPOLLING=true" --name afrimashadmin akinoyedotun/afrimashadmin
   volumes:
   - name: docker
