@@ -32,6 +32,8 @@ export const agentReducer = (state = initialState, action) => {
         agentList: action.payload.content,
         count: action.payload.numberOfElements,
         loading: false,
+        pages: action.payload.totalPages,
+        page: action.payload.pageNumber
       }
     case ERROR_FETCH_AGENT:
       return {
