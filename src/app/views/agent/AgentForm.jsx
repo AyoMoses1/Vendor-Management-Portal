@@ -25,7 +25,7 @@ const agentTypes = [
   { type: 'Bussiness Development Agent', value: 'BD_AGENT' },
 ]
 
-const gender = ['MALE', 'FEMALE', 'OTHER'];
+const gender = ['MALE', 'FEMALE', 'OTHERS'];
 const ageBracket = ['18 - 24', '25 - 30', '31 - 40', '40+']
 
 const AgentForm = ({ isEdit, id, agent }) => {
