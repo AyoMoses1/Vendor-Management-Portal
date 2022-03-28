@@ -18,6 +18,7 @@ steps:
   commands:
     - docker login -u $USERNAME --password $PASSWORD
     - docker pull akinoyedotun/afrimashadmin
+    - sleep 10s
     - docker stop afrimashadmin_test || true 
     - docker rm afrimashadmin_test || true
     - docker run --rm -d -p 3030:3000 -e "REACT_APP_SKIP_PREFLIGHT_CHECK=true" -e "CHOKIDAR_USEPOLLING=true" --name afrimashadmin_test akinoyedotun/afrimashadmin
