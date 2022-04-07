@@ -3,48 +3,57 @@ name: build-pipeline-afrimash-admin
 type: docker
 
 steps:
-- name: build-docker-image
-  image: plugins/docker
-  settings:
-    auto_tag: true
-    dockerfile: Dockerfile
-    repo: akinoyedotun/afrimashadmin
-    username:
-      from_secret: docker_username
-    password:
-      from_secret: docker_password
-- name: publish
+- name: build-publish
   image: plugins/docker
   settings:
     repo: akinoyedotun/afrimashadmin
     dockerfile: Dockerfile
-    auto_tag: true
     username:
       from_secret: docker_username
     password:
       from_secret: docker_password
+  when:
+    branch:
+    - develop
+
 - name: deploy
   image: docker
-  environment:
-    username:
-      from_secret: docker_username
-    password:
-      from_secret: docker_password
   commands:
-#    - echo $PASSWORD |docker login -u $USERNAME --password-stdin
+    - docker login -u $USERNAME --password $PASSWORD
     - docker pull akinoyedotun/afrimashadmin
     - docker stop afrimashadmin_test || true 
+    - sleep 10s
     - docker rm afrimashadmin_test || true
     - docker run --rm -d -p 3030:3000 -e "REACT_APP_SKIP_PREFLIGHT_CHECK=true" -e "CHOKIDAR_USEPOLLING=true" --name afrimashadmin_test akinoyedotun/afrimashadmin
+  environment:
+    USERNAME:
+      from_secret: docker_username
+    PASSWORD:
+      from_secret: docker_password
   volumes:
   - name: docker
     path: /var/run/docker.sock
-  image_pull_secrets:
-  - dockerconfig
+  when:
+    branch:
+    - develop
+
+- name: deploy_prod
+  image: docker
+  commands:
+    - docker stop afrimashadmin || true 
+    - docker rm afrimashadmin || true
+    - sleep 10s
+    - docker run --rm -d -p 3040:3000 -e "REACT_APP_SKIP_PREFLIGHT_CHECK=true" -e "CHOKIDAR_USEPOLLING=true" --name afrimashadmin akinoyedotun/afrimashadmin
+  volumes:
+  - name: docker
+    path: /var/run/docker.sock
+  when:
+    branch:
+    - master
 
 volumes:
 - name: docker
   host:
     path: /var/run/docker.sock
 image_pull_secrets:
-- dockerconfig
+- dockerconfigjson

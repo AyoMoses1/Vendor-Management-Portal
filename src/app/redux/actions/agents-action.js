@@ -1,4 +1,5 @@
 import http from "../../services/api"
+import routes from '../routes';
 
 export const GET_ALL_AGENTS_SUCCESS = "GET_ALL_AGENTS_SUCCESS";
 
@@ -25,6 +26,15 @@ export const UPDATE_AGENT_REQUEST = 'UPDATE_AGENT_REQUEST'
 export const UPDATE_AGENT_SUCCESS = 'UPDATE_AGENT_SUCCESS'
 export const UPDATE_AGENT_FAILED = 'UPDATE_AGENT_FAILED'
 
+
+export const GET_ALL_AGENT_APPLICATION = 'GET_ALL_AGENT_APPLICATION';
+export const GET_ALL_AGENT_APPLICATION_SUCCESS = 'GET_ALL_AGENT_APPLICATION_SUCCESS';
+export const GET_ALL_AGENT_APPLICATION_FAILED = 'GET_ALL_AGENT_APPLICATION_FAILED';
+
+export const APPROVE_AGENT_APPLICATION = 'APPROVE_AGENT_APPLICATION';
+export const APPROVE_AGENT_APPLICATION_SUCCESS = 'APPROVE_AGENT_APPLICATION_SUCCESS';
+export const APPROVE_AGENT_APPLICATION_FAILED = 'APPROVE_AGENT_APPLICATION_FAILED';
+
 export const getAllAgents = ({search = '', size = '', page = ''}) => dispatch => {
   dispatch({ type: GET_AGENT_REQUEST })
   http.get(`/afrimash/agents/?=search?${search}&size=${size}&page=${page}`).then(({ data }) => {
@@ -40,13 +50,34 @@ export const getAgentById = (id) => dispatch => {
   http.get(`/afrimash/agents/${id}`).then(({ data }) => {
     dispatch({
       type: GET_AGENT_DETAILS_SUCCESS,
-      payload: data.object,
+      payload: data?.object,
     })
   }).catch((err) => {
     dispatch({ type: ERROR_FETCH_DETILS_AGENT, payload: err })
   })
 }
+export const getAllAgentsApplications = () => dispatch => {
+  dispatch({ type: GET_ALL_AGENT_APPLICATION });
+  http.get(routes.agentApplicationRoute).then(({data}) => {
+    dispatch({
+      type: GET_ALL_AGENT_APPLICATION_SUCCESS,
+      payload: data.object,
+    })
+  }).catch((err) => {
+    dispatch({type: GET_ALL_AGENT_APPLICATION_FAILED, payload: err})
+  })
+}
 
+export const approveAgentApplication = (payload) => dispatch => {
+  dispatch({type: APPROVE_AGENT_APPLICATION});
+  http.post(`${routes.approveApplicationRoute}/${payload.applicationId}`).then(({data}) => {
+    dispatch({
+      type:  APPROVE_AGENT_APPLICATION_SUCCESS,
+    })
+  }).catch((err) => {
+    dispatch({type: APPROVE_AGENT_APPLICATION_FAILED, payload: err})
+  })
+}
 export const getAgentCustomers = (agentCode) => dispatch => {
   http.get(`/afrimash/customers?agentCode=${agentCode}`).then(({ data }) => {
     dispatch({

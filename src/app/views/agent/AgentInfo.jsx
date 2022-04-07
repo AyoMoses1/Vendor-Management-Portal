@@ -44,7 +44,7 @@ const AgentsInfo = ({ location, match }) => {
   const { agentDetails, error, loading, severity } = agentDetail
   const { agentCustomers } = agentCustomerList
   const { agentOrders, count } = agentOrder
-
+  console.log({id});
   useEffect(() => {
     setTimeout(() => {
       dispatch(getAgentById(id))
@@ -286,6 +286,7 @@ const AgentsInfo = ({ location, match }) => {
     } else if (
       agentDetails.status === 'SUSPENDED' ||
       agentDetails.status === 'IN_ACTIVE'
+      || agentDetails.status === 'PENDING'
     ) {
       dialog
         .confirm('Activate Agent account?')
@@ -355,8 +356,6 @@ const AgentsInfo = ({ location, match }) => {
                 >
                   {agentDetails.status === 'ACTIVE'
                     ? 'Deactivate Account'
-                    : agentDetails.status === 'SUSPENDED'
-                    ? 'Activate Agent'
                     : 'Activate Agent'}
                 </Button>
               </div>
@@ -405,6 +404,14 @@ const AgentsInfo = ({ location, match }) => {
                       {agentDetails && agentDetails['agentType'] === 'BD_AGENT'
                         ? 'BDA AGENT'
                         : 'LEAD AGENT'}
+                    </div>
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell className='pl-4'>Agent Status</TableCell>
+                  <TableCell>
+                    <div>
+                      {agentDetails?.status}
                     </div>
                   </TableCell>
                 </TableRow>

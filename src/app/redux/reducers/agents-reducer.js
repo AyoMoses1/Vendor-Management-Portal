@@ -9,7 +9,13 @@ import {
   AGENT_ORDERS_FAILED,
   CREATE_AGENT_REQUEST,
   CREATE_AGENT_SUCCESS,
-  CREATE_AGENT_FAILED
+  CREATE_AGENT_FAILED,
+  GET_ALL_AGENT_APPLICATION,
+  GET_ALL_AGENT_APPLICATION_SUCCESS,
+  GET_ALL_AGENT_APPLICATION_FAILED,
+  APPROVE_AGENT_APPLICATION,
+  APPROVE_AGENT_APPLICATION_SUCCESS,
+  APPROVE_AGENT_APPLICATION_FAILED
 } from '../actions/agents-action'
 
 const initialState = {
@@ -124,6 +130,59 @@ export const createAgentReducer = (state = { response: [], loading: false }, act
         ...state,
         response: action.payload,
         loading: false,
+      }
+      default:
+      return state
+  }
+}
+
+export const agentApplicationReducer = (state = {content: [], pageNumber:0, pageSize: 0, offset:0, loading: false}, action) => {
+  switch(action.type){
+    case GET_ALL_AGENT_APPLICATION: 
+    return {
+      ...state,
+      loading: true
+    }
+    case GET_ALL_AGENT_APPLICATION_SUCCESS: 
+    return {
+      ...state,
+      content: action.payload.content,
+      loading: false,
+      pageNumber: action.payload?.pageable?.pageNumber,
+      pageSize: action.payload?.pageable?.pageSize,
+      offset: action.payload?.pageable?.offset,
+
+    }
+    case GET_ALL_AGENT_APPLICATION_FAILED:
+      return {
+        ...state,
+        response: action.payload,
+        loading: false,
+      }
+      default:
+      return state
+  }
+}
+
+export const agentApprovalReducer = (state = {loading: false, showSnackBar: false}, {type, payload}) => {
+  switch(type){
+    case APPROVE_AGENT_APPLICATION:
+      return {
+        ...state,
+        loading: true,
+        showSnackBar: false
+      }
+    case APPROVE_AGENT_APPLICATION_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        showSnackBar: true
+      }
+    case APPROVE_AGENT_APPLICATION_FAILED:
+      return {
+        ...state,
+        loading: false,
+        showSnackBar: true
       }
       default:
       return state

@@ -1,6 +1,6 @@
 import Axios from "axios"
 export default new (class Http {
-  API_URL = "https://api.afrimash.com/"
+  API_URL = "https://api.afrimash.com/" /* "https://test-api.afrimash.com" */
   AxiosSetup = () => {
     const token = localStorage.getItem("jwt_token")
     const axiosInstance = Axios.create({
@@ -24,9 +24,11 @@ export default new (class Http {
       const response = await this.AxiosSetup().post(urlpath, data, config)
       return response
     } catch (error) {
-      let err
-        err = error.response.data
-      return err
+      if(error.response){
+        return error.response.data;
+      }else {
+        return error;
+      }
     }
   }
 
