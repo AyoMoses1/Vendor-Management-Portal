@@ -16,6 +16,10 @@ const EditAgent = MatxLoadable({
   loader: () => import('./EditAgent'),
 })
 
+const AgentApplication = MatxLoadable({
+  loader: () => import('./AgentApplications'),
+})
+
 const agentsRoutes = [
   {
     path: '/agents',
@@ -33,5 +37,9 @@ const agentsRoutes = [
     path: '/agent/edit',
     component: EditAgent,
   },
+ /*  {
+    path: '/agent-applications',
+    component: AgentApplication,
+  }, */
 ]
 export default agentsRoutes

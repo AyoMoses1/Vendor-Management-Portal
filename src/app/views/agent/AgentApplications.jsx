@@ -13,7 +13,7 @@ import {
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  getAllAgents,
+  getAllAgentsApplications,
   approveAgentApplication,
 } from 'app/redux/actions/agents-action';
 import { useDialog } from 'muibox';
@@ -22,16 +22,17 @@ import Loading from 'matx/components/MatxLoadable/Loading';
 import Notification from 'app/components/Notification';
 import { FiMoreVertical } from 'react-icons/fi';
 import Modal from '../../components/Modal';
-import CustomSnackBar from '../../components/Snackbar';
+import CustomSnackBar from '../../components/Snackbar'
+import { APPROVE_AGENT_APPLICATION } from '../../redux/actions/agents-action';
 
 const Agents = () => {
-  const { agentList, count, error, severity, loading, pages } = useSelector(
-    (state) => state.agents,
+  const { content, pageNumber, pageSize, offset, loading } = useSelector(
+    (state) => state.agentApplication,
   );
   const { loading: approvalLoading, showSnackBar } = useSelector(
     (state) => state.agentApproval,
   );
-  const [id, setId] = useState(0);
+  const [id, setId] = React.useState(0);
   //const [count, setCount] = React.useState(0)
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -62,15 +63,24 @@ const Agents = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getAllAgents({ page }));
+    dispatch(getAllAgentsApplications());
   }, [dispatch]);
 
-  const onPageChange = (page) => {
-    dispatch(getAllAgents(page));
+  useEffect(() => {
+      if(showSnackBar){
+        setopenApprovalModal(false);
+        dispatch({type: APPROVE_AGENT_APPLICATION});
+      }
+  })
+
+  /* const onPageChange = (page) => {
+    dispatch(getAllAgents( page ));
     setPage(page);
-  };
+  }; */
+
   const handleMenu = (option, user) => {
-    if (option === 'Activate') {
+    if (option === 'Approve') {
+        console.log(user)
       setActiveApplication(user);
       setopenApprovalModal(true);
     }
@@ -79,7 +89,6 @@ const Agents = () => {
   const handleApplicationApproval = () => {
     dispatch(approveAgentApplication({ applicationId: activeApplication.id }));
   };
-
   const columns = [
     {
       name: 'firstName', // field name in the row object
@@ -87,23 +96,14 @@ const Agents = () => {
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
-          let user = agentList[dataIndex];
+          let user = content[dataIndex];
           setId(user.id);
           return (
-            <Link
-              to={{
-                pathname: `/agent/details/${user.id}`,
-                state: {
-                  id: user.id,
-                  agentCode: user.agentCode,
-                },
-              }}
-              className='flex items-center'
-            >
+            
               <div className='ml-3'>
                 <h5 className='my-0 text-15'>{`${user?.firstName} ${user?.lastName}`}</h5>
               </div>
-            </Link>
+         
           );
         },
       },
@@ -114,27 +114,18 @@ const Agents = () => {
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
-          let user = agentList[dataIndex];
+          let user = content[dataIndex];
           setId(user.id);
           return (
-            <Link
-              to={{
-                pathname: `/agent/details/${user.id}`,
-                state: {
-                  id: user.id,
-                  agentCode: user.agentCode,
-                },
-              }}
-              className='flex items-center'
-            >
-              <div className='w-220'>
-                <h6>
+           
+              <div /* className='w-220' */>
+                <h6 style={{wordBreak:'break-all'}}>
                   <strong>Email:</strong> {user?.email}
                 </h6>
                 <br />
-                <h5 className='my-0'>Phone: {user?.mobileNo}</h5>
+                <h5  className='my-0'>Phone: {user?.mobileNo}</h5>
               </div>
-            </Link>
+         
           );
         },
       },
@@ -145,25 +136,16 @@ const Agents = () => {
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
-          let user = agentList[dataIndex];
+          let user = content[dataIndex];
           setId(user.id);
           return (
-            <Link
-              to={{
-                pathname: `/agent/details/${user.id}`,
-                state: {
-                  id: user.id,
-                  agentCode: user.agentCode,
-                },
-              }}
-              className='flex items-center'
-            >
-              <div className='ml-10'>
+            
+              <div className='ml-3'>
                 <h5 className='my-0'>
                   {user?.agentType === 'BD_AGENT' ? 'BDA AGENT' : 'LEAD AGENT'}
                 </h5>
               </div>
-            </Link>
+         
           );
         },
       },
@@ -174,84 +156,40 @@ const Agents = () => {
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
-          let user = agentList[dataIndex];
+          let user = content[dataIndex];
           return (
-            <Link
-              to={{
-                pathname: `/agent/details/${user.id}`,
-                state: {
-                  id: user.id,
-                  agentCode: user.agentCode,
-                },
-              }}
-              className='flex items-center'
-            >
+           
               <div className='ml-3'>
                 <h5 className='my-0 text-muted'> {user.state || '-----'}</h5>
               </div>
-            </Link>
+            
           );
         },
       },
     },
     {
-      name: 'status', // field name in the row object
-      label: 'Application status', // column title that will be shown in table
-      options: {
-        filter: false,
-        customBodyRenderLite: (dataIndex) => {
-          let user = agentList[dataIndex];
-          setId(user.id);
-          return (
-            <Link
-              to={{
-                pathname: `/agent/details/${user.id}`,
-                state: {
-                  id: user.id,
-                  agentCode: user.agentCode,
-                },
-              }}
-            >
-              <div>{user.status}</div>
-            </Link>
-          );
+        name: 'status',
+        label: 'Application Status',
+        options: {
+          filter: true,
+          customBodyRenderLite: (dataIndex) => {
+            let user = content[dataIndex];
+            return (
+                <div className='ml-3'>
+                  <h5 className='my-0 text-muted'> {user.status || '-----'}</h5>
+                </div>
+      
+            );
+          },
         },
       },
-    },
-    /*  {
-      name: "action",
-      label: "Action",
-      options: {
-        filter: false,
-        customBodyRenderLite: (dataIndex) => {
-          let user = agentList[dataIndex];
-          return (
-            <div>
-              <Link
-                to={{
-                  pathname: "/agent/edit",
-                  state: {
-                    id: user.id,
-                    user,
-                  },
-                }}
-              >
-                <IconButton>
-                  <Icon>edit</Icon>
-                </IconButton>
-              </Link>
-            </div>
-          );
-        },
-      },
-    }, */
     {
       name: 'action',
       label: 'Action',
       options: {
         filter: false,
         customBodyRenderLite: (dataIndex) => {
-          let user = agentList[dataIndex];
+          let user = content[dataIndex];
           return (
             <div>
               <IconButton
@@ -273,52 +211,22 @@ const Agents = () => {
                 open={open}
                 onClose={handleClose}
               >
-                {['View Details', 'Edit Agent'].map((option) => {
-                  if (option === 'Edit Agent') {
-                    return (
-                      <Link
-                        to={{
-                          pathname: '/agent/edit',
-                          state: {
-                            id: user.id,
-                            user,
-                          },
-                        }}
-                      >
-                        <MenuItem key={option}>{option}</MenuItem>
-                      </Link>
-                    );
-                  }
-                  if (option === 'View Details') {
-                    return (
-                      <Link
-                        to={{
-                          pathname: `/agent/details/${user.id}`,
-                          state: {
-                            id: user.id,
-                            agentCode: user.agentCode,
-                          },
-                        }}
-                      >
-                        <MenuItem key={option}>{option}</MenuItem>
-                      </Link>
-                    );
-                  }
-                  return (
-                    <MenuItem
-                      key={option}
-                      onClick={() => handleMenu(option, user)}
-                    >
-                      {option}
-                    </MenuItem>
-                  );
-                })}
+                {['Approve', 'View Details'].map((option) => (
+                  <MenuItem
+                    key={option}
+                    selected={option === 'Pyxis'}
+                    onClick={() => handleMenu(option, user)}
+                  >
+                    {option}
+                  </MenuItem>
+                ))}
               </Menu>
             </div>
           );
         },
       },
     },
+   
   ];
 
   return (
@@ -330,9 +238,9 @@ const Agents = () => {
             { name: 'Agent' },
           ]}
         />
-        {severity === 'error' && (
-          <Notification alert={error} severity={severity || ''} />
-        )}
+        {/* {severity === "error" && (
+          <Notification alert={error} severity={severity || ""} />
+        )} */}
       </div>
       <div className='overflow-auto'>
         <div className='min-w-750'>
@@ -340,8 +248,8 @@ const Agents = () => {
             <Loading />
           ) : (
             <MUIDataTable
-              title={'All Agents'}
-              data={agentList}
+              title={'All Agent Applications'}
+              data={content}
               columns={columns}
               options={{
                 onRowsDelete: (data) =>
@@ -351,14 +259,14 @@ const Agents = () => {
                     .catch(() => {
                       return false;
                     }),
-                count,
+                pageSize,
                 page,
                 handleChangePage,
-                onTableChange: (action, tableState) => {
-                  if (action === 'changePage') {
+                /*  onTableChange: (action, tableState) => {
+                  if (action === "changePage") {
                     onPageChange(tableState.page);
                   }
-                },
+                }, */
                 filter: true,
                 sort: true,
                 sortOrder: { name: 'id', direction: 'desc' },
@@ -418,20 +326,21 @@ const Agents = () => {
             />
           )}
         </div>
+        <Modal
+          title='Agent Approval'
+          open={openApprovalModal}
+          okText={approvalLoading? '...loading':'Approve agent'}
+          onOk={handleApplicationApproval}
+          onClose={() => setopenApprovalModal(false)}
+          loading={approvalLoading}
+        >
+          <p>
+            Do you want to approve application from{' '}
+            {`${activeApplication.firstName} ${activeApplication.lastName}`}?
+          </p>
+        </Modal>
+        <CustomSnackBar message={`${activeApplication.firstName} ${activeApplication.lastName} application approved`} open={showSnackBar}/>
       </div>
-      <Modal
-        title='Agent Approval'
-        open={openApprovalModal}
-        okText={approvalLoading ? '...loading' : 'Approve agent'}
-        onOk={handleApplicationApproval}
-        onClose={() => setopenApprovalModal(false)}
-        loading={approvalLoading}
-      >
-        <p>
-          Do you want to approve application from{' '}
-          {`${activeApplication.firstName} ${activeApplication.lastName}`}?
-        </p>
-      </Modal>
     </div>
   );
 };
