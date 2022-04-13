@@ -16,7 +16,7 @@ steps:
     branch:
     - develop
 
-- name: build-publish
+- name: build-publish-prod
   image: plugins/docker
   settings:
     repo: akinoyedotun/afrimashadmin
