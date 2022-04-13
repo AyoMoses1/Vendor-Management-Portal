@@ -16,6 +16,19 @@ steps:
     branch:
     - develop
 
+- name: build-publish
+  image: plugins/docker
+  settings:
+    repo: akinoyedotun/afrimashadmin
+    dockerfile: Dockerfile
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+  when:
+    branch:
+    - main
+
 - name: deploy
   image: docker
   commands:
@@ -49,7 +62,7 @@ steps:
     path: /var/run/docker.sock
   when:
     branch:
-    - master
+    - main
 
 volumes:
 - name: docker
