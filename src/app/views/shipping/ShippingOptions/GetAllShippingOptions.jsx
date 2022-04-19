@@ -1,33 +1,36 @@
-import React, { useEffect } from 'react'
-import { Breadcrumb } from 'matx'
-import MUIDataTable from 'mui-datatables'
-import { Grow, Icon, IconButton, TextField, Button } from '@material-ui/core'
-import { Link } from 'react-router-dom'
-import { useDialog } from 'muibox'
+import React, { useEffect } from 'react';
+import { Breadcrumb } from 'matx';
+import MUIDataTable from 'mui-datatables';
+import { Grow, Icon, IconButton, TextField, Button } from '@material-ui/core';
+import { Link } from 'react-router-dom';
+import { useDialog } from 'muibox';
 
-import http from '../../../services/api'
+import http from '../../../services/api';
 
-import Loading from 'matx/components/MatxLoadable/Loading'
-import Notification from 'app/components/Notification'
+import Loading from 'matx/components/MatxLoadable/Loading';
+import Notification from 'app/components/Notification';
 
 const GetAllShippingOptions = () => {
-  const [shippinOptions, setShippingOptions] = React.useState([])
-  const [error, setError] = React.useState(false)
-  const [loading, setLoading] = React.useState(false)
-  const [severity, setSeverirty] = React.useState('')
-  const dialog = useDialog()
+  const [shippinOptions, setShippingOptions] = React.useState([]);
+  const [error, setError] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
+  const [severity, setSeverirty] = React.useState('');
+  const dialog = useDialog();
 
   const getAllShippingOptions = async () => {
-    setLoading(true)
-    http.get('/afrimash/shipping-option').then((res) => {
-      setShippingOptions(res?.data.object)
-      setLoading(false)
-    })
-  }
+    setLoading(true);
+    http
+      .get('/afrimash/shipping-option')
+      .then((res) => {
+        setShippingOptions(res?.data.object) 
+        setLoading(false);
+      })
+      .catch((e) => console.log(e));
+  };
 
   useEffect(() => {
-    getAllShippingOptions()
-  }, [])
+    getAllShippingOptions();
+  }, []);
 
   const columns = [
     {
@@ -36,7 +39,7 @@ const GetAllShippingOptions = () => {
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
-          const shippingZone = shippinOptions[dataIndex]
+          const shippingZone = shippinOptions[dataIndex];
           return (
             <Link
               to={{
@@ -51,7 +54,7 @@ const GetAllShippingOptions = () => {
                 <p className='my-0 text-10'>{`${shippingZone?.name}`}</p>
               </div>
             </Link>
-          )
+          );
         },
       },
     },
@@ -61,7 +64,7 @@ const GetAllShippingOptions = () => {
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
-          const shippingZone = shippinOptions[dataIndex]
+          const shippingZone = shippinOptions[dataIndex];
           return (
             <Link
               to={{
@@ -76,7 +79,7 @@ const GetAllShippingOptions = () => {
                 <p className='my-0 text-10'>{`${shippingZone?.description}`}</p>
               </div>
             </Link>
-          )
+          );
         },
       },
     },
@@ -86,7 +89,7 @@ const GetAllShippingOptions = () => {
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
-          const shippingZone = shippinOptions[dataIndex]
+          const shippingZone = shippinOptions[dataIndex];
           return (
             <Link
               to={{
@@ -101,7 +104,7 @@ const GetAllShippingOptions = () => {
                 <p className='my-0 text-10'>{`${shippingZone?.methodCondition}`}</p>
               </div>
             </Link>
-          )
+          );
         },
       },
     },
@@ -111,7 +114,7 @@ const GetAllShippingOptions = () => {
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
-          const shippingZone = shippinOptions[dataIndex]
+          const shippingZone = shippinOptions[dataIndex];
           return (
             <Link
               to={{
@@ -126,7 +129,7 @@ const GetAllShippingOptions = () => {
                 <p className='my-0 text-10'>{`${shippingZone?.calculationUnit}`}</p>
               </div>
             </Link>
-          )
+          );
         },
       },
     },
@@ -136,7 +139,7 @@ const GetAllShippingOptions = () => {
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
-          const shippingZone = shippinOptions[dataIndex]
+          const shippingZone = shippinOptions[dataIndex];
           return (
             <Link
               to={{
@@ -149,7 +152,7 @@ const GetAllShippingOptions = () => {
             >
               <div className='ml-3'></div>
             </Link>
-          )
+          );
         },
       },
     },
@@ -159,7 +162,7 @@ const GetAllShippingOptions = () => {
       options: {
         filter: false,
         customBodyRenderLite: (dataIndex) => {
-          let shippingZone = shippinOptions[dataIndex]
+          let shippingZone = shippinOptions[dataIndex];
           return (
             <div className='flex items-center'>
               <div>
@@ -170,10 +173,10 @@ const GetAllShippingOptions = () => {
                       .then((value) => {
                         http
                           .delete(`afrimash/shipping-option/${shippingZone.id}`)
-                          .then(() => window.location.reload())
+                          .then(() => window.location.reload());
                       })
                       .catch(() => {
-                        return false
+                        return false;
                       })
                   }
                 >
@@ -181,7 +184,7 @@ const GetAllShippingOptions = () => {
                 </IconButton>
               </div>
             </div>
-          )
+          );
         },
       },
     },
@@ -191,7 +194,7 @@ const GetAllShippingOptions = () => {
       options: {
         filter: false,
         customBodyRenderLite: (dataIndex) => {
-          let shippingOption = shippinOptions[dataIndex]
+          let shippingOption = shippinOptions[dataIndex];
           return (
             <div className='flex items-center ml-10'>
               <Link
@@ -207,11 +210,11 @@ const GetAllShippingOptions = () => {
                 </IconButton>
               </Link>
             </div>
-          )
+          );
         },
       },
     },
-  ]
+  ];
 
   return (
     <div className='m-sm-30'>
@@ -247,7 +250,7 @@ const GetAllShippingOptions = () => {
                   searchText,
                   handleSearch,
                   hideSearch,
-                  options
+                  options,
                 ) => {
                   return (
                     <Grow appear in={true} timeout={300}>
@@ -275,7 +278,7 @@ const GetAllShippingOptions = () => {
                         }}
                       />
                     </Grow>
-                  )
+                  );
                 },
                 customToolbar: () => {
                   return (
@@ -289,7 +292,7 @@ const GetAllShippingOptions = () => {
                         Create new shipping option
                       </Button>
                     </Link>
-                  )
+                  );
                 },
               }}
             />
@@ -297,7 +300,7 @@ const GetAllShippingOptions = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default GetAllShippingOptions
+export default GetAllShippingOptions;
