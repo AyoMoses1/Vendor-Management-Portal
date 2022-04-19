@@ -13,6 +13,8 @@ import {
   agentOrdersReducer,
   agentApplicationReducer,
   agentApprovalReducer,
+  deleteAgentReducer,
+  transferCustomerReducer
 } from './agents-reducer';
 import {
   shippingGroupCreateReducer,
@@ -34,7 +36,9 @@ const RootReducer = combineReducers({
   agentOrder: agentOrdersReducer,
   createAgent: createAgentReducer,
   agentApplication: agentApplicationReducer,
-  agentApproval: agentApprovalReducer
+  agentApproval: agentApprovalReducer,
+  deleteAgentReducer,
+  transferCustomerReducer
 });
 
 export default RootReducer;

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 import {
   TextField,
   Button,
@@ -7,56 +7,60 @@ import {
   Select,
   InputLabel,
   MenuList,
-} from "@material-ui/core";
-import http from "../../../services/api";
+} from '@material-ui/core';
+import http from '../../../services/api';
 // or
 import Divider from '@material-ui/core/Divider';
 
+import { Formik } from 'formik';
 
-import { Formik } from "formik";
+import * as yup from 'yup';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 
-import * as yup from "yup";
-import { useHistory } from "react-router-dom/cjs/react-router-dom";
-import Autocomplete from "@material-ui/lab/Autocomplete";
+import Notification from '../../../components/Notification';
+import { errorState } from '../../helpers/error-state';
+import { useDispatch, useSelector } from 'react-redux';
+import { getShippingOptionGroup } from 'app/redux/actions/shippingActions';
 
-import Notification from "../../../components/Notification";
-import { errorState } from "../../helpers/error-state";
-import { useDispatch, useSelector } from "react-redux";
-import { getShippingOptionGroup } from "app/redux/actions/shippingActions";
+const initialValues = {
+  name: '',
+  baseCost: '',
+  additionalCost: '',
+  additionalCostOnEvery: '',
+  criteriaValue: '',
+  description: '',
+  width: '',
+  length: '',
+};
+const initialState = {
+  shippingClass: '',
+  shippingZone: '',
+  methodCondition: '',
+  dimensionUnit: '',
+  calculationUnit: '',
+  description: '',
+  width: '',
+  length: '',
+};
 
 const CreateShippingOption = ({ location }) => {
   const history = useHistory();
   const { id } = location?.state;
-
-  const initialValues = {
-    name: "",
-    baseCost: "",
-    additionalCost: "",
-    additionalCostOnEvery: "",
-    criteriaValue: "",
-    description: "",
-    width: "",
-    length: "",
-  };
-  const initialState = {
-    shippingClass: "",
-    shippingZone: "",
-    methodCondition: "",
-    dimensionUnit: "",
-    calculationUnit: "",
-    description: "",
-    width: "",
-    length: "",
-  };
-  const calculationUnit = ["SHIPPING_CLASS", "DIMENSION", "VOLUME", "WEIGHT"];
-  const methodCondition = ["GREATER_THAN", "LESS_THAN", "EQUAL_TO"];
-  const dimensionUnit = ["ML", "CM", "G"];
+  const calculationUnit = [
+    'SHIPPING_CLASS',
+    'DIMENSION',
+    'VOLUME',
+    'WEIGHT',
+  ];
+  const methodCondition = ['GREATER_THAN', 'LESS_THAN', 'EQUAL_TO'];
+  const dimensionUnit = ['ML', 'CM', 'G', 'ITEM_QTY'];
   const [shippingOption, setShippingOptionDetails] =
     React.useState(initialValues);
-  const [value, setValues] = React.useState(initialValues);
+  //const [value, setValues] = React.useState(initialValues);
   const [state, setState] = React.useState(initialState);
-  const [error, setError] = React.useState("");
-  const [severity, setSeverity] = React.useState("");
+  const [error, setError] = React.useState('');
+  const [severity, setSeverity] = React.useState('');
   const [loading, setLoading] = React.useState(false);
   const [shippingZones, setShippingZones] = React.useState();
   const [shippingClass, setShippingClass] = React.useState();
@@ -69,11 +73,7 @@ const CreateShippingOption = ({ location }) => {
     loading: loadingGroup,
     shipping: shippingGroup,
     error: errorGroup,
-  } = useSelector(
-    (state) => state.shippingOptionGroupList
-  );
- 
-  console.log({shippingGroup})
+  } = useSelector((state) => state.shippingOptionGroupList);
 
   // const group = shippingGroup.map((ship)=> (
   //   console.log(ship)
@@ -85,7 +85,7 @@ const CreateShippingOption = ({ location }) => {
     const payload = { ...state, ...values };
     if (shipping) {
       delete payload.criteriaValue;
-     delete payload.methodCondition;
+      delete payload.methodCondition;
     } else {
       delete payload.shippingClass;
     }
@@ -93,15 +93,16 @@ const CreateShippingOption = ({ location }) => {
       delete payload.width;
       delete payload.length;
     }
-    console.log({payload})
+
+    console.log({ payload });
     setLoading(true);
     if (id) {
       setLoading(false);
       http.put(`/afrimash/shipping-option`, payload).then((res) => {
         if (res.status === 200) {
-          history.push("/shipping-options");
-        } else if (res.status === "BAD_REQUEST") {
-          let message = "Somthing went wrong with that request";
+          history.push('/shipping-options');
+        } else if (res.status === 'BAD_REQUEST') {
+          let message = 'Somthing went wrong with the request';
           errorState(setError, setSeverity, message);
         }
       });
@@ -109,9 +110,9 @@ const CreateShippingOption = ({ location }) => {
       setLoading(false);
       http.post(`/afrimash/shipping-option`, payload).then((res) => {
         if (res.status === 200) {
-          history.push("/shipping-options");
-        } else if (res.status === "BAD_REQUEST") {
-          let message = "Somthing went wrong with that request";
+          history.push('/shipping-options');
+        } else if (res.status === 'BAD_REQUEST') {
+          let message = 'Somthing went wrong with the request';
           errorState(setError, setSeverity, message);
         }
       });
@@ -127,9 +128,9 @@ const CreateShippingOption = ({ location }) => {
 
   const handleAutoCompleteSelect = (e, name) => {
     setState({ ...state, [name]: e.target.value });
-    if (e.target.value === "SHIPPING_CLASS") {
+    if (e.target.value === 'SHIPPING_CLASS') {
       setShipping(true);
-    } else if (e.target.value === "DIMENSION") {
+    } else if (e.target.value === 'DIMENSION') {
       setDimension(true);
       setShipping(false);
     } else {
@@ -142,22 +143,21 @@ const CreateShippingOption = ({ location }) => {
     setState({ ...state, [name]: e.target.value });
   };
 
-
   const handleDimensionSelect = (e, name) => {
     setState({ ...state, [name]: e.target.value });
   };
 
   const getAllShippingZones = () => {
     setLoading(true);
-    http.get("/afrimash/shipping-zone").then((res) => {
+    http.get('/afrimash/shipping-zone').then((res) => {
       setShippingZones(res?.data.object);
       setLoading(false);
-      console.log(shippingZones)
     });
   };
+
   const getAllShippingClasses = () => {
     setLoading(true);
-    http.get("/afrimash/shipping-class").then((res) => {
+    http.get('/afrimash/shipping-class').then((res) => {
       setShippingClass(res?.data.object);
       setLoading(false);
     });
@@ -181,12 +181,9 @@ const CreateShippingOption = ({ location }) => {
     }
   }, []);
 
-
-  console.log({shippingGroup})
-
   return (
-    <div className="m-sm-30">
-      <Notification alert={error} severity={severity || ""} />
+    <div className='m-sm-30'>
+      <Notification alert={error} severity={severity || ''} />
       <Formik
         initialValues={shippingOption}
         onSubmit={handleSubmit}
@@ -204,18 +201,18 @@ const CreateShippingOption = ({ location }) => {
           setSubmitting,
           setFieldValue,
         }) => (
-          <form className="px-4" onSubmit={handleSubmit}>
+          <form className='px-4' onSubmit={handleSubmit}>
             <Grid container spacing={3}>
               <Grid container item>
                 <h1>Create new Shipping Option</h1>
               </Grid>
               <Grid item sm={6} xs={12}>
                 <TextField
-                  className="mb-4"
-                  name="name"
-                  label="Option Name"
-                  variant="outlined"
-                  margin="normal"
+                  className='mb-4'
+                  name='name'
+                  label='Option Name'
+                  variant='outlined'
+                  margin='normal'
                   fullWidth
                   onBlur={handleBlur}
                   onChange={handleChange}
@@ -225,8 +222,8 @@ const CreateShippingOption = ({ location }) => {
                 />
                 {shipping && (
                   <Autocomplete
-                    id="shippingClassId"
-                    name="shippingClass"
+                    id='shippingClassId'
+                    name='shippingClass'
                     options={shippingClass}
                     disabled={!shipping}
                     getOptionLabel={(option) => option.name}
@@ -234,31 +231,31 @@ const CreateShippingOption = ({ location }) => {
                       option.id === value.id
                     }
                     onChange={(event, newValue) =>
-                      handleSelect(newValue, "shippingClass")
+                      handleSelect(newValue, 'shippingClass')
                     }
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label="Select Shipping class"
-                        variant="outlined"
+                        label='Select Shipping class'
+                        variant='outlined'
                         required={!shipping}
-                        margin="normal"
+                        margin='normal'
                       />
                     )}
                   />
                 )}
                 {!shipping && (
                   <TextField
-                    className="mb-4"
-                    name="methodCondition"
-                    label="Select Method Condition"
-                    variant="outlined"
+                    className='mb-4'
+                    name='methodCondition'
+                    label='Select Method Condition'
+                    variant='outlined'
                     select
-                    margin="normal"
+                    margin='normal'
                     fullWidth
                     onBlur={handleBlur}
                     onChange={(e) =>
-                      handleMethodCondition(e, "methodCondition")
+                      handleMethodCondition(e, 'methodCondition')
                     }
                     value={state.methodCondition}
                   >
@@ -270,11 +267,11 @@ const CreateShippingOption = ({ location }) => {
                   </TextField>
                 )}
                 <TextField
-                  className="mb-4"
-                  name="baseCost"
-                  label="Base Cost"
-                  variant="outlined"
-                  margin="normal"
+                  className='mb-4'
+                  name='baseCost'
+                  label='Base Cost'
+                  variant='outlined'
+                  margin='normal'
                   fullWidth
                   onBlur={handleBlur}
                   onChange={handleChange}
@@ -284,11 +281,11 @@ const CreateShippingOption = ({ location }) => {
                 />
                 {!shipping && isDimension && (
                   <TextField
-                    className="mb-4"
-                    name="width"
-                    label="Dimension width"
-                    variant="outlined"
-                    margin="normal"
+                    className='mb-4'
+                    name='width'
+                    label='Dimension width'
+                    variant='outlined'
+                    margin='normal'
                     fullWidth
                     onBlur={handleBlur}
                     onChange={handleChange}
@@ -297,11 +294,11 @@ const CreateShippingOption = ({ location }) => {
                 )}
                 {!shipping && isDimension && (
                   <TextField
-                    className="mb-4"
-                    name="length"
-                    label="Dimension length"
-                    variant="outlined"
-                    margin="normal"
+                    className='mb-4'
+                    name='length'
+                    label='Dimension length'
+                    variant='outlined'
+                    margin='normal'
                     fullWidth
                     onBlur={handleBlur}
                     onChange={handleChange}
@@ -311,17 +308,17 @@ const CreateShippingOption = ({ location }) => {
               </Grid>
               <Grid item sm={6} xs={12}>
                 <TextField
-                  className="mb-4"
-                  name="calculationUnit"
-                  label="Select calculation unit"
-                  variant="outlined"
+                  className='mb-4'
+                  name='calculationUnit'
+                  label='Select calculation unit'
+                  variant='outlined'
                   select
                   required
-                  margin="normal"
+                  margin='normal'
                   fullWidth
                   onBlur={handleBlur}
                   onChange={(e) =>
-                    handleAutoCompleteSelect(e, "calculationUnit")
+                    handleAutoCompleteSelect(e, 'calculationUnit')
                   }
                   value={state.calculationUnit}
                 >
@@ -333,49 +330,47 @@ const CreateShippingOption = ({ location }) => {
                 </TextField>
                 {!shipping && (
                   <TextField
-                    className="mb-4"
-                    name="criteriaValue"
-                    label="Criteria value"
-                    variant="outlined"
-                    margin="normal"
+                    className='mb-4'
+                    name='criteriaValue'
+                    label='Criteria value'
+                    variant='outlined'
+                    margin='normal'
                     fullWidth
                     onBlur={handleBlur}
                     onChange={handleChange}
                     value={values.criteriaValue}
                     error={Boolean(
-                      touched.criteriaValue && errors.criteriaValue
+                      touched.criteriaValue && errors.criteriaValue,
                     )}
                     helperText={touched.criteriaValue && errors.criteriaValue}
                   />
                 )}
-                  <Autocomplete
-                    id="shippingZoneId"
-                    name="shippingZone"
-                    options={shippingZones}
-                   // disabled={!shipping}
-                    getOptionLabel={(option) => option.name}
-                    getOptionSelected={(option, value) =>
-                      option.id === value.id
-                    }
-                    onChange={(event, newValue) =>
-                      handleSelect(newValue, "shippingZone")
-                    }
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label="Select Shipping Zone"
-                        variant="outlined"
-                        required={!shipping}
-                        margin="normal"
-                      />
-                    )}
-                  />
+                <Autocomplete
+                  id='shippingZoneId'
+                  name='shippingZone'
+                  options={shippingZones}
+                  // disabled={!shipping}
+                  getOptionLabel={(option) => option.name}
+                  getOptionSelected={(option, value) => option.id === value.id}
+                  onChange={(event, newValue) =>
+                    handleSelect(newValue, 'shippingZone')
+                  }
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label='Select Shipping Zone'
+                      variant='outlined'
+                      required={!shipping}
+                      margin='normal'
+                    />
+                  )}
+                />
                 <TextField
-                  className="mb-4"
-                  name="additionalCost"
-                  label="Additional Cost"
-                  variant="outlined"
-                  margin="normal"
+                  className='mb-4'
+                  name='additionalCost'
+                  label='Additional Cost'
+                  variant='outlined'
+                  margin='normal'
                   fullWidth
                   onBlur={handleBlur}
                   onChange={handleChange}
@@ -383,18 +378,18 @@ const CreateShippingOption = ({ location }) => {
                 />
                 {values.additionalCost > 1 && (
                   <TextField
-                    className="mb-4"
-                    name="additionalCostOnEvery"
-                    label="Additional Cost on every"
-                    variant="outlined"
-                    margin="normal"
+                    className='mb-4'
+                    name='additionalCostOnEvery'
+                    label='Additional Cost on every'
+                    variant='outlined'
+                    margin='normal'
                     fullWidth
                     onBlur={handleBlur}
                     onChange={handleChange}
                     value={values.additionalCostOnEvery}
                     error={Boolean(
                       touched.additionalCostOnEvery &&
-                        errors.additionalCostOnEvery
+                        errors.additionalCostOnEvery,
                     )}
                     helperText={
                       touched.additionalCostOnEvery &&
@@ -403,20 +398,17 @@ const CreateShippingOption = ({ location }) => {
                   />
                 )}
 
-
-
-                
                 {values.additionalCost > 1 && (
                   <TextField
-                    className="mb-4"
-                    name="dimensionUnit"
-                    label="Select dimension unit"
-                    variant="outlined"
+                    className='mb-4'
+                    name='dimensionUnit'
+                    label='Select dimension unit'
+                    variant='outlined'
                     select
-                    margin="normal"
+                    margin='normal'
                     fullWidth
                     onBlur={handleBlur}
-                    onChange={(e) => handleDimensionSelect(e, "dimensionUnit")}
+                    onChange={(e) => handleDimensionSelect(e, 'dimensionUnit')}
                     value={state.dimensionUnit}
                   >
                     {dimensionUnit.map((unit) => (
@@ -428,51 +420,48 @@ const CreateShippingOption = ({ location }) => {
                 )}
                 <TextField
                   multiline
-                  className="mb-4"
-                  name="description"
-                  label="Option Description"
-                  variant="outlined"
-                  margin="normal"
+                  className='mb-4'
+                  name='description'
+                  label='Option Description'
+                  variant='outlined'
+                  margin='normal'
                   fullWidth
                   onBlur={handleBlur}
                   onChange={handleChange}
                   value={values.description}
                 />
               </Grid>
-                <Divider />
+              <Divider />
               <Autocomplete
-                  id="shippingOptionGroup"
-                  options={shippingGroup.filter(i => i.description && i.name)}
-                  getOptionLabel={(option) => option.name}
-                  fullWidth={true}
-                  getOptionSelected={(option, value) => option.id === value.id}
-                  onChange={(event, newValue) =>{
-                    console.log({newValue})
-                    handleSelect(newValue, "shippingOptionGroup")
-                  }
-                    
-                  }
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Select Shipping Option group"
-                      variant="outlined"
-                      margin="normal"
-                    />
-                  )}
-                />
-              
+                id='shippingOptionGroup'
+                options={shippingGroup.filter((i) => i.description && i.name)}
+                getOptionLabel={(option) => option.name}
+                fullWidth={true}
+                getOptionSelected={(option, value) => option.id === value.id}
+                onChange={(event, newValue) => {
+                  console.log({ newValue });
+                  handleSelect(newValue, 'shippingOptionGroup');
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label='Select Shipping Option group'
+                    variant='outlined'
+                    margin='normal'
+                  />
+                )}
+              />
             </Grid>
-        
-            <Grid item container justify="center" alignItems="center">
+
+            <Grid item container justify='center' alignItems='center'>
               <Button
-                className="w-220 mt-4"
+                className='w-220 mt-4'
                 disabled={loading}
-                variant="contained"
-                color="primary"
-                type="submit"
+                variant='contained'
+                color='primary'
+                type='submit'
               >
-                {id ? "Update shipping option" : " Create shipping option"}
+                {id ? 'Update shipping option' : ' Create shipping option'}
               </Button>
             </Grid>
           </form>
@@ -483,8 +472,8 @@ const CreateShippingOption = ({ location }) => {
 };
 
 const shippingZonesSchema = yup.object().shape({
-  name: yup.string().required("please enter a valid name"),
-  baseCost: yup.string().required("Please enter a valid base cost"),
+  name: yup.string().required('please enter a valid name'),
+  baseCost: yup.string().required('Please enter a valid base cost'),
 });
 
 export default CreateShippingOption;
