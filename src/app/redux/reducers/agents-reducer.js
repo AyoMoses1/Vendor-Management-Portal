@@ -15,7 +15,13 @@ import {
   GET_ALL_AGENT_APPLICATION_FAILED,
   APPROVE_AGENT_APPLICATION,
   APPROVE_AGENT_APPLICATION_SUCCESS,
-  APPROVE_AGENT_APPLICATION_FAILED
+  APPROVE_AGENT_APPLICATION_FAILED,
+  DELETE_AGENT,
+  DELETE_AGENT_FAILED,
+  DELETE_AGENT_SUCCESS,
+  TRANSFER_CUSTOMERS,
+  TRANSFER_CUSTOMERS_FAILED,
+  TRANSFER_CUSTOMERS_SUCCESS
 } from '../actions/agents-action'
 
 const initialState = {
@@ -30,6 +36,7 @@ export const agentReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_AGENT_REQUEST:
       return {
+        ...state,
         loading: true,
       }
     case GET_ALL_AGENTS_SUCCESS:
@@ -186,5 +193,47 @@ export const agentApprovalReducer = (state = {loading: false, showSnackBar: fals
       }
       default:
       return state
+  }
+}
+
+export const deleteAgentReducer = (state={loading: false, errMsg:'', data:''}, {type, payload}) => {
+  switch(type){
+    case DELETE_AGENT: 
+    return {
+      ...state,
+      loading: true
+    }
+    case DELETE_AGENT_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        data: payload
+      }
+    case DELETE_AGENT_FAILED:
+      return {
+        ...state,
+        loading: false,
+        errMsg: payload
+      }
+      default:
+        return state
+  }
+}
+
+export const transferCustomerReducer = (state={loading: false}, {type, payload}) => {
+  switch(type){
+    case TRANSFER_CUSTOMERS:
+      return {
+        ...state,
+        loading: true
+      }
+    case TRANSFER_CUSTOMERS_SUCCESS:
+    case TRANSFER_CUSTOMERS_FAILED:
+      return {
+        ...state,
+        loading: false
+      }
+    default:
+      return state;
   }
 }

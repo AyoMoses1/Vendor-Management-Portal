@@ -112,7 +112,7 @@ export const navigations = [
         path: "/agents",
         iconText: "B"
       },
-      /* {
+     /*  {
         name: "Agent Applications",
         path: "/agent-applications",
         iconText: "B"

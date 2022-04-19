@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Breadcrumb } from 'matx';
 import MUIDataTable from 'mui-datatables';
 import {
@@ -9,12 +9,19 @@ import {
   Button,
   Menu,
   MenuItem,
+  Box,
+  FormControl,
+  InputLabel,
+  Select,
 } from '@material-ui/core';
+import Autocomplete from '@mui/material/Autocomplete';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   getAllAgents,
   approveAgentApplication,
+  deleteAgent,
+  transferCustomer,
 } from 'app/redux/actions/agents-action';
 import { useDialog } from 'muibox';
 import './style.scss';
@@ -31,14 +38,29 @@ const Agents = () => {
   const { loading: approvalLoading, showSnackBar } = useSelector(
     (state) => state.agentApproval,
   );
+  const {
+    loading: deleteAgentLoading,
+    data,
+    errMsg,
+  } = useSelector((state) => state.deleteAgentReducer);
+  const { loading: transferCustomerLoading } = useSelector(
+    (state) => state.transferCustomerReducer,
+  );
   const [id, setId] = useState(0);
-  //const [count, setCount] = React.useState(0)
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [openApprovalModal, setopenApprovalModal] = useState(false);
-  const [activeApplication, setActiveApplication] = useState({});
-
+  const [activeAgent, setActiveAgent] = useState({});
+  const [openDeleteAgent, setOpenDeleteAgentModal] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [transferModalProps, setTransferModalProps] = useState({
+    open: false,
+    loading: false,
+  });
+  const [receipientAgent, setReceipientAgent] = useState('');
+  const [activeAgentIndex, setActiveAgentIndex] = useState(null);
+  const [rowActionType, setRowActionType] = useState('');
+
   const open = Boolean(anchorEl);
 
   const handleClick = (event) => {
@@ -65,19 +87,51 @@ const Agents = () => {
     dispatch(getAllAgents({ page }));
   }, [dispatch]);
 
+  console.log({ activeAgentIndex, rowActionType });
+
   const onPageChange = (page) => {
     dispatch(getAllAgents(page));
     setPage(page);
   };
-  const handleMenu = (option, user) => {
+   const handleMenu = (option, user) => {
+  
+    setActiveAgent(user);
     if (option === 'Activate') {
-      setActiveApplication(user);
       setopenApprovalModal(true);
+    }
+    if (option === 'Delete Agent' && user.customersCount === 0) {
+      setOpenDeleteAgentModal(true);
+    }
+
+    if (option === 'Delete Agent' && user.customersCount > 0) {
+      setTransferModalProps((prevState) => ({ ...prevState, open: true }));
     }
   };
 
   const handleApplicationApproval = () => {
-    dispatch(approveAgentApplication({ applicationId: activeApplication.id }));
+    dispatch(approveAgentApplication({ applicationId: activeAgent.id }));
+  };
+
+  const handleDeleteAgent = async () => {
+    await dispatch(deleteAgent(activeAgent.id));
+    dispatch(getAllAgents({ page }));
+    setOpenDeleteAgentModal(false);
+  };
+
+  const handleTransferCustomer = async () => {
+    console.log({ receipientAgent });
+    try {
+      await dispatch(
+        transferCustomer({
+          sourceAgentId: activeAgent.id,
+          reciepientAgentId: receipientAgent,
+        }),
+      );
+      handleDeleteAgent();
+      setTransferModalProps({ loading: false, open: false });
+    } catch (error) {
+      console.log({ error });
+    }
   };
 
   const columns = [
@@ -218,40 +272,16 @@ const Agents = () => {
         },
       },
     },
-    /*  {
-      name: "action",
-      label: "Action",
-      options: {
-        filter: false,
-        customBodyRenderLite: (dataIndex) => {
-          let user = agentList[dataIndex];
-          return (
-            <div>
-              <Link
-                to={{
-                  pathname: "/agent/edit",
-                  state: {
-                    id: user.id,
-                    user,
-                  },
-                }}
-              >
-                <IconButton>
-                  <Icon>edit</Icon>
-                </IconButton>
-              </Link>
-            </div>
-          );
-        },
-      },
-    }, */
     {
       name: 'action',
       label: 'Action',
       options: {
         filter: false,
-        customBodyRenderLite: (dataIndex) => {
+        customBodyRender: (value, tableMeta, updateValue) => value,
+        customBodyRenderLite: (dataIndex, another) => {
+          console.log({ dataIndex, another });
           let user = agentList[dataIndex];
+
           return (
             <div>
               <IconButton
@@ -273,48 +303,91 @@ const Agents = () => {
                 open={open}
                 onClose={handleClose}
               >
-                {['View Details', 'Edit Agent'].map((option) => {
-                  if (option === 'Edit Agent') {
+                {['View Details', 'Edit Agent', 'Delete Agent'].map(
+                  (option) => {
+                    if (option === 'Edit Agent') {
+                      return (
+                        <Link
+                          to={{
+                            pathname: '/agent/edit',
+                            state: {
+                              id: user.id,
+                              user,
+                            },
+                          }}
+                        >
+                          <MenuItem key={option}>{option}</MenuItem>
+                        </Link>
+                      );
+                    }
+                    if (option === 'View Details') {
+                      return (
+                        <Link
+                          to={{
+                            pathname: `/agent/details/${user.id}`,
+                            state: {
+                              id: user.id,
+                              agentCode: user.agentCode,
+                            },
+                          }}
+                        >
+                          <MenuItem key={option}>{option}</MenuItem>
+                        </Link>
+                      );
+                    }
                     return (
-                      <Link
-                        to={{
-                          pathname: '/agent/edit',
-                          state: {
-                            id: user.id,
-                            user,
-                          },
+                      <MenuItem
+                        key={option}
+                        onMouseDown={(e) => {
+                          setRowActionType(option);
                         }}
                       >
-                        <MenuItem key={option}>{option}</MenuItem>
-                      </Link>
+                        {option}
+                      </MenuItem>
                     );
-                  }
-                  if (option === 'View Details') {
-                    return (
-                      <Link
-                        to={{
-                          pathname: `/agent/details/${user.id}`,
-                          state: {
-                            id: user.id,
-                            agentCode: user.agentCode,
-                          },
-                        }}
-                      >
-                        <MenuItem key={option}>{option}</MenuItem>
-                      </Link>
-                    );
-                  }
-                  return (
-                    <MenuItem
-                      key={option}
-                      onClick={() => handleMenu(option, user)}
-                    >
-                      {option}
-                    </MenuItem>
-                  );
-                })}
+                  },
+                )}
               </Menu>
             </div>
+          );
+        },
+      },
+    },
+    {
+      name: 'Delete',
+      label: 'delete',
+      options: {
+        filter: false,
+        customBodyRenderLite: (dataIndex, another) => {
+          let user = agentList[dataIndex];
+          return (
+            <>
+              <Link
+                to={{
+                  pathname: '/agent/edit',
+                  state: {
+                    id: user.id,
+                    user,
+                  },
+                }}
+              >
+                <MenuItem>Edit Agent</MenuItem>
+              </Link>
+              <Link
+                to={{
+                  pathname: `/agent/details/${user.id}`,
+                  state: {
+                    id: user.id,
+                    agentCode: user.agentCode,
+                  },
+                }}
+              >
+                <MenuItem>View Details</MenuItem>
+              </Link>
+              <MenuItem onClick={() => handleMenu('Delete Agent', user)}>
+                Delete Agent
+              </MenuItem>
+            </>
           );
         },
       },
@@ -344,13 +417,12 @@ const Agents = () => {
               data={agentList}
               columns={columns}
               options={{
-                onRowsDelete: (data) =>
-                  dialog
-                    .confirm('Are you sure you want to delete?')
-                    .then((value) => console.log('delete'))
-                    .catch(() => {
-                      return false;
-                    }),
+                onCellClick: (colData, cellMeta) =>
+                  console.log({ colData, cellMeta }),
+                onRowsDelete: (data) => {
+                  console.log(data);
+                },
+
                 count,
                 page,
                 handleChangePage,
@@ -429,8 +501,52 @@ const Agents = () => {
       >
         <p>
           Do you want to approve application from{' '}
-          {`${activeApplication.firstName} ${activeApplication.lastName}`}?
+          {`${activeAgent.firstName} ${activeAgent.lastName}`}?
         </p>
+      </Modal>
+      <Modal
+        title='Delete Approval'
+        open={openDeleteAgent}
+        okText={deleteAgentLoading ? '...loading' : 'Delete agent'}
+        onOk={handleDeleteAgent}
+        onClose={() => setOpenDeleteAgentModal(false)}
+        loading={deleteAgentLoading}
+      >
+        <p>
+          Do you want to delete agent
+          {`${activeAgent.firstName} ${activeAgent.lastName}`}?
+        </p>
+      </Modal>
+      <Modal
+        title={`Transfer ${activeAgent.fullName}'s customers`}
+        open={transferModalProps.open}
+        okText={transferCustomerLoading ? '...loading' : 'Transfer Customer'}
+        onOk={handleTransferCustomer}
+        onClose={() => setTransferModalProps({ loading: false, open: false })}
+        loading={transferCustomerLoading}
+      >
+        <Box sx={{ minWidth: 120 }}>
+          <FormControl fullWidth>
+            <InputLabel id='demo-simple-select-label'>
+              Select Receipient Agent
+            </InputLabel>
+            <Select
+              labelId='demo-simple-select-label'
+              id='demo-simple-select'
+              value={receipientAgent}
+              label='Select Receipient Agent'
+              onChange={(e) => {
+                setReceipientAgent(e.target.value);
+              }}
+            >
+              {[...agentList].filter(agent => agent.id !== activeAgent.id).map((agt) => (
+                <MenuItem key={agt.id} value={agt.id}>
+                  {agt.fullName}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Box>
       </Modal>
     </div>
   );
