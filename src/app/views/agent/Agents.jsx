@@ -272,7 +272,7 @@ const Agents = () => {
         },
       },
     },
-    {
+   /*  {
       name: 'action',
       label: 'Action',
       options: {
@@ -352,10 +352,10 @@ const Agents = () => {
           );
         },
       },
-    },
+    }, */
     {
-      name: 'Delete',
-      label: 'delete',
+      name: 'Actions',
+      label: 'actions',
       options: {
         filter: false,
         customBodyRenderLite: (dataIndex, another) => {
