@@ -120,8 +120,8 @@ const dispatch = useDispatch()
                       .confirm('Are you sure you want to delete?')
                       .then((value) => {
                         http
-                          .delete(`afrimash/shipping-class/${user.id}`)
-                          .then(() => window.location.reload())
+                          .delete(`afrimash/shipping-option-group/${user.id}`)
+                          .then(() => dispatch(getShippingOptionGroup({})))
                       })
                       .catch(() => {
                         return false
