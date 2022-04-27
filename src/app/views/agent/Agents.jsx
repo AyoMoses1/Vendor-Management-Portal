@@ -32,23 +32,18 @@ import Modal from '../../components/Modal';
 import CustomSnackBar from '../../components/Snackbar';
 
 const Agents = () => {
-  const { agentList, count, error, severity, loading, pages } = useSelector(
-    (state) => state.agents,
-  );
+  const { agentList, total, error, severity, loading, pages, size } =
+    useSelector((state) => state.agents);
   const { loading: approvalLoading, showSnackBar } = useSelector(
     (state) => state.agentApproval,
   );
-  const {
-    loading: deleteAgentLoading,
-    data,
-    errMsg,
-  } = useSelector((state) => state.deleteAgentReducer);
+  const { loading: deleteAgentLoading } = useSelector(
+    (state) => state.deleteAgentReducer,
+  );
   const { loading: transferCustomerLoading } = useSelector(
     (state) => state.transferCustomerReducer,
   );
   const [id, setId] = useState(0);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [openApprovalModal, setopenApprovalModal] = useState(false);
   const [activeAgent, setActiveAgent] = useState({});
   const [openDeleteAgent, setOpenDeleteAgentModal] = useState(false);
@@ -60,41 +55,27 @@ const Agents = () => {
   const [receipientAgent, setReceipientAgent] = useState('');
   const [activeAgentIndex, setActiveAgentIndex] = useState(null);
   const [rowActionType, setRowActionType] = useState('');
+  const [page, setPage] = useState(0)
 
-  const open = Boolean(anchorEl);
-
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleChangePage = (event, newPage) => {
+  const handleChangePage = (newPage) => {
+    console.log({ agentList, newPage });
     setPage(newPage);
+   dispatch(getAllAgents({ page: newPage, size : size}));
   };
 
-  // const handleChangeRowsPerPage = (event) => {
-  //   setRowsPerPage(parseInt(event.target.value, 10));
-  //   setPage(0);
-  // };
+  const handleChangeRowsPerPage = (value) => {
+   dispatch(getAllAgents({ page: 0, size: parseInt(value, 10) }));
+  };
 
-  const dialog = useDialog();
+
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getAllAgents({ page }));
-  }, [dispatch]);
+    dispatch(getAllAgents({}));
+  }, []);
 
-  console.log({ activeAgentIndex, rowActionType });
-
-  const onPageChange = (page) => {
-    dispatch(getAllAgents(page));
-    setPage(page);
-  };
-   const handleMenu = (option, user) => {
-  
+  const handleMenu = (option, user) => {
     setActiveAgent(user);
     if (option === 'Activate') {
       setopenApprovalModal(true);
@@ -272,7 +253,7 @@ const Agents = () => {
         },
       },
     },
-    {
+    /*  {
       name: 'action',
       label: 'Action',
       options: {
@@ -352,10 +333,10 @@ const Agents = () => {
           );
         },
       },
-    },
+    }, */
     {
-      name: 'Delete',
-      label: 'delete',
+      name: 'Actions',
+      label: 'actions',
       options: {
         filter: false,
         customBodyRenderLite: (dataIndex, another) => {
@@ -409,35 +390,29 @@ const Agents = () => {
       </div>
       <div className='overflow-auto'>
         <div className='min-w-750'>
-          {loading ? (
+          {false ? (
             <Loading />
           ) : (
             <MUIDataTable
+
               title={'All Agents'}
-              data={agentList}
+              data={[...agentList]}
               columns={columns}
               options={{
-                onCellClick: (colData, cellMeta) =>
-                  console.log({ colData, cellMeta }),
-                onRowsDelete: (data) => {
-                  console.log(data);
-                },
-
-                count,
-                page,
-                handleChangePage,
-                onTableChange: (action, tableState) => {
-                  if (action === 'changePage') {
-                    onPageChange(tableState.page);
-                  }
-                },
+                serverSide: true,
+                selectableRows: "none",
+                count: total,
+                page:  page,
+                onChangePage: (value) => handleChangePage(value),
+                onChangeRowsPerPage: handleChangeRowsPerPage,
                 filter: true,
                 sort: true,
                 sortOrder: { name: 'id', direction: 'desc' },
                 filterType: 'dropdown',
                 responsive: 'standard',
                 elevation: 0,
-                rowsPerPageOptions: [10, 20, 40, 80, 100],
+                rowsPerPage: size,
+                rowsPerPageOptions: [10, 20, 40, 50, 80, 100],
                 customSearchRender: (
                   searchText,
                   handleSearch,
@@ -539,11 +514,13 @@ const Agents = () => {
                 setReceipientAgent(e.target.value);
               }}
             >
-              {[...agentList].filter(agent => agent.id !== activeAgent.id).map((agt) => (
-                <MenuItem key={agt.id} value={agt.id}>
-                  {agt.fullName}
-                </MenuItem>
-              ))}
+              {[...agentList]
+                .filter((agent) => agent.id !== activeAgent.id)
+                .map((agt) => (
+                  <MenuItem key={agt.id} value={agt.id}>
+                    {agt.fullName}
+                  </MenuItem>
+                ))}
             </Select>
           </FormControl>
         </Box>
