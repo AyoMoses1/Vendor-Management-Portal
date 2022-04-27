@@ -1,22 +1,47 @@
-import React, { useState, useEffect } from 'react'
-import { Breadcrumb } from 'matx'
-import MUIDataTable from 'mui-datatables'
-import { Grow, Icon, IconButton, TextField, Button } from '@material-ui/core'
-import { Link } from 'react-router-dom'
-import { useDialog } from 'muibox'
-import { deleteProduct, getAllResults } from './ProductService'
-import Loading from 'matx/components/MatxLoadable/Loading'
+import React, { useState, useEffect } from 'react';
+import { Breadcrumb } from 'matx';
+import MUIDataTable from 'mui-datatables';
+import { Grow, Icon, IconButton, TextField, Button } from '@material-ui/core';
+import { Link } from 'react-router-dom';
+import { useDialog } from 'muibox';
+import { deleteProduct, getAllResults } from './ProductService';
+import Loading from 'matx/components/MatxLoadable/Loading';
+import { useDispatch } from 'react-redux';
+import { updateProductFeature } from '../../redux/actions/ussd-action';
 
 const Products = () => {
-  const [isAlive, setIsAlive] = useState(true)
-  const [loading, setLoading] = useState(false)
-  const [products, setProducts] = useState([])
-  const dialog = useDialog()
+  const [isAlive, setIsAlive] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [products, setProducts] = useState([]);
+  const dialog = useDialog();
+  const dispatcher = useDispatch();
 
   useEffect(() => {
-    getAllResults(setProducts, setLoading, '/afrimash/products/')
-    return () => setIsAlive(false)
-  }, [isAlive])
+    getAllResults(setProducts, setLoading, '/afrimash/products/');
+    return () => setIsAlive(false);
+  }, [isAlive]);
+
+  const handleFeaturedOnUSSD = (product) => {
+    const confirmMessage = product.isFeaturedOnUssd
+      ? `Do you want to remove ${product.name} from USSD menu?`
+      : `Do you want to feature ${product.name} on USSD menu?`;
+    dialog
+      .confirm(confirmMessage)
+      .then(() => {
+        dispatcher(
+          updateProductFeature({
+            data: {
+              id: product.id,
+              isFeaturedOnUssd: !product.isFeaturedOnUssd,
+            },
+          }),
+        );
+      })
+      .then(() => {
+        getAllResults(setProducts, setLoading, '/afrimash/products/');
+      })
+      .catch((error) => console.error(error));
+  };
 
   const columns = [
     {
@@ -25,7 +50,7 @@ const Products = () => {
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
-          let product = products[dataIndex]
+          let product = products[dataIndex];
           return (
             <div className='flex items-center'>
               <Link
@@ -40,7 +65,7 @@ const Products = () => {
                 <span className='my-0 text-15'>{product?.name}</span>
               </Link>
             </div>
-          )
+          );
         },
       },
     },
@@ -50,14 +75,14 @@ const Products = () => {
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
-          let product = products[dataIndex]
+          let product = products[dataIndex];
           return (
             <div className='flex items-center'>
               <div className='ml-3'>
                 <span className='my-0 text-15'> {product?.sku || '-----'}</span>
               </div>
             </div>
-          )
+          );
         },
       },
     },
@@ -67,7 +92,7 @@ const Products = () => {
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
-          let product = products[dataIndex]
+          let product = products[dataIndex];
           return (
             <div className='flex items-center'>
               <Link
@@ -85,7 +110,7 @@ const Products = () => {
                 </span>
               </Link>
             </div>
-          )
+          );
         },
       },
     },
@@ -95,15 +120,15 @@ const Products = () => {
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
-          let product = products[dataIndex]
-          let n = product.productCategories.map((name) => name.name)
+          let product = products[dataIndex];
+          let n = product.productCategories.map((name) => name.name);
           return (
             <div className='flex items-center'>
               <div className='ml-3'>
                 <span className='my-0 text-15'>{product && n.join(',')}</span>
               </div>
             </div>
-          )
+          );
         },
       },
     },
@@ -113,8 +138,8 @@ const Products = () => {
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
-          let product = products[dataIndex]
-          let n = product.tags.map((name) => name.name)
+          let product = products[dataIndex];
+          let n = product.tags.map((name) => name.name);
           return (
             <div className='flex items-center'>
               <div className='ml-4'>
@@ -123,7 +148,7 @@ const Products = () => {
                 </span>
               </div>
             </div>
-          )
+          );
         },
       },
     },
@@ -133,7 +158,7 @@ const Products = () => {
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
-          let product = products[dataIndex]
+          let product = products[dataIndex];
           return (
             <div className='flex items-center'>
               <Link
@@ -148,7 +173,7 @@ const Products = () => {
                 <span className='my-0 text-15'>{product.brandId?.name}</span>
               </Link>
             </div>
-          )
+          );
         },
       },
     },
@@ -158,7 +183,7 @@ const Products = () => {
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
-          let product = products[dataIndex]
+          let product = products[dataIndex];
           return (
             <div className='flex items-center'>
               <Link
@@ -175,33 +200,7 @@ const Products = () => {
                 </span>
               </Link>
             </div>
-          )
-        },
-      },
-    },
-    {
-      name: 'sku',
-      label: 'Sku',
-      options: {
-        innerWidth: '30px',
-        filter: true,
-        customBodyRenderLite: (dataIndex) => {
-          let product = products[dataIndex]
-          return (
-            <div className='flex items-center'>
-              <Link
-                to={{
-                  pathname: '/product/details',
-                  state: {
-                    id: product.id,
-                  },
-                }}
-                className='ml-4'
-              >
-                <span className='my-0 text-15'>{product.sku || '-----'}</span>
-              </Link>
-            </div>
-          )
+          );
         },
       },
     },
@@ -211,7 +210,25 @@ const Products = () => {
       options: {
         filter: false,
         customBodyRenderLite: (dataIndex) => {
-          let product = products[dataIndex]
+          let product = products[dataIndex];
+          return (
+            <Button
+              onClick={() => handleFeaturedOnUSSD(product)}
+              variant='text'
+            >
+              {product.isFeaturedOnUssd ? 'Remove from USSD' : 'Add to USSD'}
+            </Button>
+          );
+        },
+      },
+    },
+    {
+      name: 'action',
+      label: ' ',
+      options: {
+        filter: false,
+        customBodyRenderLite: (dataIndex) => {
+          let product = products[dataIndex];
           return (
             <div className='flex items-center'>
               <div className='flex-grow'></div>
@@ -229,7 +246,7 @@ const Products = () => {
                 </IconButton>
               </Link>
             </div>
-          )
+          );
         },
       },
     },
@@ -239,7 +256,7 @@ const Products = () => {
       options: {
         filter: false,
         customBodyRenderLite: (dataIndex) => {
-          let product = products[dataIndex]
+          let product = products[dataIndex];
           return (
             <Link
               to={{
@@ -254,11 +271,11 @@ const Products = () => {
                 {/* <h5 className='my-0 text-15'>{`${user?.id}`}</h5> */}
               </div>
             </Link>
-          )
+          );
         },
       },
     },
-  ]
+  ];
 
   return (
     <div className='m-sm-30'>
@@ -270,80 +287,82 @@ const Products = () => {
           {loading ? (
             <Loading />
           ) : (
-            <MUIDataTable
-              title={'All Products'}
-              data={products}
-              columns={columns}
-              options={{
-                onRowsDelete: (data) =>
-                  dialog
-                    .confirm('Are you sure you want to delete?')
-                    .then((value) => deleteProduct(data.data))
-                    .catch(() => {
-                      return false
-                    }),
-                sort: true,
-                filter: true,
-                sortOrder: { name: 'id', direction: 'desc' },
-                filterType: 'textField',
-                responsive: 'standard',
-                elevation: 0,
-                rowsPerPageOptions: [10, 20, 40, 80, 100],
-                customSearchRender: (
-                  searchText,
-                  handleSearch,
-                  hideSearch,
-                  options
-                ) => {
-                  return (
-                    <Grow appear in={true} timeout={300}>
-                      <TextField
-                        variant='outlined'
-                        size='small'
-                        fullWidth
-                        onChange={({ target: { value } }) =>
-                          handleSearch(value)
-                        }
-                        InputProps={{
-                          style: {
-                            paddingRight: 0,
-                          },
-                          startAdornment: (
-                            <Icon className='mr-2' fontSize='small'>
-                              search
-                            </Icon>
-                          ),
-                          endAdornment: (
-                            <IconButton onClick={hideSearch}>
-                              <Icon fontSize='small'>clear</Icon>
-                            </IconButton>
-                          ),
+            <div>
+              <MUIDataTable
+                title={'All Products'}
+                data={products}
+                columns={columns}
+                options={{
+                  onRowsDelete: (data) =>
+                    dialog
+                      .confirm('Are you sure you want to delete?')
+                      .then((value) => deleteProduct(data.data))
+                      .catch(() => {
+                        return false;
+                      }),
+                  sort: true,
+                  filter: true,
+                  sortOrder: { name: 'id', direction: 'desc' },
+                  filterType: 'textField',
+                  responsive: 'standard',
+                  elevation: 0,
+                  rowsPerPageOptions: [10, 20, 40, 80, 100],
+                  customSearchRender: (
+                    searchText,
+                    handleSearch,
+                    hideSearch,
+                    options,
+                  ) => {
+                    return (
+                      <Grow appear in={true} timeout={300}>
+                        <TextField
+                          variant='outlined'
+                          size='small'
+                          fullWidth
+                          onChange={({ target: { value } }) =>
+                            handleSearch(value)
+                          }
+                          InputProps={{
+                            style: {
+                              paddingRight: 0,
+                            },
+                            startAdornment: (
+                              <Icon className='mr-2' fontSize='small'>
+                                search
+                              </Icon>
+                            ),
+                            endAdornment: (
+                              <IconButton onClick={hideSearch}>
+                                <Icon fontSize='small'>clear</Icon>
+                              </IconButton>
+                            ),
+                          }}
+                        />
+                      </Grow>
+                    );
+                  },
+                  customToolbar: () => {
+                    return (
+                      <Link
+                        to={{
+                          pathname: '/product/new',
+                          state: {},
                         }}
-                      />
-                    </Grow>
-                  )
-                },
-                customToolbar: () => {
-                  return (
-                    <Link
-                      to={{
-                        pathname: '/product/new',
-                        state: {},
-                      }}
-                    >
-                      <Button variant='contained' color='primary'>
-                        Add New
-                      </Button>
-                    </Link>
-                  )
-                },
-              }}
-            />
+                      >
+                        <Button variant='contained' color='primary'>
+                          Add New
+                        </Button>
+                      </Link>
+                    );
+                  },
+                }}
+              />
+            </div>
           )}
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Products
+export default Products;

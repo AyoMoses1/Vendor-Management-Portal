@@ -67,7 +67,7 @@ const Agents = () => {
    dispatch(getAllAgents({ page: 0, size: parseInt(value, 10) }));
   };
 
-  const dialog = useDialog();
+
 
   const dispatch = useDispatch();
 

@@ -27,6 +27,7 @@ import sellerRoutes from './views/sellers/SellerRoutes'
 import agentsRoutes from './views/agent/AgentRoutes'
 import settingsRoutes from './views/user-settings/settings-route'
 import shippingRoutes from './views/shipping/shipping-routes'
+import ussdRoutes from './views/ussd-management/ussd-routes'
 
 const redirectRoute = [
   {
@@ -69,7 +70,9 @@ const routes = [
   ...mapRoutes,
   ...mainRoute,
   ...redirectRoute,
+  ...ussdRoutes,
   ...errorRoute,
+
 ]
 
 export default routes

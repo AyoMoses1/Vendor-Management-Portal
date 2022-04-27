@@ -46,7 +46,6 @@ export const TRANSFER_CUSTOMERS_FAILED = "TRANSFER_CUSTOMERS_FAILED";
 export const getAllAgents = ({search = '', size = '', page = ''}) => dispatch => {
   dispatch({ type: GET_AGENT_REQUEST })
   http.get(`/afrimash/agents/?search=${search}&size=${size}&page=${page}`).then(({ data }) => {
-    console.log("*****IMPOT*****", data );
     dispatch({
       type: GET_ALL_AGENTS_SUCCESS,
       payload: data.object,
