@@ -44,7 +44,7 @@ const AgentsInfo = ({ location, match }) => {
   const { agentDetails, error, loading, severity } = agentDetail
   const { agentCustomers } = agentCustomerList
   const { agentOrders, count } = agentOrder
-  console.log({id});
+
   useEffect(() => {
     setTimeout(() => {
       dispatch(getAgentById(id))
