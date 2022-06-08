@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { TextField, Button, Grid } from '@material-ui/core'
 import http from '../../../services/api'
 
@@ -11,6 +11,7 @@ import { errorState } from '../../helpers/error-state'
 import { useDispatch, useSelector } from 'react-redux'
 import { addShippingGroup, CREATE_GROUP_RESET } from 'app/redux/actions/shippingActions'
 import { useHistory } from 'react-router-dom/cjs/react-router-dom'
+import Autocomplete from '@material-ui/lab/Autocomplete';
 
 const initialValues = {
   name: '',
@@ -18,18 +19,34 @@ const initialValues = {
 }
 const CreateShippingOptionGroup = () => {
   const dispatch = useDispatch()
-
+  const [shippinZones, setShippingZones] = React.useState([])
   const shipping = useSelector((state) => state.shipping)
   const {loading, shipping: shippingCreate, error} = shipping
-  console.log(shippingCreate)
+  const history = useHistory();
+  const [state, setState] = useState({shippingZone: null});
 
 
-
-  const history = useHistory()
+  const handleSelect = (newValue, fieldName) => {
+    const { id } = newValue;
+    setState({ ...state, [fieldName]: id });
+  };
 
   const handleSubmit = (values) => {
-      dispatch(addShippingGroup(values))
+    values.shippingZone = state?.shippingZone;
+
+    console.log(values);
+    dispatch(addShippingGroup(values));
   }
+
+  const getAllShippingZones = () => {
+    http.get('/afrimash/shipping-zone').then((res) => {
+      setShippingZones(res?.data.object)
+    })
+  }
+
+  useEffect(() => {
+    getAllShippingZones()
+  }, [])
 
 useEffect(() => {
 if(shippingCreate) {
@@ -95,6 +112,24 @@ if(shippingCreate) {
                   value={values?.description}
                   error={Boolean(touched.description && errors.description)}
                   helperText={touched.description && errors.description}
+                />
+                 <Autocomplete
+                  id='shippingZone'
+                  name='shippingZone'
+                  options={shippinZones}
+                  getOptionLabel={(option) => option.name}
+                  getOptionSelected={(option, value) => option.id === value.id}
+                  onChange={(event, newValue) =>
+                    handleSelect(newValue, 'shippingZone')
+                  }
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label='Select Shipping Zone'
+                      variant='outlined'
+                      margin='normal'
+                    />
+                  )}
                 />
               </Grid>
               
