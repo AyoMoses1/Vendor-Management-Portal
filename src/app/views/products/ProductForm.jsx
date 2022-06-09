@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   TextField,
   Button,
@@ -6,27 +6,28 @@ import {
   Grid,
   Checkbox,
   Icon,
-} from '@material-ui/core'
+} from '@material-ui/core';
 import {
   getProductById,
   createProduct,
   updateProduct,
   getData,
   getBrands,
-} from './ProductService'
-import { useDropzone } from 'react-dropzone'
-import clsx from 'clsx'
-import { Formik } from 'formik'
-import * as yup from 'yup'
-import { makeStyles } from '@material-ui/core/styles'
-import { useHistory } from 'react-router-dom'
-import Notification from '../../components/Notification'
-import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank'
-import CheckBoxIcon from '@material-ui/icons/CheckBox'
-import Autocomplete from '@material-ui/lab/Autocomplete'
+} from './ProductService';
+import { useDropzone } from 'react-dropzone';
+import clsx from 'clsx';
+import { Formik } from 'formik';
+import * as yup from 'yup';
+import { makeStyles } from '@material-ui/core/styles';
+import { useHistory } from 'react-router-dom';
+import Notification from '../../components/Notification';
+import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@material-ui/icons/CheckBox';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import http from '../../services/api';
 
-const icon = <CheckBoxOutlineBlankIcon fontSize='small' />
-const checkedIcon = <CheckBoxIcon fontSize='small' />
+const icon = <CheckBoxOutlineBlankIcon fontSize='small' />;
+const checkedIcon = <CheckBoxIcon fontSize='small' />;
 
 const usestyles = makeStyles(({ palette, ...theme }) => ({
   dropZone: {
@@ -50,9 +51,9 @@ const usestyles = makeStyles(({ palette, ...theme }) => ({
     boxSizing: 'inherit',
     marginTop: '2px',
   },
-}))
+}));
 
-const productTypes = ['EXTERNAL', 'GROUPED', 'SIMPLE', 'VARIANT']
+const productTypes = ['EXTERNAL', 'GROUPED', 'SIMPLE', 'VARIANT'];
 
 function NewProduct({ isNewProduct, id, Product }) {
   const initialState = {
@@ -60,7 +61,8 @@ function NewProduct({ isNewProduct, id, Product }) {
     rating: null,
     translatedName: null,
     productCode: null,
-  }
+    shippingClass: null
+  };
   const initialValues = {
     productType: '',
     discountRate: '',
@@ -70,21 +72,36 @@ function NewProduct({ isNewProduct, id, Product }) {
     sku: '',
     name: '',
     description: '',
-  }
+  };
 
-  const history = useHistory()
+  const history = useHistory();
 
-  const classes = usestyles()
-  const [state, setState] = useState(initialState)
-  const [values, setValues] = useState(initialValues)
-  const [brands, setBrands] = useState([])
-  const [tags, setTags] = useState([])
-  const [stores, setStores] = useState([])
-  const [categories, setCategories] = useState([])
-  const [imageList, setImageList] = useState([])
-  const [alert, setAlert] = useState('')
-  const [severity, setSeverity] = useState('')
+  const classes = usestyles();
+  const [state, setState] = useState(initialState);
+  const [values, setValues] = useState(initialValues);
+  const [brands, setBrands] = useState([]);
+  const [tags, setTags] = useState([]);
+  const [stores, setStores] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [imageList, setImageList] = useState([]);
+  const [alert, setAlert] = useState('');
+  const [severity, setSeverity] = useState('');
+  const [shippinClasses, setShippingClasses] = React.useState([]);
+  const [loading, setLoading] = useState(false);
+
   // const [product, setProduct] = useState(Product);
+
+  const getAllShippingClasses = () => {
+    setLoading(true);
+    http.get('/afrimash/shipping-class').then((res) => {
+      setShippingClasses(res?.data.object);
+      setLoading(false);
+    });
+  };
+
+  useEffect(() => {
+    getAllShippingClasses();
+  }, []);
 
   const urls = [
     {
@@ -103,12 +120,12 @@ function NewProduct({ isNewProduct, id, Product }) {
       url: `/afrimash/tags/`,
       set: setTags,
     },
-  ]
+  ];
 
-  const onDrop = useCallback((acceptedFiles) => {}, [])
+  const onDrop = useCallback((acceptedFiles) => {}, []);
 
   const { getRootProps, getInputProps, isDragActive, acceptedFiles } =
-    useDropzone({ accept: 'image/*', onDrop })
+    useDropzone({ accept: 'image/*', onDrop });
 
   /**
    * maps through a list of urls and callbacks
@@ -116,30 +133,30 @@ function NewProduct({ isNewProduct, id, Product }) {
    * @set the data returned to state variables
    */
   const getRessult = () => {
-    urls.map((val) => getData(val.url, val.set, setAlert, setSeverity))
-  }
+    urls.map((val) => getData(val.url, val.set, setAlert, setSeverity));
+  };
 
   useEffect(() => {
-    getBrands(setAlert, setSeverity, setBrands)
-    getRessult()
-    setImageList(acceptedFiles)
+    getBrands(setAlert, setSeverity, setBrands);
+    getRessult();
+    setImageList(acceptedFiles);
     if (!isNewProduct) {
       getProductById(id).then(({ data }) => {
-        setState(data.object)
-        setValues(data.object)
-      })
+        setState(data.object);
+        setValues(data.object);
+      });
     }
-  }, [acceptedFiles, id, isNewProduct])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [acceptedFiles, id, isNewProduct]);
 
   const handleSelect = (newValue, fieldName) => {
-    const { id } = newValue
-    setState({ ...state, [fieldName]: id })
-    console.log(state)
-  }
+    const { id } = newValue;
+    setState({ ...state, [fieldName]: id });
+  };
 
   const handleSubmit = (values, { setSubmitting }) => {
-    const payload = { ...state, ...values }
-    const data = new FormData()
+    const payload = { ...state, ...values };
+    const data = new FormData();
     const updateData = {
       id: state.id,
       name: values?.name || state.name,
@@ -152,27 +169,30 @@ function NewProduct({ isNewProduct, id, Product }) {
       rating: state.rating,
       price: values?.price || state.price,
       discountRate: values?.discountRate || state.discountRate,
-    }
-    data.append('product', JSON.stringify(payload))
+      shippingClass: state.shippingClass
+    };
+    data.append('product', JSON.stringify(payload));
 
     imageList.forEach((file, imageFile) => {
-      data.append('imageFile', file)
-    })
+      data.append('imageFile', file);
+    });
     if (!isNewProduct) {
       updateProduct(updateData)
         .then((res) => {
-          if (res.status === 200) history.push('/products')
-          else return
+          if (res.status === 200) history.push('/products');
+          else return;
         })
-        .catch((err) => console.error(err))
-    }
-    createProduct(data)
+        .catch((err) => console.error(err));
+    }else {
+      createProduct(data)
       .then((res) => {
-        if (res.status === 200) history.push('/products')
-        else return
+        if (res.status === 200) history.push('/products');
+        else return;
       })
-      .then((err) => console.error(err))
-  }
+      .then((err) => console.error(err));
+    }
+   
+  };
 
   return (
     <div className='m-sm-30'>
@@ -189,9 +209,6 @@ function NewProduct({ isNewProduct, id, Product }) {
           touched,
           handleChange,
           handleBlur,
-          handleSubmit,
-          isSubmitting,
-          setSubmitting,
           setFieldValue,
         }) => (
           <form className='px-4' onSubmit={handleSubmit}>
@@ -335,6 +352,26 @@ function NewProduct({ isNewProduct, id, Product }) {
                     />
                   )}
                 />
+
+                <Autocomplete
+                  id='shippingClass'
+                  name='shippingClass'
+                  options={shippinClasses}
+                  getOptionLabel={(option) => option.name}
+                  getOptionSelected={(option, value) => option.id === value.id}
+                  onChange={(event, newValue) =>
+                    handleSelect(newValue, 'shippingClass')
+                  }
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label='Select Shipping Class'
+                      variant='outlined'
+                      margin='normal'
+                    />
+                  )}
+                />
+
                 <Autocomplete
                   multiple
                   id='tags'
@@ -342,7 +379,7 @@ function NewProduct({ isNewProduct, id, Product }) {
                   getOptionLabel={(option) => option.name}
                   getOptionSelected={(option, value) => option.id === value.id}
                   onChange={(event, newValue) => {
-                    setState({ ...state, tags: newValue })
+                    setState({ ...state, tags: newValue });
                   }}
                   renderOption={(option, { selected }) => (
                     <React.Fragment>
@@ -389,7 +426,7 @@ function NewProduct({ isNewProduct, id, Product }) {
                   id='categoried'
                   options={categories}
                   onChange={(event, newValue) => {
-                    setState({ ...state, productCategories: newValue })
+                    setState({ ...state, productCategories: newValue });
                   }}
                   getOptionLabel={(option) => option.name}
                   getOptionSelected={(option, value) => option.id === value.id}
@@ -429,7 +466,7 @@ function NewProduct({ isNewProduct, id, Product }) {
         )}
       </Formik>
     </div>
-  )
+  );
 }
 
 const productSchema = yup.object().shape({
@@ -439,6 +476,6 @@ const productSchema = yup.object().shape({
     .string()
     .min(10)
     .required('Please enter a description of atleast 10 chars long'),
-})
+});
 
-export default NewProduct
+export default NewProduct;
