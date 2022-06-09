@@ -146,6 +146,7 @@ function NewProduct({ isNewProduct, id, Product }) {
         setValues(data.object);
       });
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [acceptedFiles, id, isNewProduct]);
 
   const handleSelect = (newValue, fieldName) => {
@@ -208,9 +209,6 @@ function NewProduct({ isNewProduct, id, Product }) {
           touched,
           handleChange,
           handleBlur,
-          handleSubmit,
-          isSubmitting,
-          setSubmitting,
           setFieldValue,
         }) => (
           <form className='px-4' onSubmit={handleSubmit}>
