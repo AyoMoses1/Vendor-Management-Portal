@@ -16,6 +16,8 @@ const GetAllShippingClass = () => {
 const shippingOptionGroupList = useSelector((state) => state.shippingOptionGroupList)
 const {loading, shipping, error} = shippingOptionGroupList
 
+console.log({shipping})
+
 
   const history = useHistory()
 
