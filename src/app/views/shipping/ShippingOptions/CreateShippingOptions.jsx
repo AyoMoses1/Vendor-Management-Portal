@@ -32,6 +32,7 @@ const initialValues = {
   description: '',
   width: '',
   length: '',
+  calculationUnit: '',
 };
 const initialState = {
   shippingClass: '',
@@ -47,12 +48,7 @@ const initialState = {
 const CreateShippingOption = ({ location }) => {
   const history = useHistory();
   const { id } = location?.state;
-  const calculationUnit = [
-    'SHIPPING_CLASS',
-    'DIMENSION',
-    'VOLUME',
-    'WEIGHT',
-  ];
+  const calculationUnit = ['SHIPPING_CLASS', 'DIMENSION', 'VOLUME', 'WEIGHT'];
   const methodCondition = ['GREATER_THAN', 'LESS_THAN', 'EQUAL_TO'];
   const dimensionUnit = ['ML', 'CM', 'G', 'ITEM_QTY'];
   const [shippingOption, setShippingOptionDetails] =
@@ -166,7 +162,20 @@ const CreateShippingOption = ({ location }) => {
   const getShippingOptionDetails = (optionId) => {
     setLoading(true);
     http.get(`/afrimash/shipping-option/${optionId}`).then((res) => {
-      setShippingOptionDetails(res?.data.object);
+      const data = res?.data.object;
+      setShippingOptionDetails(data);
+      const initValues = {
+        shippingClass: data?.shippingClass?.name,
+        shippingZone: data?.shippingZone?.name,
+        methodCondition: data?.methodCondition,
+        dimensionUnit: data?.dimensionUnit,
+        calculationUnit: data?.calculationUnit,
+        description: '',
+        width: '',
+        length: '',
+      };
+
+      setState(initValues)
       setLoading(false);
     });
   };
@@ -180,6 +189,8 @@ const CreateShippingOption = ({ location }) => {
       getShippingOptionDetails(id);
     }
   }, []);
+
+  console.log({ state });
 
   return (
     <div className='m-sm-30'>

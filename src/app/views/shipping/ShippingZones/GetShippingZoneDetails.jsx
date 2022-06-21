@@ -17,6 +17,7 @@ import { SimpleCard, Breadcrumb } from 'matx'
 
 import Loading from 'matx/components/MatxLoadable/Loading'
 import StatesModal from './AddStateModal'
+import ShippingOptionByZone from './ShippingOptionByZone';
 
 const ShippingZoneDetails = ({ location, match }) => {
   const [loading, setLoading] = React.useState(false)
@@ -24,6 +25,9 @@ const ShippingZoneDetails = ({ location, match }) => {
   const [open, setOpen] = React.useState(false)
 
   const { id } = location.state
+
+  console.log({id})
+
   const getShippingZoneDetails = (zoneId) => {
     setLoading(true)
     http.get(`/afrimash/shipping-zone/${zoneId}`).then((res) => {
@@ -38,7 +42,9 @@ const ShippingZoneDetails = ({ location, match }) => {
   }
 
   useEffect(() => {
-    getShippingZoneDetails(id)
+    if(id){
+      getShippingZoneDetails(id)
+    }
   }, [id])
 
   const columns = [
@@ -112,6 +118,10 @@ const ShippingZoneDetails = ({ location, match }) => {
               </TableBody>
             </Table>
           </SimpleCard>
+          <Divider />
+          <Box mt={5}>
+                <ShippingOptionByZone id={id}/>
+          </Box>
           <Divider />
           <Box mt={5}>
             <SimpleCard>
