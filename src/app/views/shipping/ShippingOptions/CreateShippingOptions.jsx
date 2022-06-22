@@ -32,7 +32,7 @@ const initialValues = {
   description: '',
   width: '',
   length: '',
-  calculationUnit: '',
+/*   calculationUnit: '', */
 };
 const initialState = {
   shippingClass: '',
@@ -78,6 +78,7 @@ const CreateShippingOption = ({ location }) => {
   // console.log(shippingGroup)
 
   const handleSubmit = async (values, { setSubmitting }) => {
+    console.log({values, state});
     const payload = { ...state, ...values };
     if (shipping) {
       delete payload.criteriaValue;
@@ -90,7 +91,6 @@ const CreateShippingOption = ({ location }) => {
       delete payload.length;
     }
 
-    console.log({ payload });
     setLoading(true);
     if (id) {
       setLoading(false);
