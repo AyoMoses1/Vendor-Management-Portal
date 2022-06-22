@@ -119,9 +119,9 @@ const ShippingZoneDetails = ({ location, match }) => {
             </Table>
           </SimpleCard>
           <Divider />
-          <Box mt={5}>
+        {/*   <Box mt={5}>
                 <ShippingOptionByZone id={id}/>
-          </Box>
+          </Box> */}
           <Divider />
           <Box mt={5}>
             <SimpleCard>
