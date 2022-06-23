@@ -47,8 +47,8 @@ steps:
   - name: docker
     path: /var/run/docker.sock
   when:
-    branch:
-    - develop
+    branch: develop
+    event: [ push, tag, pull_request ]
 
 - name: deploy_prod
   image: docker
@@ -68,8 +68,8 @@ steps:
   - name: docker
     path: /var/run/docker.sock
   when:
-    branch:
-    - main
+    branch: main
+    event: [ push, tag, pull_request ]
 
 
 volumes:
