@@ -1,6 +1,6 @@
 import Axios from "axios"
 export default new (class Http {
-  API_URL = "https://api.afrimash.com" /*  "https://test-api.afrimash.com" */
+  API_URL = /* "https://api.afrimash.com" */  "https://test-api.afrimash.com"
   AxiosSetup = () => {
     const token = localStorage.getItem("jwt_token")
     const axiosInstance = Axios.create({
