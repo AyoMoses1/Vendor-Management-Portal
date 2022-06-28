@@ -37,7 +37,7 @@ steps:
     - docker stop afrimashadmin_test || true 
     - sleep 10s
     - docker rm afrimashadmin_test || true
-    - docker run --rm -d -p 3030:3000 -e "REACT_APP_SKIP_PREFLIGHT_CHECK=true" -e "CHOKIDAR_USEPOLLING=true" --name afrimashadmin_test akinoyedotun/afrimashadmin
+    - docker run --rm -d -p 3030:3000 -e "REACT_APP_SKIP_PREFLIGHT_CHECK=true" -e "REACT_APP_BASE_URL_TEST=https://test-api.afrimash.com" -e "CHOKIDAR_USEPOLLING=true" --name afrimashadmin_test akinoyedotun/afrimashadmin
   environment:
     USERNAME:
       from_secret: docker_username
@@ -58,7 +58,7 @@ steps:
     - docker stop afrimashadmin || true 
     - sleep 10s
     - docker rm afrimashadmin || true
-    - docker run --rm -d -p 3040:3000 -e "REACT_APP_SKIP_PREFLIGHT_CHECK=true" -e "CHOKIDAR_USEPOLLING=true" --name afrimashadmin akinoyedotun/afrimashadmin
+    - docker run --rm -d -p 3040:3000 -e "REACT_APP_SKIP_PREFLIGHT_CHECK=true" -e "REACT_APP_BASE_URL_LIVE=https://api.afrimash.com" -e "CHOKIDAR_USEPOLLING=true" --name afrimashadmin akinoyedotun/afrimashadmin
   environment:
     USERNAME:
       from_secret: docker_username

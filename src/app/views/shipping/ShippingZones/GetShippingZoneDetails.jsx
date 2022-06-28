@@ -127,7 +127,7 @@ const ShippingZoneDetails = ({ location, match }) => {
             <SimpleCard>
               <MUIDataTable
                 title={'Zone States'}
-                data={shippingZone?.stateList}
+                data={shippingZone?.stateList ?? []} 
                 columns={columns}
                 options={{
                   filterType: 'textField',
