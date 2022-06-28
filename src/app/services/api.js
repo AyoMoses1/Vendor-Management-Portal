@@ -1,6 +1,6 @@
 import Axios from "axios"
 export default new (class Http {
-  API_URL = process.env.REACT_APP_BASE_URL_TEST
+  API_URL = process.env.REACT_APP_BASE_URL
   AxiosSetup = () => {
     const token = localStorage.getItem("jwt_token")
     const axiosInstance = Axios.create({
