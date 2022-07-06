@@ -7,9 +7,9 @@ export const getCustomerById = (id) => {
     .get(`/afrimash/customers/${id}`)
 }
 
-export const getAllCustomer = (setData, isLoading, setAlert, setSeverity) => {
+export const getAllCustomer = (setData, isLoading, setAlert, setSeverity, source) => {
   isLoading(true)
-   http.get('/afrimash/customers/').then(({data}) => {
+   http.get(`/afrimash/customers?source=${source}`).then(({data}) => {
     if (data instanceof Object) {
       setData(data.object)
       isLoading(false)
