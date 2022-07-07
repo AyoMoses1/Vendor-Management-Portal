@@ -98,7 +98,7 @@ function BulkCreate({
                             margin='normal'
                             required
                             inputProps={{
-                                accept: ".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                                accept: ".csv"
                             }}
                             aria-required='true'
                             onChange={fileUploadHandler}
