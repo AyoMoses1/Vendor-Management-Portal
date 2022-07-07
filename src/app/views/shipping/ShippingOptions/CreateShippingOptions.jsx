@@ -76,7 +76,6 @@ const CreateShippingOption = ({ location }) => {
   // console.log(shippingGroup)
 
   const handleSubmit = async (values, { setSubmitting }) => {
-    console.log({values, state});
     const payload = { ...state, ...values };
     if (shipping) {
       delete payload.criteriaValue;
@@ -188,7 +187,7 @@ const CreateShippingOption = ({ location }) => {
     }
   }, []);
 
-  console.log({ state });
+
 
   return (
     <div className='m-sm-30'>
@@ -385,7 +384,7 @@ const CreateShippingOption = ({ location }) => {
                   onChange={handleChange}
                   value={values.additionalCost}
                 />
-                {values.additionalCost > 1 && (
+                {values.additionalCost !== '' && !isNaN(parseInt(values.additionalCost)) && (
                   <TextField
                     className='mb-4'
                     name='additionalCostOnEvery'
@@ -407,7 +406,7 @@ const CreateShippingOption = ({ location }) => {
                   />
                 )}
 
-                {values.additionalCost > 1 && (
+                {values.additionalCost !== '' && !isNaN(parseInt(values.additionalCost)) && (
                   <TextField
                     className='mb-4'
                     name='dimensionUnit'
