@@ -34,7 +34,7 @@ function UserForm({ isNewUser, id, User }) {
     phoneNo: '',
     active: false,
     role: 3,
-    password: 'password',
+    // password: 'password',
     username: '',
   }
   const classes = useStyles()
