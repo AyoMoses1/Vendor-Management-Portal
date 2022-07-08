@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-function BulkCreate({
+function BulkUpload({
     name,
     isOpen,
     handleClose,
@@ -133,4 +133,4 @@ function BulkCreate({
     )
 }
 
-export default BulkCreate;
+export default BulkUpload;

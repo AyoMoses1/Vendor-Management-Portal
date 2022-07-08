@@ -136,7 +136,7 @@ const Agents = () => {
               className='flex items-center'
             >
               <div className='ml-3'>
-                <h5 className='my-0 text-15'>{`${user?.firstName} ${user?.lastName}`}</h5>
+                <h5 className='my-0 text-1'>{`${user?.firstName} ${user?.lastName}`}</h5>
               </div>
             </Link>
           );

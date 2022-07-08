@@ -10,7 +10,7 @@ import Loading from 'matx/components/MatxLoadable/Loading'
 import Notification from '../../components/Notification'
 import { errorState } from '../helpers/error-state'
 import { states } from '../../../utils/states'
-import BulkCreate from './BulkCreate'
+import BulkUpload from './BulkUpload'
 
 function NewCustomer({ isNewCustomer, id, Customer }) {
   const initialValues = {
@@ -119,10 +119,10 @@ function NewCustomer({ isNewCustomer, id, Customer }) {
               onClick={() => {
                 handleModal()
               }}>
-              Bulk Create
+              Bulk Upload
             </Button>
           </div>
-          <BulkCreate
+          <BulkUpload
             name={"Create Multiple Customers"}
             isOpen={open}
             handleClose={handleModal} />
