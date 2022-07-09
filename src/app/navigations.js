@@ -119,6 +119,11 @@ export const navigations = [
         path: '/doc-pickup-centers',
         iconText: '',
       },
+      {
+        name: 'USSD Special Orders',
+        path: '/ussd-special-orders',
+        iconText: '',
+      },
 
     ],
   },
