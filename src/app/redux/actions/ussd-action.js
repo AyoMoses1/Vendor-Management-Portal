@@ -29,6 +29,10 @@ export const SHIPPING_STATES = 'SHIPPING_STATES';
 export const SHIPPING_STATES_SUCCESS = 'SHIPPING_STATES_SUCCESS';
 export const SHIPPING_STATES_FAILED = 'SHIPPING_STATES_FAILED';
 
+export const SPECIAL_ORDERS = 'SPECIAL_ORDERS';
+export const SPECIAL_ORDERS_SUCCESS = 'SPECIAL_ORDERS_SUCCESS';
+export const SPECIAL_ORDERS_FAILED = 'SPECIAL_ORDERS_FAILED';
+
 export const getProductCategories = (payload) => (dispatch) => {
   dispatch({ type: USSD_PRODUCT_CATEGORIES });
   const params = getURLParams(payload.params);
@@ -133,5 +137,21 @@ export const getShippingStates = () => (dispatch) => {
     })
     .catch((err) => {
       dispatch({ type: SHIPPING_STATES_FAILED, payload: err });
+    });
+};
+
+export const getSpecialOrders = (payload) => (dispatch) => {
+  dispatch({ type: SPECIAL_ORDERS });
+  const params = getURLParams(payload.params);
+  http
+    .get(`${routes.specialOrders}/${params}`)
+    .then(({ data }) => {
+      dispatch({
+        type: SPECIAL_ORDERS_SUCCESS,
+        payload: data.object.content,
+      });
+    })
+    .catch((err) => {
+      dispatch({ type: SPECIAL_ORDERS_FAILED, payload: err });
     });
 };

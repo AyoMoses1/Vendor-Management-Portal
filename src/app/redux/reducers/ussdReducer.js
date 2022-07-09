@@ -17,6 +17,9 @@ import {
   SHIPPING_STATES,
   SHIPPING_STATES_SUCCESS,
   SHIPPING_STATES_FAILED,
+  SPECIAL_ORDERS,
+  SPECIAL_ORDERS_SUCCESS,
+  SPECIAL_ORDERS_FAILED,
 } from '../actions/ussd-action';
 
 export const updateUssdCatFeature = (state = { loading: false }, action) => {
@@ -162,6 +165,33 @@ export const getShippingStates = (
         shippingStates: action.payload,
       };
     case SHIPPING_STATES_FAILED:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload.toString(),
+      };
+    default:
+      return state;
+  }
+};
+
+export const getSpecialOrders = (
+  state = { loading: false, specialOrders: [], error: '' },
+  action,
+) => {
+  switch (action.type) {
+    case SPECIAL_ORDERS:
+      return {
+        ...state,
+        loading: true,
+      };
+    case SPECIAL_ORDERS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        specialOrders: action.payload,
+      };
+    case SPECIAL_ORDERS_FAILED:
       return {
         ...state,
         loading: false,

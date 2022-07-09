@@ -27,6 +27,7 @@ import {
   updateUssdProductFeature,
   getPickupCenters,
   getShippingStates,
+  getSpecialOrders,
 } from './ussdReducer'
 
 const RootReducer = combineReducers({
@@ -52,7 +53,8 @@ const RootReducer = combineReducers({
   getPickupCenters,
   getFeaturedUssdProducts,
   updateUssdProductFeature,
-  getShippingStates
+  getShippingStates,
+  getSpecialOrders,
 });
 
 export default RootReducer;

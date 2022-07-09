@@ -9,6 +9,7 @@ const routes = {
     ussdProducts: (catId) => `/afrimash/USSD/product-categories/${catId}/products`,
     ussdPickupCenters: '/afrimash/pickup-centers',
     shippingState: '/afrimash/shipping-states',
+    specialOrders: '/afrimash/special-orders/search',
 }
 
 export default routes;
