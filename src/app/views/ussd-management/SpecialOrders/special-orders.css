@@ -1,0 +1,73 @@
+.PENDING {
+    background-color: #ffc8a7;
+    color: #bf510f;
+  }
+  
+  .PROCESSING {
+    color: #197e19;
+    background-color: #c6e1c6;
+  }
+  
+  .COMPLETED {
+    color: #095aba;
+    background-color: #85bbfa;
+  }
+  
+  .DELIVERED {
+    background-color: #5589ed;
+    color: #ffffff;
+  }
+  
+  .ON_HOLD {
+    color: #926202;
+    background-color: #f8dda7;
+  }
+  
+  .DISPUTED {
+    color: #900404;
+    background-color: #f9b1b1;
+  }
+  
+  .AWAITING_PAYMENT {
+    color: #9f6a00;
+    background-color: #fff8d7;
+  }
+  
+  .AWAITING_FULFILMENT {
+    color: #076a70;
+    background-color: #d7fdff;
+  }
+  
+  .MANUAL_VERIFICATION_REQUIRED {
+    color: #1f4535;
+    background-color: #e3e3e3;
+  }
+  
+  .ORDER {
+    padding: 5px;
+    width: fit-content;
+    border-radius: 5px;
+    font-weight: 600 !important;
+  }
+  
+  .PAID {
+    color: #008a16;
+    font-weight: 800 !important;
+    background-color: #fcfcfc;
+  }
+  
+  .qty {
+    padding: 7px !important;
+    padding-top: 12px !important ;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .d-flex {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  

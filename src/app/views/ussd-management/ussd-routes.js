@@ -8,6 +8,10 @@ const USSDProduct = MatxLoadable({
     loader: () => import('./Products/index.js'),
 })
 
+const USSDSpecialOrders =  MatxLoadable({
+    loader: () => import('./SpecialOrders/index.js'),
+})
+
 const ussdRoutes = [
     {
         path: '/ussd-product-categories',
@@ -16,6 +20,10 @@ const ussdRoutes = [
     {
         path: '/ussd-products',
         component: USSDProduct
+    },
+    {
+        path: '/ussd-special-orders',
+        component: USSDSpecialOrders
     }
 ]
 
