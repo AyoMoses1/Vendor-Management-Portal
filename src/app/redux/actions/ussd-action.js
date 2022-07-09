@@ -21,6 +21,14 @@ export const USSD_FEATURE_PRODUCT = 'USSD_FEATURE_PRODUCT';
 export const USSD_FEATURE_PRODUCT_SUCCESS = 'USSD_FEATURE_PRODUCT_SUCCESS';
 export const USSD_FEATURE_PRODUCT_FAILED = 'USSD_FEATURE_PRODUCT_FAILED';
 
+export const USSD_PICKUP_CENTERS = 'USSD_PICKUP_CENTERS';
+export const USSD_PICKUP_CENTERS_SUCCESS = 'USSD_PICKUP_CENTERS_SUCCESS';
+export const USSD_PICKUP_CENTERS_FAILED = 'USSD_PICKUP_CENTERS_FAILED';
+
+export const SHIPPING_STATES = 'SHIPPING_STATES';
+export const SHIPPING_STATES_SUCCESS = 'SHIPPING_STATES_SUCCESS';
+export const SHIPPING_STATES_FAILED = 'SHIPPING_STATES_FAILED';
+
 export const getProductCategories = (payload) => (dispatch) => {
   dispatch({ type: USSD_PRODUCT_CATEGORIES });
   const params = getURLParams(payload.params);
@@ -79,4 +87,51 @@ export const updateProductFeature = (payload) => async (dispatch) => {
   } catch (err) {
     dispatch({ type: USSD_FEATURE_PRODUCT_FAILED, payload: err });
   }
+};
+
+export const getPickupCenters = (payload) => (dispatch) => {
+  dispatch({ type: USSD_PICKUP_CENTERS });
+  const params = getURLParams(payload.params);
+  http
+    .get(`${routes.ussdPickupCenters}/${params}`)
+    .then(({ data }) => {
+      dispatch({
+        type: USSD_PICKUP_CENTERS_SUCCESS,
+        payload: data.object,
+      });
+    })
+    .catch((err) => {
+      dispatch({ type: USSD_PICKUP_CENTERS_FAILED, payload: err });
+    });
+};
+
+export const getFilteredPickupCenters = (payload) => (dispatch) => {
+  dispatch({ type: USSD_PICKUP_CENTERS });
+  const params = getURLParams(payload.params);
+  http
+    .get(`${routes.ussdPickupCenters}/search${params}`)
+    .then(({ data }) => {
+      dispatch({
+        type: USSD_PICKUP_CENTERS_SUCCESS,
+        payload: data.object.content,
+      });
+    })
+    .catch((err) => {
+      dispatch({ type: USSD_PICKUP_CENTERS_FAILED, payload: err });
+    });
+};
+
+export const getShippingStates = () => (dispatch) => {
+  dispatch({ type: SHIPPING_STATES });
+  http
+    .get(`${routes.shippingState}`)
+    .then(({ data }) => {
+      dispatch({
+        type: SHIPPING_STATES_SUCCESS,
+        payload: data.object,
+      });
+    })
+    .catch((err) => {
+      dispatch({ type: SHIPPING_STATES_FAILED, payload: err });
+    });
 };

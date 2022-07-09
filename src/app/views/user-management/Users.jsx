@@ -20,7 +20,6 @@ const Users = () => {
 
   useEffect(() => {
     getAllUser(setUserList, isLoading, setAlert, setSeverity, setCount, page)
-    console.log(userList)
     return () => setIsAlive(false)
   }, [isAlive, page])
 

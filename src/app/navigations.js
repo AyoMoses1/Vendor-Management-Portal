@@ -114,7 +114,12 @@ export const navigations = [
         path: '/ussd-product-categories',
         iconText: '',
       },
-    
+      {
+        name: 'DOC Pickup Centers',
+        path: '/doc-pickup-centers',
+        iconText: '',
+      },
+
     ],
   },
   {

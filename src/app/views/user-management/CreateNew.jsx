@@ -49,7 +49,6 @@ function CreateNew({name, handleClose, isOpen, fields, onSubmit,states}) {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log(state)
     setState({ ...state, [name]: value });
   };
 

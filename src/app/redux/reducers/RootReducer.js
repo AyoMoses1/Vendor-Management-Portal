@@ -20,11 +20,13 @@ import {
   shippingGroupCreateReducer,
   shippingGroupListReducer,
 } from './ShippingReducer';
-import{
+import {
   updateUssdCatFeature,
   getFeaturedUssdCat,
   getFeaturedUssdProducts,
-  updateUssdProductFeature
+  updateUssdProductFeature,
+  getPickupCenters,
+  getShippingStates,
 } from './ussdReducer'
 
 const RootReducer = combineReducers({
@@ -47,8 +49,10 @@ const RootReducer = combineReducers({
   transferCustomerReducer,
   updateUssdCatFeature,
   getFeaturedUssdCat,
+  getPickupCenters,
   getFeaturedUssdProducts,
-  updateUssdProductFeature
+  updateUssdProductFeature,
+  getShippingStates
 });
 
 export default RootReducer;

@@ -7,7 +7,6 @@ import {
   IconButton,
   TextField,
   Button,
-  Menu,
   MenuItem,
   Box,
   FormControl,
@@ -23,13 +22,10 @@ import {
   deleteAgent,
   transferCustomer,
 } from 'app/redux/actions/agents-action';
-import { useDialog } from 'muibox';
 import './style.scss';
 import Loading from 'matx/components/MatxLoadable/Loading';
 import Notification from 'app/components/Notification';
-import { FiMoreVertical } from 'react-icons/fi';
 import Modal from '../../components/Modal';
-import CustomSnackBar from '../../components/Snackbar';
 
 const Agents = () => {
   const { agentList, total, error, severity, loading, pages, size } =

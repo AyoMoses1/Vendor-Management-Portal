@@ -53,7 +53,6 @@ const USSDProductsComponent = ({ location, match }) => {
       await featureProduct(product);
       dispatcher(getProducts({ catId: id, params: {} }));
     } catch (error) {
-      console.log(error);
     }
   };
   useEffect(() => {

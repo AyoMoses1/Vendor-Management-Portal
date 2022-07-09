@@ -49,7 +49,6 @@ function UserForm({ isNewUser, id, User }) {
     let tempState = { ...state, ...values }
     if (isNewUser)
       addUser(tempState).then((res) => {
-        console.log(res)
         if (res.status == 200) {
           setState({ ...state })
           history.push('/users')
@@ -66,7 +65,6 @@ function UserForm({ isNewUser, id, User }) {
     else
       updateUser(tempState)
         .then((response) => {
-          console.log(response)
           if (response.status == '200') {
             setState({ ...state })
             history.push('/users')
@@ -97,7 +95,6 @@ function UserForm({ isNewUser, id, User }) {
   const getRoles = () => {
     getAllRoles().then(({ data }) => {
       setRoles(data.object)
-      console.log(data)
     })
   }
 

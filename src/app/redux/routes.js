@@ -6,8 +6,9 @@ const routes = {
     ussdProductCategories: '/afrimash/USSD/product-categories/search',
     featureProductCategoriesUssd: '/afrimash/product-categories/feature-on-ussd',
     featureProductUssd: '/afrimash/products/feature-on-ussd',
-    ussdProducts: (catId) => `/afrimash/USSD/product-categories/${catId}/products`
-    
+    ussdProducts: (catId) => `/afrimash/USSD/product-categories/${catId}/products`,
+    ussdPickupCenters: '/afrimash/pickup-centers',
+    shippingState: '/afrimash/shipping-states',
 }
 
 export default routes;
