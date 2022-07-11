@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { SimpleCard } from 'matx'
-import SpecialOrderViewer from './SpecialOrderViewer'
+import SpecialOrderViewer from './SpecialOrderDetails'
 import SpecialOrderEditor from './SpecialOrderEditor'
 
 const SpecialOrder = ({ location }) => {
