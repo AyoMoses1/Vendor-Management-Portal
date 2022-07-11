@@ -62,7 +62,7 @@ const SpecialOrderViewer = ({ toggleOrderEditor, id }) => {
 
   const handlePrint = () => window.print()
 
-  const handleCheck = () =>{
+  const handleCheck = () => {
     console.log('Hello Napster')
   }
   let {
@@ -72,7 +72,7 @@ const SpecialOrderViewer = ({ toggleOrderEditor, id }) => {
     deliveryAddress,
     shippingMethod,
 
-    customerName, mobileNo,productName, description, quantity, location, specialOrderNo, expectedDeliveryDate, status
+    customerName, mobileNo, productName, description, quantity, location, specialOrderNo, expectedDeliveryDate, status
   } = state
 
   const handleModal = () => {
@@ -81,7 +81,7 @@ const SpecialOrderViewer = ({ toggleOrderEditor, id }) => {
 
   const refresh = async () => {
     getSpecialOrder();
-}
+  }
 
   return (
     <>
@@ -106,10 +106,10 @@ const SpecialOrderViewer = ({ toggleOrderEditor, id }) => {
                 color='primary'
               >
                 Check if product exists
-              </Button> 
+              </Button>
             </Link>
-           
-          
+
+
             {/* <Button
               className='mr-4 py-2'
               variant='contained'
@@ -119,15 +119,15 @@ const SpecialOrderViewer = ({ toggleOrderEditor, id }) => {
               Edit Order
             </Button> */}
             <Button
-                className='mr-4 py-2'
-                variant='contained'
-                color='primary'
-                onClick={() => {
-                    handleModal()
-                }}>
-                Edit Special Order
+              className='mr-4 py-2'
+              variant='contained'
+              color='primary'
+              onClick={() => {
+                handleModal()
+              }}>
+              Edit Special Order
             </Button>
-            
+
             <Button
               onClick={handlePrint}
               className='py-2'
@@ -153,23 +153,23 @@ const SpecialOrderViewer = ({ toggleOrderEditor, id }) => {
               <p className='mb-0'>Product Description: {description}</p>
               <p className='mb-0'>Product Quantity: {quantity}</p>
             </div>
-            
+
             <div className={`text-right`}>
               <h5 className='font-normal capitalize'>
-              <div>
-                <span className={`mb-4 ORDER ${status}`}>
-                  Special order status: {status}
-                </span>
-              </div>
-              <br/>
-              <h5 className='font-normal capitalize'>
-                <strong>Order date: </strong>
-                <span>
-                  {createDate
-                    ? format(new Date(createDate).getTime(), 'MMMM dd, yyyy')
-                    : 'Not set'}
-                </span>
-              </h5>
+                <div>
+                  <span className={`mb-4 ORDER ${status}`}>
+                    Special order status: {status}
+                  </span>
+                </div>
+                <br />
+                <h5 className='font-normal capitalize'>
+                  <strong>Order date: </strong>
+                  <span>
+                    {createDate
+                      ? format(new Date(createDate).getTime(), 'MMMM dd, yyyy')
+                      : 'Not set'}
+                  </span>
+                </h5>
                 <strong>Expected Delivery Date: </strong>
                 <span>
                   {expectedDeliveryDate
@@ -181,23 +181,23 @@ const SpecialOrderViewer = ({ toggleOrderEditor, id }) => {
           </div>
 
 
-            <Editor
-              name={"Edit Special Order"}
-              isOpen={open}
-              specialOrder={state}
-              handleClose={handleModal}
-              refresh={() => refresh()}
-            />  
+          <Editor
+            name={"Edit Special Order"}
+            isOpen={open}
+            specialOrder={state}
+            handleClose={handleModal}
+            refresh={() => refresh()}
+          />
 
           <Divider />
-          
+
           <div
             className={clsx(
               'viewer__billing-info px-4 py-5 flex justify-between',
               classes.viewerAction
             )}
           >
-            <div>
+            <div className='w-full'>
               <h5 className='mb-2'>Customer Details</h5>
               <p className='mb-4'>
                 {customerName
@@ -211,7 +211,7 @@ const SpecialOrderViewer = ({ toggleOrderEditor, id }) => {
                 {location ? location : null}
               </p>
             </div>
-            
+
             <div className='text-right w-full'>
               <h5 className='mb-2'>Shipping Details</h5>
               <p className='mb-4'>
