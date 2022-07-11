@@ -60,3 +60,33 @@ export const getPickupCenter = (id, isLoading, setAlert, setSeverity) => {
         }
     })
 }
+
+export const getSpecialOrder = (id, isLoading, setAlert, setSeverity) => {
+    isLoading(true)
+    return http.get('/special-orders/' + id).then((res) => {
+        if (res.status === 200) {
+            isLoading(false)
+            return res?.data?.object;
+        } else {
+            isLoading(false)
+            setSeverity('error')
+            setAlert('Please check that all required fields are entered')
+            return false
+        }
+    })
+}
+
+export const updateSpecialOrder = (data, isLoading, setAlert, setSeverity) => {
+    isLoading(true)
+    return http.put('/special-orders', data).then((res) => {
+        if (res.status === 200) {
+            isLoading(false)
+            return true
+        } else {
+            isLoading(false)
+            setSeverity('error')
+            setAlert('Please check that all required fields are entered')
+            return false
+        }
+    })
+}

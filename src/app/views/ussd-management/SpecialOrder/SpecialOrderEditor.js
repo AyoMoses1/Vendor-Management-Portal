@@ -12,12 +12,12 @@ import {
   KeyboardDatePicker,
 } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
-import { getInvoiceById, updateInvoice } from "./OrderService";
+import { getInvoiceById, updateInvoice } from "./SpecialOrderService";
 import { useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
 import { useCallback } from "react";
-import { errorState } from "../helpers/error-state";
+import { errorState } from "../../../views/helpers/error-state";
 import Notification from "app/components/Notification";
 
 const useStyles = makeStyles(({ palette, ...theme }) => ({
@@ -46,8 +46,8 @@ const useStyles = makeStyles(({ palette, ...theme }) => ({
 //     value: "CANCELLED",
 //   },
 //   {
-//     label: "Processing",
-//     value: "PROCESSING",
+//     label: "Awaiting Payment",
+//     value: "AWAITING_PAYMENT",
 //   },
 
 //   {
@@ -55,49 +55,25 @@ const useStyles = makeStyles(({ palette, ...theme }) => ({
 //     value: "COMPLETED",
 //   },
 //   {
-//     label: "Delivered",
-//     value: "DELIVERED",
+//     label: "Converted",
+//     value: "CONVERTED",
 //   },
 // ];
-// {
-//   label: 'On Hold',
-//   value: 'ON_HOLD',
-// },
-// {
-//   label: 'Disputed',
-//   value: 'DISPUTED',
-// },
-// {
-//   label: 'Awaiting Payment',
-//   value: 'AWAITING_PAYMENT',
-// },
-// {
-//   label: 'Awaiting Fulfilment',
-//   value: 'AWAITING_FULFILMENT',
-// },
-// {
-//   label: 'Manual Verification Required',
-//   value: 'MANUAL_VERIFICATION_RQUIRED',
-// },
-// {
-//   label: 'Paid',
-//   value: 'PAID',
-// },
-//]
 
-const OrderEditor = ({ isNewInvoice, toggleOrderEditor, id }) => {
+
+const SpecialOrderEditor = ({ isNewInvoice, toggleOrderEditor, id}) => {
   const [isAlive, setIsAlive] = useState(true);
-  const [state, setState] = useState(initialValues);
+  const [state, setState] = useState(updatedValues);
   const [invoiceStatus, setInvoiceStatus] = useState("");
   const [error, setError] = React.useState("");
   const [severity, setSeverity] = React.useState("");
-  const [orderStatus, setOrderStatus] = React.useState("PROCESSING");
+  const [orderStatus, setOrderStatus] = React.useState("");
 
   const history = useHistory();
 
   const classes = useStyles();
 
-  let { referenceNo, status, createDate, loading } = state;
+  let {  specialOrderNo, status, createDate, loading,  } = state;
 
   const generateRandomId = useCallback(() => {
     let tempId = Math.random().toString();
@@ -110,7 +86,7 @@ const OrderEditor = ({ isNewInvoice, toggleOrderEditor, id }) => {
     setInvoiceStatus(event.target.value);
     setState({ ...state, [event.target.name]: event.target.value });
   };
-  
+  console.log(state)
   const handleDateChange = (date) => {
     setState({ ...state, date });
   };
@@ -120,6 +96,7 @@ const OrderEditor = ({ isNewInvoice, toggleOrderEditor, id }) => {
     //setOrderStatus({ ...state, [e.target.name]: e.target.value });
   };
 
+
   const handleSubmit = () => {
     const auth = JSON.parse(localStorage.getItem("auth_user"));
     if (auth.role.name === "ROLE_ADMIN" || auth.role.name === "ROLE_MANAGER") {
@@ -127,7 +104,7 @@ const OrderEditor = ({ isNewInvoice, toggleOrderEditor, id }) => {
       updateInvoice(tempState).then((res) => {
         console.log(res);
         if (res.status === 200) {
-          history.push("/orders");
+          history.push("/special-orders");
         }
       });
     } else {
@@ -186,43 +163,60 @@ const OrderEditor = ({ isNewInvoice, toggleOrderEditor, id }) => {
             )}
           >
             <div>
-              <h5 className="mb-2">Order Info</h5>
-              <p className="mb-4">Order Number</p>
+              <h5 className="mb-2">Special Order Info</h5>
+              <p className="mb-4">Special Order Number</p>
               <TextValidator
-                label="Reference No."
+                label="Special Order No."
                 type="text"
                 fullWidth
-                name="referenceNo"
-                value={referenceNo}
+                name="specialOrderNo"
+                value={specialOrderNo ? specialOrderNo : "Not set"}
                 disabled
                 errorMessages={["this field is required"]}
               />
             </div>
             <div>
               <FormControl component="fieldset" className="w-full mb-4">
-                <RadioGroup
+                {/* <RadioGroup
                   aria-label="status"
                   name="status"
                   value={orderStatus}
                   onChange={handeleOrderStatus}
-                ></RadioGroup>
+                ></RadioGroup> */}
                 <RadioGroup
                   aria-labelledby="demo-controlled-radio-buttons-group"
                   name="controlled-radio-buttons-group"
                   value={orderStatus}
                   onChange={handeleOrderStatus}
                 >
+                  
                   {status === "PENDING" && (
                     <>
                       <FormControlLabel
-                        value="PROCESSING"
+                        value="AWAITING_PAYMENT"
                         control={<Radio />}
-                        label="PROCESSING"
+                        label="AWAITING_PAYMENT"
                       />
                       <FormControlLabel
                         value="CANCELLED"
                         control={<Radio />}
                         label="CANCELLED"
+                      />
+                      <FormControlLabel
+                        value="CONVERTED"
+                        control={<Radio />}
+                        label="CONVERTED"
+                      />
+                    </>
+                  )}
+
+                  
+                  {status === "AWAITING_PAYMENT" && (
+                    <>
+                      <FormControlLabel
+                        value="PROCESSING"
+                        control={<Radio />}
+                        label="PROCESSING"
                       />
                     </>
                   )}
@@ -235,6 +229,29 @@ const OrderEditor = ({ isNewInvoice, toggleOrderEditor, id }) => {
                       />
                     </>
                   )}
+
+                  {/* Testing Purposes only */}
+                
+                  {/* {status === "CANCELLED" && (
+                    <>
+                      <FormControlLabel
+                        value="PROCESSING"
+                        control={<Radio />}
+                        label="PROCESSING"
+                      />
+                      <FormControlLabel
+                        value="PENDING"
+                        control={<Radio />}
+                        label="PENDING"
+                      />
+                      <FormControlLabel
+                        value="AWAITING_PAYMENT"
+                        control={<Radio />}
+                        label="AWAITING_PAYMENT"
+                      />
+                    </>
+                  )} */}
+
                 </RadioGroup>
               </FormControl>
               <div className="text-right">
@@ -284,4 +301,17 @@ const initialValues = {
   loading: false,
 };
 
-export default OrderEditor;
+const updatedValues = {
+    id: "",
+    specialOrderNo: "",
+    customerName:"",
+    email: "",
+    mobileNo: "",
+    quantity: "",
+    location:"",
+    status:"",
+    loading: false,
+    descrition:"",
+    expectedDeliveryDate: new Date(),
+}
+export default SpecialOrderEditor;

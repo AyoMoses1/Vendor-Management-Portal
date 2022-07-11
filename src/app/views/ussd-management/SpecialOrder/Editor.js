@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react'
 import { TextField, Modal, Button, Grid, MenuItem } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import "./index.css";
+import "../SpecialOrders/special-orders.css"
 import { errorState } from '../../helpers/error-state';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom';
-import { addPickupCenter, updatePickupCenter } from '../USSDService';
+import { getInvoiceById, updateInvoice } from "./SpecialOrderService";
+import { addPickupCenter, updatePickupCenter, getSpecialOrder, updateSpecialOrder } from '../USSDService';
 import Notification from '../../../components/Notification';
 
 import { Formik } from 'formik'
@@ -37,15 +38,16 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const initialValues = {
-    state: '',
-    city: '',
-    address: '',
+    productName: '',
+    quantity: '',
+    status: '',
 }
 
-function NewPickupCenter({
+
+function Editor({
     name,
     isOpen,
-    pickupCenter,
+    specialOrder,
     handleClose,
     refresh
 }) {
@@ -55,7 +57,25 @@ function NewPickupCenter({
     const [alert, setAlert] = React.useState('')
     const [severity, setSeverity] = React.useState('')
     const [buttonState, setButtonState] = React.useState('Add');
+    const [error, setError] = React.useState("");
+
     const history = useHistory();
+
+
+    let statusValues = []
+
+
+    if(specialOrder.status === "PENDING"){
+        statusValues = ["AWAITING_PAYMENT", "CANCELLED", "CONVERTED"]
+    }
+    else if (specialOrder.status === "AWAITING_PAYMENT"){
+        statusValues = ["PROCESSING", "CANCELLED"]
+    }
+    else if (specialOrder.status === "PROCESSING"){
+        statusValues = ["COMPLETED","CANCELLED"]
+    }
+
+    console.log(specialOrder)
     const { shippingStates } = useSelector(
         (state) => state.getShippingStates,
     );
@@ -63,43 +83,34 @@ function NewPickupCenter({
     const [values, setValues] = React.useState(initialValues)
 
     useEffect(() => {
-        if (pickupCenter) {
-            setValues({ ...pickupCenter, state: pickupCenter.state.id })
+        if (specialOrder) {
+            setValues({ ...specialOrder, id: specialOrder.id })
             setButtonState('Update');
         } else {
             setValues(initialValues);
         }
-    }, [pickupCenter])
+    }, [specialOrder])
 
+    const handleChange = (e) => {
+        setValues(prev => {
+            return {...values, [e.target.name]: e.target.value}
+        })
+    }
+    
     const handleSubmit = async (values) => {
-        if (!pickupCenter) {
-            let tempState = { ...values }
-            const result = await addPickupCenter(
-                tempState,
-                setLoading,
-                setAlert,
-                setSeverity
-            ).then((res) => res)
-            if (result) {
-                refresh();
-                handleClose();
-            } else if (!result) {
-                errorState(setAlert, setSeverity)
+        const auth = JSON.parse(localStorage.getItem("auth_user"));
+        if (auth.role.name === "ROLE_ADMIN" || auth.role.name === "ROLE_MANAGER") {
+          let tempState = { ...values, id: specialOrder.id };
+          updateInvoice(tempState).then((res) => {
+            console.log(res);
+            if (res.status === 200) {
+              history.push("/special-orders");
             }
+          });
         } else {
-            let tempState = { ...values }
-            const result = await updatePickupCenter(
-                tempState,
-                setLoading,
-                setAlert,
-                setSeverity,
-            ).then((res) => res)
-            if (result) {
-                refresh();
-                handleClose();
-            } else if (!result) {
-                errorState(setAlert, setSeverity)
-            }
+          let msg = "You dont have enough permission to perform action";
+          errorState(setError, setSeverity, msg);
+          return;
         }
     }
 
@@ -128,33 +139,13 @@ function NewPickupCenter({
                     <form onSubmit={handleSubmit}>
                         <div>
                             <TextField
-                                className='mb-4'
-                                name='state'
-                                label='State'
-                                variant='outlined'
-                                margin='normal'
-                                select
-                                fullWidth
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                                value={values?.state}
-                                error={Boolean(touched.state && errors.state)}
-                                helperText={touched.state && errors.state}
-                            >
-                                {shippingStates.map((state, idx) => (
-                                    <MenuItem key={idx} value={state?.id}>
-                                        {state?.name}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
-                            <TextField
                                 onChange={handleChange}
                                 onBlur={handleBlur}
-                                value={values.city}
-                                name='city'
+                                value={values.productName}
+                                name='productName'
                                 margin='normal'
                                 fullWidth
-                                label='City'
+                                label='Product Name'
                                 type='text'
                                 variant='outlined'
                                 error={Boolean(touched.city && errors.city)}
@@ -165,25 +156,48 @@ function NewPickupCenter({
                             <TextField
                                 onChange={handleChange}
                                 onBlur={handleBlur}
-                                value={values.address}
-                                name='address'
+                                value={values.quantity}
+                                name='quantity'
                                 fullWidth
                                 margin='normal'
-                                label='Address'
+                                label='Quantity'
                                 type='text'
                                 variant='outlined'
                                 error={Boolean(touched.address && errors.address)}
                                 helperText={touched.address && errors.address}
                             />
                         </div>
+                        <div>
+                        <TextField
+                            className='mb-4'
+                            name='status'
+                            label='Order Status'
+                            variant='outlined'
+                            margin='normal'
+                            select
+                            fullWidth
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            value={values?.status}
+                            error={Boolean(touched.state && errors.state)}
+                            helperText={touched.state && errors.state}
+                        >
+                            {statusValues.map((status) => (
+                                <MenuItem value={status} key = {status}>
+                                    {status}
+                                </MenuItem>
+                            ))}
+                            </TextField>
+                        </div>
                         <Button
                             type='submit'
                             variant='contained'
                             color='primary'
                             className='w-full mt-4'
+                            // onClick={handleSubmit}
                             disabled={loading}
                         >
-                            {buttonState}
+                            Update
                         </Button>
                     </form>
                 )}
@@ -209,4 +223,4 @@ const customerValidations = yup.object().shape({
     city: yup.string().required('Please enter a valid city. i.e Ikeja'),
 })
 
-export default NewPickupCenter;
+export default Editor;
