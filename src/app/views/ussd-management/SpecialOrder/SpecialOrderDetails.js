@@ -6,7 +6,7 @@ import { format } from 'date-fns'
 import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
 import '../../orders/order-view.css'
-import Editor from './Editor'
+import Editor from './SpecialOrderEditor'
 import { getSpecialOrder } from '../USSDService'
 
 const useStyles = makeStyles(({ palette, ...theme }) => ({
@@ -127,13 +127,7 @@ const SpecialOrderViewer = ({ toggleOrderEditor, id }) => {
                 }}>
                 Edit Special Order
             </Button>
-            <Editor
-              name={"Edit Special Order"}
-              isOpen={open}
-              specialOrder={state}
-              handleClose={handleModal}
-              refresh={() => refresh()}
-            />
+            
             <Button
               onClick={handlePrint}
               className='py-2'
@@ -185,6 +179,15 @@ const SpecialOrderViewer = ({ toggleOrderEditor, id }) => {
               </h5>
             </div>
           </div>
+
+
+            <Editor
+              name={"Edit Special Order"}
+              isOpen={open}
+              specialOrder={state}
+              handleClose={handleModal}
+              refresh={() => refresh()}
+            />  
 
           <Divider />
           
