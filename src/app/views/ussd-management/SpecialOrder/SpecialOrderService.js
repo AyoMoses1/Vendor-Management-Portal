@@ -36,7 +36,7 @@ export const populate = (setCustomers, setAlert, setSeverity, url, setLoading) =
         setCustomers(data.object)
     }
   }).catch((err) => {
-    setAlert('Ann error occurred while fetching data', err.message)
+    setAlert('An error occurred while fetching data', err.message)
     setSeverity('error')
   })
 }

@@ -65,14 +65,14 @@ function Editor({
     let statusValues = []
 
 
-    if(specialOrder.status === "PENDING"){
+    if (specialOrder.status === "PENDING") {
         statusValues = ["AWAITING_PAYMENT", "CANCELLED", "CONVERTED"]
     }
-    else if (specialOrder.status === "AWAITING_PAYMENT"){
+    else if (specialOrder.status === "AWAITING_PAYMENT") {
         statusValues = ["PROCESSING", "CANCELLED"]
     }
-    else if (specialOrder.status === "PROCESSING"){
-        statusValues = ["COMPLETED","CANCELLED"]
+    else if (specialOrder.status === "PROCESSING") {
+        statusValues = ["COMPLETED", "CANCELLED"]
     }
 
     console.log(specialOrder)
@@ -93,10 +93,10 @@ function Editor({
 
     const handleChange = (e) => {
         setValues(prev => {
-            return {...values, [e.target.name]: e.target.value}
+            return { ...values, [e.target.name]: e.target.value }
         })
     }
-    
+
     const handleSubmit = async (values) => {
         const auth = JSON.parse(localStorage.getItem("auth_user"));
         if (auth.role.name === "ROLE_ADMIN" || auth.role.name === "ROLE_MANAGER") {
@@ -161,32 +161,32 @@ function Editor({
                                 fullWidth
                                 margin='normal'
                                 label='Quantity'
-                                type='text'
+                                type='number'
                                 variant='outlined'
                                 error={Boolean(touched.address && errors.address)}
                                 helperText={touched.address && errors.address}
                             />
                         </div>
                         <div>
-                        <TextField
-                            className='mb-4'
-                            name='status'
-                            label='Order Status'
-                            variant='outlined'
-                            margin='normal'
-                            select
-                            fullWidth
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            value={values?.status}
-                            error={Boolean(touched.state && errors.state)}
-                            helperText={touched.state && errors.state}
-                        >
-                            {statusValues.map((status) => (
-                                <MenuItem value={status} key = {status}>
-                                    {status}
-                                </MenuItem>
-                            ))}
+                            <TextField
+                                className='mb-4'
+                                name='status'
+                                label='Order Status'
+                                variant='outlined'
+                                margin='normal'
+                                select
+                                fullWidth
+                                onBlur={handleBlur}
+                                onChange={handleChange}
+                                value={values?.status}
+                                error={Boolean(touched.state && errors.state)}
+                                helperText={touched.state && errors.state}
+                            >
+                                {statusValues.map((status) => (
+                                    <MenuItem value={status} key={status}>
+                                        {status}
+                                    </MenuItem>
+                                ))}
                             </TextField>
                         </div>
                         <Button
@@ -194,7 +194,6 @@ function Editor({
                             variant='contained'
                             color='primary'
                             className='w-full mt-4'
-                            // onClick={handleSubmit}
                             disabled={loading}
                         >
                             Update
@@ -215,12 +214,8 @@ function Editor({
 }
 
 const customerValidations = yup.object().shape({
-    address: yup
-        .string()
-        .min(5, 'Please enter a more detailed address')
-        .required(),
-    state: yup.string().required('Please select a state. i.e Lagos'),
-    city: yup.string().required('Please enter a valid city. i.e Ikeja'),
+    productName: yup.string().required('Please enter a valid product name. i.e Day Old Chicks'),
+    quantity: yup.number().required('Please enter a valid quantity. i.e 200'),
 })
 
 export default Editor;
