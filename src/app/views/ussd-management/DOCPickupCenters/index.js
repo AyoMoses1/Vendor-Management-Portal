@@ -130,7 +130,7 @@ const DOCPickupCenters = () => {
       name: 'state',
       label: 'State',
       options: {
-        filter: true,
+        filter: false,
         customBodyRenderLite: (dataIndex) => {
           const doc = pickupCenters[dataIndex];
           return (
@@ -255,10 +255,9 @@ const DOCPickupCenters = () => {
             options={{
               setTableProps: () => ({ className: "doc-table" }),
               selectableRows: false,
-              filter: true,
+              filter: false,
               sort: true,
               sortOrder: { name: 'id', direction: 'desc' },
-              filterType: 'dropdown',
               responsive: 'standard',
               elevation: 0,
               rowsPerPageOptions: [10, 20, 40, 80, 100],
