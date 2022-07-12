@@ -49,7 +49,6 @@ const USSDProductCategoriesComponent = () => {
       await featureCat(productCat);
       dispatcher(getProductCategories({}));
     } catch (error) {
-      console.log(error);
     }
   };
 

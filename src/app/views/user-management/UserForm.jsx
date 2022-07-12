@@ -34,7 +34,6 @@ function UserForm({ isNewUser, id, User }) {
     phoneNo: '',
     active: false,
     role: 3,
-    password: 'password',
     username: '',
   }
   const classes = useStyles()
@@ -50,12 +49,11 @@ function UserForm({ isNewUser, id, User }) {
     let tempState = { ...state, ...values }
     if (isNewUser)
       addUser(tempState).then((res) => {
-        console.log(res)
         if (res.status == 200) {
           setState({ ...state })
           history.push('/users')
         } else {
-          setAlert('Invalid details provided')
+          setAlert(res?.errorMsg ?? 'Invalid details provided')
           setSeverity('error')
           setTimeout(() => {
             setAlert('')
@@ -67,11 +65,11 @@ function UserForm({ isNewUser, id, User }) {
     else
       updateUser(tempState)
         .then((response) => {
-          console.log(response)
           if (response.status == '200') {
             setState({ ...state })
             history.push('/users')
           } else {
+            setAlert(response?.errorMsg ?? 'Invalid details provided')
             setAlert('Invalid details provided')
             setSeverity('error')
             setTimeout(() => {
@@ -98,7 +96,6 @@ function UserForm({ isNewUser, id, User }) {
   const getRoles = () => {
     getAllRoles().then(({ data }) => {
       setRoles(data.object)
-      console.log(data)
     })
   }
 

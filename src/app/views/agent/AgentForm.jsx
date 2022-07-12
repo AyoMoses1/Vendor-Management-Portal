@@ -20,6 +20,7 @@ import { errorState } from '../helpers/error-state';
 import { states } from '../../../utils/states';
 import getAgeBracket from '../../../utils/getAgeBracket';
 import CustomSnackBar, { FailedSnackBar } from '../../components/Snackbar';
+import BulkUpload from './BulkUpload';
 
 const agentTypes = [
   { type: 'Lead Agent', value: 'LEAD_AGENT' },
@@ -62,6 +63,12 @@ const AgentForm = ({ isEdit, id, agent }) => {
   const agentDetail = useSelector((state) => state.agentDetails);
 
   const { agentDetails } = agentDetail;
+
+  const [open, setOpen] = useState(false)
+
+  const handleModal = () => {
+    setOpen(!open)
+  }
 
   const fileUploadHandler = async (e) => {
     const file = e.target.files[0];
@@ -132,7 +139,7 @@ const AgentForm = ({ isEdit, id, agent }) => {
   }, [agentDetails, isEdit]);
 
 
-  console.log({showSnack})
+  console.log({ showSnack })
   return (
     <div className='m-sm-30'>
       <Notification alert={error} severity={severity || ''} />
@@ -156,7 +163,22 @@ const AgentForm = ({ isEdit, id, agent }) => {
           <form className='px-4' onSubmit={handleSubmit}>
             <Grid container spacing={3}>
               <Grid container item>
-                <h1>Agent personal details</h1>
+                <div className='w-full flex justify-between align-center'>
+                  <h4>Agent personal details</h4>
+                  <Button
+                    type='submit'
+                    variant='contained'
+                    color='primary'
+                    onClick={() => {
+                      handleModal()
+                    }}>
+                    Bulk Upload
+                  </Button>
+                </div>
+                <BulkUpload
+                  name={"Create Multiple Customers"}
+                  isOpen={open}
+                  handleClose={handleModal} />
               </Grid>
               <Grid item sm={6} xs={12}>
                 <TextField
@@ -294,7 +316,7 @@ const AgentForm = ({ isEdit, id, agent }) => {
                 </TextField>
               </Grid>
             </Grid>
-            <h3 className='mt-4'>Agent documents uploads</h3>
+            <h4 className='mt-4 mb-4'>Agent documents uploads</h4>
             <Grid container spacing={3}>
               <Grid item sm={6} xs={12}>
                 <InputLabel htmlFor='bootstrap-input'>
@@ -371,7 +393,7 @@ const AgentForm = ({ isEdit, id, agent }) => {
           </form>
         )}
       </Formik>
-      <FailedSnackBar onClose={() => setShowSnack({message: '', status: false})} message={showSnack.message} open={showSnack.status} />
+      <FailedSnackBar onClose={() => setShowSnack({ message: '', status: false })} message={showSnack.message} open={showSnack.status} />
     </div>
   );
 };

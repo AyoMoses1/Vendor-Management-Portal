@@ -1,0 +1,18 @@
+.special-order-table thead tr th {
+  padding-left: 24px!important;
+  padding-right: 24px!important;
+}
+
+.special-order-table tbody tr td {
+  padding-left: 24px!important;
+  padding-right: 24px!important;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.special-order-table thead tr th:first-child{
+  width: 100px !important; 
+}
+

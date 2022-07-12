@@ -10,6 +10,7 @@ import Loading from 'matx/components/MatxLoadable/Loading'
 import Notification from '../../components/Notification'
 import { errorState } from '../helpers/error-state'
 import { states } from '../../../utils/states'
+import BulkUpload from './BulkUpload'
 
 function NewCustomer({ isNewCustomer, id, Customer }) {
   const initialValues = {
@@ -49,6 +50,11 @@ function NewCustomer({ isNewCustomer, id, Customer }) {
   const [loading, isLoading] = useState(false)
   const [alert, setAlert] = useState('')
   const [severity, setSeverity] = useState('')
+  const [open, setOpen] = useState(false)
+
+  const handleModal = () => {
+    setOpen(!open)
+  }
 
   // const handleChange = (e) => {
   //   const { name, value } = e.target
@@ -105,6 +111,21 @@ function NewCustomer({ isNewCustomer, id, Customer }) {
           {severity === 'error' && (
             <Notification alert={alert} severity={severity || ''} />
           )}
+          <div className='flex justify-end align-center'>
+            <Button
+              type='submit'
+              variant='contained'
+              color='primary'
+              onClick={() => {
+                handleModal()
+              }}>
+              Bulk Upload
+            </Button>
+          </div>
+          <BulkUpload
+            name={"Create Multiple Customers"}
+            isOpen={open}
+            handleClose={handleModal} />
           <Formik
             initialValues={values}
             onSubmit={handleSubmit}

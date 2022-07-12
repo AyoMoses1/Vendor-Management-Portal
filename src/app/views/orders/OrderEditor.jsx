@@ -110,7 +110,7 @@ const OrderEditor = ({ isNewInvoice, toggleOrderEditor, id }) => {
     setInvoiceStatus(event.target.value);
     setState({ ...state, [event.target.name]: event.target.value });
   };
-
+  
   const handleDateChange = (date) => {
     setState({ ...state, date });
   };

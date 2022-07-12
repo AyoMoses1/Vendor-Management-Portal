@@ -1,13 +1,13 @@
-import http from "../../services/api"
+import http from '../../../services/api'
 
 export const getInvoiceById = (id) => {
   return http
-    .get(`/afrimash/orders/${id}`)
+    .get(`/afrimash/special-orders/${id}`)
 }
 
 export const getAllInvoice = (getOrders, setLoading, page,setCount,source) => {
   setLoading(true)
-  return http.get(`afrimash/orders?page=${page}&orderSource=${source}`).then(({ data }) => {
+  return http.get(`afrimash/special-orders?page=${page}&orderSource=${source}`).then(({ data }) => {
     if (data instanceof Object) {
       getOrders(data.object.content)
      setCount(data.object.totalElements);
@@ -17,13 +17,13 @@ export const getAllInvoice = (getOrders, setLoading, page,setCount,source) => {
 }
 
 export const deleteInvoice = (order) => {
-  return http.delete('/afrimash/orders/', order)
+  return http.delete('/afrimash/special-orders/', order)
 }
 export const addInvoice = (order) => {
-  return http.post('/afrimash/orders/', order)
+  return http.post('/afrimash/special-orders/', order)
 }
 export const updateInvoice = (order) => {
-  return http.patch(`/afrimash/orders/`, order)
+  return http.put(`/afrimash/special-orders/`, order)
 }
 
 export const populate = (setCustomers, setAlert, setSeverity, url, setLoading) => {
@@ -36,7 +36,7 @@ export const populate = (setCustomers, setAlert, setSeverity, url, setLoading) =
         setCustomers(data.object)
     }
   }).catch((err) => {
-    setAlert('Ann error occurred while fetching data', err.message)
+    setAlert('An error occurred while fetching data', err.message)
     setSeverity('error')
   })
 }

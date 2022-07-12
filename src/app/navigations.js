@@ -114,7 +114,17 @@ export const navigations = [
         path: '/ussd-product-categories',
         iconText: '',
       },
-    
+      {
+        name: 'DOC Pickup Centers',
+        path: '/doc-pickup-centers',
+        iconText: '',
+      },
+      {
+        name: 'USSD Special Orders',
+        path: '/ussd-special-orders',
+        iconText: '',
+      },
+
     ],
   },
   {
