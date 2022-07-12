@@ -7,7 +7,7 @@ export const getCustomerById = (id) => {
     .get(`/afrimash/customers/${id}`)
 }
 
-export const getAllCustomer = (setData, isLoading, setAlert, setSeverity) => {
+export const getAllCustomer = (setData, isLoading, setAlert, setSeverity, source) => {
   isLoading(true)
    http.get('/afrimash/customers/search?source=ADMIN').then(({data}) => {
     if (data instanceof Object) {

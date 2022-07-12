@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { Breadcrumb } from 'matx'
 import MUIDataTable from 'mui-datatables'
-import { Grow, Icon, IconButton, TextField, Button } from '@material-ui/core'
+import { Grow, Icon, IconButton, TextField, Button, MenuItem } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 import Loading from 'matx/components/MatxLoadable/Loading'
+import './customer-view.css'
 
 import Notification from '../../components/Notification'
 import { getAllCustomer } from './CustomerService'
@@ -15,11 +16,43 @@ const CustomerList = () => {
   const [loading, isLoading] = useState(false)
   const [alert, setAlert] = useState('')
   const [severity, setSeverity] = useState('')
+  const [source, setSource] = useState('')
+
+  const sourceTypes = [
+    {
+      type: 'USSD',
+      value: 'USSD',
+    },
+    {
+      type: 'ADMIN',
+      value: 'ADMIN',
+    },
+    {
+      type: 'AGENT APP',
+      value: 'AGENT_APP',
+    },
+    {
+      type: 'CUSTOMER APP',
+      value: 'CUSTOMER_APP',
+    },
+    {
+      type: 'MARKET PLACE',
+      value: 'MARKET_PLACE',
+    },
+    {
+      type: 'IVR',
+      value: 'IVR',
+    },
+    {
+      type: 'SMS',
+      value: 'SMS',
+    },
+  ]
 
   useEffect(() => {
-    getAllCustomer(setUserList, isLoading, setAlert, setSeverity)
+    getAllCustomer(setUserList, isLoading, setAlert, setSeverity, source)
     return () => setIsAlive(false)
-  }, [isAlive])
+  }, [isAlive, source])
 
   console.log({ userList })
   const columns = [
@@ -254,22 +287,46 @@ const CustomerList = () => {
                 },
                 customToolbar: () => {
                   return (
-                    <Link
-                      to={{
-                        pathname: '/customer/new',
-                        state: {},
-                      }}
-                    >
-                      <IconButton>
-                        <Button variant='contained' color='primary'>
-                          Add New
-                        </Button>
-                      </IconButton>
-                    </Link>
+                    <>
+                      <Link
+                        to={{
+                          pathname: '/customer/new',
+                          state: {},
+                        }}
+                      >
+                        <IconButton>
+                          <Button variant='contained' color='primary'>
+                            Add New
+                          </Button>
+                        </IconButton>
+                      </Link>
+                      <div className='w-full flex-end flex'>
+                        <div className='w-220 flex-end'>
+                          <TextField
+                            className='mb-4'
+                            name='mobileNo'
+                            label='Filter by source'
+                            variant='outlined'
+                            margin='normal'
+                            select
+                            fullWidth
+                            value={source}
+                            onChange={(e) => setSource(e.target.value)}
+                          >
+                            {sourceTypes.map((sourceType, idx) => (
+                              <MenuItem key={idx} value={sourceType.value}>
+                                {sourceType.type}
+                              </MenuItem>
+                            ))}
+                          </TextField>
+                        </div>
+                      </div>
+                    </>
                   )
                 },
               }}
             />
+
           )}
         </div>
       </div>
