@@ -53,7 +53,7 @@ function UserForm({ isNewUser, id, User }) {
           setState({ ...state })
           history.push('/users')
         } else {
-          setAlert('Invalid details provided')
+          setAlert(res?.errorMsg ?? 'Invalid details provided')
           setSeverity('error')
           setTimeout(() => {
             setAlert('')
@@ -69,6 +69,7 @@ function UserForm({ isNewUser, id, User }) {
             setState({ ...state })
             history.push('/users')
           } else {
+            setAlert(response?.errorMsg ?? 'Invalid details provided')
             setAlert('Invalid details provided')
             setSeverity('error')
             setTimeout(() => {
