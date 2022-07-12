@@ -10,6 +10,7 @@ import Autocomplete from '@material-ui/lab/Autocomplete'
 import * as yup from 'yup'
 import { useDropzone } from 'react-dropzone'
 import clsx from 'clsx'
+const API_URL = process.env.REACT_APP_BASE_URL
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -105,7 +106,7 @@ function NewCategory({ isNewCategory, id, Category }) {
 
       axios({
         method: 'post',
-        url: 'https://api.afrimash.com/afrimash/product-categories',
+        url: API_URL + '/afrimash/product-categories',
         data,
         headers: {
           'Content-Type': 'multipart/form-data',

@@ -33,19 +33,20 @@ export const loadUser = () => dispatch => {
 };
 
 export function loginWithEmailAndPassword(state){
+  const API_URL = process.env.REACT_APP_BASE_URL
   const userlog = state
   return dispatch => {
     dispatch({
       type: LOGIN_LOADING
     });
-    axios.post('https://api.afrimash.com/afrimash/authenticate', userlog).then(
+    axios.post(API_URL + '/afrimash/authenticate', userlog).then(
       response => {
         if (response.status === 200) {
           dispatch({
             type: LOGIN_SUCCESS,
             payload: response.data
           })
-          axios.get("https://api.afrimash.com/afrimash/users/logged-in-details").then(
+          axios.get(API_URL + "/afrimash/users/logged-in-details").then(
             (response) => {
               if (response.status === 200) {
                 dispatch({
