@@ -148,11 +148,11 @@ const SpecialOrderViewer = ({ toggleOrderEditor, id }) => {
           >
             <div>
               <h5 className='mb-2'>Order Info</h5>
-              <p className='mb-4'>Special Order Number: #{specialOrderNo}</p>
+              <p className='mb-4'>Special Order Number: <strong>#{specialOrderNo}</strong></p>
               <p className='mb-4'>Product Name: {productName}</p>
               <p className='mb-0'>Product Description: {description}</p>
-              <p className='mb-0'>Product Quantity: {quantity}</p>
             </div>
+            
 
             <div className={`text-right`}>
               <h5 className='font-normal capitalize'>
@@ -179,8 +179,12 @@ const SpecialOrderViewer = ({ toggleOrderEditor, id }) => {
               </h5>
             </div>
           </div>
-
-
+          
+          <div className={clsx(
+              'viewer_actions px-4 mb-5 flex items-center justify-between')}>
+              <p className='mb-0'>Product Quantity:</p>
+              <h5 className=''>{quantity}</h5>
+            </div>
           <Editor
             name={"Edit Special Order"}
             isOpen={open}
