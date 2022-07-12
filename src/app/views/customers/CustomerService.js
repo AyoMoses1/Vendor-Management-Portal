@@ -9,9 +9,9 @@ export const getCustomerById = (id) => {
 
 export const getAllCustomer = (setData, isLoading, setAlert, setSeverity) => {
   isLoading(true)
-   http.get('/afrimash/customers/').then(({data}) => {
+   http.get('/afrimash/customers/search?source=ADMIN').then(({data}) => {
     if (data instanceof Object) {
-      setData(data.object)
+      setData(data.object.content)
       isLoading(false)
     } else {
       errorState(setAlert, setSeverity)
@@ -20,11 +20,11 @@ export const getAllCustomer = (setData, isLoading, setAlert, setSeverity) => {
 }
 
 export const deleteCustomer = (customer) => {
-  return http.delete('/afrimash/customers/', customer)
+  return http.delete('/afrimash/customers', customer)
 }
 export const addCustomer = (customer, setData, isLoading, setAlert, setSeverity) => {
   isLoading(true)
-  return http.post('/afrimash/customers/', customer).then((res) => {
+  return http.post('/afrimash/customers', customer).then((res) => {
     if (res.errorCode === 'ENTITY_EXISTS_ERROR') {
       isLoading(false)
       setSeverity('error')

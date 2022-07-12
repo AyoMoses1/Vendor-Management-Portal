@@ -21,6 +21,7 @@ const CustomerList = () => {
     return () => setIsAlive(false)
   }, [isAlive])
 
+  console.log({ userList })
   const columns = [
     {
       name: 'firstName', // field name in the row object
