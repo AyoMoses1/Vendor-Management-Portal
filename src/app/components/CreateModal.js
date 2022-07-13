@@ -1,12 +1,9 @@
 import React from 'react'
-import { TextField, Modal, Button, Grid, MenuItem, RadioGroup, FormControl, FormControlLabel, Radio, Typography } from '@material-ui/core'
+import { Modal, Button, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { useHistory } from 'react-router-dom/cjs/react-router-dom';
 import CheckSharpIcon from '@mui/icons-material/CheckSharp';
 import PriorityHighSharpIcon from '@mui/icons-material/PriorityHighSharp';
 import './modal.css'
-import { FiColumns } from 'react-icons/fi';
-// import Notification from '../../../components/Notification';
 
 
 function rand() {
