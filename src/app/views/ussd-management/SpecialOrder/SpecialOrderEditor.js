@@ -1,16 +1,14 @@
 import React, { useEffect } from 'react'
-import { TextField, Modal, Button, Grid, MenuItem, RadioGroup,FormControl, FormControlLabel, Radio } from '@material-ui/core'
+import { TextField, Modal, Button, RadioGroup, FormControl, FormControlLabel, Radio } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import "../SpecialOrders/special-orders.css"
 import { errorState } from '../../helpers/error-state';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom';
-import { getInvoiceById, updateInvoice } from "./SpecialOrderService";
-import { addPickupCenter, updatePickupCenter, getSpecialOrder, updateSpecialOrder } from '../USSDService';
+import { updateInvoice } from "./SpecialOrderService";
 import Notification from '../../../components/Notification';
 
 import { Formik } from 'formik'
 import * as yup from 'yup'
-import { useSelector } from 'react-redux';
 
 function rand() {
     return Math.round(Math.random() * 20) - 10
@@ -66,33 +64,33 @@ function Editor({
 
 
     if (specialOrder.status === "PENDING") {
-        statusValues = [{label:"AWAITING PAYMENT", value: "AWAITING_PAYMENT"}, {label:"CANCELLED", value:"CANCELLED"}, {label:"CONVERTED", value:"CONVERTED"}]
+        statusValues = [{ label: "AWAITING PAYMENT", value: "AWAITING_PAYMENT" }, { label: "CANCELLED", value: "CANCELLED" }, { label: "CONVERTED", value: "CONVERTED" }]
     }
     else if (specialOrder.status === "AWAITING_PAYMENT") {
-        statusValues = [{label:"PROCESSING", value:"PROCESSING"}, {label:"CANCELLED", value:"CANCELLED"}]
+        statusValues = [{ label: "PROCESSING", value: "PROCESSING" }, { label: "CANCELLED", value: "CANCELLED" }]
     }
     else if (specialOrder.status === "PROCESSING") {
-        statusValues = [{label:"COMPLETED", value: "COMPLETED"}, {label:"CANCELLED",value:"CANCELLED"}]
+        statusValues = [{ label: "COMPLETED", value: "COMPLETED" }, { label: "CANCELLED", value: "CANCELLED" }]
     }
-    else if (specialOrder.status === null){
-        statusValues = [{label:"PENDING", value:"PENDING"}]
+    else if (specialOrder.status === null) {
+        statusValues = [{ label: "PENDING", value: "PENDING" }]
     }
 
 
 
     const statusElements = statusValues.map(option => {
         return <FormControlLabel
-                    value={option.value}
-                    control={<Radio />}
-                    label={option.label}
-                    key={option.value}
-                />
+            value={option.value}
+            control={<Radio />}
+            label={option.label}
+            key={option.value}
+        />
     })
     const [values, setValues] = React.useState(initialValues)
 
     useEffect(() => {
         if (specialOrder) {
-            const {productName, quantity, status} = specialOrder
+            const { productName, quantity, status } = specialOrder
             setValues({ ...initialValues, productName, quantity, status })
             setButtonState('Update');
         } else {
@@ -100,27 +98,21 @@ function Editor({
         }
     }, [specialOrder])
 
-    const handleChange = (e) => {
-        setValues(prev => {
-            return { ...values, [e.target.name]: e.target.value }
-        })
-        console.log(values)
-    }
-
     const handleSubmit = async (values) => {
         const auth = JSON.parse(localStorage.getItem("auth_user"));
         if (auth.role.name === "ROLE_ADMIN" || auth.role.name === "ROLE_MANAGER") {
-          let tempState = { ...values, id: specialOrder.id };
-          updateInvoice(tempState).then((res) => {
-            console.log(res);
-            if (res.status === 200) {
-              history.push("/special-orders");
-            }
-          });
+            let tempState = { ...values, id: specialOrder.id };
+            updateInvoice(tempState).then((res) => {
+                if (res.status === 200) {
+                    // history.goBack()
+                    handleClose();
+                    refresh();
+                }
+            });
         } else {
-          let msg = "You dont have enough permission to perform action";
-          errorState(setError, setSeverity, msg);
-          return;
+            let msg = "You dont have enough permission to perform action";
+            errorState(setError, setSeverity, msg);
+            return;
         }
     }
 

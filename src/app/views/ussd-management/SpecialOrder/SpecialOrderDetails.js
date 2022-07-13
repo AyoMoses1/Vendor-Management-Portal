@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Icon, Button, Divider, IconButton } from '@material-ui/core'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { getInvoiceById } from './SpecialOrderService'
 import { format } from 'date-fns'
 import { makeStyles } from '@material-ui/core/styles'
@@ -50,7 +50,8 @@ const useStyles = makeStyles(({ palette, ...theme }) => ({
 const SpecialOrderViewer = ({ toggleOrderEditor, id }) => {
   const [state, setState] = useState({})
   const [open, setOpen] = useState(false)
-  const classes = useStyles()
+  const classes = useStyles();
+  const history = useHistory();
 
   useEffect(() => {
     if (id !== 'add')
@@ -80,7 +81,10 @@ const SpecialOrderViewer = ({ toggleOrderEditor, id }) => {
   }
 
   const refresh = async () => {
-    getSpecialOrder();
+    getInvoiceById(id).then((res) => {
+      console.log(res.data.object)
+      setState({ ...res.data.object })
+    })
   }
 
   return (
@@ -92,11 +96,11 @@ const SpecialOrderViewer = ({ toggleOrderEditor, id }) => {
             classes.viewerAction
           )}
         >
-          <Link to='/ussd-special-orders'>
-            <IconButton>
-              <Icon>arrow_back</Icon>
-            </IconButton>
-          </Link>
+          <IconButton onClick={() => {
+            history.goBack()
+          }}>
+            <Icon>arrow_back</Icon>
+          </IconButton>
           <div>
             <Link to='/products'>
               <Button
@@ -152,13 +156,19 @@ const SpecialOrderViewer = ({ toggleOrderEditor, id }) => {
               <p className='mb-4'>Product Name: {productName}</p>
               <p className='mb-0'>Product Description: {description}</p>
             </div>
-            
+
 
             <div className={`text-right`}>
               <h5 className='font-normal capitalize'>
                 <div>
-                  <span className={`mb-4 ORDER ${status}`}>
-                    Special order status: {status}
+                  <span className={`mb-4 flex`}>
+                    <span className={`ORDER`}>
+                      Special order status:
+                    </span>
+                    <span className={`mb-4 ORDER ${status}`}>
+                      {status ? status.split("_").join(" ") : ""}
+                    </span>
+
                   </span>
                 </div>
                 <br />
@@ -179,12 +189,12 @@ const SpecialOrderViewer = ({ toggleOrderEditor, id }) => {
               </h5>
             </div>
           </div>
-          
+
           <div className={clsx(
-              'viewer_actions px-4 mb-5 flex items-center justify-between')}>
-              <p className='mb-0'>Product Quantity:</p>
-              <h5 className=''>{quantity}</h5>
-            </div>
+            'viewer_actions px-4 mb-5 flex items-center justify-between')}>
+            <p className='mb-0'>Product Quantity:</p>
+            <h5 className=''>{quantity}</h5>
+          </div>
           <Editor
             name={"Edit Special Order"}
             isOpen={open}
