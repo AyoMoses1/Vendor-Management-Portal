@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 
-const CreateModal = ({ isOpen, handleModal, alertData, handleOK }) => {
+const Alert = ({ isOpen, handleModal, alertData, handleOK }) => {
   console.log(alertData)
   const classes = useStyles()
   const [modalStyle] = React.useState(getModalStyle)
@@ -96,4 +96,4 @@ const CreateModal = ({ isOpen, handleModal, alertData, handleOK }) => {
   )
 }
 
-export default CreateModal
+export default Alert

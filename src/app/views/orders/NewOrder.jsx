@@ -15,7 +15,7 @@ import Autocomplete from '@material-ui/lab/Autocomplete'
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank'
 import CheckBoxIcon from '@material-ui/icons/CheckBox'
 import Notification from '../../components/Notification'
-import CreateModal from 'app/components/CreateModal'
+import Alert from 'app/components/Alert'
 
 import './order-view.css'
 import Loader from '../../../matx/components/MatxLoadable/Loading'
@@ -384,7 +384,7 @@ function NewOrders() {
           >
             Show Modal
           </Button>
-          <CreateModal isOpen={isOpen} handleModal={handleModal} alertData={alertData} />
+          <Alert isOpen={isOpen} handleModal={handleModal} alertData={alertData} />
         </SimpleCard>
       )}
     </div>
