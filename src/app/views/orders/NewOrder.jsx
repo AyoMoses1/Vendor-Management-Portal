@@ -51,9 +51,9 @@ function NewOrders() {
   const [isIconTrue, setDisableIcon] = useState(false)
   const [product, setNewProduct] = React.useState([])
   const [isOpen, setIsOpen] = React.useState(false)
-  const [created, setCreated] = React.useState({header: false, text: 'We encountered a problem.'})
+  const [alertData, setAlertData] = React.useState({ success: false, text: 'We encountered a problem.', title: "Title" })
   const [modalText, setModalText] = React.useState('')
-  
+
 
   const getAllDetails = () => {
     populate(
@@ -76,7 +76,6 @@ function NewOrders() {
     getAllDetails()
     getProductsData(setLoading, '/afrimash/products/', setProducts)
   }, [])
-  console.log(products.content)
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -146,11 +145,11 @@ function NewOrders() {
         if (response.status === 200) {
           // history.push('/orders')
           setIsOpen(prev => !prev)
-          setCreated({header:true, text:'You have successfully created an order.'})
+          setAlertData({ success: true, text: 'You have successfully created an order.', title: "Order Created" })
         }
       } else if (!response) {
         setIsOpen(prev => !prev)
-        // setCreated({header:false, text:'We encountered a problem'})
+        // setCreated({success:false, text:'We encountered a problem'})
         setAlert('An Error Ocurred, Could not Create Order. Try Again')
         setSeverity('error')
       }
@@ -222,8 +221,7 @@ function NewOrders() {
                             options={products}
                             value={fields.product}
                             getOptionLabel={(option) =>
-                              `Name: ${option.name || ''} Vendor: ${
-                                option.storeId?.name || ''
+                              `Name: ${option.name || ''} Vendor: ${option.storeId?.name || ''
                               }`
                             }
                             onChange={(e, newValues) =>
@@ -383,11 +381,10 @@ function NewOrders() {
             variant='contained'
             color='primary'
             onClick={handleModal}
-            status = {created}
           >
-           Show Modal
+            Show Modal
           </Button>
-          <CreateModal isOpen = {isOpen} handleModal = {handleModal} created={created} title ="Order"/>
+          <CreateModal isOpen={isOpen} handleModal={handleModal} alertData={alertData} />
         </SimpleCard>
       )}
     </div>

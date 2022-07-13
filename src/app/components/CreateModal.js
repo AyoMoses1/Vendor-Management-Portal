@@ -24,11 +24,11 @@ function getModalStyle() {
 const useStyles = makeStyles((theme) => ({
   paper: {
     position: 'absolute',
-    width: 500,
+    width: 450,
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[2],
     padding: theme.spacing(5, 4, 3),
-    height: 400,
+    height: 350,
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-around',
@@ -47,20 +47,44 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 
-const CreateModal = ({ isOpen, handleModal, created, title }) => {
-  console.log(created)
+const CreateModal = ({ isOpen, handleModal, alertData, handleOK }) => {
+  console.log(alertData)
   const classes = useStyles()
   const [modalStyle] = React.useState(getModalStyle)
   const [alert, setAlert] = React.useState('')
   const [buttonState, setButtonState] = React.useState('Ok');
 
-  const body = <div style={modalStyle} className={classes.paper}>
-
-    {created.header ? <CheckSharpIcon className='check--icon' style={{ fontSize: 100 }} /> : <PriorityHighSharpIcon className='failed--icon' style={{ fontSize: 100 }} />}
-    <Typography variant='h5' className='modal--header'>{title} Created</Typography>
-    <Typography className='modal-content'>{created.text}</Typography>
-    {created.header ? <Button variant='contained' style={{ background: '#0F4E08' }} className={classes.button}>OK</Button> : <Button variant='contained' style={{ background: '#454545' }} className={classes.button} onClick={handleModal}>Back</Button>}
-  </div>
+  const body = (
+    <div style={modalStyle} className={classes.paper}>
+      <img src={alertData.success ? "/assets/images/success-check.svg" : "/assets/images/fail-check.svg"} alt="check" />
+      <Typography variant='h5' className='modal--header'>
+        {alertData.title}
+      </Typography>
+      <Typography className='modal-content'>
+        {alertData.text}
+      </Typography>
+      {
+        alertData.success ?
+          <Button 
+            variant='contained' 
+            style={{ background: '#0F4E08' }} 
+            className={classes.button} 
+            onClick={handleOK}
+          >
+            OK
+          </Button>
+          :
+          <Button 
+            variant='contained' 
+            style={{ background: '#454545' }} 
+            className={classes.button} 
+            onClick={handleModal}
+          >
+            Back
+          </Button>
+      }
+    </div>
+  )
 
 
   return (

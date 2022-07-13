@@ -1,19 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap');
 
 
-.check--icon{
+.check--icon {
     border: 4px solid #27AE60;
     border-radius: 50%;
     color: #27AE60;
 }
 
-.failed--icon{
+.failed--icon {
     border: 4px solid red;
     border-radius: 50%;
     color: red;
 }
 
-.modal--header{
+.modal--header {
     font-family: 'Montserrat';
     font-style: normal;
     font-weight: 600;
@@ -21,7 +21,8 @@
     line-height: 24px;
     color: #000000;
 }
-.modal-content{
+
+.modal-content {
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 300;
@@ -29,3 +30,6 @@
     line-height: 19px;
 }
 
+img {
+    height: 100px;
+}
