@@ -7,11 +7,12 @@ export const getCustomerById = (id) => {
     .get(`/afrimash/customers/${id}`)
 }
 
-export const getAllCustomer = (setData, isLoading, setAlert, setSeverity, source) => {
+export const getAllCustomer = (setData, setCount, isLoading, setAlert, setSeverity, size, page, source) => {
   isLoading(true)
-   http.get(`/afrimash/customers?source=${source}`).then(({data}) => {
+  http.get(`/afrimash/customers/search?page=${page}&size=${size}&source=${source}`).then(({ data }) => {
     if (data instanceof Object) {
-      setData(data.object)
+      setData(data.object.content)
+      setCount(data.object.totalElements)
       isLoading(false)
     } else {
       errorState(setAlert, setSeverity)
@@ -37,7 +38,7 @@ export const addCustomer = (customer, setData, isLoading, setAlert, setSeverity)
       return false
     } else if (res.status === 'OK') {
       isLoading(false)
-     return true
+      return true
     } else {
       isLoading(false)
       return false

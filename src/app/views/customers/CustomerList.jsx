@@ -18,6 +18,9 @@ const CustomerList = () => {
   const [severity, setSeverity] = useState('')
   const [source, setSource] = useState('ALL')
   const [title, setTitle] = useState('All Customers')
+  const [count, setCount] = useState(0)
+  const [page, setPage] = useState(0)
+  const [size, setSize] = useState(10);
 
   const sourceTypes = [
     {
@@ -69,9 +72,15 @@ const CustomerList = () => {
 
   useEffect(() => {
     const _source = source === 'ALL' ? '' : source;
-    getAllCustomer(setUserList, isLoading, setAlert, setSeverity, _source)
+    getAllCustomer(setUserList, setCount, isLoading, setAlert, setSeverity, size, page, _source)
     return () => setIsAlive(false)
-  }, [isAlive, source])
+  }, [isAlive, source, size])
+
+  const onPageChange = (page) => {
+    const _source = source === 'ALL' ? '' : source;
+    getAllCustomer(setUserList, setCount, isLoading, setAlert, setSeverity, size, page, _source)
+    setPage(page)
+  }
 
   const columns = [
     {
@@ -281,6 +290,8 @@ const CustomerList = () => {
               options={{
                 filterType: 'textField',
                 responsive: 'standard',
+                serverSide: true,
+                count,
                 sort: true,
                 sortOrder: { name: 'id', direction: 'desc' },
                 //   selectableRows: "none", // set checkbox for each row
@@ -291,7 +302,17 @@ const CustomerList = () => {
                 //   pagination: true, //set pagination option
                 //   viewColumns: false, // set column option
                 elevation: 0,
+                page,
+                onTableChange: (action, tableState) => {
+                  if (action === 'changePage') {
+                    onPageChange(tableState.page)
+                  }
+                },
                 rowsPerPageOptions: [10, 20, 40, 80, 100],
+                rowsPerPage: size,
+                onChangeRowsPerPage: (x) => {
+                  setSize(x)
+                },
                 customSearchRender: (
                   searchText,
                   handleSearch,

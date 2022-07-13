@@ -19,21 +19,22 @@ const Users = () => {
   const [count, setCount] = useState(0)
   const [roles, setRoles] = useState([])
   const [role, setRole] = useState(0)
+  const [size, setSize] = useState(10);
 
   useEffect(() => {
-    getAllUser(setUserList, isLoading, setAlert, setSeverity, setCount, page, role)
+    getAllUser(setUserList, isLoading, setAlert, setSeverity, setCount, page, size, role)
     return () => setIsAlive(false)
-  }, [isAlive, page])
+  }, [isAlive, page, size])
 
   const onPageChange = (page) => {
-    getAllUser(setUserList, isLoading, setAlert, setSeverity, setCount, page, role)
+    getAllUser(setUserList, isLoading, setAlert, setSeverity, setCount, page, size, role)
     setPage(page)
   }
 
   const handleCustomSearch = (value) => {
     console.log(value);
     setRole(value);
-    getAllUser(setUserList, isLoading, setAlert, setSeverity, setCount, page, value)
+    getAllUser(setUserList, isLoading, setAlert, setSeverity, setCount, page, size, value)
   }
 
   useEffect(() => {
@@ -232,6 +233,10 @@ const Users = () => {
                   }
                 },
                 rowsPerPageOptions: [10, 20, 40, 80, 100],
+                rowsPerPage: size,
+                onChangeRowsPerPage: (x) => {
+                  setSize(x)
+                },
                 customSearchRender: (
                   searchText,
                   handleSearch,
