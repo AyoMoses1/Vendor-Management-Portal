@@ -6,7 +6,6 @@ import { useHistory } from 'react-router-dom'
 
 import * as yup from 'yup'
 import { Formik } from 'formik'
-import Notification from '../../components/Notification'
 import Alert from 'app/components/Alert';
 
 const useStyles = makeStyles((theme) => ({
