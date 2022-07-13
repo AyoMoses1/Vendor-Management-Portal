@@ -2,12 +2,13 @@ import axios from "axios";
 import localStorageService from "../services/localStorageService";
 import http from "./api";
 import history from "history.js";
+const API_URL = process.env.REACT_APP_BASE_URL
 
 
 class JwtAuthService {
 
   loginWithEmailAndPassword = (userlog) => {
-    axios.post(`https://api.afrimash.com/afrimash/authenticate`, userlog)
+    axios.post(`${API_URL}/afrimash/authenticate`, userlog)
       .then(
         response => {
           if (response.status === 200) {
