@@ -15,6 +15,7 @@ import Autocomplete from '@material-ui/lab/Autocomplete'
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank'
 import CheckBoxIcon from '@material-ui/icons/CheckBox'
 import Notification from '../../components/Notification'
+import CreateModal from 'app/components/CreateModal'
 
 import './order-view.css'
 import Loader from '../../../matx/components/MatxLoadable/Loading'
@@ -49,6 +50,10 @@ function NewOrders() {
   const [severity, setSeverity] = useState('')
   const [isIconTrue, setDisableIcon] = useState(false)
   const [product, setNewProduct] = React.useState([])
+  const [isOpen, setIsOpen] = React.useState(false)
+  const [created, setCreated] = React.useState({header: false, text: 'We encountered a problem.'})
+  const [modalText, setModalText] = React.useState('')
+  
 
   const getAllDetails = () => {
     populate(
@@ -85,6 +90,15 @@ function NewOrders() {
     setState({ ...state, orderItems: fields })
   }
 
+  // To be changed later
+  const handleModal = () => {
+    setIsOpen(prev => !prev)
+  }
+
+
+
+
+  // 
   const handleInputChange = (i, event, newValues, reason) => {
     if (reason === 'reset') {
       setFields([])
@@ -130,9 +144,13 @@ function NewOrders() {
     addInvoice({ ...state }).then((response) => {
       if (response instanceof Object) {
         if (response.status === 200) {
-          history.push('/orders')
+          // history.push('/orders')
+          setIsOpen(prev => !prev)
+          setCreated({header:true, text:'You have successfully created an order.'})
         }
       } else if (!response) {
+        setIsOpen(prev => !prev)
+        // setCreated({header:false, text:'We encountered a problem'})
         setAlert('An Error Ocurred, Could not Create Order. Try Again')
         setSeverity('error')
       }
@@ -360,6 +378,16 @@ function NewOrders() {
               </form>
             </Card>
           </div>
+          <Button
+            type='submit'
+            variant='contained'
+            color='primary'
+            onClick={handleModal}
+            status = {created}
+          >
+           Show Modal
+          </Button>
+          <CreateModal isOpen = {isOpen} handleModal = {handleModal} created={created} title ="Order"/>
         </SimpleCard>
       )}
     </div>
