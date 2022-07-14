@@ -198,7 +198,6 @@ function NewProduct({ isNewProduct, id, Product }) {
           else{
             setAlertData({ success: false, text: 'Invalid details provided', title: 'Unable to create product' })
             handleDisplayModal();
-            
             // return 
           };
         })
@@ -237,6 +236,7 @@ function NewProduct({ isNewProduct, id, Product }) {
           touched,
           handleChange,
           handleBlur,
+          handleSubmit,
           setFieldValue,
         }) => (
           <form className='px-4' onSubmit={handleSubmit}>
