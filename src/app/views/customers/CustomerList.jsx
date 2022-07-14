@@ -82,6 +82,7 @@ const CustomerList = () => {
     setPage(page)
   }
 
+  console.log({ userList })
   const columns = [
     {
       name: 'firstName', // field name in the row object
