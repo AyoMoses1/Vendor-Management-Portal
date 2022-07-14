@@ -106,12 +106,12 @@ export const navigations = [
     ],
   },
   {
-    name: 'USSD Mgt',
+    name: 'USSD',
     icon: 'phonelink',
     children: [
       {
-        name: 'USSD Product Categories',
-        path: '/ussd-product-categories',
+        name: 'USSD Featured Categories',
+        path: '/ussd-featured-categories',
         iconText: '',
       },
       {

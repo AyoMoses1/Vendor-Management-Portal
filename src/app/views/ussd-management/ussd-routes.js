@@ -1,7 +1,7 @@
 import { MatxLoadable } from 'matx'
 
-const USSDProductCategories = MatxLoadable({
-    loader: () => import('./ProductCategories/index.js'),
+const USSDFeaturedCategories = MatxLoadable({
+    loader: () => import('./FeaturedCategories/index.js'),
 })
 
 const DOCPickupCenters = MatxLoadable({
@@ -25,8 +25,8 @@ const USSDSpecialOrder = MatxLoadable({
 })
 const ussdRoutes = [
     {
-        path: '/ussd-product-categories',
-        component: USSDProductCategories
+        path: '/ussd-featured-categories',
+        component: USSDFeaturedCategories
     },
     {
         path: '/doc-pickup-centers',

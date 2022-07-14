@@ -126,8 +126,8 @@ const USSDProductCategoriesComponent = () => {
         <Breadcrumb
           routeSegments={[
             {
-              name: 'USSD Product Categories',
-              path: '/ussd-product-categories',
+              name: 'USSD Featured Categories',
+              path: '/ussd-featured-categories',
             },
           ]}
         />
@@ -136,7 +136,7 @@ const USSDProductCategoriesComponent = () => {
         <div className='min-w-750'>
           {loading && <CircularProgress size={20} />}
           <MUIDataTable
-            title={'USSD Product Categories'}
+            title={'USSD Featured Categories'}
             data={productCategories}
             columns={columns}
             options={{
