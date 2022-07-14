@@ -22,6 +22,7 @@ import getAgeBracket from '../../../utils/getAgeBracket';
 import CustomSnackBar, { FailedSnackBar } from '../../components/Snackbar';
 import CreateModal from 'app/components/CreateModal'
 import BulkUpload from './BulkUpload';
+import Alert from 'app/components/Alert';
 
 const agentTypes = [
   { type: 'Lead Agent', value: 'LEAD_AGENT' },
@@ -61,6 +62,10 @@ const AgentForm = ({ isEdit, id, agent }) => {
   const [error, setError] = React.useState('');
   const [severity, setSeverity] = React.useState('');
   const [loading, setLoading] = React.useState(false);
+
+  const [alertData, setAlertData] = useState({ success: false, text: '', title: '' });
+  const [isOpen, setIsOpen] = React.useState(false)
+
   const agentDetail = useSelector((state) => state.agentDetails);
 
   const [modalIsOpen, setModalIsOpen] = React.useState(false)
@@ -71,7 +76,7 @@ const AgentForm = ({ isEdit, id, agent }) => {
   const [open, setOpen] = useState(false)
 
   const handleModal = () => {
-    setOpen(!open)
+    setIsOpen(!isOpen)
   }
 
 
@@ -123,14 +128,16 @@ const AgentForm = ({ isEdit, id, agent }) => {
     try {
       const res = await http.post_new(`/afrimash/agents`, formData, config);
       setLoading(false);
-      setCreated({header:true, text:'You have successfully created an agent'})
-      setModalIsOpen(true)
+      setAlertData({ success: true, text: "Agent created sucessfully", title: 'Agent Created' })
+      handleModal();
       // history.push('/agents');
     } catch (err) {
       setLoading(false);
       if (err.response) {
         console.log(err.response.data);
-        setModalIsOpen(true)
+        setAlertData({ success: false, text: err.response?.errorMsg ?? 'Invalid details provided', title: 'Unable to create agent' })
+        handleModal();
+        
         setShowSnack({
           message: err.response.data.errorMsg,
           status: true,
@@ -404,6 +411,14 @@ const AgentForm = ({ isEdit, id, agent }) => {
               >
                 {isEdit ? 'Update Agent' : 'Create Agent'}
               </Button>
+              <Alert
+                isOpen={isOpen}
+                handleModal={handleModal}
+                alertData={alertData}
+                handleOK={() => {
+                  history.push('/agents')
+                }}
+              />
             </Grid>
           </form>
         )}

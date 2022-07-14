@@ -6,7 +6,8 @@ import { errorState } from '../../helpers/error-state';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom';
 import { addPickupCenter, updatePickupCenter } from '../USSDService';
 import Notification from '../../../components/Notification';
-import CreateModal from 'app/components/CreateModal'
+
+import Alert from 'app/components/Alert';
 
 
 import { Formik } from 'formik'
@@ -58,8 +59,8 @@ function NewPickupCenter({
     const [severity, setSeverity] = React.useState('')
     const [buttonState, setButtonState] = React.useState('Add');
 
-    const [modalIsOpen, setModalIsOpen] = React.useState(false)
-    const [created, setCreated] = React.useState({header: false, text: 'We encountered a problem.'})
+    const [alertData, setAlertData] = React.useState({ success: false, text: '', title: '' });
+    const [open, setOpen] = React.useState(false)
 
     const history = useHistory();
     const { shippingStates } = useSelector(
@@ -78,7 +79,7 @@ function NewPickupCenter({
     }, [pickupCenter])
 
     const handleModal = () => {
-        setModalIsOpen(prev => !prev)
+        setOpen(prev => !prev)
     }
 
 
@@ -92,12 +93,13 @@ function NewPickupCenter({
                 setSeverity
             ).then((res) => res)
             if (result) {
-                setCreated({header:true, text:'You have successfully created a shipping option.'})
                 handleClose()
-                setModalIsOpen(true)      
-                
+                setAlertData({ success: true, text: "Pickup center created sucessfully", title: 'Pickup center Created' })
+                handleModal();  
+                refresh();
             } else if (!result) {
-                setModalIsOpen(true)
+                setAlertData({ success: false, text: result?.errorMsg ?? 'Invalid details provided', title: 'Unable to create pickup center' })
+                handleModal(); 
                 errorState(setAlert, setSeverity)
             }
         } else {
@@ -109,13 +111,14 @@ function NewPickupCenter({
                 setSeverity,
             ).then((res) => res)
             if (result) {
-                setCreated({header:true, text:'You have successfully created a pickup center'})
                 handleClose()
-                setModalIsOpen(true)      
-                // refresh();
+                setAlertData({ success: false, text: result?.errorMsg ?? 'Invalid details provided', title: 'Unable to create pickup center' })
+                handleModal();     
+                refresh();
                 // handleClose();
             } else if (!result) {
-                setModalIsOpen(true)
+                setAlertData({ success: false, text: result?.errorMsg ?? 'Invalid details provided', title: 'Unable to create pickup center' })
+                handleModal(); 
                 errorState(setAlert, setSeverity)
             }
         }
@@ -214,7 +217,12 @@ function NewPickupCenter({
             <Modal open={isOpen} onClose={handleClose}>
                 {body}
             </Modal>
-            <CreateModal isOpen = {modalIsOpen} handleModal = {handleModal} created={created} title ="pickup center" successLink = '/doc-pickup-centres'/>
+            <Alert
+                isOpen={open}
+                handleModal={handleModal}
+                alertData={alertData}
+                handleOK={handleModal}
+              />
         </div>
     )
 }

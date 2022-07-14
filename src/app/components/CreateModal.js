@@ -1,6 +1,7 @@
 import React from 'react'
-import { Modal, Button, Typography } from '@material-ui/core'
+import { TextField, Modal, Button, Grid, MenuItem, RadioGroup,FormControl, FormControlLabel, Radio, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
+import { useHistory } from 'react-router-dom/cjs/react-router-dom';
 import CheckSharpIcon from '@mui/icons-material/CheckSharp';
 import PriorityHighSharpIcon from '@mui/icons-material/PriorityHighSharp';
 import './modal.css'
@@ -18,31 +19,31 @@ function getModalStyle() {
   const left = 50
 
   return {
-    top: `${top}%`,
-    left: `${left}%`,
-    transform: `translate(-${top}%, -${left}%)`,
+      top: `${top}%`,
+      left: `${left}%`,
+      transform: `translate(-${top}%, -${left}%)`,
   }
 }
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    position: 'absolute',
-    width: 500,
-    backgroundColor: theme.palette.background.paper,
-    boxShadow: theme.shadows[2],
-    padding: theme.spacing(5, 4, 3),
-    height: 400,
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    outline: 'none',
-    borderRadius: '20px',
-    boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px !important',
+      position: 'absolute',
+      width: 500,
+      backgroundColor: theme.palette.background.paper,
+      boxShadow: theme.shadows[2],
+      padding: theme.spacing(5, 4, 3),
+      height: 400,
+      display:'flex',
+      flexDirection:'column',
+      justifyContent:'space-around',
+      alignItems:'center',
+      outline: 'none',
+      borderRadius: '20px',
+      boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px !important',
   },
 
-  button: {
-
+  button:{
+   
     border: '0.5px solid #0F4E08',
     borderRadius: '8px',
     color: '#ffffff',
@@ -81,11 +82,11 @@ const CreateModal = ({isOpen, handleModal, created, title, successLink}) => {
 
 
   return (
-    <div>
-      <Modal open={isOpen} onClose={handleModal}>
-        {body}
-      </Modal>
-    </div>
+        <div>
+            <Modal open={isOpen} onClose={handleModal}>
+                {body}
+            </Modal>
+        </div>
   )
 }
 

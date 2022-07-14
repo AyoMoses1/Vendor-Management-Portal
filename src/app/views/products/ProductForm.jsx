@@ -25,8 +25,7 @@ import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import http from '../../services/api';
-import CreateModal from 'app/components/CreateModal'
-
+import Alert from 'app/components/Alert';
 const icon = <CheckBoxOutlineBlankIcon fontSize='small' />;
 const checkedIcon = <CheckBoxIcon fontSize='small' />;
 
@@ -90,8 +89,14 @@ function NewProduct({ isNewProduct, id, Product }) {
   const [shippinClasses, setShippingClasses] = React.useState([]);
   const [loading, setLoading] = useState(false);
 
-  const [modalIsOpen, setModalIsOpen] = React.useState(false)
-  const [created, setCreated] = React.useState({header: false, text: 'We encountered a problem.'})
+  const [alertData, setAlertData] = useState({ success: false, text: '', title: '' });
+  const [isOpen, setIsOpen] = React.useState(false)
+
+
+
+  const handleDisplayModal = () => {
+    setIsOpen(!isOpen)
+  }
 
   // const [product, setProduct] = useState(Product);
 
@@ -158,9 +163,6 @@ function NewProduct({ isNewProduct, id, Product }) {
     setState({ ...state, [fieldName]: id });
   };
 
-  const handleModal = () => {
-    setModalIsOpen(prev => !prev)
-  }
 
   const handleSubmit = (values, { setSubmitting }) => {
     const payload = { ...state, ...values };
@@ -189,12 +191,13 @@ function NewProduct({ isNewProduct, id, Product }) {
       updateProduct(updateData)
         .then((res) => {
           if (res.status === 200) {
-            setCreated({header:true, text:'You have successfully created a Product.'})
-            setModalIsOpen(true)
+            setAlertData({ success: true, text: "Product created sucessfully", title: 'Product Created' })
+            handleDisplayModal();
             // history.push('/products');
           }
           else{
-            setModalIsOpen(true)
+            setAlertData({ success: false, text: 'Invalid details provided', title: 'Unable to create product' })
+            handleDisplayModal();
             // return 
           };
         })
@@ -203,12 +206,13 @@ function NewProduct({ isNewProduct, id, Product }) {
       createProduct(data)
       .then((res) => {
         if (res.status === 200) {
-          setModalIsOpen(true)
-          setCreated({header:true, text:'You have successfully created a Product.'})
+          setAlertData({ success: true, text: "Product created sucessfully", title: 'Product Created' })
+          handleDisplayModal();
           // history.push('/products')
         }
         else {
-          setModalIsOpen(true)
+          setAlertData({ success: false, text: 'Invalid details provided', title: 'Unable to create product' })
+          handleDisplayModal();
           // return 
         };
       })
@@ -232,6 +236,7 @@ function NewProduct({ isNewProduct, id, Product }) {
           touched,
           handleChange,
           handleBlur,
+          handleSubmit,
           setFieldValue,
         }) => (
           <form className='px-4' onSubmit={handleSubmit}>
@@ -485,11 +490,17 @@ function NewProduct({ isNewProduct, id, Product }) {
             >
               Add Product
             </Button>
-            <Button className='mb-4 px-12' variant='contained' color='primary' onClick={handleModal}>Show Modal</Button>
           </form>
         )}
       </Formik>
-      <CreateModal isOpen = {modalIsOpen} handleModal = {handleModal} created={created} title ="Product"/>
+      <Alert
+        isOpen={isOpen}
+        handleModal={handleDisplayModal}
+        alertData={alertData}
+        handleOK={() => {
+          history.push('/products')
+        }}
+      />
     </div>
   );
 }
