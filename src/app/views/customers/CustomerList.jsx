@@ -73,6 +73,7 @@ const CustomerList = () => {
     return () => setIsAlive(false)
   }, [isAlive, source])
 
+  console.log({ userList })
   const columns = [
     {
       name: 'firstName', // field name in the row object
