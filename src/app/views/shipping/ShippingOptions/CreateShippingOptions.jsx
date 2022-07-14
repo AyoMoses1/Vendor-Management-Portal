@@ -21,6 +21,7 @@ import { errorState } from '../../helpers/error-state';
 import { useDispatch, useSelector } from 'react-redux';
 import { getShippingOptionGroup } from 'app/redux/actions/shippingActions';
 import CreateModal from 'app/components/CreateModal'
+import Alert from 'app/components/Alert';
 
 
 const initialValues = {
@@ -63,8 +64,8 @@ const CreateShippingOption = ({ location }) => {
   const [shipping, setShipping] = React.useState(false);
   const [isDimension, setDimension] = React.useState(false);
   
-  const [modalIsOpen, setModalIsOpen] = React.useState(false)
-  const [created, setCreated] = React.useState({header: false, text: 'We encountered a problem.'})
+  const [alertData, setAlertData] = React.useState({ success: false, text: '', title: '' });
+  const [isOpen, setIsOpen] = React.useState(false)
 
   const dispatch = useDispatch();
 
@@ -81,7 +82,7 @@ const CreateShippingOption = ({ location }) => {
   // console.log(shippingGroup)
 
   const handleModal = () => {
-    setModalIsOpen(prev => !prev)
+    setIsOpen(prev => !prev)
   }
 
   const handleSubmit = async (values, { setSubmitting }) => {
@@ -102,11 +103,12 @@ const CreateShippingOption = ({ location }) => {
       setLoading(false);
       http.put(`/afrimash/shipping-option`, payload).then((res) => {
         if (res.status === 200) {
-          setCreated({header:true, text:'You have successfully created a shipping option.'})
-          setModalIsOpen(true)
+          setAlertData({ success: true, text: "Shipping option created sucessfully", title: 'Shipping Option Created' })
+          handleModal();
           // history.push('/shipping-options');
         } else if (res.status === 'BAD_REQUEST') {
-          setModalIsOpen(true)
+          setAlertData({ success: false, text: 'Invalid details provided', title: 'Unable to create shipping option' })
+          handleModal();
           // let message = 'Somthing went wrong with the request';
           // errorState(setError, setSeverity, message);
         }
@@ -115,11 +117,12 @@ const CreateShippingOption = ({ location }) => {
       setLoading(false);
       http.post(`/afrimash/shipping-option`, payload).then((res) => {
         if (res.status === 200) {
-          setCreated({header:true, text:'You have successfully created a shipping option.'})
-          setModalIsOpen(true)
+          setAlertData({ success: true, text: "Shipping option created sucessfully", title: 'Shipping Option Created' })
+          handleModal();
           // history.push('/shipping-options');
         } else if (res.status === 'BAD_REQUEST') {
-          setModalIsOpen(true)
+          setAlertData({ success: false, text: 'Invalid details provided', title: 'Unable to create shipping option' })
+          handleModal();
           // let message = 'Somthing went wrong with the request';
           // errorState(setError, setSeverity, message);
         }
@@ -490,7 +493,14 @@ const CreateShippingOption = ({ location }) => {
           </form>
         )}
       </Formik>
-      <CreateModal isOpen = {modalIsOpen} handleModal = {handleModal} created={created} title ="shipping option" successLink = '/shipping-options'/>
+      <Alert
+        isOpen={isOpen}
+        handleModal={handleModal}
+        alertData={alertData}
+        handleOK={() => {
+          history.push('/shipping-options')
+        }}
+      />
     </div>
   );
 };

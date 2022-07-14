@@ -1,8 +1,6 @@
 import React from 'react'
 import { Modal, Button, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import CheckSharpIcon from '@mui/icons-material/CheckSharp';
-import PriorityHighSharpIcon from '@mui/icons-material/PriorityHighSharp';
 import './modal.css'
 
 
