@@ -91,7 +91,8 @@ function Editor({
     useEffect(() => {
         if (specialOrder) {
             const { productName, quantity, status } = specialOrder
-            setValues({ ...initialValues, productName, quantity, status })
+            // setValues({ ...initialValues, productName, quantity, status })
+            setValues({ ...initialValues, productName, quantity, status, ...specialOrder })
             setButtonState('Update');
         } else {
             setValues(initialValues);

@@ -57,6 +57,7 @@ const SpecialOrderViewer = ({ toggleOrderEditor, id }) => {
     if (id !== 'add')
       getInvoiceById(id).then((res) => {
         console.log(res.data.object)
+        console.log("AAHAHAHAHHAHAHAHAH")
         setState({ ...res.data.object })
       })
   }, [id])
