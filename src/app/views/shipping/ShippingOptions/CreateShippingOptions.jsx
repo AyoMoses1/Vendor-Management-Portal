@@ -20,7 +20,6 @@ import Notification from '../../../components/Notification';
 import { errorState } from '../../helpers/error-state';
 import { useDispatch, useSelector } from 'react-redux';
 import { getShippingOptionGroup } from 'app/redux/actions/shippingActions';
-import CreateModal from 'app/components/CreateModal'
 import Alert from 'app/components/Alert';
 
 

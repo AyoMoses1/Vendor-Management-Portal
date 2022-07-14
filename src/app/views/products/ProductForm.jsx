@@ -25,7 +25,6 @@ import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import http from '../../services/api';
-// import CreateModal from 'app/components/CreateModal' 
 import Alert from 'app/components/Alert';
 const icon = <CheckBoxOutlineBlankIcon fontSize='small' />;
 const checkedIcon = <CheckBoxIcon fontSize='small' />;

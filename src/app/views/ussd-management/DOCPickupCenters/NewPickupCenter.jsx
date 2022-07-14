@@ -96,7 +96,7 @@ function NewPickupCenter({
                 handleClose()
                 setAlertData({ success: true, text: "Pickup center created sucessfully", title: 'Pickup center Created' })
                 handleModal();  
-                
+                refresh();
             } else if (!result) {
                 setAlertData({ success: false, text: result?.errorMsg ?? 'Invalid details provided', title: 'Unable to create pickup center' })
                 handleModal(); 
@@ -221,9 +221,7 @@ function NewPickupCenter({
                 isOpen={open}
                 handleModal={handleModal}
                 alertData={alertData}
-                handleOK={() => {
-                  history.push('/doc-pickup-centers')
-                }}
+                handleOK={handleModal}
               />
         </div>
     )
