@@ -148,6 +148,9 @@ function NewOrders() {
           setIsOpen(prev => !prev)
           setCreated({header:true, text:'You have successfully created an order.'})
         }
+        else{
+          setIsOpen(prev => !prev)
+        }
       } else if (!response) {
         setIsOpen(prev => !prev)
         // setCreated({header:false, text:'We encountered a problem'})
@@ -378,15 +381,14 @@ function NewOrders() {
               </form>
             </Card>
           </div>
-          <Button
+          {/* <Button
             type='submit'
             variant='contained'
             color='primary'
             onClick={handleModal}
-            status = {created}
           >
            Show Modal
-          </Button>
+          </Button> */}
           <CreateModal isOpen = {isOpen} handleModal = {handleModal} created={created} title ="Order"/>
         </SimpleCard>
       )}
