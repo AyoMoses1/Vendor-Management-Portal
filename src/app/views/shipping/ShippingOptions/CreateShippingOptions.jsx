@@ -20,6 +20,8 @@ import Notification from '../../../components/Notification';
 import { errorState } from '../../helpers/error-state';
 import { useDispatch, useSelector } from 'react-redux';
 import { getShippingOptionGroup } from 'app/redux/actions/shippingActions';
+import CreateModal from 'app/components/CreateModal'
+
 
 const initialValues = {
   name: '',
@@ -60,6 +62,9 @@ const CreateShippingOption = ({ location }) => {
   const [shippingClass, setShippingClass] = React.useState();
   const [shipping, setShipping] = React.useState(false);
   const [isDimension, setDimension] = React.useState(false);
+  
+  const [modalIsOpen, setModalIsOpen] = React.useState(false)
+  const [created, setCreated] = React.useState({header: false, text: 'We encountered a problem.'})
 
   const dispatch = useDispatch();
 
@@ -74,6 +79,10 @@ const CreateShippingOption = ({ location }) => {
   // ))
 
   // console.log(shippingGroup)
+
+  const handleModal = () => {
+    setModalIsOpen(prev => !prev)
+  }
 
   const handleSubmit = async (values, { setSubmitting }) => {
     const payload = { ...state, ...values };
@@ -93,20 +102,26 @@ const CreateShippingOption = ({ location }) => {
       setLoading(false);
       http.put(`/afrimash/shipping-option`, payload).then((res) => {
         if (res.status === 200) {
-          history.push('/shipping-options');
+          setCreated({header:true, text:'You have successfully created a shipping option.'})
+          setModalIsOpen(true)
+          // history.push('/shipping-options');
         } else if (res.status === 'BAD_REQUEST') {
-          let message = 'Somthing went wrong with the request';
-          errorState(setError, setSeverity, message);
+          setModalIsOpen(true)
+          // let message = 'Somthing went wrong with the request';
+          // errorState(setError, setSeverity, message);
         }
       });
     } else {
       setLoading(false);
       http.post(`/afrimash/shipping-option`, payload).then((res) => {
         if (res.status === 200) {
-          history.push('/shipping-options');
+          setCreated({header:true, text:'You have successfully created a shipping option.'})
+          setModalIsOpen(true)
+          // history.push('/shipping-options');
         } else if (res.status === 'BAD_REQUEST') {
-          let message = 'Somthing went wrong with the request';
-          errorState(setError, setSeverity, message);
+          setModalIsOpen(true)
+          // let message = 'Somthing went wrong with the request';
+          // errorState(setError, setSeverity, message);
         }
       });
     }
@@ -475,6 +490,7 @@ const CreateShippingOption = ({ location }) => {
           </form>
         )}
       </Formik>
+      <CreateModal isOpen = {modalIsOpen} handleModal = {handleModal} created={created} title ="shipping option" successLink = '/shipping-options'/>
     </div>
   );
 };

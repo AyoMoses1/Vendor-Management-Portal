@@ -183,7 +183,7 @@ const SpecialOrderViewer = ({ toggleOrderEditor, id }) => {
           <div className={clsx(
               'viewer_actions px-4 mb-5 flex items-center justify-between')}>
               <p className='mb-0'>Product Quantity:</p>
-              <h5 className=''>{quantity}</h5>
+              <h5 className=''>{quantity}</h5>  
             </div>
           <Editor
             name={"Edit Special Order"}

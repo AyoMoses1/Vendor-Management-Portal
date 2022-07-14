@@ -20,6 +20,7 @@ import { errorState } from '../helpers/error-state';
 import { states } from '../../../utils/states';
 import getAgeBracket from '../../../utils/getAgeBracket';
 import CustomSnackBar, { FailedSnackBar } from '../../components/Snackbar';
+import CreateModal from 'app/components/CreateModal'
 import BulkUpload from './BulkUpload';
 
 const agentTypes = [
@@ -62,6 +63,9 @@ const AgentForm = ({ isEdit, id, agent }) => {
   const [loading, setLoading] = React.useState(false);
   const agentDetail = useSelector((state) => state.agentDetails);
 
+  const [modalIsOpen, setModalIsOpen] = React.useState(false)
+  const [created, setCreated] = React.useState({header: false, text: 'We encountered a problem.'})
+
   const { agentDetails } = agentDetail;
 
   const [open, setOpen] = useState(false)
@@ -69,6 +73,13 @@ const AgentForm = ({ isEdit, id, agent }) => {
   const handleModal = () => {
     setOpen(!open)
   }
+
+
+  const handleCreateModal = () => {
+    setModalIsOpen(prev => !prev)
+  }
+
+
 
   const fileUploadHandler = async (e) => {
     const file = e.target.files[0];
@@ -105,17 +116,21 @@ const AgentForm = ({ isEdit, id, agent }) => {
 
     if (isEdit) {
       http.put(`/afrimash/agents/`, updateData);
+      
       return;
     }
 
     try {
       const res = await http.post_new(`/afrimash/agents`, formData, config);
       setLoading(false);
-      history.push('/agents');
+      setCreated({header:true, text:'You have successfully created an agent'})
+      setModalIsOpen(true)
+      // history.push('/agents');
     } catch (err) {
       setLoading(false);
       if (err.response) {
         console.log(err.response.data);
+        setModalIsOpen(true)
         setShowSnack({
           message: err.response.data.errorMsg,
           status: true,
@@ -394,6 +409,8 @@ const AgentForm = ({ isEdit, id, agent }) => {
         )}
       </Formik>
       <FailedSnackBar onClose={() => setShowSnack({ message: '', status: false })} message={showSnack.message} open={showSnack.status} />
+
+      <CreateModal isOpen = {modalIsOpen} handleModal = {handleModal} created={created} title ="agent" successLink = '/agents'/>
     </div>
   );
 };

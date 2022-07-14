@@ -6,6 +6,8 @@ import { errorState } from '../../helpers/error-state';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom';
 import { addPickupCenter, updatePickupCenter } from '../USSDService';
 import Notification from '../../../components/Notification';
+import CreateModal from 'app/components/CreateModal'
+
 
 import { Formik } from 'formik'
 import * as yup from 'yup'
@@ -55,6 +57,10 @@ function NewPickupCenter({
     const [alert, setAlert] = React.useState('')
     const [severity, setSeverity] = React.useState('')
     const [buttonState, setButtonState] = React.useState('Add');
+
+    const [modalIsOpen, setModalIsOpen] = React.useState(false)
+    const [created, setCreated] = React.useState({header: false, text: 'We encountered a problem.'})
+
     const history = useHistory();
     const { shippingStates } = useSelector(
         (state) => state.getShippingStates,
@@ -71,6 +77,11 @@ function NewPickupCenter({
         }
     }, [pickupCenter])
 
+    const handleModal = () => {
+        setModalIsOpen(prev => !prev)
+    }
+
+
     const handleSubmit = async (values) => {
         if (!pickupCenter) {
             let tempState = { ...values }
@@ -81,9 +92,12 @@ function NewPickupCenter({
                 setSeverity
             ).then((res) => res)
             if (result) {
-                refresh();
-                handleClose();
+                setCreated({header:true, text:'You have successfully created a shipping option.'})
+                handleClose()
+                setModalIsOpen(true)      
+                
             } else if (!result) {
+                setModalIsOpen(true)
                 errorState(setAlert, setSeverity)
             }
         } else {
@@ -95,9 +109,13 @@ function NewPickupCenter({
                 setSeverity,
             ).then((res) => res)
             if (result) {
-                refresh();
-                handleClose();
+                setCreated({header:true, text:'You have successfully created a pickup center'})
+                handleClose()
+                setModalIsOpen(true)      
+                // refresh();
+                // handleClose();
             } else if (!result) {
+                setModalIsOpen(true)
                 errorState(setAlert, setSeverity)
             }
         }
@@ -196,6 +214,7 @@ function NewPickupCenter({
             <Modal open={isOpen} onClose={handleClose}>
                 {body}
             </Modal>
+            <CreateModal isOpen = {modalIsOpen} handleModal = {handleModal} created={created} title ="pickup center" successLink = '/doc-pickup-centres'/>
         </div>
     )
 }

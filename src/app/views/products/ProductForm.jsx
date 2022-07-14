@@ -25,6 +25,7 @@ import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import http from '../../services/api';
+import CreateModal from 'app/components/CreateModal'
 
 const icon = <CheckBoxOutlineBlankIcon fontSize='small' />;
 const checkedIcon = <CheckBoxIcon fontSize='small' />;
@@ -88,6 +89,9 @@ function NewProduct({ isNewProduct, id, Product }) {
   const [severity, setSeverity] = useState('');
   const [shippinClasses, setShippingClasses] = React.useState([]);
   const [loading, setLoading] = useState(false);
+
+  const [modalIsOpen, setModalIsOpen] = React.useState(false)
+  const [created, setCreated] = React.useState({header: false, text: 'We encountered a problem.'})
 
   // const [product, setProduct] = useState(Product);
 
@@ -154,6 +158,10 @@ function NewProduct({ isNewProduct, id, Product }) {
     setState({ ...state, [fieldName]: id });
   };
 
+  const handleModal = () => {
+    setModalIsOpen(prev => !prev)
+  }
+
   const handleSubmit = (values, { setSubmitting }) => {
     const payload = { ...state, ...values };
     const data = new FormData();
@@ -176,18 +184,33 @@ function NewProduct({ isNewProduct, id, Product }) {
     imageList.forEach((file, imageFile) => {
       data.append('imageFile', file);
     });
+
     if (!isNewProduct) {
       updateProduct(updateData)
         .then((res) => {
-          if (res.status === 200) history.push('/products');
-          else return;
+          if (res.status === 200) {
+            setCreated({header:true, text:'You have successfully created a Product.'})
+            setModalIsOpen(true)
+            // history.push('/products');
+          }
+          else{
+            setModalIsOpen(true)
+            // return 
+          };
         })
         .catch((err) => console.error(err));
     }else {
       createProduct(data)
       .then((res) => {
-        if (res.status === 200) history.push('/products');
-        else return;
+        if (res.status === 200) {
+          setModalIsOpen(true)
+          setCreated({header:true, text:'You have successfully created a Product.'})
+          // history.push('/products')
+        }
+        else {
+          setModalIsOpen(true)
+          // return 
+        };
       })
       .then((err) => console.error(err));
     }
@@ -462,9 +485,11 @@ function NewProduct({ isNewProduct, id, Product }) {
             >
               Add Product
             </Button>
+            <Button className='mb-4 px-12' variant='contained' color='primary' onClick={handleModal}>Show Modal</Button>
           </form>
         )}
       </Formik>
+      <CreateModal isOpen = {modalIsOpen} handleModal = {handleModal} created={created} title ="Product"/>
     </div>
   );
 }

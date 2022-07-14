@@ -3,6 +3,7 @@ import { TextField, Modal, Button } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { Formik } from 'formik'
 import * as yup from 'yup'
+import CreateModal from 'app/components/CreateModal'
 
 function rand() {
   return Math.round(Math.random() * 20) - 10
@@ -47,17 +48,26 @@ function CreateNew({
   const [state, setState] = React.useState({})
   const [values, setValues] = React.useState(initialValues)
 
+  const [modalIsOpen, setModalIsOpen] = React.useState(false)
+  const [created, setCreated] = React.useState({header: false, text: 'We encountered a problem.'})
+
   const handleChange = (e) => {
     const { name, value } = e.target
     setState({ ...state, [name]: value })
     setValues({ ...values, [name]: value })
   }
-
+  const handleModal = () => {
+    setModalIsOpen(prev => !prev)
+  }
+  
   const handleSubmit = (values, { setSubmitting }) => {
     onSubmit(state).then((res) => {
       if (res.data.status === 'OK') {
-        handleClose()
+        setModalIsOpen(true)
+        setCreated({header:true, text:'You have successfully created a Product.'})
+        // handleClose()
       } else {
+        setModalIsOpen(true)
         return
       }
     })
@@ -109,6 +119,7 @@ function CreateNew({
       <Modal open={isOpen} onClose={handleClose}>
         {body}
       </Modal>
+      <CreateModal isOpen = {modalIsOpen} handleModal = {handleModal} created={created} title ="Product"/>
     </div>
   )
 }

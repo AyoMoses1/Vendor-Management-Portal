@@ -4,7 +4,10 @@ import { makeStyles } from '@material-ui/core/styles'
 import CheckSharpIcon from '@mui/icons-material/CheckSharp';
 import PriorityHighSharpIcon from '@mui/icons-material/PriorityHighSharp';
 import './modal.css'
-
+import errorImage from "../../../src/images/error.png"
+import successImage from "../../../src/images/success.png"
+import { FiColumns } from 'react-icons/fi';
+// import Notification from '../../../components/Notification';
 
 function rand() {
   return Math.round(Math.random() * 20) - 10
@@ -46,21 +49,35 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
+// const history = useHistory()
 
-const CreateModal = ({ isOpen, handleModal, created, title }) => {
+const CreateModal = ({isOpen, handleModal, created, title, successLink}) => {
   console.log(created)
   const classes = useStyles()
   const [modalStyle] = React.useState(getModalStyle)
   const [alert, setAlert] = React.useState('')
   const [buttonState, setButtonState] = React.useState('Ok');
 
-  const body = <div style={modalStyle} className={classes.paper}>
+  const history = useHistory()
 
-    {created.header ? <CheckSharpIcon className='check--icon' style={{ fontSize: 100 }} /> : <PriorityHighSharpIcon className='failed--icon' style={{ fontSize: 100 }} />}
-    <Typography variant='h5' className='modal--header'>{title} Created</Typography>
-    <Typography className='modal-content'>{created.text}</Typography>
-    {created.header ? <Button variant='contained' style={{ background: '#0F4E08' }} className={classes.button}>OK</Button> : <Button variant='contained' style={{ background: '#454545' }} className={classes.button} onClick={handleModal}>Back</Button>}
-  </div>
+  const handleSuccessRedirect = () => {
+      history.push('afrimash\n'+""+successLink)
+  }
+
+  const body = <div style={modalStyle} className={classes.paper}>
+                  
+                  {created.header ? 
+                  
+                    <div className='check--icon'><img src = {successImage}/></div>
+                      : 
+                    <div className='failed--icon'><img src = {errorImage}/></div>
+                    
+                  }
+
+                  <Typography variant='h5' className='modal--header'>{created.header ? `${title} Created` : `Problem creating ${title}`}</Typography>
+                  <Typography className='modal-content'>{created.text}</Typography>
+                  {created.header ? <Button variant='contained' onClick={handleSuccessRedirect} style={{background:'#0F4E08'}} className={classes.button}>OK</Button>: <Button variant='contained' style={{background:'#454545'}} className={classes.button} onClick={handleModal}>Back</Button>}
+              </div>
 
 
   return (
