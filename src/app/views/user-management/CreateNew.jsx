@@ -1,13 +1,5 @@
 import React from 'react'
 import {
-  Table,
-  TableHead,
-  TableCell,
-  TableBody,
-  IconButton,
-  Icon,
-  TableRow,
-  Card,
   TextField,
   Modal,
   Button
@@ -42,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-function CreateNew({name, handleClose, isOpen, fields, onSubmit,states}) {
+function CreateNew({ name, handleClose, isOpen, fields, onSubmit, states }) {
   const classes = useStyles();
   const [modalStyle] = React.useState(getModalStyle);
   const [state, setState] = React.useState(states)
@@ -55,39 +47,39 @@ function CreateNew({name, handleClose, isOpen, fields, onSubmit,states}) {
   const submit = () => {
     onSubmit(state)
   }
-    const body = (
+  const body = (
     <div style={modalStyle} className={classes.paper}>
       <h4 id="simple-modal-title">{name}</h4>
       <form>
         <div>
-         {fields.map((field, index)=>  (                  
-         <TextField
-            className="capitalize"
-            onChange={handleChange}
-            autoFocus
-            margin="dense"
-            id={field}
-            name={field}
-            label={field}
-            type="text"
-            fullWidth />
-         ))}
-         <Button onClick={submit}  variant="contained" color="primary">Create</Button>
+          {fields.map((field, index) => (
+            <TextField
+              className="capitalize"
+              onChange={handleChange}
+              autoFocus
+              margin="dense"
+              id={field}
+              name={field}
+              label={field}
+              type="text"
+              fullWidth />
+          ))}
+          <Button onClick={submit} variant="contained" color="primary">Create</Button>
         </div>
       </form>
     </div>
   );
-    return (
-        <div>
-            <Modal 
-                open={isOpen}
-                onClose={handleClose}
-            >
-               {body}
-                
-            </Modal>
-        </div>
-    )
+  return (
+    <div>
+      <Modal
+        open={isOpen}
+        onClose={handleClose}
+      >
+        {body}
+
+      </Modal>
+    </div>
+  )
 }
 
 export default CreateNew

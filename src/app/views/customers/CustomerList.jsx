@@ -16,43 +16,71 @@ const CustomerList = () => {
   const [loading, isLoading] = useState(false)
   const [alert, setAlert] = useState('')
   const [severity, setSeverity] = useState('')
-  const [source, setSource] = useState('')
+  const [source, setSource] = useState('ALL')
+  const [title, setTitle] = useState('All Customers')
+  const [count, setCount] = useState(0)
+  const [page, setPage] = useState(0)
+  const [size, setSize] = useState(10);
 
   const sourceTypes = [
     {
+      type: 'ALL CUSTOMERS',
+      value: 'ALL',
+      name: 'All Customers'
+    },
+    {
       type: 'USSD',
       value: 'USSD',
+      name: 'USSD'
     },
     {
       type: 'ADMIN',
       value: 'ADMIN',
+      name: 'Admin'
     },
     {
       type: 'AGENT APP',
       value: 'AGENT_APP',
+      name: 'Agent App'
     },
     {
       type: 'CUSTOMER APP',
       value: 'CUSTOMER_APP',
+      name: 'Customer App'
     },
     {
       type: 'MARKET PLACE',
       value: 'MARKET_PLACE',
+      name: 'Market Place'
     },
     {
       type: 'IVR',
       value: 'IVR',
+      name: 'IVR'
     },
     {
       type: 'SMS',
       value: 'SMS',
+      name: 'SMS'
     },
   ]
 
+  const handleTitle = (value) => {
+    const v = sourceTypes.find(s => s.value === value).name;
+    setTitle(v);
+  }
+
   useEffect(() => {
-    getAllCustomer(setUserList, isLoading, setAlert, setSeverity, source)
+    const _source = source === 'ALL' ? '' : source;
+    getAllCustomer(setUserList, setCount, isLoading, setAlert, setSeverity, size, page, _source)
     return () => setIsAlive(false)
-  }, [isAlive, source])
+  }, [isAlive, source, size])
+
+  const onPageChange = (page) => {
+    const _source = source === 'ALL' ? '' : source;
+    getAllCustomer(setUserList, setCount, isLoading, setAlert, setSeverity, size, page, _source)
+    setPage(page)
+  }
 
   const columns = [
     {
@@ -228,17 +256,42 @@ const CustomerList = () => {
         {severity === 'error' && (
           <Notification alert={alert} severity={severity || ''} />
         )}
-        <div className='min-w-750'>
+        <div className='min-w-750 customer-table'>
           {loading ? (
             <Loading />
           ) : (
             <MUIDataTable
-              title={'All Customers'}
+              title={<div>
+                <h3 className='mt-4 mb-0'>{title}</h3>
+                <div className='w-full flex'>
+                  <div className='w-220 flex-end'>
+                    <TextField
+                      className='mb-4'
+                      name='mobileNo'
+                      label='Filter by source'
+                      variant='outlined'
+                      margin='normal'
+                      select
+                      fullWidth
+                      value={source}
+                      onChange={(e) => { setSource(e.target.value); handleTitle(e.target.value) }}
+                    >
+                      {sourceTypes.map((sourceType, idx) => (
+                        <MenuItem key={idx} value={sourceType.value}>
+                          {sourceType.type}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </div>
+                </div>
+              </div>}
               data={userList}
               columns={columns}
               options={{
                 filterType: 'textField',
                 responsive: 'standard',
+                serverSide: true,
+                count,
                 sort: true,
                 sortOrder: { name: 'id', direction: 'desc' },
                 //   selectableRows: "none", // set checkbox for each row
@@ -249,7 +302,17 @@ const CustomerList = () => {
                 //   pagination: true, //set pagination option
                 //   viewColumns: false, // set column option
                 elevation: 0,
+                page,
+                onTableChange: (action, tableState) => {
+                  if (action === 'changePage') {
+                    onPageChange(tableState.page)
+                  }
+                },
                 rowsPerPageOptions: [10, 20, 40, 80, 100],
+                rowsPerPage: size,
+                onChangeRowsPerPage: (x) => {
+                  setSize(x)
+                },
                 customSearchRender: (
                   searchText,
                   handleSearch,
@@ -299,27 +362,6 @@ const CustomerList = () => {
                           </Button>
                         </IconButton>
                       </Link>
-                      <div className='w-full flex-end flex'>
-                        <div className='w-220 flex-end'>
-                          <TextField
-                            className='mb-4'
-                            name='mobileNo'
-                            label='Filter by source'
-                            variant='outlined'
-                            margin='normal'
-                            select
-                            fullWidth
-                            value={source}
-                            onChange={(e) => setSource(e.target.value)}
-                          >
-                            {sourceTypes.map((sourceType, idx) => (
-                              <MenuItem key={idx} value={sourceType.value}>
-                                {sourceType.type}
-                              </MenuItem>
-                            ))}
-                          </TextField>
-                        </div>
-                      </div>
                     </>
                   )
                 },

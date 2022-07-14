@@ -6,9 +6,9 @@ export const getUserById = (id) => {
         .get(`/afrimash/users/${id}`)
 }
 
-export const getAllUser = (setData, isLoading, setAlert, setSeverity, setCount, page, role) => {
+export const getAllUser = (setData, isLoading, setAlert, setSeverity, setCount, page, size, role) => {
     isLoading(true)
-    http.get(role ? `/afrimash/users/search?page=${page}&roleId=${role}` : `/afrimash/users/search?page=${page}`).then(({ data }) => {
+    http.get(role ? `/afrimash/users/search?page=${page}&size=${size}&roleId=${role}` : `/afrimash/users/search?page=${page}&size=${size}`).then(({ data }) => {
         setData(data.object.content)
         setCount(data.object.totalElements);
         isLoading(false)
