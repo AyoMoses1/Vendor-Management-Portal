@@ -7,10 +7,18 @@ import "./_index.scss";
 
 import * as serviceWorker from "./serviceWorker";
 import App from "./app/App";
+import routes from '../src/app/RootRoutes'
+import { Store } from '../src/app/redux/Store'
+import { Provider } from 'react-redux'
+import AppContext from '../src/app/appContext'
 
 // cssVars();
 
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(
+    <Provider store={Store}>
+        <App />
+    </Provider>     
+    , document.getElementById("root"));
 
 // for IE-11 support un-comment cssVars() and it's import in this file
 // and in MatxTheme file
