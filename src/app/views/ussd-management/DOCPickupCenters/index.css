@@ -1,0 +1,13 @@
+.doc-table thead tr th {
+    padding-left: 24px!important;
+    padding-right: 24px!important;
+}
+
+.doc-table tbody tr td {
+    padding-left: 24px!important;
+    padding-right: 24px!important;
+}
+
+.w-full {
+    width: 100%;
+}

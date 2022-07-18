@@ -20,6 +20,8 @@ import Notification from '../../../components/Notification';
 import { errorState } from '../../helpers/error-state';
 import { useDispatch, useSelector } from 'react-redux';
 import { getShippingOptionGroup } from 'app/redux/actions/shippingActions';
+import Alert from 'app/components/Alert';
+
 
 const initialValues = {
   name: '',
@@ -60,6 +62,9 @@ const CreateShippingOption = ({ location }) => {
   const [shippingClass, setShippingClass] = React.useState();
   const [shipping, setShipping] = React.useState(false);
   const [isDimension, setDimension] = React.useState(false);
+  
+  const [alertData, setAlertData] = React.useState({ success: false, text: '', title: '' });
+  const [isOpen, setIsOpen] = React.useState(false)
 
   const dispatch = useDispatch();
 
@@ -74,6 +79,10 @@ const CreateShippingOption = ({ location }) => {
   // ))
 
   // console.log(shippingGroup)
+
+  const handleModal = () => {
+    setIsOpen(prev => !prev)
+  }
 
   const handleSubmit = async (values, { setSubmitting }) => {
     const payload = { ...state, ...values };
@@ -93,20 +102,28 @@ const CreateShippingOption = ({ location }) => {
       setLoading(false);
       http.put(`/afrimash/shipping-option`, payload).then((res) => {
         if (res.status === 200) {
-          history.push('/shipping-options');
+          setAlertData({ success: true, text: "Shipping option created sucessfully", title: 'Shipping Option Created' })
+          handleModal();
+          // history.push('/shipping-options');
         } else if (res.status === 'BAD_REQUEST') {
-          let message = 'Somthing went wrong with the request';
-          errorState(setError, setSeverity, message);
+          setAlertData({ success: false, text: 'Invalid details provided', title: 'Unable to create shipping option' })
+          handleModal();
+          // let message = 'Somthing went wrong with the request';
+          // errorState(setError, setSeverity, message);
         }
       });
     } else {
       setLoading(false);
       http.post(`/afrimash/shipping-option`, payload).then((res) => {
         if (res.status === 200) {
-          history.push('/shipping-options');
+          setAlertData({ success: true, text: "Shipping option created sucessfully", title: 'Shipping Option Created' })
+          handleModal();
+          // history.push('/shipping-options');
         } else if (res.status === 'BAD_REQUEST') {
-          let message = 'Somthing went wrong with the request';
-          errorState(setError, setSeverity, message);
+          setAlertData({ success: false, text: 'Invalid details provided', title: 'Unable to create shipping option' })
+          handleModal();
+          // let message = 'Somthing went wrong with the request';
+          // errorState(setError, setSeverity, message);
         }
       });
     }
@@ -475,6 +492,14 @@ const CreateShippingOption = ({ location }) => {
           </form>
         )}
       </Formik>
+      <Alert
+        isOpen={isOpen}
+        handleModal={handleModal}
+        alertData={alertData}
+        handleOK={() => {
+          history.push('/shipping-options')
+        }}
+      />
     </div>
   );
 };

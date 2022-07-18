@@ -67,7 +67,7 @@ class SignIn extends Component {
             <TextValidator
               className='mt-20 mb-24 w-100'
               variant='outlined'
-              label='Username'
+              label='Email'
               onChange={this.handleChange}
               type='email'
               name='username'

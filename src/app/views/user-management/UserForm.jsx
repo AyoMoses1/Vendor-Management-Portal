@@ -6,7 +6,7 @@ import { useHistory } from 'react-router-dom'
 
 import * as yup from 'yup'
 import { Formik } from 'formik'
-import Notification from '../../components/Notification'
+import Alert from 'app/components/Alert';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -34,50 +34,45 @@ function UserForm({ isNewUser, id, User }) {
     phoneNo: '',
     active: false,
     role: 3,
-    password: 'password',
     username: '',
   }
   const classes = useStyles()
   const [state, setState] = useState(initialState)
   const [values, setValues] = useState(initialValues)
   const [roles, setRoles] = useState([])
-  const [alert, setAlert] = useState('')
-  const [severity, setSeverity] = useState('')
   const [role, setRole] = useState('')
   const history = useHistory()
+  const [alertData, setAlertData] = useState({ success: false, text: '', title: '' });
+  const [isOpen, setIsOpen] = React.useState(false)
+
+  const handleModal = () => {
+    setIsOpen(prev => !prev)
+  }
 
   const handleSubmit = (values, { isSubmitting }) => {
     let tempState = { ...state, ...values }
     if (isNewUser)
       addUser(tempState).then((res) => {
-        console.log(res)
         if (res.status == 200) {
           setState({ ...state })
-          history.push('/users')
+          setAlertData({ success: true, text: "User created sucessfully", title: 'User Created' })
+          handleModal();
         } else {
-          setAlert('Invalid details provided')
-          setSeverity('error')
-          setTimeout(() => {
-            setAlert('')
-            setSeverity('')
-          }, 3000)
+          setAlertData({ success: false, text: res?.errorMsg ?? 'Invalid details provided', title: 'Unable to create user' })
+          handleModal();
           return
         }
       })
     else
       updateUser(tempState)
         .then((response) => {
-          console.log(response)
           if (response.status == '200') {
             setState({ ...state })
-            history.push('/users')
+            setAlertData({ success: true, text: "User updated sucessfully", title: 'User Created' })
+            handleModal();
           } else {
-            setAlert('Invalid details provided')
-            setSeverity('error')
-            setTimeout(() => {
-              setAlert('')
-              setSeverity('')
-            }, 3000)
+            setAlertData({ success: false, text: response?.errorMsg ?? 'Invalid details provided', title: 'Unable to create user' })
+            handleModal();
             return
           }
         })
@@ -98,15 +93,11 @@ function UserForm({ isNewUser, id, User }) {
   const getRoles = () => {
     getAllRoles().then(({ data }) => {
       setRoles(data.object)
-      console.log(data)
     })
   }
 
   return (
     <div className='w-100 overflow-auto'>
-      {severity === 'error' && (
-        <Notification alert={alert} severity={severity} />
-      )}
       <Card>
         <Formik
           initialValues={values}
@@ -219,6 +210,14 @@ function UserForm({ isNewUser, id, User }) {
               <Button type='submit' variant='contained' color='primary'>
                 Submit
               </Button>
+              <Alert
+                isOpen={isOpen}
+                handleModal={handleModal}
+                alertData={alertData}
+                handleOK={() => {
+                  history.push('/users')
+                }}
+              />
             </form>
           )}
         </Formik>
