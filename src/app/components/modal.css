@@ -33,3 +33,12 @@
 img {
     height: 100px;
 }
+
+div.auth__alert__buttons{
+    display: flex;
+    flex-direction: space-around;
+}
+div.auth__alert__buttons button{
+   margin: 0 10px !important;
+   border: none; 
+}
