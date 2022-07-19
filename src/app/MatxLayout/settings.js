@@ -1,6 +1,6 @@
 import layout1Settings from "./Layout1/Layout1Settings";
 import { themeColors } from "./MatxTheme/themeColors";
-import { createMuiTheme } from "@material-ui/core";
+import { createTheme } from "@material-ui/core";
 import { forEach, merge } from "lodash";
 import themeOptions from "./MatxTheme/themeOptions";
 
@@ -8,7 +8,7 @@ function createMatxThemes() {
   let themes = {};
 
   forEach(themeColors, (value, key) => {
-    themes[key] = createMuiTheme(merge({}, themeOptions, value));
+    themes[key] = createTheme(merge({}, themeOptions, value));
   });
   return themes;
 }

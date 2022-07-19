@@ -15,6 +15,7 @@ import Autocomplete from '@material-ui/lab/Autocomplete'
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank'
 import CheckBoxIcon from '@material-ui/icons/CheckBox'
 import Notification from '../../components/Notification'
+import Alert from 'app/components/Alert'
 
 import './order-view.css'
 import Loader from '../../../matx/components/MatxLoadable/Loading'
@@ -49,6 +50,10 @@ function NewOrders() {
   const [severity, setSeverity] = useState('')
   const [isIconTrue, setDisableIcon] = useState(false)
   const [product, setNewProduct] = React.useState([])
+  const [isOpen, setIsOpen] = React.useState(false)
+  const [alertData, setAlertData] = React.useState({ success: false, text: 'We encountered a problem.', title: "Title" })
+  const [modalText, setModalText] = React.useState('')
+
 
   const getAllDetails = () => {
     populate(
@@ -71,7 +76,6 @@ function NewOrders() {
     getAllDetails()
     getProductsData(setLoading, '/afrimash/products/', setProducts)
   }, [])
-  console.log(products.content)
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -85,6 +89,15 @@ function NewOrders() {
     setState({ ...state, orderItems: fields })
   }
 
+  // To be changed later
+  const handleModal = () => {
+    setIsOpen(prev => !prev)
+  }
+
+
+
+
+  // 
   const handleInputChange = (i, event, newValues, reason) => {
     if (reason === 'reset') {
       setFields([])
@@ -130,9 +143,16 @@ function NewOrders() {
     addInvoice({ ...state }).then((response) => {
       if (response instanceof Object) {
         if (response.status === 200) {
-          history.push('/orders')
+          // history.push('/orders')
+          setIsOpen(prev => !prev)
+          setAlertData({ success: true, text: 'You have successfully created an order.', title: "Order Created" })
+        }
+        else{
+          setIsOpen(prev => !prev)
         }
       } else if (!response) {
+        setIsOpen(prev => !prev)
+        // setCreated({success:false, text:'We encountered a problem'})
         setAlert('An Error Ocurred, Could not Create Order. Try Again')
         setSeverity('error')
       }
@@ -204,8 +224,7 @@ function NewOrders() {
                             options={products}
                             value={fields.product}
                             getOptionLabel={(option) =>
-                              `Name: ${option.name || ''} Vendor: ${
-                                option.storeId?.name || ''
+                              `Name: ${option.name || ''} Vendor: ${option.storeId?.name || ''
                               }`
                             }
                             onChange={(e, newValues) =>
@@ -360,6 +379,15 @@ function NewOrders() {
               </form>
             </Card>
           </div>
+          {/* <Button
+            type='submit'
+            variant='contained'
+            color='primary'
+            onClick={handleModal}
+          >
+            Show Modal
+                      </Button> */}
+          <Alert isOpen={isOpen} handleModal={handleModal} alertData={alertData} />
         </SimpleCard>
       )}
     </div>

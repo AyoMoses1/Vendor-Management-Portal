@@ -15,7 +15,6 @@ const UserInfo = ({ location }) => {
 
   useEffect(() => {
     getUserById(id).then(({ data }) => {
-      console.log(data)
       setUser(data.object)
     })
   }, [id])

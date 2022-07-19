@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { Breadcrumb } from 'matx'
 import MUIDataTable from 'mui-datatables'
-import { Grow, Icon, IconButton, TextField, Button } from '@material-ui/core'
+import { Grow, Icon, IconButton, TextField, Button, MenuItem, Typography, Select } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 
 import Notification from '../../components/Notification'
 
-import { getAllUser } from './UserService'
+import { getAllRoles, getAllUser } from './UserService'
 import Loading from 'matx/components/MatxLoadable/Loading'
 
 const Users = () => {
@@ -17,16 +17,34 @@ const Users = () => {
   const [severity, setSeverity] = useState('')
   const [page, setPage] = useState(0)
   const [count, setCount] = useState(0)
+  const [roles, setRoles] = useState([])
+  const [role, setRole] = useState(0)
+  const [size, setSize] = useState(10);
 
   useEffect(() => {
-    getAllUser(setUserList, isLoading, setAlert, setSeverity, setCount, page)
-    console.log(userList)
+    getAllUser(setUserList, isLoading, setAlert, setSeverity, setCount, page, size, role)
     return () => setIsAlive(false)
-  }, [isAlive, page])
+  }, [isAlive, page, size])
 
   const onPageChange = (page) => {
-    getAllUser(setUserList, isLoading, setAlert, setSeverity, setCount, page)
+    getAllUser(setUserList, isLoading, setAlert, setSeverity, setCount, page, size, role)
     setPage(page)
+  }
+
+  const handleCustomSearch = (value) => {
+    console.log(value);
+    setRole(value);
+    getAllUser(setUserList, isLoading, setAlert, setSeverity, setCount, page, size, value)
+  }
+
+  useEffect(() => {
+    getRoles();
+  }, [])
+
+  const getRoles = () => {
+    getAllRoles().then(({ data }) => {
+      setRoles(data.object)
+    })
   }
 
   const columns = [
@@ -34,7 +52,7 @@ const Users = () => {
       name: 'firstname', // field name in the row object
       label: 'Name', // column title that will be shown in table
       options: {
-        filter: true,
+        filter: false,
         customBodyRenderLite: (dataIndex) => {
           let user = userList[dataIndex]
           return (
@@ -48,9 +66,8 @@ const Users = () => {
               className='flex items-center'
             >
               <div className='ml-3'>
-                <h5 className='my-0 text-15'>{`${user?.firstName || 'N/A'} ${
-                  user?.lastName || 'N/A'
-                }`}</h5>
+                <h5 className='my-0 text-15'>{`${user?.firstName || 'N/A'} ${user?.lastName || 'N/A'
+                  }`}</h5>
                 <small className='text-muted'>{user?.email}</small>
               </div>
             </Link>
@@ -62,7 +79,7 @@ const Users = () => {
       name: 'phoneNo',
       label: 'Phone Number',
       options: {
-        filter: true,
+        filter: false,
         customBodyRenderLite: (dataIndex) => {
           let user = userList[dataIndex]
           return (
@@ -88,6 +105,34 @@ const Users = () => {
       label: 'Role',
       options: {
         filter: true,
+        filterType: 'custom',
+        filterOptions: {
+          name: roles,
+          display: () => {
+            return (
+              <Grow appear in={true} timeout={300}>
+                <Select
+                  size='small'
+                  fullWidth
+                  variant='outlined'
+                  displayEmpty={true}
+                  renderValue={value => value?.length ? Array.isArray(value) ? value.join(', ') : value : 'Select Role'}
+                  onChange={({ target: { value } }) => handleCustomSearch(value)}
+                  style={{ width: "260px" }}
+                >
+                  <MenuItem key={"null"} value={0}>
+                    All
+                  </MenuItem>
+                  {roles.map((role, idx) => (
+                    <MenuItem key={idx} value={role?.id}>
+                      {role.name.substr(5)}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </Grow>
+            )
+          }
+        },
         customBodyRenderLite: (dataIndex) => {
           let user = userList[dataIndex]
           let role = user.role?.name
@@ -188,6 +233,10 @@ const Users = () => {
                   }
                 },
                 rowsPerPageOptions: [10, 20, 40, 80, 100],
+                rowsPerPage: size,
+                onChangeRowsPerPage: (x) => {
+                  setSize(x)
+                },
                 customSearchRender: (
                   searchText,
                   handleSearch,
