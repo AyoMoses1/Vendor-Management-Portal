@@ -8,6 +8,7 @@ import clsx from 'clsx'
 import '../../orders/order-view.css'
 import Editor from './SpecialOrderEditor'
 import { getSpecialOrder } from '../USSDService'
+import { useIdleTimer } from 'react-idle-timer'
 
 const useStyles = makeStyles(({ palette, ...theme }) => ({
   '@global': {
@@ -57,7 +58,6 @@ const SpecialOrderViewer = ({ toggleOrderEditor, id }) => {
     if (id !== 'add')
       getInvoiceById(id).then((res) => {
         console.log(res.data.object)
-        console.log("AAHAHAHAHHAHAHAHAH")
         setState({ ...res.data.object })
       })
   }, [id])
@@ -143,7 +143,6 @@ const SpecialOrderViewer = ({ toggleOrderEditor, id }) => {
             </Button>
           </div>
         </div>
-
         <div id='print-area'>
           <div
             className={clsx(

@@ -9,7 +9,7 @@ export const getCustomerById = (id) => {
 
 export const getAllCustomer = (setData, setCount, isLoading, setAlert, setSeverity, size, page, source) => {
   isLoading(true)
-   http.get('/afrimash/customers/search?source=ADMIN').then(({data}) => {
+  http.get(source ? `/afrimash/customers/search?source=${source}` : `/afrimash/customers/search`).then(({ data }) => {
     if (data instanceof Object) {
       setData(data.object.content)
       isLoading(false)

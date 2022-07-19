@@ -15,13 +15,16 @@ export function setUserData(user) {
 }
 
 export function logoutUser() {
+ 
   return dispatch => {
+    console.log('LOGING OUT')
     jwtAuthService.logout();
-
+   
     history.push({
       pathname: "/signin"
     });
 
+  
     dispatch({
       type: USER_LOGGED_OUT
     });
