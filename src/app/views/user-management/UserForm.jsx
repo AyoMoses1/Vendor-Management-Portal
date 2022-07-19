@@ -83,6 +83,7 @@ function UserForm({ isNewUser, id, User }) {
     getRoles()
     if (!isNewUser) {
       getUserById(id).then(({ data }) => {
+        console.log(data.object);
         setState(data.object)
         setValues(data.object)
         setRole(data.object.role.name)

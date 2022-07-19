@@ -1,0 +1,8 @@
+.ROLE {
+    background-color: #5589ed;
+    color: #ffffff!important;
+    padding: 5px 10px;
+    width: fit-content;
+    border-radius: 5px;
+    font-weight: 600 !important;
+}

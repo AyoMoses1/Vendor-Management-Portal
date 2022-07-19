@@ -103,7 +103,7 @@ function BulkUpload({
                             aria-required='true'
                             onChange={fileUploadHandler}
                         />
-                        {error ? <p class="m-0 custom-danger">{errorMessage}</p> : <></>}
+                        {error ? <p className="m-0 custom-danger">{errorMessage}</p> : <></>}
 
                     </Grid>
                     <Grid item container justifyContent='center' alignItems='center'>
