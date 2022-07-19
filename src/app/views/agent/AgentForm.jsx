@@ -65,18 +65,34 @@ const AgentForm = ({ isEdit, id, agent }) => {
 
   const [alertData, setAlertData] = useState({ success: false, text: '', title: '' });
   const [isOpen, setIsOpen] = React.useState(false)
+  const [alertOpen, setAlertOpen] = React.useState(false)
+  const [openBulkUpload, setOpenBulkUpload] = React.useState(false)
 
   const agentDetail = useSelector((state) => state.agentDetails);
 
   const [modalIsOpen, setModalIsOpen] = React.useState(false)
-  const [created, setCreated] = React.useState({header: false, text: 'We encountered a problem.'})
+  const [created, setCreated] = React.useState({ header: false, text: 'We encountered a problem.' })
 
   const { agentDetails } = agentDetail;
 
-  const [open, setOpen] = useState(false)
-
   const handleModal = () => {
     setIsOpen(!isOpen)
+  }
+
+  const handleBulkUploadModal = () => {
+    setOpenBulkUpload(!openBulkUpload)
+  }
+
+  const handleAlertModal = () => {
+    setAlertOpen(prev => !prev)
+  }
+
+  const handleAlertOK = () => {
+    history.goBack();
+  }
+
+  const completed = () => {
+    handleAlertModal();
   }
 
 
@@ -121,7 +137,7 @@ const AgentForm = ({ isEdit, id, agent }) => {
 
     if (isEdit) {
       http.put(`/afrimash/agents/`, updateData);
-      
+
       return;
     }
 
@@ -129,15 +145,14 @@ const AgentForm = ({ isEdit, id, agent }) => {
       const res = await http.post_new(`/afrimash/agents`, formData, config);
       setLoading(false);
       setAlertData({ success: true, text: "Agent created sucessfully", title: 'Agent Created' })
-      handleModal();
+      handleAlertModal();
       // history.push('/agents');
     } catch (err) {
       setLoading(false);
       if (err.response) {
         console.log(err.response.data);
         setAlertData({ success: false, text: err.response?.errorMsg ?? 'Invalid details provided', title: 'Unable to create agent' })
-        handleModal();
-        
+        handleAlertModal();
         setShowSnack({
           message: err.response.data.errorMsg,
           status: true,
@@ -148,7 +163,9 @@ const AgentForm = ({ isEdit, id, agent }) => {
   };
 
   React.useEffect(() => {
-    dispatch(getAgentById(id));
+    if (id) {
+      dispatch(getAgentById(id));
+    }
   }, [dispatch, id, isEdit]);
 
   React.useEffect(() => {
@@ -188,19 +205,27 @@ const AgentForm = ({ isEdit, id, agent }) => {
                 <div className='w-full flex justify-between align-center'>
                   <h4>Agent personal details</h4>
                   <Button
-                    type='submit'
                     variant='contained'
                     color='primary'
                     onClick={() => {
-                      handleModal()
+                      handleBulkUploadModal()
                     }}>
                     Bulk Upload
                   </Button>
                 </div>
+                <Alert
+                  isOpen={alertOpen}
+                  handleModal={handleAlertModal}
+                  alertData={alertData}
+                  handleOK={handleAlertOK}
+                />
                 <BulkUpload
-                  name={"Create Multiple Customers"}
-                  isOpen={open}
-                  handleClose={handleModal} />
+                  name={"Create Multiple Agents"}
+                  isOpen={openBulkUpload}
+                  handleClose={handleBulkUploadModal}
+                  completed={completed}
+                  setSuccessData={(data) => setAlertData(data)}
+                />
               </Grid>
               <Grid item sm={6} xs={12}>
                 <TextField
@@ -413,7 +438,7 @@ const AgentForm = ({ isEdit, id, agent }) => {
               </Button>
               <Alert
                 isOpen={isOpen}
-                handleModal={handleModal}
+                handleModal={handleAlertModal}
                 alertData={alertData}
                 handleOK={() => {
                   history.push('/agents')
@@ -425,7 +450,7 @@ const AgentForm = ({ isEdit, id, agent }) => {
       </Formik>
       <FailedSnackBar onClose={() => setShowSnack({ message: '', status: false })} message={showSnack.message} open={showSnack.status} />
 
-      <CreateModal isOpen = {modalIsOpen} handleModal = {handleModal} created={created} title ="agent" successLink = '/agents'/>
+      <CreateModal isOpen={modalIsOpen} handleModal={handleModal} created={created} title="agent" successLink='/agents' />
     </div>
   );
 };
