@@ -50,7 +50,6 @@ const useStyles = makeStyles(({ palette, ...theme }) => ({
 const UserInfo = ({ location }) => {
   const { id } = location.state
   const [loading, setLoading] = React.useState(false);
-  const [open, setOpen] = useState(false)
   const [openRoleUpdate, setOpenRoleUpdate] = useState(false)
   const [roles, setRoles] = useState([])
   const [user, setUser] = useState([])
@@ -90,9 +89,8 @@ const UserInfo = ({ location }) => {
     })
   }
 
-  const refresh = async () => {
-    handleRoleUpdateModal();
-    getUser();
+  const completed = () => {
+    handleAlertModal();
   }
 
   const handleAlertModal = () => {
@@ -137,7 +135,8 @@ const UserInfo = ({ location }) => {
         roles={roles}
         user={user}
         handleClose={handleRoleUpdateModal}
-        refresh={refresh} />
+        completed={completed}
+        setSuccessData={(data) => setAlertData(data)} />
 
       <div className={clsx('invoice-viewer py-4', classes.orderViewer)}>
         <div

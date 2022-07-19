@@ -42,7 +42,8 @@ const UpdateUserRole = ({
     roles,
     user,
     handleClose,
-    refresh,
+    completed,
+    setSuccessData
 }) => {
     const classes = useStyles()
     const [modalStyle] = React.useState(getModalStyle)
@@ -68,8 +69,9 @@ const UpdateUserRole = ({
         updateUser(tempState)
             .then((response) => {
                 if (response.status == '200') {
-                    setAlertData({ success: true, text: "Role updated sucessfully", title: 'Role Updated' })
-                    handleModal();
+                    setSuccessData({ success: true, text: "Role updated sucessfully", title: 'Role Updated' })
+                    completed()
+                    handleClose();
                     setLoading(false);
                 } else {
                     setAlertData({ success: false, text: response?.errorMsg ?? 'Invalid details provided', title: 'Unable to update user role' })
@@ -91,10 +93,7 @@ const UpdateUserRole = ({
         setValues({ ...values, role: e.target.value })
     }
 
-    const handleOK = () => {
-        handleModal();
-        refresh();
-    }
+    const handleOK = () => { }
 
     const body = (
         <div style={modalStyle} className={classes.paper}>
