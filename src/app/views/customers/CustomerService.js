@@ -9,9 +9,10 @@ export const getCustomerById = (id) => {
 
 export const getAllCustomer = (setData, setCount, isLoading, setAlert, setSeverity, size, page, source) => {
   isLoading(true)
-  http.get(source ? `/afrimash/customers/search?source=${source}` : `/afrimash/customers/search`).then(({ data }) => {
+  http.get(`/afrimash/customers/search?page=${page}&size=${size}&source=${source}`).then(({ data }) => {
     if (data instanceof Object) {
       setData(data.object.content)
+      setCount(data.object.totalElements)
       isLoading(false)
     } else {
       errorState(setAlert, setSeverity)
