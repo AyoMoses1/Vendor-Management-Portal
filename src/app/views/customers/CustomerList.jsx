@@ -71,13 +71,13 @@ const CustomerList = () => {
   }
 
   useEffect(() => {
-    const _source = source === 'ALL' ? 'ADMIN' : source;
+    const _source = source === 'ALL' ? '' : source;
     getAllCustomer(setUserList, setCount, isLoading, setAlert, setSeverity, size, page, _source)
     return () => setIsAlive(false)
   }, [isAlive, source, size])
 
   const onPageChange = (page) => {
-    const _source = source === 'ALL' ? 'ADMIN' : source;
+    const _source = source === 'ALL' ? '' : source;
     getAllCustomer(setUserList, setCount, isLoading, setAlert, setSeverity, size, page, _source)
     setPage(page)
   }

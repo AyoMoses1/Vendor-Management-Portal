@@ -165,7 +165,7 @@ const Users = () => {
         customBodyRenderLite: (dataIndex) => {
           let user = userList[dataIndex]
           return (
-            <div className='flex items-center'>
+            <div className='flex items-center' style={{width: "200px"}}>
               <div className='flex-grow'></div>
               <Link
                 to={{
@@ -181,18 +181,6 @@ const Users = () => {
                 </IconButton>
               </Link>
             </div>
-          )
-        },
-      },
-    },
-    {
-      name: 'id', // field name in the row object
-      label: '', // column title that will be shown in table
-      options: {
-        filter: false,
-        customBodyRenderLite: (dataIndex) => {
-          return (
-            <div>{/* <h5 className='my-0 text-15'>{`${user?.id}`}</h5> */}</div>
           )
         },
       },

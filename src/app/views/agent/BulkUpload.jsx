@@ -1,8 +1,9 @@
-import React from 'react'
-import { TextField, Modal, Button, Grid, InputLabel } from '@material-ui/core'
+import React, { useState } from 'react'
+import { TextField, Modal, Button, Grid, InputLabel, CircularProgress } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import http from '../../services/api';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom';
+import Alert from 'app/components/Alert';
 
 function rand() {
     return Math.round(Math.random() * 20) - 10
@@ -33,6 +34,8 @@ function BulkUpload({
     name,
     isOpen,
     handleClose,
+    completed,
+    setSuccessData
 }) {
     const classes = useStyles()
     const [modalStyle] = React.useState(getModalStyle)
@@ -41,6 +44,12 @@ function BulkUpload({
     const [loading, setLoading] = React.useState(false);
     const history = useHistory();
     const [errorMessage, setErrorMessage] = React.useState('Field cannot be empty')
+    const [alertOpen, setAlertOpen] = React.useState(false)
+    const [alertData, setAlertData] = useState({ success: false, text: '', title: '' });
+
+    const handleModal = () => {
+        setAlertOpen(prev => !prev)
+    }
 
     const handleSubmit = async () => {
         if (!file) {
@@ -60,18 +69,21 @@ function BulkUpload({
 
         try {
             const res = await http.post_new(`/afrimash/agents/bulkcreate`, formData, config);
-            setLoading(false);
+            setSuccessData({ success: true, text: "Agents uploaded successfully", title: 'Agents Uploaded' })
+            completed()
             handleClose();
-            history.push('/agents')
+            setLoading(false);
         } catch (err) {
             setLoading(false);
             if (err.response) {
-                console.log(err.response.data);
-                setError(true);
-                setErrorMessage(err.response.data.error)
+                setAlertData({ success: false, text: err.response.data.error ?? 'Invalid details provided', title: 'Unable to process data' })
+                handleModal();
+                setLoading(false);
             }
         }
     }
+
+    const handleOK = () => { }
 
     const fileUploadHandler = async (e) => {
         setError(false);
@@ -115,8 +127,15 @@ function BulkUpload({
                                 handleSubmit()
                             }}
                         >
-                            Upload
+                            {loading ? <CircularProgress size={14} className='mr-10' /> : ''}
+                            {loading ? "Uploading" : "Upload"}
                         </Button>
+                        <Alert
+                            isOpen={alertOpen}
+                            handleModal={handleModal}
+                            alertData={alertData}
+                            handleOK={handleOK}
+                        />
                     </Grid>
                 </Grid>
             </Grid>

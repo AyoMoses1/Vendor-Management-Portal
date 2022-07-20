@@ -142,10 +142,10 @@ export const getShippingStates = () => (dispatch) => {
 
 export const getSpecialOrders = (payload) => (dispatch) => {
   dispatch({ type: SPECIAL_ORDERS });
-  const params = getURLParams(payload.params);
   http
-    .get(`${routes.specialOrders}/${params}`)
+    .get(`${routes.specialOrders}?page=${payload.page}&size=${payload.size}`)
     .then(({ data }) => {
+      payload.setCount(data.object.totalElements)
       dispatch({
         type: SPECIAL_ORDERS_SUCCESS,
         payload: data.object.content,

@@ -24,7 +24,7 @@ export const addUser = (user) => {
     return http.post('/afrimash/users/', user)
 }
 export const updateUser = (user) => {
-    return http.put(`/afrimash/users/`, user)
+    return http.patch(`/afrimash/users/`, user)
 }
 export const getAllRoles = () => {
     return http.get('/afrimash/roles/')
