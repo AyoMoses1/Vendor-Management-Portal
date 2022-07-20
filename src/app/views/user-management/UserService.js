@@ -17,8 +17,16 @@ export const getAllUser = (setData, isLoading, setAlert, setSeverity, setCount, 
     })
 }
 
-export const deleteUser = (user) => {
-    return http.delete('/afrimash/users/', user)
+export const deleteUser = (id, isLoading) => {
+    const data = {
+        id: id
+    }
+    isLoading(true);
+    return http.delete('/afrimash/users/', { data: { id } }).then(({ data }) => {
+        isLoading(false)
+    }).catch((err) => {
+        isLoading(false)
+    })
 }
 export const addUser = (user) => {
     return http.post('/afrimash/users/', user)
