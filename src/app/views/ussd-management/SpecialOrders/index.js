@@ -29,7 +29,9 @@ const USSDSpecialOrdersComponent = () => {
   const [severity, setSeverity] = React.useState('')
   const [alert, setAlert] = React.useState('')
   const [open, setOpen] = React.useState(false)
-
+  const [size, setSize] = React.useState(10)
+  const [page, setPage] = React.useState(0)
+  const [count, setCount] = React.useState(0)
 
   const { loading, specialOrders, error } = useSelector(
     (state) => state.getSpecialOrders,
@@ -40,16 +42,19 @@ const USSDSpecialOrdersComponent = () => {
     setOpen(!open)
   }
 
+  const onPageChange = (page) => {
+    getSpecialOrders({page: page, size: size})
+    setPage(page)
+  }
   const refresh = () => {
     dispatcher(getSpecialOrders({}));
   }
 
   useEffect(() => {
-    dispatcher(getSpecialOrders({}));
-  }, [])
+    dispatcher(getSpecialOrders({page: page, size: size, setCount: setCount}));
+  }, [size, page])
 
   useEffect(() => {
-    console.log(specialOrders);
   }, [specialOrders])
 
 const columns = [
@@ -245,8 +250,21 @@ const columns = [
               sortOrder: { name: 'id', direction: 'ascending' },
               filterType: 'dropdown',
               responsive: 'standard',
+              serverSide: true,
               elevation: 0,
+              count,
+              page,
+                onTableChange: (action, tableState) => {
+                  if (action === 'changePage') {
+                    onPageChange(tableState.page)
+                  }
+                },
+              
               rowsPerPageOptions: [10, 20, 40, 80, 100],
+              rowsPerPage: size,
+              onChangeRowsPerPage: (x) => {
+                setSize(x)
+              },
               customSearchRender: (
                 searchText,
                 handleSearch,
