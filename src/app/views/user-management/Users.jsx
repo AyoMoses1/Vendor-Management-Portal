@@ -3,11 +3,11 @@ import { Breadcrumb } from 'matx'
 import MUIDataTable from 'mui-datatables'
 import { Grow, Icon, IconButton, TextField, Button, MenuItem, Typography, Select } from '@material-ui/core'
 import { Link } from 'react-router-dom'
-
 import Notification from '../../components/Notification'
-
-import { getAllRoles, getAllUser } from './UserService'
+import { getAllRoles, getAllUser, deleteUser } from './UserService'
 import Loading from 'matx/components/MatxLoadable/Loading'
+import { useDialog } from 'muibox'
+import Alert from 'app/components/Alert'
 
 const Users = () => {
   const [isAlive, setIsAlive] = useState(true)
@@ -20,6 +20,9 @@ const Users = () => {
   const [roles, setRoles] = useState([])
   const [role, setRole] = useState(0)
   const [size, setSize] = useState(10);
+  const dialog = useDialog();
+  const [alertData, setAlertData] = useState({ success: false, text: '', title: '' });
+  const [alertOpen, setAlertOpen] = React.useState(false)
 
   useEffect(() => {
     getAllUser(setUserList, isLoading, setAlert, setSeverity, setCount, page, size, role)
@@ -32,7 +35,6 @@ const Users = () => {
   }
 
   const handleCustomSearch = (value) => {
-    console.log(value);
     setRole(value);
     getAllUser(setUserList, isLoading, setAlert, setSeverity, setCount, page, size, value)
   }
@@ -45,6 +47,18 @@ const Users = () => {
     getAllRoles().then(({ data }) => {
       setRoles(data.object)
     })
+  }
+
+  const refresh = () => {
+    getAllUser(setUserList, isLoading, setAlert, setSeverity, setCount, page, size, role);
+  }
+
+  const handleAlertModal = () => {
+    setAlertOpen(prev => !prev)
+  }
+
+  const handleAlertOK = () => {
+    handleAlertModal();
   }
 
   const columns = [
@@ -166,7 +180,6 @@ const Users = () => {
           let user = userList[dataIndex]
           return (
             <div className='flex items-center'>
-              <div className='flex-grow'></div>
               <Link
                 to={{
                   pathname: '/user/edit',
@@ -186,13 +199,42 @@ const Users = () => {
       },
     },
     {
-      name: 'id', // field name in the row object
-      label: '', // column title that will be shown in table
+      name: 'delete',
+      label: ' ',
       options: {
         filter: false,
         customBodyRenderLite: (dataIndex) => {
+          let user = userList[dataIndex]
           return (
-            <div>{/* <h5 className='my-0 text-15'>{`${user?.id}`}</h5> */}</div>
+            <div className='flex items-center'>
+              <div>
+                <IconButton
+                  onClick={() =>
+                    dialog
+                      .confirm(`Are you sure you want to delete ${user?.firstName || 'N/A'} ${user?.lastName || 'N/A'
+                        }?`)
+                      .then(async (value) => {
+                        const result = await deleteUser(
+                          user?.id,
+                          isLoading,
+                        ).then((res) => {
+                          refresh();
+                          setAlertData({ success: true, text: 'User has been deleted successfully', title: 'User Deleted' })
+                          handleAlertModal();
+                        }).catch((err) => {
+                          setAlertData({ success: false, text: 'Unable to delete user. Please try again', title: 'User Deleted' })
+                          handleAlertModal();
+                        });
+                      })
+                      .catch(() => {
+                        return false;
+                      })
+                  }
+                >
+                  <Icon>delete</Icon>
+                </IconButton>
+              </div>
+            </div>
           )
         },
       },
@@ -201,6 +243,12 @@ const Users = () => {
 
   return (
     <div className='m-sm-30'>
+      <Alert
+        isOpen={alertOpen}
+        handleModal={handleAlertModal}
+        alertData={alertData}
+        handleOK={handleAlertOK}
+      />
       {severity === 'error' && (
         <Notification severity={severity} alert={alert} />
       )}
