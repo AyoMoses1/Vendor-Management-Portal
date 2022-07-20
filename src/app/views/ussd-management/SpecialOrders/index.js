@@ -43,7 +43,9 @@ const USSDSpecialOrdersComponent = () => {
   }
 
   const onPageChange = (page) => {
-    getSpecialOrders({page: page, size: size})
+
+    getSpecialOrders({page: page, size: size, setCount:setCount})
+    
     setPage(page)
   }
   const refresh = () => {
@@ -251,8 +253,8 @@ const columns = [
               filterType: 'dropdown',
               responsive: 'standard',
               serverSide: true,
-              elevation: 0,
               count,
+              elevation: 0,
               page,
                 onTableChange: (action, tableState) => {
                   if (action === 'changePage') {
