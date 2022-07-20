@@ -13,7 +13,6 @@ import {
   InputLabel,
   Select,
 } from '@material-ui/core';
-import Autocomplete from '@mui/material/Autocomplete';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -44,14 +43,11 @@ const Agents = () => {
   const [openApprovalModal, setopenApprovalModal] = useState(false);
   const [activeAgent, setActiveAgent] = useState({});
   const [openDeleteAgent, setOpenDeleteAgentModal] = useState(false);
-  const [anchorEl, setAnchorEl] = React.useState(null);
   const [transferModalProps, setTransferModalProps] = useState({
     open: false,
     loading: false,
   });
   const [receipientAgent, setReceipientAgent] = useState('');
-  const [activeAgentIndex, setActiveAgentIndex] = useState(null);
-  const [rowActionType, setRowActionType] = useState('');
   const [page, setPage] = useState(0)
   const [size, setSize] = useState(10);
 
