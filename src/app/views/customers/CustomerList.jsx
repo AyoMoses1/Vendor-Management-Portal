@@ -7,7 +7,7 @@ import Loading from 'matx/components/MatxLoadable/Loading'
 import './customer-view.css'
 
 import Notification from '../../components/Notification'
-import { getAllCustomer } from './CustomerService'
+import { getAllCustomer } from './CustomerService';
 
 const CustomerList = () => {
   const [isAlive, setIsAlive] = useState(true)
@@ -289,19 +289,14 @@ const CustomerList = () => {
               data={userList}
               columns={columns}
               options={{
-                filterType: 'textField',
+                filter: false,
                 responsive: 'standard',
                 serverSide: true,
                 count,
                 sort: true,
+                setTableProps: () => ({ className: "customer-table" }),
+                selectableRows: false,
                 sortOrder: { name: 'id', direction: 'desc' },
-                //   selectableRows: "none", // set checkbox for each row
-                //   search: false, // set search option
-                //   filter: false, // set data filter option
-                //   download: false, // set download option
-                //   print: false, // set print option
-                //   pagination: true, //set pagination option
-                //   viewColumns: false, // set column option
                 elevation: 0,
                 page,
                 onTableChange: (action, tableState) => {

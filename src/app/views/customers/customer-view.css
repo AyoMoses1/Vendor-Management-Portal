@@ -1,3 +1,17 @@
 .w-full {
     width: 100%;
 }
+
+.customer-table thead tr th {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+}
+
+.customer-table tbody tr td {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+}
+
+.customer-table thead tr th:first-child {
+    width: 100px !important;
+}
