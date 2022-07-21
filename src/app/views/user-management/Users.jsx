@@ -7,7 +7,8 @@ import Notification from '../../components/Notification'
 import { getAllRoles, getAllUser, deleteUser } from './UserService'
 import Loading from 'matx/components/MatxLoadable/Loading'
 import { useDialog } from 'muibox'
-import Alert from 'app/components/Alert'
+import Alert from 'app/components/Alert';
+import './user.css';
 
 const Users = () => {
   const [isAlive, setIsAlive] = useState(true)
@@ -267,6 +268,8 @@ const Users = () => {
               data={userList}
               columns={columns}
               options={{
+                setTableProps: () => ({ className: "user-table" }),
+                selectableRows: false,
                 filterType: 'textField',
                 responsive: 'standard',
                 elevation: 0,

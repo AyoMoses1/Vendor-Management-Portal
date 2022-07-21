@@ -1,0 +1,17 @@
+.agent-table thead tr th {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+}
+
+.agent-table tbody tr td {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+}
+
+.w-full {
+    width: 100%;
+}
+
+.agent-table thead tr th:first-child {
+    width: 100px !important;
+}
