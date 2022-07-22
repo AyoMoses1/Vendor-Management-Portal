@@ -9,6 +9,7 @@ import Loading from 'matx/components/MatxLoadable/Loading'
 import { useDialog } from 'muibox'
 import Alert from 'app/components/Alert';
 import './user.css';
+import { getUserStatistics } from '../dashboard/DashboardService'
 
 const Users = () => {
   const [isAlive, setIsAlive] = useState(true)
@@ -24,6 +25,9 @@ const Users = () => {
   const dialog = useDialog();
   const [alertData, setAlertData] = useState({ success: false, text: '', title: '' });
   const [alertOpen, setAlertOpen] = React.useState(false)
+  const [title, setTitle] = useState('All Users');
+  const [statistics, setStatistics] = useState([]);
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
     getAllUser(setUserList, isLoading, setAlert, setSeverity, setCount, page, size, role)
@@ -38,11 +42,29 @@ const Users = () => {
   const handleCustomSearch = (value) => {
     setRole(value);
     getAllUser(setUserList, isLoading, setAlert, setSeverity, setCount, page, size, value)
+    if (value === 0) {
+      setTitle('All Users')
+    } else {
+      let tempRole = roles.find(r => r.id === value).name.substr(5).split("_").join(" ");
+      setTitle(tempRole);
+    }
   }
 
   useEffect(() => {
     getRoles();
+    getUserStatistics(setStatistics);
   }, [])
+
+  useEffect(() => {
+    if (statistics.length) {
+      if (role === 0) {
+        setTotal(count);
+      } else {
+        const tempTotal = statistics.find(s => s.role.id === role)?.total ?? 0;
+        setTotal(tempTotal);
+      }
+    }
+  }, [statistics, role, count])
 
   const getRoles = () => {
     getAllRoles().then(({ data }) => {
@@ -264,12 +286,39 @@ const Users = () => {
             <Loading />
           ) : (
             <MUIDataTable
-              title={'All Users'}
+              title={<div>
+                <h4 className='mt-4 mb-0'>{title}</h4>
+                <div className='w-full flex'>
+                  <div className='w-220 flex-end mt-4'>
+                    <Grow appear in={true} timeout={300}>
+                      <Select
+                        size='small'
+                        fullWidth
+                        variant='outlined'
+                        displayEmpty={true}
+                        renderValue={value => value?.length ? Array.isArray(value) ? value.join(', ') : value : 'Select Role'}
+                        onChange={({ target: { value } }) => handleCustomSearch(value)}
+                        style={{ width: "260px" }}
+                      >
+                        <MenuItem key={"null"} value={0}>
+                          All
+                        </MenuItem>
+                        {roles.map((role, idx) => (
+                          <MenuItem key={idx} value={role?.id}>
+                            {role.name.substr(5)}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </Grow>
+                  </div>
+                </div>
+              </div>}
               data={userList}
               columns={columns}
               options={{
                 setTableProps: () => ({ className: "user-table" }),
                 selectableRows: false,
+                filter: false,
                 filterType: 'textField',
                 responsive: 'standard',
                 elevation: 0,
@@ -335,6 +384,10 @@ const Users = () => {
                           <Icon>add</Icon>Add New
                         </Button>
                       </IconButton>
+                      <div className='w-full pr-20 flex justify-end items-center'>
+                        <p className='pr-10'>Total: </p>
+                        <h6 className='mb-0'>{total}</h6>
+                      </div>
                     </Link>
                   )
                 },
