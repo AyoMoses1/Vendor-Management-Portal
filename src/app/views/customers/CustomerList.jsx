@@ -136,7 +136,7 @@ const CustomerList = () => {
                 }}
                 className='ml-3'
               >
-                <h5 className='my-0 text-muted'>{user.address || '-----'}</h5>
+                <h6 className='my-0 text-muted'>{user.address || '-----'}</h6>
               </Link>
             </div>
           )
