@@ -110,7 +110,7 @@ export const navigations = [
     icon: 'phonelink',
     children: [
       {
-        name: 'USSD Featured Categories',
+        name: 'Featured Categories',
         path: '/ussd-featured-categories',
         iconText: '',
       },

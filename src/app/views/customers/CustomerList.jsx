@@ -5,6 +5,8 @@ import { Grow, Icon, IconButton, TextField, Button, MenuItem } from '@material-u
 import { Link } from 'react-router-dom'
 import Loading from 'matx/components/MatxLoadable/Loading'
 import './customer-view.css'
+// import { deleteUser } from '../user-management/UserService'
+import { useDialog } from 'muibox'
 
 import Notification from '../../components/Notification'
 import { getAllCustomer } from './CustomerService';
@@ -21,6 +23,8 @@ const CustomerList = () => {
   const [count, setCount] = useState(0)
   const [page, setPage] = useState(0)
   const [size, setSize] = useState(10);
+
+  // const dialog = useDialog()
 
   const sourceTypes = [
     {
@@ -70,6 +74,10 @@ const CustomerList = () => {
     setTitle(v);
   }
 
+  // const refresh = () => {
+  //   const _source = source === 'ALL' ? '' : source;
+  //   getAllCustomer(setUserList, setCount, isLoading, setAlert, setSeverity, size, page, _source)
+  // } 
   useEffect(() => {
     const _source = source === 'ALL' ? '' : source;
     getAllCustomer(setUserList, setCount, isLoading, setAlert, setSeverity, size, page, _source)
@@ -188,6 +196,47 @@ const CustomerList = () => {
         },
       },
     },
+    // {
+    //   name: 'delete',
+    //   label: ' ',
+    //   options: {
+    //     filter: false,
+    //     customBodyRenderLite: (dataIndex) => {
+    //       let user = userList[dataIndex]
+    //       return (
+    //         <div className='flex items-center'>
+    //           <div>
+    //             <IconButton
+    //               onClick={() =>
+    //                 dialog
+    //                   .confirm(`Are you sure you want to delete ${user?.firstName || 'N/A'} ${user?.lastName || 'N/A'
+    //                     }?`)
+    //                   .then(async (value) => {
+    //                     const result = await deleteUser(
+    //                       user?.id,
+    //                       isLoading,
+    //                     ).then((res) => {
+    //                       refresh();
+    //                       // setAlertData({ success: true, text: 'User has been deleted successfully', title: 'User Deleted' })
+    //                       // handleAlertModal();
+    //                     }).catch((err) => {
+    //                       // setAlertData({ success: false, text: 'Unable to delete user. Please try again', title: 'User Deleted' })
+    //                       // handleAlertModal();
+    //                     });
+    //                   })
+    //                   .catch(() => {
+    //                     return false;
+    //                   })
+    //               }
+    //             >
+    //               <Icon>delete</Icon>
+    //             </IconButton>
+    //           </div>
+    //         </div>
+    //       )
+    //     },
+    //   },
+    // },
     {
       name: 'action',
       label: ' ',
