@@ -79,9 +79,8 @@ const GenerateAccountNumber = ({
     }
 
     useEffect(() => {
-        console.log(customer)
         if (customer) {
-            initialValues.mobileNo = customer.mobileNo.length === 8 ? "234" + customer.mobileNo : customer.mobileNo;
+            initialValues.mobileNo = customer.mobileNo.length === 10 ? "234" + customer.mobileNo : customer.mobileNo;
             setValues(initialValues);
         }
     }, [customer])
