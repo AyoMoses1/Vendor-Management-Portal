@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Divider,
   Table,
@@ -28,6 +28,8 @@ import { Box } from '@material-ui/core'
 import { Button } from '@material-ui/core'
 
 import './style.scss'
+import GenerateAccountNumber from '../shared/GenerateAccountNumber'
+import Alert from 'app/components/Alert'
 
 const AgentsInfo = ({ location, match }) => {
   const dispatch = useDispatch()
@@ -40,6 +42,24 @@ const AgentsInfo = ({ location, match }) => {
   const agentDetail = useSelector((state) => state.agentDetails)
   const agentCustomerList = useSelector((state) => state.agentCustomers)
   const agentOrder = useSelector((state) => state.agentOrder)
+
+  const [open, setOpen] = useState(false)
+  const [alertData, setAlertData] = useState({ success: false, text: '', title: '' });
+  const [alertOpen, setAlertOpen] = useState(false)
+
+
+  const handleModal = () => {
+    setOpen(!open)
+  }
+
+  const handleAlertModal = () => {
+    setAlertOpen(prev => !prev)
+  }
+
+  const completed = () => {
+    handleModal();
+    handleAlertModal();
+  }
 
   const { agentDetails, error, loading, severity } = agentDetail
   const { agentCustomers } = agentCustomerList
@@ -329,6 +349,23 @@ const AgentsInfo = ({ location, match }) => {
       ) : (
         <>
           <SimpleCard>
+
+            <Alert
+              isOpen={alertOpen}
+              handleModal={handleAlertModal}
+              alertData={alertData}
+              handleOK={handleAlertModal}
+            />
+
+            <GenerateAccountNumber
+              customer={agentDetails?.length === 0 ? null : agentDetails}
+              name={"Generate Account"}
+              isOpen={open}
+              handleClose={handleModal}
+              completed={completed}
+              setSuccessData={(data) => setAlertData(data)}
+            />
+
             <div className='flex flex-space-between flex-middle'>
               <h5 className='pl-4 text-left'>Agent Details</h5>
               <div>
@@ -358,6 +395,16 @@ const AgentsInfo = ({ location, match }) => {
                     ? 'Deactivate Account'
                     : 'Activate Agent'}
                 </Button>
+                {agentDetails && (
+                  <Button
+                    onClick={handleModal}
+                    variant='contained'
+                    color='primary'
+                    className='ml-4'
+                  >
+                    Generate Payment Code
+                  </Button>
+                )}
               </div>
             </div>
             <Divider className='mt-4' />
@@ -367,9 +414,8 @@ const AgentsInfo = ({ location, match }) => {
                   <TableCell className='pl-4'>Agent Name</TableCell>
                   <TableCell>
                     <h5 className='mt-4 mb-2'>
-                      {`${agentDetails && agentDetails.firstName} ${
-                        agentDetails.lastName
-                      }`}
+                      {`${agentDetails && agentDetails.firstName} ${agentDetails.lastName
+                        }`}
                     </h5>
                   </TableCell>
                 </TableRow>
