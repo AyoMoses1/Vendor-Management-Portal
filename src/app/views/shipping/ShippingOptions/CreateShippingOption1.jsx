@@ -300,6 +300,9 @@ const ShippingOption = (props) => {
   return (
     <div className='m-sm-30'>
       <Grid container spacing={3}>
+        <Grid item sx={12} md={12}>
+          <Box fontSize='h4.fontSize'>Create Shipping Option</Box>
+        </Grid>
         {errorFields.length > 0 && (
           <Grid item sx={12} md={12}>
             <Alert severity='error'>
