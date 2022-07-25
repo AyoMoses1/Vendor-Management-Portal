@@ -102,7 +102,7 @@ const CreateShippingOption = ({ location }) => {
       setLoading(false);
       http.put(`/afrimash/shipping-option`, payload).then((res) => {
         if (res.status === 200) {
-          setAlertData({ success: true, text: "Shipping option created sucessfully", title: 'Shipping Option Created' })
+          setAlertData({ success: true, text: "Shipping option updated sucessfully", title: 'Shipping Option Updated' })
           handleModal();
           // history.push('/shipping-options');
         } else if (res.status === 'BAD_REQUEST') {
@@ -464,7 +464,6 @@ const CreateShippingOption = ({ location }) => {
                 fullWidth={true}
                 getOptionSelected={(option, value) => option.id === value.id}
                 onChange={(event, newValue) => {
-                  console.log({ newValue });
                   handleSelect(newValue, 'shippingOptionGroup');
                 }}
                 renderInput={(params) => (
