@@ -359,7 +359,7 @@ const AgentsInfo = ({ location, match }) => {
 
             <GenerateAccountNumber
               customer={agentDetails?.length === 0 ? null : agentDetails}
-              name={"Generate Account"}
+              name={"Generate Account Number"}
               isOpen={open}
               handleClose={handleModal}
               completed={completed}
@@ -402,7 +402,7 @@ const AgentsInfo = ({ location, match }) => {
                     color='primary'
                     className='ml-4'
                   >
-                    Generate Payment Code
+                    Generate Account Number
                   </Button>
                 )}
               </div>

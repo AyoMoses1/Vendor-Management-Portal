@@ -62,7 +62,7 @@ const CustomerInfo = ({ location }) => {
 
       <GenerateAccountNumber
         customer={customer}
-        name={"Generate Account"}
+        name={"Generate Account Number"}
         isOpen={open}
         handleClose={handleModal}
         completed={completed}
@@ -79,7 +79,7 @@ const CustomerInfo = ({ location }) => {
               color='primary'
               className='mr-4'
             >
-              Generate Payment Code
+              Generate Account Number
             </Button> : <></>}
           </div>
         </div>

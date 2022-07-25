@@ -65,7 +65,7 @@ const GenerateAccountNumber = ({
                 completed(res.data.object);
                 setSuccessData({
                     success: true,
-                    text: 'Customer should dial ' + res.data.object + ' on their registered phone number',
+                    text: 'Account number generated and sent to customer successfully',
                     title: 'Account Generated Successfully'
                 })
             } else {
