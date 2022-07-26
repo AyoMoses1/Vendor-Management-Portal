@@ -75,13 +75,14 @@ const ShippingOption = (props) => {
   const onCostChange = (event) => {
     const name = event.target.name;
     const value = event.target.value;
-    setErrorFields([]);
     setCostState((prevState) => ({ ...prevState, [name]: value }));
+    setErrorFields([]);
   };
 
   const handleOtherSettingsChange = (name, value) => {
-    setErrorFields([]);
+    
     setOtherSettingsState((prevState) => ({ ...prevState, [name]: value }));
+    setErrorFields([]);
   };
 
   const costInputs = costInput.map((input) => {
@@ -125,60 +126,73 @@ const ShippingOption = (props) => {
   });
 
   const onConditionChange = (name, value, id) => {
-    setErrorFields([]);
 
-    let activeConditions = conditions.slice();
+    const activeConditions = [...conditions];
     if (name === conditionNameEnum.CALCULATION_UNIT && id === 'main') {
-      const calUnitObj = calculationUnitObj[0];
+      const calUnitObj = {...calculationUnitObj[0]};
       calUnitObj.value = value;
       const otherObj = getCondition(value);
-      activeConditions[0] = {
-        ...activeConditions[0],
+      const thisCond = activeConditions.slice(0, 1);
+      const firstConditions = {
+        ...thisCond[0],
         data: [calUnitObj, ...otherObj],
       };
-      setConditions(activeConditions);
-    } else if (id === 'main') {
-      let mainCond = activeConditions[0].data.map((dat) => {
+      setConditions([firstConditions, ...activeConditions.slice(1)]);
+    } else if ( name !== conditionNameEnum.CALCULATION_UNIT && id === 'main') {
+      const thisCond = activeConditions.slice(0, 1);
+      
+      const mainCond = [...thisCond[0].data?.slice()].map((dat) => {
         if (dat.name === name) {
-          dat.value = value;
+          return {
+            ...dat,
+            value
+          }
         }
         return dat;
       });
-      activeConditions[0] = { ...activeConditions[0], data: mainCond };
-      setConditions(activeConditions);
+
+      const firstConditions = { ...thisCond.slice(0, 1), data: mainCond };
+      
+      setConditions([firstConditions, ...activeConditions.slice(1)]);
     } else {
-      let selectedCond = activeConditions.find((cond) => cond.id === id);
+      const selectedCond = [...activeConditions].find((cond) => cond.id === id);
       if (name === conditionNameEnum.CALCULATION_UNIT) {
-        const calUnitObj = calculationUnitObj[0];
+        const calUnitObj = {...calculationUnitObj[0]};
         calUnitObj.value = value;
         const otherObj = getCondition(value);
-        selectedCond = { ...selectedCond, data: [calUnitObj, ...otherObj] };
-        activeConditions = activeConditions.map((data) => {
-          if (data.id === id) {
-            return selectedCond;
+        const newCond = { ...selectedCond, data: [calUnitObj, ...otherObj] };
+        const newConditions = activeConditions.map((data) => {
+          if (data.id === newCond.id) {
+            return newCond;
           }
           return data;
         });
-        setConditions(activeConditions);
+        setConditions(newConditions);
       } else {
-        let thisCondition = selectedCond.data.map((dat) => {
-          if (dat.name === name) {
-            dat.value = value;
+        const thisCondition = [...selectedCond.data].map((dat) => {
+          if (dat.name === name && selectedCond.id === id) {
+            return {
+              ...dat,
+              value
+            }
           }
           return dat;
         });
 
-        selectedCond = { ...selectedCond, data: thisCondition };
-        activeConditions = activeConditions.map((data) => {
-          if (data.id === id) {
-            return selectedCond;
+        const newCond = { ...selectedCond, data: thisCondition };
+
+        const newActiveCond = activeConditions.map((data) => {
+          if (data.id === newCond.id) {
+            return newCond;
           }
           return data;
         });
-
-        setConditions(activeConditions);
+    
+          setConditions(newActiveCond);
       }
     }
+
+        setErrorFields([]);
   };
 
   const onDeleteCondition = (id) => {
@@ -232,20 +246,18 @@ const ShippingOption = (props) => {
 
       if (emptyFields.length > 0) {
         setErrorFields(emptyFields);
-        console.log({ emptyFields });
       } else {
         const finalData = {
           ...otherSettingsFinal,
           conditions: conditionsData,
         };
 
-        console.log({ finalData });
 
-        const response = await http.post_new(
+       await http.post_new(
           `/afrimash/shipping-option`,
           finalData,
         );
-        console.log(response);
+
         setAlertData({
           success: true,
           text: 'Shipping option created sucessfully',
@@ -254,7 +266,7 @@ const ShippingOption = (props) => {
         handleAlertModal();
       }
     } catch (e) {
-      console.log(e);
+
       if(e.response){
         setAlertData({
           success: false,
@@ -335,10 +347,11 @@ const ShippingOption = (props) => {
             </Box>
 
             <SingleCondition
+              key={conditions[0]?.id}
               onChange={(name, value, id) =>
                 onConditionChange(name, value, 'main')
               }
-              data={conditions[0].data}
+              data={conditions[0]?.data}
               id={conditions[0]?.id}
             />
           </Box>

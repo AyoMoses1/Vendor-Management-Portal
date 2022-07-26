@@ -38,7 +38,13 @@ export const costInput = [
     {
       name: 'shippingZone',
       label: 'Select Shipping Zone',
-      getOptionLabel: (option) => option.name,
+      getOptionLabel: (option) => { 
+        if(option.name){
+          return option.name
+        }else{
+          return ''
+        }
+      },
       getOptionSelected: (option, value) => option.id === value.id,
       type: 'autocomplete',
       value: '',
@@ -46,7 +52,13 @@ export const costInput = [
     {
       name: 'shippingOptionGroup',
       label: 'Select Shipping Option Group',
-      getOptionLabel: (option) => option.name,
+      getOptionLabel: (option) => { 
+        if(option.name){
+          return option.name
+        }else{
+          return ''
+        }
+      },
       getOptionSelected: (option, value) => option.id === value.id,
       type: 'autocomplete',
       value: '',
@@ -67,10 +79,16 @@ const shippingClassObj = [
     {
       name: conditionNameEnum.SHIPPING_CLASS,
       label: 'Shipping class',
-      getOptionLabel: (option) => option.name,
+      getOptionLabel: (option) => { 
+        if(option.name){
+          return option.name
+        }else{
+          return ''
+        }
+      },
       getOptionSelected: (option, value) => option.id === value.id,
       type: 'autocomplete',
-      value: '',
+      value: {name: ''},
     },
   ];
   
@@ -116,6 +134,7 @@ const shippingClassObj = [
       name: conditionNameEnum.CALCULATION_UNIT,
       label: 'Calculation Unit',
       type: 'select',
+      value:'',
       options: [
         { value: 'SHIPPING_CLASS', name: 'Shipping Class' },
         { value: 'DIMENSION', name: 'Dimension' },
