@@ -13,7 +13,7 @@ const CreateShippingClass = MatxLoadable({
 })
 
 const CreateShippingOptions = MatxLoadable({
-  loader: () => import('./ShippingOptions/CreateShippingOptions'),
+  loader: () => import('./ShippingOptions/CreateShippingOption1'),
 })
 
 const ShippingOptionsDetails = MatxLoadable({

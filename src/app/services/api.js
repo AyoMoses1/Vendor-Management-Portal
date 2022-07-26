@@ -20,7 +20,7 @@ export default new (class Http {
     return axiosInstance
   }
 
-  post = async (urlpath, data, config) => {
+  post = async (urlpath, data, config = {}) => {
     try {
       const response = await this.AxiosSetup().post(urlpath, data, config)
       return response
@@ -33,7 +33,7 @@ export default new (class Http {
     }
   }
 
-  post_new = async (urlpath, data, config) => {
+  post_new = async (urlpath, data, config = {}) => {
       return await this.AxiosSetup().post(urlpath, data, config);
   }
 
