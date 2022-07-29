@@ -15,6 +15,10 @@ import {
   conditionNameEnum,
   calculationUnitObj,
   otherSettings,
+  minMaxCriteriaValue,
+  criteriaVal,
+  dimensionsObj,
+  baseCostDefinition,
 } from './components/helper';
 import { getShippingOptionGroup } from 'app/redux/actions/shippingActions';
 import { useDispatch, useSelector } from 'react-redux';
@@ -80,12 +84,14 @@ const ShippingOption = (props) => {
   };
 
   const handleOtherSettingsChange = (name, value) => {
-    
     setOtherSettingsState((prevState) => ({ ...prevState, [name]: value }));
     setErrorFields([]);
   };
 
-  const costInputs = costInput.map((input) => {
+  const costInputs = (conditions[0].data[0].value === 'SUB_TOTAL'
+    ? [costInput[0], ...baseCostDefinition, ...costInput.slice(1)]
+    : costInput
+  ).map((input) => {
     return generateInput({
       ...input,
       onChange: onCostChange,
@@ -119,17 +125,41 @@ const ShippingOption = (props) => {
     return generateInput({
       ...input,
       onChange: (event) =>
-      handleOtherSettingsChange(event.target.name, event.target.value),
+        handleOtherSettingsChange(event.target.name, event.target.value),
       value: otherSettingsState[input.name],
     });
-
   });
 
-  const onConditionChange = (name, value, id) => {
 
+  const handleMethodCondition = (thisCondition, name, value) => {
+    if (name === conditionNameEnum.METHOD_CONDITION && value === 'RANGE') {
+      thisCondition = [
+        ...thisCondition.slice(0, 2),
+        ...minMaxCriteriaValue,
+      ];
+
+      if (thisCondition[0].value === calculationUnitEnum.DIMENSION) {
+        return [...thisCondition.slice(0, 4), ...dimensionsObj];
+      }
+    }
+
+    if (name === conditionNameEnum.METHOD_CONDITION && value !== 'RANGE') {
+      thisCondition = [...thisCondition.slice(0, 2), ...criteriaVal];
+
+      if (thisCondition[0].value === calculationUnitEnum.DIMENSION) {
+        return [...thisCondition.slice(0, 3), ...dimensionsObj];
+      }
+
+     
+    }
+
+    return thisCondition;
+  }
+
+  const onConditionChange = (name, value, id) => {
     const activeConditions = [...conditions];
     if (name === conditionNameEnum.CALCULATION_UNIT && id === 'main') {
-      const calUnitObj = {...calculationUnitObj[0]};
+      const calUnitObj = { ...calculationUnitObj[0] };
       calUnitObj.value = value;
       const otherObj = getCondition(value);
       const thisCond = activeConditions.slice(0, 1);
@@ -138,26 +168,29 @@ const ShippingOption = (props) => {
         data: [calUnitObj, ...otherObj],
       };
       setConditions([firstConditions, ...activeConditions.slice(1)]);
-    } else if ( name !== conditionNameEnum.CALCULATION_UNIT && id === 'main') {
+    } else if (name !== conditionNameEnum.CALCULATION_UNIT && id === 'main') {
       const thisCond = activeConditions.slice(0, 1);
-      
-      const mainCond = [...thisCond[0].data?.slice()].map((dat) => {
+
+      let mainCond = [...thisCond[0].data?.slice()].map((dat) => {
         if (dat.name === name) {
           return {
             ...dat,
-            value
-          }
+            value,
+          };
         }
         return dat;
       });
 
+      mainCond = handleMethodCondition(mainCond, name, value);
+
       const firstConditions = { ...thisCond.slice(0, 1), data: mainCond };
-      
+
       setConditions([firstConditions, ...activeConditions.slice(1)]);
     } else {
       const selectedCond = [...activeConditions].find((cond) => cond.id === id);
+
       if (name === conditionNameEnum.CALCULATION_UNIT) {
-        const calUnitObj = {...calculationUnitObj[0]};
+        const calUnitObj = { ...calculationUnitObj[0] };
         calUnitObj.value = value;
         const otherObj = getCondition(value);
         const newCond = { ...selectedCond, data: [calUnitObj, ...otherObj] };
@@ -169,15 +202,18 @@ const ShippingOption = (props) => {
         });
         setConditions(newConditions);
       } else {
-        const thisCondition = [...selectedCond.data].map((dat) => {
+        let thisCondition = [...selectedCond.data].map((dat) => {
           if (dat.name === name && selectedCond.id === id) {
             return {
               ...dat,
-              value
-            }
+              value,
+            };
           }
           return dat;
         });
+
+       
+        thisCondition = handleMethodCondition(thisCondition, name, value);
 
         const newCond = { ...selectedCond, data: thisCondition };
 
@@ -187,12 +223,12 @@ const ShippingOption = (props) => {
           }
           return data;
         });
-    
-          setConditions(newActiveCond);
+
+        setConditions(newActiveCond);
       }
     }
 
-        setErrorFields([]);
+    setErrorFields([]);
   };
 
   const onDeleteCondition = (id) => {
@@ -231,15 +267,23 @@ const ShippingOption = (props) => {
         return singleCond;
       });
 
+
+      Object.entries(costState).forEach(([key, value]) => {
+        if (!value) {
+          emptyFields.push(key);
+        } else if (typeof value === 'object' && !Array.isArray(value)) {
+          otherSettingsFinal[key] = value.id;
+        } else {
+          otherSettingsFinal[key] = value;
+        }
+      });
+
       Object.entries(otherSettingsState).forEach(([key, value]) => {
         if (!value) {
           emptyFields.push(key);
-        } else if (
-          typeof value === 'object' &&
-          !Array.isArray(value)
-        ) {
+        } else if (typeof value === 'object' && !Array.isArray(value)) {
           otherSettingsFinal[key] = value.id;
-        }else {
+        } else {
           otherSettingsFinal[key] = value;
         }
       });
@@ -252,11 +296,7 @@ const ShippingOption = (props) => {
           conditions: conditionsData,
         };
 
-
-       await http.post_new(
-          `/afrimash/shipping-option`,
-          finalData,
-        );
+        await http.post_new(`/afrimash/shipping-option`, finalData);
 
         setAlertData({
           success: true,
@@ -266,21 +306,20 @@ const ShippingOption = (props) => {
         handleAlertModal();
       }
     } catch (e) {
-
-      if(e.response){
+      if (e.response) {
         setAlertData({
           success: false,
           text: 'Invalid details provided',
           title: e?.response?.data?.errorMsg,
         });
-      }else {
+      } else {
         setAlertData({
           success: false,
           text: 'Invalid details provided',
           title: 'Unable to create shipping option',
         });
       }
-      
+
       handleAlertModal();
     }
   };
@@ -399,7 +438,7 @@ const ShippingOption = (props) => {
         handleModal={handleAlertModal}
         alertData={alertData}
         handleOK={() => {
-          history.push('/shipping-options')
+          history.push('/shipping-options');
         }}
       />
     </div>
