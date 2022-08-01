@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { SimpleCard } from 'matx'
 import OrderViewer from './OrderViewer'
 import OrderEditor from './OrderEditor'
+import './order-view.css'
 
 const OrderDetails = ({ location }) => {
   const [showOrderEditor, setShowOrderEditor] = useState(false)
@@ -24,7 +25,8 @@ const OrderDetails = ({ location }) => {
   }, [id])
 
   return (
-    <SimpleCard className='m-sm-30'>
+    <>
+    <SimpleCard className='m-sm-30 order-revamp'>
       {showOrderEditor ? (
         <OrderEditor
           toggleOrderEditor={toggleOrderEditor}
@@ -35,6 +37,7 @@ const OrderDetails = ({ location }) => {
         <OrderViewer toggleOrderEditor={toggleOrderEditor} id={id} />
       )}
     </SimpleCard>
+    </>
   )
 }
 
