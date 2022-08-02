@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import http from '../../services/api';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom';
 import Alert from 'app/components/Alert';
+import localStorageService from 'app/services/localStorageService';
 
 function rand() {
     return Math.round(Math.random() * 20) - 10
@@ -46,6 +47,7 @@ function BulkUpload({
     const [errorMessage, setErrorMessage] = React.useState('Field cannot be empty')
     const [alertOpen, setAlertOpen] = React.useState(false)
     const [alertData, setAlertData] = useState({ success: false, text: '', title: '' });
+    const authUser = localStorageService.getItem('auth_user');
 
     const handleModal = () => {
         setAlertOpen(prev => !prev)
@@ -68,7 +70,7 @@ function BulkUpload({
         };
 
         try {
-            const res = await http.post_new(`/afrimash/agents/bulkcreate`, formData, config);
+            const res = await http.post_new(`/afrimash/agents/bulkcreate?notifyEmail=${authUser.email}`, formData, config);
             setSuccessData({ success: true, text: "Agents uploaded successfully", title: 'Agents Uploaded' })
             completed()
             handleClose();
