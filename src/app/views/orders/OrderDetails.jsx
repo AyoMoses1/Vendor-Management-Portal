@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { SimpleCard } from 'matx'
 import OrderViewer from './OrderViewer'
 import OrderEditor from './OrderEditor'
+
 import './order-view.css'
 
 const OrderDetails = ({ location }) => {
@@ -34,7 +35,9 @@ const OrderDetails = ({ location }) => {
           id={id}
         />
       ) : (
+        <>
         <OrderViewer toggleOrderEditor={toggleOrderEditor} id={id} />
+        </>
       )}
     </SimpleCard>
     </>

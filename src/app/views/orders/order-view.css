@@ -106,9 +106,9 @@ h5{
 }
 
 .order-image{
-  height: 100px;
-  background: #c3c9d4;
   object-fit: contain;
+  margin-right: 20px;
+  width: 100px;
 }
 .product-name{
   color: rgb(0, 127, 218);
@@ -116,7 +116,6 @@ h5{
 }
 .order-flex{
   display: flex;
-  justify-content: space-between;
 }
 
 .order-table{
@@ -134,8 +133,6 @@ h5{
   justify-content: space-between;
 }
 .order-items, .shipping-items, .order-total{
-  background: #EEEEEE;
-  margin-top: 20px;
   padding: 10px; 
 }
 .order-total{
@@ -147,4 +144,11 @@ h5{
 }
 .order-card{
   margin-bottom: 20px;
+}
+.invoice-btn{
+  background: #EEEEEE !important;
+  color: #000 !important;
+}
+.textarea{
+  background: #eee;
 }
