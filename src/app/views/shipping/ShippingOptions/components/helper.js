@@ -1,3 +1,5 @@
+export const requiredFields = ['baseCost', 'name', 'minCriteriaValue', 'maxCriteriaValue', 'shippingZone', 'shippingOptionGroup' ];
+
 export const costInput = [
     {
       type: 'number',

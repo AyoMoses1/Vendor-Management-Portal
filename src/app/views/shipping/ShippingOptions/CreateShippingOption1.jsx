@@ -19,11 +19,13 @@ import {
   criteriaVal,
   dimensionsObj,
   baseCostDefinition,
+  requiredFields
 } from './components/helper';
 import { getShippingOptionGroup } from 'app/redux/actions/shippingActions';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom';
 import CustomAlert from 'app/components/Alert';
+
 
 const ShippingOption = (props) => {
   const history = useHistory();
@@ -252,7 +254,7 @@ const ShippingOption = (props) => {
       const conditionsData = [...conditions].map((cond) => {
         let singleCond = { ...costState };
         cond.data.forEach((dat) => {
-          if (!dat.value) {
+          if (!dat.value && requiredFields.some(val => val === dat.name)) {
             emptyFields.push(dat.name);
           } else if (
             typeof dat.value === 'object' &&
@@ -269,7 +271,7 @@ const ShippingOption = (props) => {
 
 
       Object.entries(costState).forEach(([key, value]) => {
-        if (!value) {
+        if (!value && requiredFields.some(val => val === key)) {
           emptyFields.push(key);
         } else if (typeof value === 'object' && !Array.isArray(value)) {
           otherSettingsFinal[key] = value.id;
@@ -279,7 +281,7 @@ const ShippingOption = (props) => {
       });
 
       Object.entries(otherSettingsState).forEach(([key, value]) => {
-        if (!value) {
+        if (!value && requiredFields.some(val => val === key)) {
           emptyFields.push(key);
         } else if (typeof value === 'object' && !Array.isArray(value)) {
           otherSettingsFinal[key] = value.id;
@@ -290,6 +292,7 @@ const ShippingOption = (props) => {
 
       if (emptyFields.length > 0) {
         setErrorFields(emptyFields);
+        console.log({emptyFields})
       } else {
         const finalData = {
           ...otherSettingsFinal,
