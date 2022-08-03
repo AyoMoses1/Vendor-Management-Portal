@@ -3,6 +3,8 @@ import { SimpleCard } from 'matx'
 import OrderViewer from './OrderViewer'
 import OrderEditor from './OrderEditor'
 
+import './order-view.css'
+
 const OrderDetails = ({ location }) => {
   const [showOrderEditor, setShowOrderEditor] = useState(false)
   const [isNewOrder, setIsNewOrder] = useState(false)
@@ -24,7 +26,8 @@ const OrderDetails = ({ location }) => {
   }, [id])
 
   return (
-    <SimpleCard className='m-sm-30'>
+    <>
+    <SimpleCard className='m-sm-30 order-revamp'>
       {showOrderEditor ? (
         <OrderEditor
           toggleOrderEditor={toggleOrderEditor}
@@ -32,9 +35,12 @@ const OrderDetails = ({ location }) => {
           id={id}
         />
       ) : (
+        <>
         <OrderViewer toggleOrderEditor={toggleOrderEditor} id={id} />
+        </>
       )}
     </SimpleCard>
+    </>
   )
 }
 
