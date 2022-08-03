@@ -9,3 +9,11 @@ export const getUserStatistics = (setStatistics) => {
     }
   })
 }
+
+export const getCustomerStatistics = (setStatistics) => {
+  http.get(`/afrimash/dashboard/customer-stats-by-source`).then(({ data }) => {
+    if (data instanceof Object) {
+      setStatistics(data.object);
+    }
+  })
+}

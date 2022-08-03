@@ -10,6 +10,7 @@ import { useDialog } from 'muibox'
 
 import Notification from '../../components/Notification'
 import { getAllCustomer } from './CustomerService';
+import { getCustomerStatistics } from '../dashboard/DashboardService'
 
 const CustomerList = () => {
   const [isAlive, setIsAlive] = useState(true)
@@ -23,6 +24,8 @@ const CustomerList = () => {
   const [count, setCount] = useState(0)
   const [page, setPage] = useState(0)
   const [size, setSize] = useState(10);
+  const [statistics, setStatistics] = useState([]);
+  const [total, setTotal] = useState(0);
 
   // const dialog = useDialog()
 
@@ -74,15 +77,26 @@ const CustomerList = () => {
     setTitle(v);
   }
 
-  // const refresh = () => {
-  //   const _source = source === 'ALL' ? '' : source;
-  //   getAllCustomer(setUserList, setCount, isLoading, setAlert, setSeverity, size, page, _source)
-  // } 
   useEffect(() => {
     const _source = source === 'ALL' ? '' : source;
     getAllCustomer(setUserList, setCount, isLoading, setAlert, setSeverity, size, page, _source)
     return () => setIsAlive(false)
-  }, [isAlive, source, size])
+  }, [isAlive, source, size]);
+
+  useEffect(() => {
+    getCustomerStatistics(setStatistics);
+  }, [])
+
+  useEffect(() => {
+    if (statistics.length) {
+      if (source === 'ALL') {
+        setTotal(count);
+      } else {
+        const tempTotal = statistics.find(s => s.source === source)?.total ?? 0;
+        setTotal(tempTotal);
+      }
+    }
+  }, [statistics, source])
 
   const onPageChange = (page) => {
     const _source = source === 'ALL' ? '' : source;
@@ -90,7 +104,6 @@ const CustomerList = () => {
     setPage(page)
   }
 
-  console.log({ userList })
   const columns = [
     {
       name: 'firstName', // field name in the row object
@@ -406,6 +419,10 @@ const CustomerList = () => {
                             Add New
                           </Button>
                         </IconButton>
+                        <div className='w-full pr-20 flex justify-end items-center'>
+                          <p className='pr-10'>Total: </p>
+                          <h6 className='mb-0'>{total}</h6>
+                        </div>
                       </Link>
                     </>
                   )

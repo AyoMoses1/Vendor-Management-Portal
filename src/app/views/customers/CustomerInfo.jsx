@@ -38,7 +38,6 @@ const CustomerInfo = ({ location }) => {
     getCustomerById(id).then(({ data }) => {
       setCustomer(data.object)
       setCustomerInfo(data.object.deliveryAddresses)
-      console.log(data.object)
     })
   }, [id])
 
