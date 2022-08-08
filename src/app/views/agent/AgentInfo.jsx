@@ -317,7 +317,7 @@ const AgentsInfo = ({ location, match }) => {
             }
           })
         )
-        .catch((error) => console.log(error))
+        .catch((error) => { })
     } else {
       return
     }
