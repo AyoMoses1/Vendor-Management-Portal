@@ -1,3 +1,5 @@
+export const requiredFields = ['baseCost', 'name', 'minCriteriaValue', 'maxCriteriaValue', 'shippingZone', 'shippingOptionGroup' ];
+
 export const costInput = [
     {
       type: 'number',
@@ -105,16 +107,34 @@ const shippingClassObj = [
         { value: 'RANGE', name: 'Range' },
       ],
     },
+    
+  ];
+
+  export const criteriaVal = [
     {
       type: 'number',
       name: conditionNameEnum.CRITICAL_VALUE,
       label: 'Criteria value',
       value: '',
     },
-  ];
+  ]
+
+  export const minMaxCriteriaValue = [
+    {
+      type: 'number',
+      name: 'minCriteriaValue',
+      label: 'Minimum Value',
+      value: '',
+    },
+    {
+      type: 'number',
+      name: 'maxCriteriaValue',
+      label: 'Maximum Value',
+      value: '',
+    },
+  ]
   
-  const dimensionsObj = [
-    ...regularObj,
+  export const dimensionsObj = [
     {
       type: 'number',
       name: conditionNameEnum.WIDTH,
@@ -140,9 +160,31 @@ const shippingClassObj = [
         { value: 'DIMENSION', name: 'Dimension' },
         { value: 'VOLUME', name: 'Volume' },
         { value: 'WEIGHT', name: 'Weight' },
+        { value: 'SUB_TOTAL', name: 'Subtotal' },
       ],
     },
   ];
+
+  const subTotalConditionObj = [
+    {
+      type: 'number',
+      name: conditionNameEnum.CRITICAL_VALUE,
+      label: 'Criteria value',
+      value: '',
+    },
+  ]
+
+  export const baseCostDefinition = [
+    {
+      name: 'baseCostDefinition',
+      label: 'Base Cost Definition',
+      type: 'select',
+      value:'',
+      options: [
+        { value: 'PERCENTAGE', name: 'Percentage' },
+      ],
+    },
+  ]
 
 
  
@@ -153,6 +195,7 @@ const shippingClassObj = [
     DIMENSION: 'DIMENSION',
     VOLUME: 'VOLUME',
     WEIGHT: 'WEIGHT',
+    SUBTOTAL: 'SUB_TOTAL'
   };
 
 
@@ -162,10 +205,11 @@ const shippingClassObj = [
       case calculationUnitEnum.SHIPPING_CLASS:
         return shippingClassObj;
       case calculationUnitEnum.DIMENSION:
-        return dimensionsObj;
       case calculationUnitEnum.VOLUME:
       case calculationUnitEnum.WEIGHT:
         return regularObj;
+      case calculationUnitEnum.SUBTOTAL:
+        return subTotalConditionObj;
       default:
         return '';
     }

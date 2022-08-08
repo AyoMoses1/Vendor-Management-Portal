@@ -13,7 +13,6 @@ import {
   InputLabel,
   Select,
 } from '@material-ui/core';
-import Autocomplete from '@mui/material/Autocomplete';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -26,9 +25,10 @@ import './style.scss';
 import Loading from 'matx/components/MatxLoadable/Loading';
 import Notification from 'app/components/Notification';
 import Modal from '../../components/Modal';
+import './agent.css';
 
 const Agents = () => {
-  const { agentList, total, error, severity, loading, pages, size } =
+  const { agentList, total, error, severity, loading, pages } =
     useSelector((state) => state.agents);
   const { loading: approvalLoading, showSnackBar } = useSelector(
     (state) => state.agentApproval,
@@ -43,33 +43,23 @@ const Agents = () => {
   const [openApprovalModal, setopenApprovalModal] = useState(false);
   const [activeAgent, setActiveAgent] = useState({});
   const [openDeleteAgent, setOpenDeleteAgentModal] = useState(false);
-  const [anchorEl, setAnchorEl] = React.useState(null);
   const [transferModalProps, setTransferModalProps] = useState({
     open: false,
     loading: false,
   });
   const [receipientAgent, setReceipientAgent] = useState('');
-  const [activeAgentIndex, setActiveAgentIndex] = useState(null);
-  const [rowActionType, setRowActionType] = useState('');
   const [page, setPage] = useState(0)
+  const [size, setSize] = useState(10);
 
   const handleChangePage = (newPage) => {
-    console.log({ agentList, newPage });
     setPage(newPage);
-   dispatch(getAllAgents({ page: newPage, size : size}));
   };
-
-  const handleChangeRowsPerPage = (value) => {
-   dispatch(getAllAgents({ page: 0, size: parseInt(value, 10) }));
-  };
-
-
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getAllAgents({}));
-  }, []);
+    dispatch(getAllAgents({ page: page, size: size }));
+  }, [size, page]);
 
   const handleMenu = (option, user) => {
     setActiveAgent(user);
@@ -249,87 +239,6 @@ const Agents = () => {
         },
       },
     },
-    /*  {
-      name: 'action',
-      label: 'Action',
-      options: {
-        filter: false,
-        customBodyRender: (value, tableMeta, updateValue) => value,
-        customBodyRenderLite: (dataIndex, another) => {
-          console.log({ dataIndex, another });
-          let user = agentList[dataIndex];
-
-          return (
-            <div>
-              <IconButton
-                aria-label='more'
-                id='long-button'
-                aria-controls={open ? 'long-menu' : undefined}
-                aria-expanded={open ? 'true' : undefined}
-                aria-haspopup='true'
-                onClick={handleClick}
-              >
-                <FiMoreVertical />
-              </IconButton>
-              <Menu
-                id='long-menu'
-                MenuListProps={{
-                  'aria-labelledby': 'long-button',
-                }}
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-              >
-                {['View Details', 'Edit Agent', 'Delete Agent'].map(
-                  (option) => {
-                    if (option === 'Edit Agent') {
-                      return (
-                        <Link
-                          to={{
-                            pathname: '/agent/edit',
-                            state: {
-                              id: user.id,
-                              user,
-                            },
-                          }}
-                        >
-                          <MenuItem key={option}>{option}</MenuItem>
-                        </Link>
-                      );
-                    }
-                    if (option === 'View Details') {
-                      return (
-                        <Link
-                          to={{
-                            pathname: `/agent/details/${user.id}`,
-                            state: {
-                              id: user.id,
-                              agentCode: user.agentCode,
-                            },
-                          }}
-                        >
-                          <MenuItem key={option}>{option}</MenuItem>
-                        </Link>
-                      );
-                    }
-                    return (
-                      <MenuItem
-                        key={option}
-                        onMouseDown={(e) => {
-                          setRowActionType(option);
-                        }}
-                      >
-                        {option}
-                      </MenuItem>
-                    );
-                  },
-                )}
-              </Menu>
-            </div>
-          );
-        },
-      },
-    }, */
     {
       name: 'Actions',
       label: 'actions',
@@ -390,7 +299,6 @@ const Agents = () => {
             <Loading />
           ) : (
             <MUIDataTable
-
               title={'All Agents'}
               data={[...agentList]}
               columns={columns}
@@ -398,9 +306,9 @@ const Agents = () => {
                 serverSide: true,
                 selectableRows: "none",
                 count: total,
-                page:  page,
+                page: page,
+                setTableProps: () => ({ className: "agent-table" }),
                 onChangePage: (value) => handleChangePage(value),
-                onChangeRowsPerPage: handleChangeRowsPerPage,
                 filter: true,
                 sort: true,
                 sortOrder: { name: 'id', direction: 'desc' },
@@ -408,6 +316,9 @@ const Agents = () => {
                 responsive: 'standard',
                 elevation: 0,
                 rowsPerPage: size,
+                onChangeRowsPerPage: (x) => {
+                  setSize(x)
+                },
                 rowsPerPageOptions: [10, 20, 40, 50, 80, 100],
                 customSearchRender: (
                   searchText,
