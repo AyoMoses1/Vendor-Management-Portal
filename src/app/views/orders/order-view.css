@@ -12,6 +12,7 @@
   color: #095aba;
   background-color: #85bbfa;
 }
+
 .CONVERTED {
   color: black;
   background-color: yellow;
@@ -63,7 +64,7 @@
 
 .qty {
   padding: 7px !important;
-  padding-top: 12px !important ;
+  padding-top: 12px !important;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -76,79 +77,145 @@
   align-items: center;
 }
 
-.order-container{
+.order-container {
   display: flex;
 }
-#print-area{
+
+#print-area {
   display: flex;
   justify-content: space-between;
 }
 
-#print-area > div{
+#print-area>div {
   background: #EEEEEE;
   padding: 20px 0;
 }
 
-.order-width{
+.order-width {
   max-width: 580px;
   min-width: 400px;
 }
 
-.customer-details{
+.customer-details {
   display: flex;
 }
-p{
+
+p {
   line-height: 5px;
   font-weight: 400;
 }
-h5{
+
+h5 {
   font-weight: 600;
 }
 
-.order-image{
+.order-image {
   object-fit: contain;
   margin-right: 20px;
-  width: 100px;
+  width: 60px;
 }
-.product-name{
+
+.product-name {
   color: rgb(0, 127, 218);
   text-decoration: underline;
 }
-.order-flex{
+
+.order-flex {
   display: flex;
 }
 
-.order-table{
+.order-table {
   width: 100%;
 }
-.order-table thead tr th:first-child{
-  width: 65% !important;
-}
-.order-table tbody tr td:first-child{
+
+.order-table thead tr th:first-child {
   width: 65% !important;
 }
 
-.order-table tr{
+.order-table tbody tr td:first-child {
+  width: 65% !important;
+}
+
+.order-table tr {
   display: flex;
   justify-content: space-between;
 }
-.order-items, .shipping-items, .order-total{
-  padding: 10px; 
+
+.order-items,
+.shipping-items,
+.order-total {
+  padding: 10px;
 }
-.order-total{
+
+.order-total {
   display: flex;
   justify-content: flex-end;
 }
-.flex-right{
+
+.flex-right {
   margin-top: 20px;
 }
-.order-card{
+
+.order-card {
   margin-bottom: 20px;
 }
-.invoice-btn{
+
+.invoice-btn {
   background: #EEEEEE !important;
   color: #000 !important;
 }
-.textarea{
+
+.textarea {
   background: #eee;
+}
+
+.order-view {
+  background-color: #edf2f4;
+}
+
+.no-border .MuiPaper-root {
+  box-shadow: none;
+  height: 100%;
+}
+
+.no-border1 {
+  padding-top: 4px!important;
+}
+
+.no-border1 .MuiPaper-root {
+  box-shadow: none;
+  height: 100%;
+}
+
+.no-border2 {
+  padding-top: 6px!important;
+}
+
+.no-border2 .MuiPaper-root {
+  box-shadow: none;
+  height: 100%;
+}
+
+.order-header p {
+  font-size: 11px;
+}
+
+.order-text-10 {
+  font-size: 10px;
+}
+
+.order-text-12 {
+  font-size: 12px;
+}
+
+.order-text-14 {
+  font-size: 14px;
+}
+
+.order-border-bottom {
+  border-bottom: 1px solid #edf2f4;
+}
+
+.desc-width {
+  width: 150px;
 }

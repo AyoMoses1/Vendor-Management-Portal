@@ -27,19 +27,21 @@ const OrderDetails = ({ location }) => {
 
   return (
     <>
-    <SimpleCard className='m-sm-30 order-revamp'>
       {showOrderEditor ? (
-        <OrderEditor
-          toggleOrderEditor={toggleOrderEditor}
-          isNewOrder={isNewOrder}
-          id={id}
-        />
+        <SimpleCard className='m-sm-30 order-revamp'>
+          <OrderEditor
+            toggleOrderEditor={toggleOrderEditor}
+            isNewOrder={isNewOrder}
+            id={id}
+          />
+        </SimpleCard>
       ) : (
-        <>
-        <OrderViewer toggleOrderEditor={toggleOrderEditor} id={id} />
-        </>
+        <div className='p-sm-30 order-view'>
+          <div className="py-20 h-100">
+            <OrderViewer toggleOrderEditor={toggleOrderEditor} id={id} />
+          </div>
+        </div>
       )}
-    </SimpleCard>
     </>
   )
 }
