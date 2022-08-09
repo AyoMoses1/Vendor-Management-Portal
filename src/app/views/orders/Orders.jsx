@@ -30,7 +30,7 @@ const Orders = (props) => {
   const dispatch = useDispatch()
   const [source, setSource] = useState('ALL')
   const [size, setSize] = useState(10);
-  const [title, setTitle] = useState('All Orders')
+  const [title, setTitle] = useState('ALL ORDERS')
 
   
 
@@ -75,6 +75,9 @@ const Orders = (props) => {
     setPage(page)
   }
 
+  const handleTitle = (string) => {
+      string.includes('_') ? setTitle(string.split('_').shift() + " " + string.split('_').pop()): setTitle(string)
+  }
   const columns = [
     {
       name: 'referenceNo', // field name in the row object
@@ -284,8 +287,8 @@ const Orders = (props) => {
                     value={source}
                     onChange={(e) => {
                       setSource(e.target.value)
-                      e.target.value == 'ALL' ? setTitle('All Orders'):
-                      setTitle(e.target.value)
+                      e.target.value == 'ALL' ? setTitle('ALL ORDERS'):
+                      handleTitle(e.target.value)
                     }}
                   >
                     {sourceTypes.map((sourceType, idx) => (
