@@ -30,6 +30,7 @@ const Orders = (props) => {
   const dispatch = useDispatch()
   const [source, setSource] = useState('ALL')
   const [size, setSize] = useState(10);
+  const [title, setTitle] = useState('All Orders')
 
   
 
@@ -270,7 +271,7 @@ const Orders = (props) => {
           ) : (
             <MUIDataTable
             title={<div>
-              <h3 className='mt-4 mb-0'>All Orders</h3>
+              <h3 className='mt-4 mb-0'>{title}</h3>
               <div className='w-full flex'>
                 <div className='w-220 flex-end'>
                   <TextField
@@ -280,9 +281,12 @@ const Orders = (props) => {
                     variant='outlined'
                     margin='normal'
                     select
-                    fullWidth
                     value={source}
-                    onChange={(e) => setSource(e.target.value)}
+                    onChange={(e) => {
+                      setSource(e.target.value)
+                      e.target.value == 'ALL' ? setTitle('All Orders'):
+                      setTitle(e.target.value)
+                    }}
                   >
                     {sourceTypes.map((sourceType, idx) => (
                       <MenuItem key={idx} value={sourceType.value}>

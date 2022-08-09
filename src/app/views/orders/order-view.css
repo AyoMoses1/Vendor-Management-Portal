@@ -161,8 +161,10 @@ h5 {
 }
 
 .invoice-btn {
-  background: #EEEEEE !important;
+  background: #d9d6d6 !important;
   color: #000 !important;
+  font-size: 12px !important;
+  width: 180px !important;
 }
 
 .textarea {
@@ -218,4 +220,20 @@ h5 {
 
 .desc-width {
   width: 150px;
+}
+
+.comment-header, .download-header, .notice-header{
+  font-weight: bold !important;
+}
+
+.notice-btn{
+  background: #eee !important;
+  color:#000 !important;
+}
+
+.chat-text-12{
+  font-size: 12px !important;
+}
+.chat-section{
+  margin-top: 10px !important;
 }

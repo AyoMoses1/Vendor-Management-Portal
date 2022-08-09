@@ -191,7 +191,7 @@ const OrderViewer = ({ toggleOrderEditor, id }) => {
                                 <div className='order-text-10'>
                                   <span className='product-name'>{item.productId.name.slice(0, 50) + "..."}</span>
                                   <div className='mt-20'>
-                                    <p>Capacity: 16 Litres</p> {/* Please this is hardcoded. Will fix this later from the backend*/}
+                                    <p>Capacity: {item.productId.description.slice(0, 20)+ "..."}</p> {/* Please this is hardcoded. Will fix this later from the backend*/}
                                     <p>Seller: {item.productId.storeId.sellerId.name}</p>
                                   </div>
                                 </div>
@@ -255,16 +255,16 @@ const OrderViewer = ({ toggleOrderEditor, id }) => {
                 <Item>
                   <div className='order-total'>
                     <div>
-                      <p>Item SubTotal: </p>
-                      <p>Shipping: </p>
-                      <p><strong>Total:</strong></p>
+                      <p><small>Item SubTotal:</small></p>
+                      <p><small>Shipping: </small></p>
+                      <p><strong><small>Total:</small></strong></p>
                     </div>
                     <div className='ml-4'>
-                      <p><strong>{subTotal}</strong></p>
-                      <p>{orderItems ? orderItems.length && orderItems.map(item => {
+                      <p><small><strong>{subTotal}</strong></small></p>
+                      <p><small>{orderItems ? orderItems.length && orderItems.map(item => {
                         return item.shippingCost ? item.shippingCost : ''
-                      }).reduce(totalShippinCost) : ""}</p>
-                      <p><strong>{totalPrice}</strong></p>
+                      }).reduce(totalShippinCost) : ""}</small></p>
+                      <p><small><strong>{totalPrice}</strong></small></p>
                     </div>
                   </div>
                 </Item>

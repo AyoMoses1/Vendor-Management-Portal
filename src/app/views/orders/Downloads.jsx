@@ -11,7 +11,7 @@ export default function MediaCard() {
   return (
     <Card sx={{ maxWidth: 345 }} className='order-card'>
       <CardContent>
-        <Typography gutterBottom variant="h6" component="div">
+        <Typography gutterBottom className='download-header' component="div">
           Downloads
         </Typography>
         <Divider/>
