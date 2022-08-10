@@ -54,12 +54,10 @@ const GenerateAccountNumber = ({
     }
 
     const handleSubmit = async (value) => {
-        console.log(value);
         await generateAccount(
             value,
             setLoading,
         ).then((res) => {
-            console.log(res);
             if (res && res.status == 200 && res.data) {
                 setLoading(false);
                 completed(res.data.object);
@@ -74,7 +72,6 @@ const GenerateAccountNumber = ({
                 handleModal();
             }
         }).catch(err => {
-            console.log(err)
         })
     }
 
