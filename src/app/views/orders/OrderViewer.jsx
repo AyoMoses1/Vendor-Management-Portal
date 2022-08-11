@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { getInvoiceById } from './OrderService'
+import { getInvoiceById, updateInvoice } from './OrderService'
 import { format } from 'date-fns'
 import { makeStyles } from '@material-ui/core/styles'
+import { useHistory } from "react-router-dom";
+import { errorState } from "../helpers/error-state";
 import clsx from 'clsx';
 import './order-view.css';
 import ChatBox from './ChatBox'
@@ -11,6 +13,20 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import { styled } from '@mui/material/styles';
+import Button from '@mui/material/Button';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import { SimpleCard } from 'matx'
+import OrderEditor from './OrderEditor'
+import Chip from '@mui/material/Chip';
+import Stack from '@mui/material/Stack';
+import DoneIcon from '@mui/icons-material/Done';
+import DeleteIcon from '@mui/icons-material/Delete';
+
+
+
 
 const useStyles = makeStyles(({ palette, ...theme }) => ({
   '@global': {
@@ -52,8 +68,15 @@ const useStyles = makeStyles(({ palette, ...theme }) => ({
   },
 }))
 
-const OrderViewer = ({ toggleOrderEditor, id }) => {
+const OrderViewer = ({ id, order }) => {
   const [state, setState] = useState({})
+  const [changeStatus, setChangeStatus] = useState(false)
+  const [orderStatus, setOrderStatus] = useState("")
+  const history = useHistory()
+  const [error, setError] = React.useState("");
+  const [severity, setSeverity] = React.useState("");
+  const [isNewOrder, setIsNewOrder] = useState(false)
+  const [isOpen,setIsOpen] = useState(false)
 
   const classes = useStyles()
 
@@ -62,10 +85,19 @@ const OrderViewer = ({ toggleOrderEditor, id }) => {
       getInvoiceById(id).then((res) => {
         console.log(res.data)
         setState({ ...res.data.object })
+        setOrderStatus(status)
       })
+
   }, [id])
 
   const handlePrint = () => window.print()
+
+
+  const toggleOrderEditor = () => {
+    setIsOpen(prev => !prev)
+    console.log(state, "test") 
+  }
+
 
   let {
     referenceNo,
@@ -94,6 +126,58 @@ const OrderViewer = ({ toggleOrderEditor, id }) => {
     color: theme.palette.text.secondary,
   }));
 
+  const handleChange = (e) => {
+    setChangeStatus(true)
+    setOrderStatus(e.target.value)
+  }
+
+  
+  let statusValues = [
+    { label: "PENDING", value: "PENDING" },
+    { label: "AWAITING PAYMENT", value: "AWAITING_PAYMENT" },
+    { label: "CONVERTED", value: "CONVERTED" },
+    { label: "PROCESSING", value: "PROCESSING" },
+    { label: "CANCELLED", value: "CANCELLED" },
+    { label: "COMPLETED", value: "COMPLETED" }, 
+  ]
+
+  useEffect(()=>{
+    if (status === "PENDING") {
+      statusValues = []
+    }
+    else if (status === "AWAITING_PAYMENT") {
+        statusValues = [ ]
+    }
+    else if (status === "PROCESSING") {
+        statusValues = []
+    }
+    else if (status === null) {
+        statusValues = []
+    }
+  }, [state])
+
+  const handleSubmit = () => {
+    const auth = JSON.parse(localStorage.getItem("auth_user"));
+    if (auth.role.name === "ROLE_ADMIN" || auth.role.name === "ROLE_MANAGER") {
+      let tempState = { status: orderStatus, id: id };
+      updateInvoice(tempState).then((res) => {
+        console.log(res);
+        if (res.status === 200) {
+          refresh()
+          // history.push("/orders");
+        }
+      });
+    } else {
+      let msg = "You dont have enough permission to perform action";
+      errorState(setError, setSeverity, msg);
+      return;
+    }
+  };
+
+  const refresh = () => {
+    window.location.reload()
+  }
+  
 
   return (
     <div className='order-container'>
@@ -126,18 +210,28 @@ const OrderViewer = ({ toggleOrderEditor, id }) => {
 
                     <div className='customer-details'>
                       <div className='order-text-12'>
-                        <p className='py-4'>Order Status: </p>
+                        <p className='py-2'>Order Status: </p>
                         <p>Customer Name: </p>
                         <p>Customer ID: </p>
                         <p>Email: </p>
                         <p>Phone: </p>
                       </div>
                       <div className='ml-4 order-text-12'>
-                        <p className='py-4'><strong>{status}</strong></p>
+                        <form onSubmit={handleChange} className='status-form'>
+                          <select value ={orderStatus ? orderStatus: status} onChange={handleChange} className='status-box'>
+                            {statusValues.map(value => {
+                              return <option value={value.value}>{value.label}</option>
+                            })}
+                          </select>
+                        </form>
+                        {/* <p className='py-4'><strong>{status}</strong></p> */}
                         <p><strong>{customerId ? `${customerId.firstName.toUpperCase()} ${customerId.lastName.toUpperCase()}` : null}</strong></p>
                         <p><strong>{customerId ? customerId.id : null}</strong></p>
                         <p><strong>{customerId ? customerId.email : null}</strong></p>
                         <p><strong>{customerId ? customerId.mobileNo : null}</strong></p>
+                      </div>
+                      <div className='edit-action'>
+                        <Button color="primary" onClick={handleSubmit}>{changeStatus ? 'Save': 'Edit'}</Button>
                       </div>
                     </div>
                   </div>
@@ -150,7 +244,13 @@ const OrderViewer = ({ toggleOrderEditor, id }) => {
                     classes.viewerAction
                   )}>
                     <div className='billing'>
-                      <h5>Billing Address</h5>
+                      <div className='header-flex'>
+                        <h5>Shipping Address</h5>
+                        <div className='edit-action'>
+                            <Button color="primary" onClick={()=>toggleOrderEditor()}>Edit</Button>
+                        </div>
+                      </div>
+                      {/* <h5>Billing Address</h5> */}
                       {orderSource == 'ADMIN' ?
                         <p>{customerId ? `${customerId.deliveryAddresses[0].address}` : null}</p>
                         :
@@ -160,30 +260,36 @@ const OrderViewer = ({ toggleOrderEditor, id }) => {
                           <p>{customerId ? `${customerId.address}` : null}</p>
                       }
                     </div>
-                    <div className='shipping'>
+                    {/* <div className='shipping'>
                       <h5>Shipping Address</h5>
                       <p>Shiping adress</p>
-                    </div>
+                    </div> */}
                   </div>
                 </Item>
               </Grid>
               <Grid item xs={12} className={"no-border"}>
                 <Item>
                   <div className='order-items'>
-                    <h5>Order Items</h5>
+                    <div className='header-flex'>
+                      <h5>Order Items</h5>
+                      {/* <div className='edit-action'>
+                          <Button color="primary">Edit</Button>
+                      </div> */}
+                    </div>
                     <table className='order-table'>
-                      <thead>
+                      <thead className='my-4'>
                         <tr>
-                          <Grid item xs={6} className='order-text-14'><small>Item</small></Grid>
+                          <Grid item xs={4} className='order-text-14'><small>Item</small></Grid>
                           <Grid item xs={2} className='text-center order-text-14'><small>Cost</small></Grid>
                           <Grid item xs={2} className='text-center order-text-14'><small>Quantity</small></Grid>
                           <Grid item xs={2} className='text-center order-text-14'><small>Total</small></Grid>
+                          <Grid item xs={2} className='text-center order-text-14'></Grid>
                         </tr>
                       </thead>
-                      <tbody>
+                      <tbody className='order-items'>
                         {orderItems ? orderItems.map((item, index) => (
                           <tr key={item.id} className={index != orderItems.length - 1 ? "order-border-bottom my-4" : ""}>
-                            <Grid item xs={6}>
+                            <Grid item xs={4}>
                               <div className='order-flex'>
                                 <div className='order-image'>
                                   <img style={{ height: "auto" }} src={item.productId.productImages[0].imageUrl} />
@@ -205,6 +311,9 @@ const OrderViewer = ({ toggleOrderEditor, id }) => {
                             </Grid>
                             <Grid item xs={2} className='text-center order-text-10'>
                               N{item.subTotal?.toLocaleString()}
+                            </Grid>
+                            <Grid  item xs={2} className='text-center order-text-10'>
+                              <DeleteIcon className='del-icon'/>
                             </Grid>
                           </tr>
                         )) : ""}
@@ -280,7 +389,6 @@ const OrderViewer = ({ toggleOrderEditor, id }) => {
               <Grid item xs={12} className={"no-border"}>
                 <Downloads />
               </Grid>
-
               <Grid item xs={12} className={"no-border"}>
                 <Notice />
               </Grid>
@@ -288,6 +396,22 @@ const OrderViewer = ({ toggleOrderEditor, id }) => {
           </Grid>
         </Grid>
       </Box>
+      <OrderEditor
+        toggleOrderEditor={toggleOrderEditor}
+        isNewOrder={isNewOrder}
+        id={id}
+        isOpen={isOpen}
+        order = {state}
+        name={"Edit Shipping Address"}
+        orderSource={orderSource}
+        // isOpen={open}
+        // specialOrder={state}
+        // handleClose={handleModal}
+        // refresh={() => refresh()}
+      />
+     
+
+
     </div>
   )
 }
