@@ -231,7 +231,7 @@ const OrderViewer = ({ id, order }) => {
                         <p><strong>{customerId ? customerId.mobileNo : null}</strong></p>
                       </div>
                       <div className='edit-action'>
-                        <Button color="primary" onClick={handleSubmit} style = {changeStatus ? {"display":"inline-block"}:{"display":"none"}}>Edit</Button>
+                        <Button color="primary" onClick={handleSubmit} style = {changeStatus ? {"display":"inline-block"}:{"display":"none"}}>Save</Button>
                       </div>
                     </div>
                   </div>
