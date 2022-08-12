@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import Cost from './components/Cost';
 import generateInput from './components/Input';
 import { Grid, Box, Divider, Button, IconButton } from '@material-ui/core';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import http from '../../../services/api';
 import SingleCondition from './components/SingleCondition';
-import { valueToPercent } from '@mui/base';
 import uuid from 'react-uuid';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import {
@@ -19,15 +17,16 @@ import {
   criteriaVal,
   dimensionsObj,
   baseCostDefinition,
-  requiredFields
+  requiredFields,
 } from './components/helper';
 import { getShippingOptionGroup } from 'app/redux/actions/shippingActions';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom';
 import CustomAlert from 'app/components/Alert';
+import services from './services';
 
-
-const ShippingOption = (props) => {
+const ShippingOption = ({ location }) => {
+  const { id } = location?.state;
   const history = useHistory();
   const [shippingZones, setShippingZones] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
@@ -47,19 +46,90 @@ const ShippingOption = (props) => {
     shippingOptionGroup: '',
     name: '',
   });
-  const {
-    loading: loadingGroup,
-    shipping: shippingGroup,
-    error: errorGroup,
-  } = useSelector((state) => state.shippingOptionGroupList);
+  const { shipping: shippingGroup } = useSelector(
+    (state) => state.shippingOptionGroupList,
+  );
   const [alertData, setAlertData] = useState({
     success: false,
     text: '',
     title: '',
   });
   const [isOpen, setIsOpen] = useState(false);
-
   const dispatch = useDispatch();
+
+  console.log({ costState, conditions, otherSettingsState });
+
+  useEffect(() => {
+    (async () => {
+      if (id) {
+        let {
+          data: {
+            object: { conditions, shippingZone, shippingOptionGroup, name },
+          },
+        } = await services.getShippingOptionDetails(id);
+        console.log({ conditions, shippingZone, shippingOptionGroup });
+
+        const cost = {
+          baseCost: conditions[0].baseCost,
+          additionalCost: conditions[0].additionalCost,
+          additionalCostOnEvery: conditions[0].additionalCostOnEvery,
+          dimensionUnit: conditions[0].dimensionUnit,
+        };
+
+        conditions = conditions.map((cond) => {
+          const calculationUnit = {
+            ...calculationUnitObj[0],
+            value: cond['calculationUnit'],
+          };
+          const methodCondition = getCondition(calculationUnit.value);
+          let dimensionParams = [];
+          let criteriaVall = [];
+          let rangeParams = [];
+
+          if (calculationUnit.value === 'SHIPPING_CLASS') {
+            methodCondition[0].value = cond.shippingClass;
+          } else if (calculationUnit.value === 'DIMENSION') {
+            methodCondition[0].value = cond.methodCondition;
+            dimensionParams = dimensionsObj.map((data) => {
+              return {
+                ...data,
+                value: cond[data.name],
+              };
+            });
+          } else {
+            methodCondition[0].value = cond.methodCondition;
+          }
+
+          if (cond.methodCondition === 'RANGE') {
+            rangeParams = minMaxCriteriaValue.map((data) => {
+              return {
+                ...data,
+                value: cond[data.name],
+              };
+            });
+          }
+          if (cond.criteriaValue) {
+            criteriaVall = criteriaVal;
+            criteriaVall[0].value = cond.criteriaValue;
+          }
+
+          return {
+            data: [
+              calculationUnit,
+              ...methodCondition,
+              ...rangeParams,
+              ...dimensionParams,
+              ...criteriaVall,
+            ],
+            id: cond.id,
+          };
+        });
+        setConditions(conditions);
+        setCostState(cost);
+        setOtherSettingsState({ shippingOptionGroup, shippingZone, name });
+      }
+    })();
+  }, [id]);
 
   useEffect(() => {
     dispatch(getShippingOptionGroup({}));
@@ -132,13 +202,9 @@ const ShippingOption = (props) => {
     });
   });
 
-
   const handleMethodCondition = (thisCondition, name, value) => {
     if (name === conditionNameEnum.METHOD_CONDITION && value === 'RANGE') {
-      thisCondition = [
-        ...thisCondition.slice(0, 2),
-        ...minMaxCriteriaValue,
-      ];
+      thisCondition = [...thisCondition.slice(0, 2), ...minMaxCriteriaValue];
 
       if (thisCondition[0].value === calculationUnitEnum.DIMENSION) {
         return [...thisCondition.slice(0, 4), ...dimensionsObj];
@@ -151,12 +217,10 @@ const ShippingOption = (props) => {
       if (thisCondition[0].value === calculationUnitEnum.DIMENSION) {
         return [...thisCondition.slice(0, 3), ...dimensionsObj];
       }
-
-     
     }
 
     return thisCondition;
-  }
+  };
 
   const onConditionChange = (name, value, id) => {
     const activeConditions = [...conditions];
@@ -165,6 +229,7 @@ const ShippingOption = (props) => {
       calUnitObj.value = value;
       const otherObj = getCondition(value);
       const thisCond = activeConditions.slice(0, 1);
+      
       const firstConditions = {
         ...thisCond[0],
         data: [calUnitObj, ...otherObj],
@@ -185,8 +250,8 @@ const ShippingOption = (props) => {
 
       mainCond = handleMethodCondition(mainCond, name, value);
 
-      const firstConditions = { ...thisCond.slice(0, 1), data: mainCond };
-
+      const firstConditions = { ...thisCond.slice(0, 1)[0], data: mainCond };
+      console.log({ thisCond: thisCond.slice(0, 1)  });
       setConditions([firstConditions, ...activeConditions.slice(1)]);
     } else {
       const selectedCond = [...activeConditions].find((cond) => cond.id === id);
@@ -214,7 +279,6 @@ const ShippingOption = (props) => {
           return dat;
         });
 
-       
         thisCondition = handleMethodCondition(thisCondition, name, value);
 
         const newCond = { ...selectedCond, data: thisCondition };
@@ -254,7 +318,7 @@ const ShippingOption = (props) => {
       const conditionsData = [...conditions].map((cond) => {
         let singleCond = { ...costState };
         cond.data.forEach((dat) => {
-          if (!dat.value && requiredFields.some(val => val === dat.name)) {
+          if (!dat.value && requiredFields.some((val) => val === dat.name)) {
             emptyFields.push(dat.name);
           } else if (
             typeof dat.value === 'object' &&
@@ -266,12 +330,15 @@ const ShippingOption = (props) => {
           }
         });
 
+        if(id){
+          singleCond.id = cond.id;
+        }
+
         return singleCond;
       });
 
-
       Object.entries(costState).forEach(([key, value]) => {
-        if (!value && requiredFields.some(val => val === key)) {
+        if (!value && requiredFields.some((val) => val === key)) {
           emptyFields.push(key);
         } else if (typeof value === 'object' && !Array.isArray(value)) {
           otherSettingsFinal[key] = value.id;
@@ -281,7 +348,7 @@ const ShippingOption = (props) => {
       });
 
       Object.entries(otherSettingsState).forEach(([key, value]) => {
-        if (!value && requiredFields.some(val => val === key)) {
+        if (!value && requiredFields.some((val) => val === key)) {
           emptyFields.push(key);
         } else if (typeof value === 'object' && !Array.isArray(value)) {
           otherSettingsFinal[key] = value.id;
@@ -292,14 +359,25 @@ const ShippingOption = (props) => {
 
       if (emptyFields.length > 0) {
         setErrorFields(emptyFields);
-        console.log({emptyFields})
+        console.log({ emptyFields });
       } else {
         const finalData = {
           ...otherSettingsFinal,
           conditions: conditionsData,
         };
 
-        await http.post_new(`/afrimash/shipping-option`, finalData);
+        if(id){
+          finalData.id = id;
+        }
+
+        console.log({ finalData })
+
+        if(id){
+          await services.updateShippingOption(finalData);
+        }else{
+          await services.createShippingOption(finalData);
+        }
+
 
         setAlertData({
           success: true,
