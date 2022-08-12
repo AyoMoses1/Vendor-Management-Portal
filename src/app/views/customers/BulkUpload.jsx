@@ -61,7 +61,7 @@ function BulkUpload({
         };
         try {
             const res = await http.post_new(`/afrimash/customers/bulkcreate?notifyEmail=${value.email}`, formData, config);
-            setSuccessData({ success: true, text: "Customers uploaded successfully", title: 'Customer Uploaded' })
+            setSuccessData({ success: true, text: "A notification would be sent to the provided email when completed", title: 'Upload in progress' })
             completed()
             handleClose();
             setLoading(false);

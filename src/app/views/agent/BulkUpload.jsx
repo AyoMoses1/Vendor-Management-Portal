@@ -60,7 +60,7 @@ function BulkUpload({
         };
         try {
             const res = await http.post_new(`/afrimash/agents/bulkcreate?notifyEmail=${value.email}`, formData, config);
-            setSuccessData({ success: true, text: "Agents uploaded successfully", title: 'Agents Uploaded' })
+            setSuccessData({ success: true,  text: "A notification would be sent to the provided email when completed", title: 'Upload in progress' })
             completed()
             handleClose();
             setLoading(false);
