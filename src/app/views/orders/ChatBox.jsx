@@ -12,11 +12,11 @@ export default function MediaCard() {
   return (
     <Card sx={{ maxWidth: 345 }} className='order-card'>
       <CardContent>
-        <Typography gutterBottom variant="h6" component="div">
+        <Typography gutterBottom component="div" className='comment-header order-text-12'>
           Comment Section
         </Typography>
         <Divider/>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body2" color="text.secondary" className='chat-text-12 chat-section'>
           Lizards are a widespread group of squamate reptiles, with over 6,000
           species, ranging across all continents except Antarctica
         </Typography>

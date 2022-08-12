@@ -5,6 +5,7 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import Box from '@material-ui/core/Box'
 import { Formik } from 'formik'
 import * as yup from 'yup'
 import { TextField} from '@material-ui/core'
@@ -15,7 +16,7 @@ export default function MediaCard() {
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardContent>
-        <Typography gutterBottom variant="h6" component="div">
+        <Typography gutterBottom className='notice-header' component="div">
           Send Note to customer
         </Typography>
         <Formik
@@ -50,16 +51,9 @@ export default function MediaCard() {
                                 // helperText={touched.address && errors.address}
                             />
                         </div>
-                        <Button
-                            type='submit'
-                            variant='contained'
-                            color='primary'
-                            className='mt-4'
-                            // disabled={loading}
-                        >
-                          Send
-                            {/* {buttonState} */}
-                        </Button>
+                        <Box display="flex" justifyContent="flex-end">
+                          <Button type='submit' className='mt-4 notice-btn'>Send</Button>
+                        </Box>
                     </form>
                 )}
             </Formik>

@@ -8,14 +8,16 @@ import './order-view.css'
 const OrderDetails = ({ location }) => {
   const [showOrderEditor, setShowOrderEditor] = useState(false)
   const [isNewOrder, setIsNewOrder] = useState(false)
+  const [isOpen,setIsOpen] = useState(false)
 
   const { id, order } = location.state
 
   console.log(order)
 
   const toggleOrderEditor = () => {
-    setShowOrderEditor(!showOrderEditor)
-    setIsNewOrder(false)
+    // setShowOrderEditor(!showOrderEditor)
+    // setIsNewOrder(false)
+    setIsOpen(!isOpen)
   }
 
   useEffect(() => {
@@ -27,19 +29,11 @@ const OrderDetails = ({ location }) => {
 
   return (
     <>
-    <SimpleCard className='m-sm-30 order-revamp'>
-      {showOrderEditor ? (
-        <OrderEditor
-          toggleOrderEditor={toggleOrderEditor}
-          isNewOrder={isNewOrder}
-          id={id}
-        />
-      ) : (
-        <>
-        <OrderViewer toggleOrderEditor={toggleOrderEditor} id={id} />
-        </>
-      )}
-    </SimpleCard>
+      <div className='p-sm-30 order-view'>
+        <div className="py-20 h-100">
+          <OrderViewer toggleOrderEditor={toggleOrderEditor} id={id} order={order}/>
+        </div>
+      </div>
     </>
   )
 }

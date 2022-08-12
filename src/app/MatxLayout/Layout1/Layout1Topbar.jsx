@@ -77,6 +77,7 @@ class Layout1Topbar extends Component {
     let { theme, settings, className, style } = this.props
     const topbarTheme =
       settings.themes[settings.layout1Settings.topbar.theme] || theme
+    const userName = JSON.parse(localStorage.getItem("auth_user"))
     return (
       <MuiThemeProvider theme={topbarTheme}>
         <div className='topbar'>
@@ -94,6 +95,7 @@ class Layout1Topbar extends Component {
                 </IconButton>
               </div>
               <div className='flex flex-middle'>
+                <div className="username" style={{color:'#fff'}}>{`Hello ${userName?.firstName} ${userName?.lastName}`}</div>
                 <MatxMenu
                   menuButton={
                     <IconButtonWhite
