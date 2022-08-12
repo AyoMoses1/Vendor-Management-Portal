@@ -6,7 +6,6 @@ import { conditionNameEnum } from './helper';
 
 
 const SingleCondition = ({ data, onChange, id }) => {
-  console.log('***********IDXXXX***********', id, data)
   const [shippingClassList, setShippingClass] = useState([]);
 
   const getAllShippingClasses = () => {
