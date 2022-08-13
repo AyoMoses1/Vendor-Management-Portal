@@ -1,12 +1,10 @@
 import React, { useEffect } from 'react'
-import { TextField, Modal, Button, RadioGroup, FormControl, FormControlLabel, Radio } from '@material-ui/core'
+import { TextField, Modal, Button } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-// import "../SpecialOrders/special-orders.css"
 import { errorState } from '../helpers/error-state';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom';
 import { getInvoiceById, updateInvoice } from "./OrderService";
 
-// import { updateInvoice } from "./SpecialOrderService";
 import Notification from '../../components/Notification';
 
 import { Formik } from 'formik'
@@ -37,19 +35,12 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-const initialValues = {
-    productName: '',
-    quantity: '',
-    status: '',
-}
-
 
 function OrderEditor({
     name,
     isOpen,
     order,
     handleClose,
-    refresh,
     toggleOrderEditor,
     orderSource
 }) {
@@ -61,31 +52,27 @@ function OrderEditor({
     const [buttonState, setButtonState] = React.useState('Add');
     const [error, setError] = React.useState("");
     const [address, setAddress] = React.useState("")
-    const history = useHistory();
 
-    const [values, setValues] = React.useState(initialValues)
 
     useEffect(() => {
         if (order) {
-            const { productName, quantity, status } = order
-            orderSource == 'ADMIN' ? setAddress(order.customerId.deliveryAddresses[0]?.address) : orderSource == 'AGENT_APP' ? setAddress(order?.deliveryAddress?.address) : setAddress(order?.customerId?.address)
-            setValues({ ...initialValues, productName, quantity, status, ...order })
+            orderSource == 'ADMIN' ?
+                setAddress(order.customerId.deliveryAddresses[0]?.address ?? "") :
+                orderSource == 'AGENT_APP' ?
+                    setAddress(order?.deliveryAddress?.address ?? "") :
+                    setAddress(order?.customerId?.address ?? "")
             setButtonState('Update');
 
-        } else {
-            setValues(initialValues);
         }
     }, [order])
 
     const handleSubmit = async (values) => {
         const auth = JSON.parse(localStorage.getItem("auth_user"));
         if (auth.role.name === "ROLE_ADMIN" || auth.role.name === "ROLE_MANAGER") {
-            let tempState = { ...values, id: order.id };
+            let tempState = { deliveryAddresses: values.address, id: order.id };
             updateInvoice(tempState).then((res) => {
                 if (res.status === 200) {
-                    // history.goBack()
                     handleClose();
-                    refresh();
                 }
             });
         } else {
@@ -103,7 +90,7 @@ function OrderEditor({
             )}
 
             <Formik
-                initialValues={values}
+                initialValues={{ address }}
                 onSubmit={handleSubmit}
                 enableReinitialize={true}
                 validationSchema={customerValidations}
@@ -122,16 +109,16 @@ function OrderEditor({
                             <TextField
                                 onChange={handleChange}
                                 onBlur={handleBlur}
-                      
-                                value={address}                                
-                                name='productName'
+
+                                value={values.address}
+                                name='address'
                                 margin='normal'
                                 fullWidth
                                 label='Shipping Address'
                                 type='text'
                                 variant='outlined'
-                                error={Boolean(touched.city && errors.city)}
-                                helperText={touched.city && errors.city}
+                                error={Boolean(touched.address && errors.address)}
+                                helperText={touched.address && errors.address}
                             />
                         </div>
                         <Button
@@ -145,19 +132,19 @@ function OrderEditor({
                             Update Order
                         </Button>
                         <Button
-                          type='submit'
-                          variant='contained'
-                          color='primary'
-                          className='mt-4 mx-4'
-                          disabled={loading}
-                          onClick = {() => toggleOrderEditor()}
+                            type='submit'
+                            variant='contained'
+                            color='primary'
+                            className='mt-4 mx-4'
+                            disabled={loading}
+                            onClick={() => toggleOrderEditor()}
                         >
-                          Cancel
-                        </Button>  
+                            Cancel
+                        </Button>
                     </form>
-                    
+
                 )}
-            </Formik>           
+            </Formik>
         </div>
     )
     return (
@@ -170,9 +157,7 @@ function OrderEditor({
 }
 
 const customerValidations = yup.object().shape({
-    productName: yup.string().required('Please enter a valid product name. i.e Day Old Chicks'),
-    quantity: yup.number().required('Please enter a valid quantity. i.e 200'),
-    status: yup.string().required('Please enter a valid status')
+    address: yup.string().required('Address is required')
 })
 
 export default OrderEditor;
