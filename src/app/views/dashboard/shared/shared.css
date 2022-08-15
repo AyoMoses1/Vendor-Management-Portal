@@ -1,0 +1,36 @@
+.audience .echarts-for-react {
+    height: 180px !important;
+}
+
+.scrolling-wrapper-flexbox {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+}
+
+.scrolling-wrapper-flexbox .scrollable-item {
+    flex: 0 0 auto;
+    margin-right: 3px;
+}
+
+.scrollable-item {
+    border: 1px solid white;
+    width: 180px;
+    height: 100px;
+}
+
+.scrolling-wrapper-flexbox {
+    height: 110px;
+    width: 100%;
+    -webkit-overflow-scrolling: touch;
+
+}
+
+scrolling-wrapper-flexbox::-webkit-scrollbar {
+    display: none;
+}
+
+.kard {
+    border: 1px solid green;
+    height: 100px;
+}
