@@ -8,24 +8,107 @@ const MostViewed = () => {
     <div>
       <Card elevation={3} className='p-10'>
         <div className='card-title'>Most Viewed</div>
-        <small className='text-muted'>Today</small>
-        <div className='pt-8' />
-        <MatxProgressBar value={75} color='primary' text='Google (102k)' />
-        <div className='py-4' />
-        <MatxProgressBar value={45} color='secondary' text='Twitter (40k)' />
-        <div className='py-4' />
-        <MatxProgressBar value={75} color='primary' text='Facebook (80k)' />
+        <div class="scrolling-wrapper-grid">
+          <div className='pt-8' />
+          <div className="scroll">
+            <div class="fig"> 
+              <h2>1 </h2>
+            </div>
 
-        <div className='py-12' />
-        <small className='text-muted'>Yesterday</small>
-        <div className='pt-8' />
-        <MatxProgressBar value={75} color='primary' text='Google (102k)' />
-        <div className='py-4' />
-        <MatxProgressBar value={45} color='secondary' text='Twitter (40k)' />
-        <div className='py-4' />
-        <MatxProgressBar value={75} color='primary' text='Facebook (80k)' />
-      </Card>
-    </div>
+            <Card className="p-5 kord">
+              <div className="flix flex-middle">
+                <div className="pics"> </div>      
+                <div className="ml-12">
+                  <small className="text-muted">
+                      <h6> Knapsack Spray </h6>
+                      <p>Category: Equipment</p>
+                    </small>
+                    <h6> #245,092 </h6>
+                </div>
+              </div>
+            </Card>
+          </div>
+
+            <div className="py-4" />
+            <div className="scroll">
+              <div> 
+                <h2>2 </h2>
+              </div>
+              <Card className=" kerd">
+                <div className="flix flex-middle">
+                  <div className="pics"> </div>      
+                  <div className="ml-12">
+                    <small className="text-muted">
+                      <h6> Knapsack Spray </h6>
+                      <p>Category: Equipment</p>
+                    </small>
+                    <h6> #245,092 </h6>
+                 </div>
+               </div>
+              </Card>
+            </div>
+
+            <div className='py-4' />
+            <div className="scroll">
+              <div> 
+                <h2>3 </h2>
+              </div>
+              <Card className="kerd">
+                <div className="flix flex-middle">
+                  <div className="pics"> </div>      
+                  <div className="ml-12">
+                    <small className="text-muted">
+                      <h6> Knapsack Spray </h6>
+                      <p>Category: Equipment</p>
+                    </small>
+                    <h6> #245,092 </h6>
+                  </div>
+                </div>
+              </Card>
+            </div>
+           
+            <div className='py-4' />
+            <div className="scroll">
+              <div> 
+                <h2>4 </h2>
+              </div>
+              <Card className="kerd">
+                <div className="flix flex-middle">
+                  <div className="pics"> </div>      
+                  <div className="ml-12">
+                    <small className="text-muted">
+                      <h6> Knapsack Spray </h6>
+                      <p>Category: Equipment</p>
+                   </small>
+                   <h6> #245,092 </h6>
+                 </div>
+               </div>
+              </Card>
+            </div>
+           
+            <div className='py-4' />
+            <div className="scroll">
+              <div> 
+                <h2>5</h2>
+              </div>
+              <Card className=" kerd">
+                <div className="flix flex-middle">
+                  <div className="pics"> </div>      
+                  <div className="ml-12">
+                    <small className="text-muted">
+                      <h6> Knapsack Spray </h6>
+                      <p>Category: Equipment</p>
+                    </small>
+                    <h6> #245,092 </h6>
+                 </div>
+               </div>
+              </Card>
+            </div>
+           
+          </div>
+          </Card>
+      </div>
+    
   )
 }
 

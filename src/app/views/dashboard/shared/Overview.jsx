@@ -1,11 +1,6 @@
 import React, { Component } from "react";
-import {
-  Grid,
-  Card,
-  Icon,
-  IconButton,
-  Tooltip,
-} from "@material-ui/core";
+import { Grid, Card, Icon, IconButton, Tooltip } from "@material-ui/core";
+import AdjustIcon from "@mui/icons-material/Adjust";
 import SalesStatistics from "./SalesStatistics";
 
 const Overview = ({ theme }) => {
@@ -17,140 +12,97 @@ const Overview = ({ theme }) => {
           <div class="scrollable-item">
             <Card className="p-10 kard">
               <div className="flex flex-middle">
-                <Icon
+                <AdjustIcon
                   style={{
-                    fontSize: "44px",
+                    fontSize: "25px",
                     opacity: 0.6,
-                    color: theme.palette.primary.main
+                    color: theme.palette.primary.main,
                   }}
                 >
                   group
-                </Icon>
+                </AdjustIcon>
                 <div className="ml-12">
-                  <small className="text-muted">New Leads</small>
-                  <h6 className="m-0 mt-4 text-primary font-weight-500">3050</h6>
+                  <small className="text-muted">
+                   <h6> +24.4% </h6>
+                    <p>From Last Month</p>
+                  </small>
                 </div>
               </div>
-              <Tooltip title="View Details" placement="top">
-                <IconButton>
-                  <Icon>arrow_right_alt</Icon>
-                </IconButton>
-              </Tooltip>
+              <h6 className="m-0 mt-4 text-primary font-weight-500">
+                #1,546,805,865.76
+              </h6>
+              <p>Total Sales</p>
             </Card>
           </div>
           <div class="scrollable-item">
             <Card className="p-10 kard">
               <div className="flex flex-middle">
-                <Icon
+                <AdjustIcon
                   style={{
-                    fontSize: "44px",
+                    fontSize: "25px",
                     opacity: 0.6,
-                    color: theme.palette.primary.main
+                    color: theme.palette.primary.main,
                   }}
                 >
                   attach_money
-                </Icon>
+                </AdjustIcon>
                 <div className="ml-12">
-                  <small className="text-muted">This week Sales</small>
-                  <h6 className="m-0 mt-4 text-primary font-weight-500">$80500</h6>
+                  <small className="text-muted">
+                    <h6> -24.4% </h6>
+                    <p>From Last Month</p>
+                  </small>
                 </div>
               </div>
-              <Tooltip title="View Details" placement="top">
-                <IconButton>
-                  <Icon>arrow_right_alt</Icon>
-                </IconButton>
-              </Tooltip>
+              <h6 className="m-0 mt-4 text-primary font-weight-500">
+                #1,546,805,865.76
+              </h6>
+              <p>Total Expenses</p>
             </Card>
           </div>
           <div class="scrollable-item">
             <Card className="p-10 kard">
               <div className="flex flex-middle">
-                <Icon
+                <AdjustIcon
                   style={{
-                    fontSize: "44px",
+                    fontSize: "25px",
                     opacity: 0.6,
-                    color: theme.palette.primary.main
-                  }}
-                >
-                  attach_money
-                </Icon>
-                <div className="ml-12">
-                  <small className="text-muted">This week Sales</small>
-                  <h6 className="m-0 mt-4 text-primary font-weight-500">$80500</h6>
-                </div>
-              </div>
-              <Tooltip title="View Details" placement="top">
-                <IconButton>
-                  <Icon>arrow_right_alt</Icon>
-                </IconButton>
-              </Tooltip>
-            </Card>
-          </div>
-          <div class="scrollable-item">
-            <Card className="p-10 kard">
-              <div className="flex flex-middle">
-                <Icon
-                  style={{
-                    fontSize: "44px",
-                    opacity: 0.6,
-                    color: theme.palette.primary.main
+                    color: theme.palette.primary.main,
                   }}
                 >
                   group
-                </Icon>
+                </AdjustIcon>
                 <div className="ml-12">
-                  <small className="text-muted">New Leads</small>
-                  <h6 className="m-0 mt-4 text-primary font-weight-500">3050</h6>
+                  <small className="text-muted">
+                   <h6> +24.4% </h6>
+                    <p>From Last Month</p>
+                  </small>
                 </div>
               </div>
-              <Tooltip title="View Details" placement="top">
-                <IconButton>
-                  <Icon>arrow_right_alt</Icon>
-                </IconButton>
-              </Tooltip>
+              <h6 className="m-0 mt-4 text-primary font-weight-500">18,043</h6>
+              <p>Total Visitors</p>
             </Card>
           </div>
           <div class="scrollable-item">
             <Card className="p-10 kard">
               <div className="flex flex-middle">
-                <Icon
+                <AdjustIcon
                   style={{
-                    fontSize: "44px",
+                    fontSize: "25px",
                     opacity: 0.6,
-                    color: theme.palette.primary.main
+                    color: theme.palette.primary.main,
                   }}
                 >
                   attach_money
-                </Icon>
+                </AdjustIcon>
                 <div className="ml-12">
-                  <small className="text-muted">This week Sales</small>
-                  <h6 className="m-0 mt-4 text-primary font-weight-500">$80500</h6>
+                  <small className="text-muted">
+                    <h6>-24.4%</h6>
+                    <p>From Last Month</p>
+                  </small>
                 </div>
               </div>
-              <Tooltip title="View Details" placement="top">
-                <IconButton>
-                  <Icon>arrow_right_alt</Icon>
-                </IconButton>
-              </Tooltip>
-            </Card>
-          </div>
-          <div class="scrollable-item">
-            <Card className="p-10 kard">
-              <div className="flex flex-middle">
-                <Icon
-                  style={{
-                    fontSize: "44px",
-                    opacity: 0.6,
-                    color: theme.palette.primary.main
-                  }}
-                >
-                  attach_money
-                </Icon>
-                <div className="ml-12">
-                  <small className="text-muted">This week Sales</small>
-                  <h6 className="m-0 mt-4 text-primary font-weight-500">$80500</h6>
-                </div>
-              </div>
+              <h6 className="m-0 mt-4 text-primary font-weight-500">23,654</h6>
+              <p>Total Orders</p>
               <Tooltip title="View Details" placement="top">
                 <IconButton>
                   <Icon>arrow_right_alt</Icon>
