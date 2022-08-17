@@ -14,15 +14,7 @@ import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import { SimpleCard } from 'matx'
 import OrderEditor from './OrderEditor'
-import Chip from '@mui/material/Chip';
-import Stack from '@mui/material/Stack';
-import DoneIcon from '@mui/icons-material/Done';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 
@@ -76,7 +68,7 @@ const OrderViewer = ({ id, order }) => {
   const [error, setError] = React.useState("");
   const [severity, setSeverity] = React.useState("");
   const [isNewOrder, setIsNewOrder] = useState(false)
-  const [isOpen,setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
 
   const classes = useStyles()
 
@@ -95,7 +87,7 @@ const OrderViewer = ({ id, order }) => {
 
   const toggleOrderEditor = () => {
     setIsOpen(prev => !prev)
-    console.log(state, "test") 
+    console.log(state, "test")
   }
 
 
@@ -131,28 +123,28 @@ const OrderViewer = ({ id, order }) => {
     setOrderStatus(e.target.value)
   }
 
-  
+
   let statusValues = [
     { label: "PENDING", value: "PENDING" },
     { label: "AWAITING PAYMENT", value: "AWAITING_PAYMENT" },
     { label: "CONVERTED", value: "CONVERTED" },
     { label: "PROCESSING", value: "PROCESSING" },
     { label: "CANCELLED", value: "CANCELLED" },
-    { label: "COMPLETED", value: "COMPLETED" }, 
+    { label: "COMPLETED", value: "COMPLETED" },
   ]
 
-  useEffect(()=>{
+  useEffect(() => {
     if (status === "PENDING") {
       statusValues = []
     }
     else if (status === "AWAITING_PAYMENT") {
-        statusValues = [ ]
+      statusValues = []
     }
     else if (status === "PROCESSING") {
-        statusValues = []
+      statusValues = []
     }
     else if (status === null) {
-        statusValues = []
+      statusValues = []
     }
   }, [state])
 
@@ -177,7 +169,16 @@ const OrderViewer = ({ id, order }) => {
   const refresh = () => {
     window.location.reload()
   }
-  
+
+  const handleModal = () => {
+    toggleOrderEditor();
+    getInvoiceById(id).then((res) => {
+      console.log(res.data)
+      setState({ ...res.data.object })
+      setOrderStatus(status)
+    })
+  }
+
 
   return (
     <div className='order-container'>
@@ -218,9 +219,9 @@ const OrderViewer = ({ id, order }) => {
                       </div>
                       <div className='ml-4 order-text-12'>
                         <form onSubmit={handleChange} className='status-form'>
-                          <select value ={orderStatus ? orderStatus: status} onChange={handleChange} className='status-box'>
+                          <select value={orderStatus ? orderStatus : status} onChange={handleChange} className='status-box'>
                             {statusValues.map(value => {
-                              return <option value={value.value}>{value.label}</option>
+                              return <option key={value.label} value={value.value}>{value.label}</option>
                             })}
                           </select>
                         </form>
@@ -231,7 +232,7 @@ const OrderViewer = ({ id, order }) => {
                         <p><strong>{customerId ? customerId.mobileNo : null}</strong></p>
                       </div>
                       <div className='edit-action'>
-                        <Button color="primary" onClick={handleSubmit} style = {changeStatus ? {"display":"inline-block"}:{"display":"none"}}>Save</Button>
+                        <Button color="primary" onClick={handleSubmit} style={changeStatus ? { "display": "inline-block" } : { "display": "none" }}>Save</Button>
                       </div>
                     </div>
                   </div>
@@ -247,7 +248,7 @@ const OrderViewer = ({ id, order }) => {
                       <div className='header-flex'>
                         <h5>Shipping Address</h5>
                         <div className='edit-action'>
-                            <Button color="primary" onClick={()=>toggleOrderEditor()}>Edit</Button>
+                          <Button color="primary" onClick={() => toggleOrderEditor()}>Edit</Button>
                         </div>
                       </div>
                       {/* <h5>Billing Address</h5> */}
@@ -279,17 +280,17 @@ const OrderViewer = ({ id, order }) => {
                     <table className='order-table'>
                       <thead className='my-4'>
                         <tr>
-                          <Grid item xs={4} className='order-text-14'><small>Item</small></Grid>
+                          <Grid item xs={5} className='order-text-14'><small>Item</small></Grid>
                           <Grid item xs={2} className='text-center order-text-14'><small>Cost</small></Grid>
                           <Grid item xs={2} className='text-center order-text-14'><small>Quantity</small></Grid>
                           <Grid item xs={2} className='text-center order-text-14'><small>Total</small></Grid>
-                          <Grid item xs={2} className='text-center order-text-14'></Grid>
+                          <Grid item xs={1} className='text-center order-text-14'></Grid>
                         </tr>
                       </thead>
                       <tbody className='order-items'>
                         {orderItems ? orderItems.map((item, index) => (
                           <tr key={item.id} className={index != orderItems.length - 1 ? "order-border-bottom my-4" : ""}>
-                            <Grid item xs={4}>
+                            <Grid item xs={5}>
                               <div className='order-flex'>
                                 <div className='order-image'>
                                   <img style={{ height: "auto" }} src={item.productId.productImages[0].imageUrl} />
@@ -297,7 +298,7 @@ const OrderViewer = ({ id, order }) => {
                                 <div className='order-text-10'>
                                   <span className='product-name'>{item.productId.name.slice(0, 50) + "..."}</span>
                                   <div className='mt-20'>
-                                    <p>Capacity: {item.productId.description.slice(0, 20)+ "..."}</p> {/* Please this is hardcoded. Will fix this later from the backend*/}
+                                    <p>Capacity: {item.productId.description.slice(0, 20) + "..."}</p> {/* Please this is hardcoded. Will fix this later from the backend*/}
                                     <p>Seller: {item.productId.storeId.sellerId.name}</p>
                                   </div>
                                 </div>
@@ -312,8 +313,8 @@ const OrderViewer = ({ id, order }) => {
                             <Grid item xs={2} className='text-center order-text-10'>
                               N{item.subTotal?.toLocaleString()}
                             </Grid>
-                            <Grid  item xs={2} className='text-center order-text-10'>
-                              <DeleteIcon className='del-icon'/>
+                            <Grid item xs={1} className='text-center order-text-10'>
+                              <DeleteIcon className='del-icon' />
                             </Grid>
                           </tr>
                         )) : ""}
@@ -341,7 +342,7 @@ const OrderViewer = ({ id, order }) => {
                                 <div className='order-image'>
                                   <img style={{ height: "auto" }} src={item.productId.productImages[0].imageUrl} />
                                 </div>
-                                <div className='order-text-10' style={{width: '70%'}}>
+                                <div className='order-text-10' style={{ width: '70%' }}>
                                   <h6>{item.productId.shippingClass?.name}</h6>
                                   <p><span className='desc-width'>Description:</span> {item.productId.shippingClass?.description}</p>
                                   <p><span className='desc-width'>Item:</span> <span className='product-name'>{item.productId.name.slice(0, 20) + "..."}</span></p>
@@ -401,15 +402,12 @@ const OrderViewer = ({ id, order }) => {
         isNewOrder={isNewOrder}
         id={id}
         isOpen={isOpen}
-        order = {state}
+        order={state}
         name={"Edit Shipping Address"}
         orderSource={orderSource}
-        // isOpen={open}
-        // specialOrder={state}
-        // handleClose={handleModal}
-        // refresh={() => refresh()}
+        handleClose={handleModal}
       />
-     
+
 
 
     </div>
