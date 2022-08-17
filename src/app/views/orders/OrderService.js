@@ -53,3 +53,12 @@ export const getProductsData = (setLoading, url, setProducts) => {
     console.error(err)
   })
 }
+
+export const deleteOrderItem = (orderId, itemId, setLoading) => {
+  setLoading(true);
+  return http.delete(`/afrimash/orders/${orderId}/order-items/${itemId}`).then(({ data }) => {
+    setLoading(false)
+  }).catch((err) => {
+    setLoading(false)
+  })
+}
