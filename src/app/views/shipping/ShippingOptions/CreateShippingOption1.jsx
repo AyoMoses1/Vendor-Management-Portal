@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import Cost from './components/Cost';
 import generateInput from './components/Input';
 import { Grid, Box, Divider, Button, IconButton } from '@material-ui/core';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import http from '../../../services/api';
 import SingleCondition from './components/SingleCondition';
-import { valueToPercent } from '@mui/base';
 import uuid from 'react-uuid';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import {
@@ -15,13 +13,20 @@ import {
   conditionNameEnum,
   calculationUnitObj,
   otherSettings,
+  minMaxCriteriaValue,
+  criteriaVal,
+  dimensionsObj,
+  baseCostDefinition,
+  requiredFields,
 } from './components/helper';
 import { getShippingOptionGroup } from 'app/redux/actions/shippingActions';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom';
 import CustomAlert from 'app/components/Alert';
+import services from './services';
 
-const ShippingOption = (props) => {
+const ShippingOption = ({ location }) => {
+  const { id } = location?.state;
   const history = useHistory();
   const [shippingZones, setShippingZones] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
@@ -41,19 +46,90 @@ const ShippingOption = (props) => {
     shippingOptionGroup: '',
     name: '',
   });
-  const {
-    loading: loadingGroup,
-    shipping: shippingGroup,
-    error: errorGroup,
-  } = useSelector((state) => state.shippingOptionGroupList);
+  const { shipping: shippingGroup } = useSelector(
+    (state) => state.shippingOptionGroupList,
+  );
   const [alertData, setAlertData] = useState({
     success: false,
     text: '',
     title: '',
   });
   const [isOpen, setIsOpen] = useState(false);
-
   const dispatch = useDispatch();
+
+  console.log({ costState, conditions, otherSettingsState });
+
+  useEffect(() => {
+    (async () => {
+      if (id) {
+        let {
+          data: {
+            object: { conditions, shippingZone, shippingOptionGroup, name },
+          },
+        } = await services.getShippingOptionDetails(id);
+        console.log({ conditions, shippingZone, shippingOptionGroup });
+
+        const cost = {
+          baseCost: conditions[0].baseCost,
+          additionalCost: conditions[0].additionalCost,
+          additionalCostOnEvery: conditions[0].additionalCostOnEvery,
+          dimensionUnit: conditions[0].dimensionUnit,
+        };
+
+        conditions = conditions.map((cond) => {
+          const calculationUnit = {
+            ...calculationUnitObj[0],
+            value: cond['calculationUnit'],
+          };
+          const methodCondition = getCondition(calculationUnit.value);
+          let dimensionParams = [];
+          let criteriaVall = [];
+          let rangeParams = [];
+
+          if (calculationUnit.value === 'SHIPPING_CLASS') {
+            methodCondition[0].value = cond.shippingClass;
+          } else if (calculationUnit.value === 'DIMENSION') {
+            methodCondition[0].value = cond.methodCondition;
+            dimensionParams = dimensionsObj.map((data) => {
+              return {
+                ...data,
+                value: cond[data.name],
+              };
+            });
+          } else {
+            methodCondition[0].value = cond.methodCondition;
+          }
+
+          if (cond.methodCondition === 'RANGE') {
+            rangeParams = minMaxCriteriaValue.map((data) => {
+              return {
+                ...data,
+                value: cond[data.name],
+              };
+            });
+          }
+          if (cond.criteriaValue) {
+            criteriaVall = criteriaVal;
+            criteriaVall[0].value = cond.criteriaValue;
+          }
+
+          return {
+            data: [
+              calculationUnit,
+              ...methodCondition,
+              ...rangeParams,
+              ...dimensionParams,
+              ...criteriaVall,
+            ],
+            id: cond.id,
+          };
+        });
+        setConditions(conditions);
+        setCostState(cost);
+        setOtherSettingsState({ shippingOptionGroup, shippingZone, name });
+      }
+    })();
+  }, [id]);
 
   useEffect(() => {
     dispatch(getShippingOptionGroup({}));
@@ -75,16 +151,19 @@ const ShippingOption = (props) => {
   const onCostChange = (event) => {
     const name = event.target.name;
     const value = event.target.value;
-    setErrorFields([]);
     setCostState((prevState) => ({ ...prevState, [name]: value }));
+    setErrorFields([]);
   };
 
   const handleOtherSettingsChange = (name, value) => {
-    setErrorFields([]);
     setOtherSettingsState((prevState) => ({ ...prevState, [name]: value }));
+    setErrorFields([]);
   };
 
-  const costInputs = costInput.map((input) => {
+  const costInputs = (conditions[0].data[0].value === 'SUB_TOTAL'
+    ? [costInput[0], ...baseCostDefinition, ...costInput.slice(1)]
+    : costInput
+  ).map((input) => {
     return generateInput({
       ...input,
       onChange: onCostChange,
@@ -118,67 +197,104 @@ const ShippingOption = (props) => {
     return generateInput({
       ...input,
       onChange: (event) =>
-      handleOtherSettingsChange(event.target.name, event.target.value),
+        handleOtherSettingsChange(event.target.name, event.target.value),
       value: otherSettingsState[input.name],
     });
-
   });
 
-  const onConditionChange = (name, value, id) => {
-    setErrorFields([]);
+  const handleMethodCondition = (thisCondition, name, value) => {
+    if (name === conditionNameEnum.METHOD_CONDITION && value === 'RANGE') {
+      thisCondition = [...thisCondition.slice(0, 2), ...minMaxCriteriaValue];
 
-    let activeConditions = conditions.slice();
+      if (thisCondition[0].value === calculationUnitEnum.DIMENSION) {
+        return [...thisCondition.slice(0, 4), ...dimensionsObj];
+      }
+    }
+
+    if (name === conditionNameEnum.METHOD_CONDITION && value !== 'RANGE') {
+      thisCondition = [...thisCondition.slice(0, 2), ...criteriaVal];
+
+      if (thisCondition[0].value === calculationUnitEnum.DIMENSION) {
+        return [...thisCondition.slice(0, 3), ...dimensionsObj];
+      }
+    }
+
+    return thisCondition;
+  };
+
+  const onConditionChange = (name, value, id) => {
+    const activeConditions = [...conditions];
     if (name === conditionNameEnum.CALCULATION_UNIT && id === 'main') {
-      const calUnitObj = calculationUnitObj[0];
+      const calUnitObj = { ...calculationUnitObj[0] };
       calUnitObj.value = value;
       const otherObj = getCondition(value);
-      activeConditions[0] = {
-        ...activeConditions[0],
+      const thisCond = activeConditions.slice(0, 1);
+      
+      const firstConditions = {
+        ...thisCond[0],
         data: [calUnitObj, ...otherObj],
       };
-      setConditions(activeConditions);
-    } else if (id === 'main') {
-      let mainCond = activeConditions[0].data.map((dat) => {
+      setConditions([firstConditions, ...activeConditions.slice(1)]);
+    } else if (name !== conditionNameEnum.CALCULATION_UNIT && id === 'main') {
+      const thisCond = activeConditions.slice(0, 1);
+
+      let mainCond = [...thisCond[0].data?.slice()].map((dat) => {
         if (dat.name === name) {
-          dat.value = value;
+          return {
+            ...dat,
+            value,
+          };
         }
         return dat;
       });
-      activeConditions[0] = { ...activeConditions[0], data: mainCond };
-      setConditions(activeConditions);
+
+      mainCond = handleMethodCondition(mainCond, name, value);
+
+      const firstConditions = { ...thisCond.slice(0, 1)[0], data: mainCond };
+      console.log({ thisCond: thisCond.slice(0, 1)  });
+      setConditions([firstConditions, ...activeConditions.slice(1)]);
     } else {
-      let selectedCond = activeConditions.find((cond) => cond.id === id);
+      const selectedCond = [...activeConditions].find((cond) => cond.id === id);
+
       if (name === conditionNameEnum.CALCULATION_UNIT) {
-        const calUnitObj = calculationUnitObj[0];
+        const calUnitObj = { ...calculationUnitObj[0] };
         calUnitObj.value = value;
         const otherObj = getCondition(value);
-        selectedCond = { ...selectedCond, data: [calUnitObj, ...otherObj] };
-        activeConditions = activeConditions.map((data) => {
-          if (data.id === id) {
-            return selectedCond;
+        const newCond = { ...selectedCond, data: [calUnitObj, ...otherObj] };
+        const newConditions = activeConditions.map((data) => {
+          if (data.id === newCond.id) {
+            return newCond;
           }
           return data;
         });
-        setConditions(activeConditions);
+        setConditions(newConditions);
       } else {
-        let thisCondition = selectedCond.data.map((dat) => {
-          if (dat.name === name) {
-            dat.value = value;
+        let thisCondition = [...selectedCond.data].map((dat) => {
+          if (dat.name === name && selectedCond.id === id) {
+            return {
+              ...dat,
+              value,
+            };
           }
           return dat;
         });
 
-        selectedCond = { ...selectedCond, data: thisCondition };
-        activeConditions = activeConditions.map((data) => {
-          if (data.id === id) {
-            return selectedCond;
+        thisCondition = handleMethodCondition(thisCondition, name, value);
+
+        const newCond = { ...selectedCond, data: thisCondition };
+
+        const newActiveCond = activeConditions.map((data) => {
+          if (data.id === newCond.id) {
+            return newCond;
           }
           return data;
         });
 
-        setConditions(activeConditions);
+        setConditions(newActiveCond);
       }
     }
+
+    setErrorFields([]);
   };
 
   const onDeleteCondition = (id) => {
@@ -202,7 +318,7 @@ const ShippingOption = (props) => {
       const conditionsData = [...conditions].map((cond) => {
         let singleCond = { ...costState };
         cond.data.forEach((dat) => {
-          if (!dat.value) {
+          if (!dat.value && requiredFields.some((val) => val === dat.name)) {
             emptyFields.push(dat.name);
           } else if (
             typeof dat.value === 'object' &&
@@ -214,18 +330,29 @@ const ShippingOption = (props) => {
           }
         });
 
+        if(id){
+          singleCond.id = cond.id;
+        }
+
         return singleCond;
       });
 
-      Object.entries(otherSettingsState).forEach(([key, value]) => {
-        if (!value) {
+      Object.entries(costState).forEach(([key, value]) => {
+        if (!value && requiredFields.some((val) => val === key)) {
           emptyFields.push(key);
-        } else if (
-          typeof value === 'object' &&
-          !Array.isArray(value)
-        ) {
+        } else if (typeof value === 'object' && !Array.isArray(value)) {
           otherSettingsFinal[key] = value.id;
-        }else {
+        } else {
+          otherSettingsFinal[key] = value;
+        }
+      });
+
+      Object.entries(otherSettingsState).forEach(([key, value]) => {
+        if (!value && requiredFields.some((val) => val === key)) {
+          emptyFields.push(key);
+        } else if (typeof value === 'object' && !Array.isArray(value)) {
+          otherSettingsFinal[key] = value.id;
+        } else {
           otherSettingsFinal[key] = value;
         }
       });
@@ -239,13 +366,19 @@ const ShippingOption = (props) => {
           conditions: conditionsData,
         };
 
-        console.log({ finalData });
+        if(id){
+          finalData.id = id;
+        }
 
-        const response = await http.post_new(
-          `/afrimash/shipping-option`,
-          finalData,
-        );
-        console.log(response);
+        console.log({ finalData })
+
+        if(id){
+          await services.updateShippingOption(finalData);
+        }else{
+          await services.createShippingOption(finalData);
+        }
+
+
         setAlertData({
           success: true,
           text: 'Shipping option created sucessfully',
@@ -254,21 +387,20 @@ const ShippingOption = (props) => {
         handleAlertModal();
       }
     } catch (e) {
-      console.log(e);
-      if(e.response){
+      if (e.response) {
         setAlertData({
           success: false,
           text: 'Invalid details provided',
           title: e?.response?.data?.errorMsg,
         });
-      }else {
+      } else {
         setAlertData({
           success: false,
           text: 'Invalid details provided',
           title: 'Unable to create shipping option',
         });
       }
-      
+
       handleAlertModal();
     }
   };
@@ -335,10 +467,11 @@ const ShippingOption = (props) => {
             </Box>
 
             <SingleCondition
+              key={conditions[0]?.id}
               onChange={(name, value, id) =>
                 onConditionChange(name, value, 'main')
               }
-              data={conditions[0].data}
+              data={conditions[0]?.data}
               id={conditions[0]?.id}
             />
           </Box>
@@ -386,7 +519,7 @@ const ShippingOption = (props) => {
         handleModal={handleAlertModal}
         alertData={alertData}
         handleOK={() => {
-          history.push('/shipping-options')
+          history.push('/shipping-options');
         }}
       />
     </div>

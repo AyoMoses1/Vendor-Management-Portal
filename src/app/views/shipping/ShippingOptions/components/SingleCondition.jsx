@@ -28,7 +28,7 @@ const SingleCondition = ({ data, onChange, id }) => {
     onChange(name, value, id);
   };
 
-  const conditionsArray = [...data].map((cond) => {
+  const conditionsArray = [...data].map((cond, index) => {
     if (cond.name === conditionNameEnum.SHIPPING_CLASS) {
       return generateInput({
         ...cond,
