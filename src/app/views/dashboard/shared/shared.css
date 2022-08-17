@@ -21,7 +21,7 @@
 }
 
 .scrolling-wrapper-flexbox {
-    height: 170px;
+    height: 160px;
     width: 100%;
     -webkit-overflow-scrolling: touch;
 
@@ -47,7 +47,7 @@ scrolling-wrapper-flexbox::-webkit-scrollbar {
 
 .kard {
     border: 1px solid green;
-    height: 140px;   
+    height: 130px;   
 }
 
 
@@ -81,15 +81,10 @@ scrolling-wrapper-flexbox::-webkit-scrollbar {
     margin: -12px 0px;
     padding: 3px 10px 0px 10px;
     width: 70%;
-   
 }
 
 .scroll {
     display: flex;
     justify-content: space-around;
     Align-items: center;
-}
-
-.fig {
-    
 }

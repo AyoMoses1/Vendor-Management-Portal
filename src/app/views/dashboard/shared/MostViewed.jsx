@@ -1,7 +1,7 @@
 import React from 'react'
-
-import { MatxProgressBar } from 'matx'
 import { Card } from '@material-ui/core'
+
+
 
 const MostViewed = () => {
   return (
