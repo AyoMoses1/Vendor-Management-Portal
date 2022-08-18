@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { Breadcrumb } from 'matx'
 import MUIDataTable from 'mui-datatables'
 import { useDialog } from 'muibox'
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 
 import {
   Grow,
@@ -13,7 +15,7 @@ import {
 } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 import './order-view.css'
-import { deleteInvoice, getAllInvoice } from './OrderService'
+import { deleteInvoice, getAllInvoice, getOrderStatus } from './OrderService'
 import Loading from 'matx/components/MatxLoadable/Loading'
 
 import { GET_ALL_ORDERS } from '../../redux/actions/EcommerceActions'
@@ -28,12 +30,51 @@ const Orders = (props) => {
   const [count, setCount] = useState(0)
   const dialog = useDialog()
   const dispatch = useDispatch()
-  const [source, setSource] = useState('')
+  const [source, setSource] = useState('ALL')
+  const [size, setSize] = useState(10);
+  const [title, setTitle] = useState('ALL ORDERS')
+  const [allOrders, setAllOrders] = useState([])
+  const [showAllOrders, setShowAllOrders] = useState(false)
+
+  const [orderStatus, setOrderStatus] = useState([])
+  
+
+  // const [statsTotal, setStatsTotal] = useState(0)
+
+  const [value, setValue] = React.useState(0);
+
+
+  // useEffect(()=>{
+  //   getOrderStatus(setLoading, setOrderStatus, orderStatus, setStatsTotal)
+  // },[orderStatus, statsTotal])
+
+
+  const fetchOrderStatus = async(event, newValue) => {
+    setValue(newValue);
+    const response = await getOrderStatus(setLoading)
+    setOrderStatus(response)
+  };
+
+  function LinkTab(props) {
+    return (
+      <Tab
+        component="a"
+        onClick={(event) => {
+          event.preventDefault();
+        }}
+        {...props}
+      />
+    );
+  }
   
 
   // const productList = useSelector((state) => state.ecommerce)
   // const { orderList } = productList
   const sourceTypes = [
+    {
+      type: 'ALL ORDERS',
+      value: 'ALL',
+    },
     {
       type: 'USSD',
       value: 'USSD',
@@ -56,10 +97,19 @@ const Orders = (props) => {
     },
   ]
   useEffect(() => {
-    getAllInvoice(setOrders, setLoading, page, setCount, source)
-    dispatch({ type: GET_ALL_ORDERS })
+    setLoading(true)
+    const _source = source === 'ALL' ? '' : source;
 
-    return () => setIsAlive(false)
+    const fetchAllOrders = async() => {
+      const response = await getAllInvoice(setLoading, page, _source)
+      setOrders(response?.content)
+      setCount(response?.totalElements)
+    }
+
+    fetchAllOrders()
+    dispatch({ type: GET_ALL_ORDERS })
+    fetchOrderStatus()
+    return () => setIsAlive(false)    
   }, [dispatch, isAlive, page, source])
 
   const onChangePage = (page) => {
@@ -67,6 +117,21 @@ const Orders = (props) => {
     setPage(page)
   }
 
+  const handleActiveLink = async (orderStats) => {
+      setLoading(true)
+      const _source = source === 'ALL' ? '' : source;
+      console.log(orderStats)
+      const response = await getAllInvoice(setLoading, page, _source)
+      setLoading(false)
+      setOrders(response.content.filter(res => {
+        return res.status === orderStats
+      }))
+  }
+
+
+  const handleTitle = (string) => {
+      string.includes('_') ? setTitle(string.split('_').shift() + " " + string.split('_').pop()): setTitle(string)
+  }
   const columns = [
     {
       name: 'referenceNo', // field name in the row object
@@ -262,7 +327,40 @@ const Orders = (props) => {
             <Loading />
           ) : (
             <MUIDataTable
-              title={'All Orders'}
+            title={<div>
+              <h3 className='mt-4 mb-0'>{title}</h3>
+              <div className='w-full flex'>
+                <div className='w-220 flex-end'>
+                  <TextField
+                    className='mb-4'
+                    name='mobileNo'
+                    label='Filter by source'
+                    variant='outlined'
+                    margin='normal'
+                    select
+                    value={source}
+                    onChange={(e) => {
+                      setSource(e.target.value)
+                      e.target.value == 'ALL' ? setTitle('ALL ORDERS'):
+                      handleTitle(e.target.value)
+                    }}
+                  >
+                    {sourceTypes.map((sourceType, idx) => (
+                      <MenuItem key={idx} value={sourceType.value}>
+                        {sourceType.type}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </div>
+                <div>
+                  <ul className='stats-nav'>
+                    {orderStatus.map((stats) => {
+                      return <li key={stats.orderStatus} onClick={() => handleActiveLink(stats.orderStatus)} id={stats.orderStatus}>{stats.orderStatus}({stats.total})</li>
+                    })}
+                  </ul>
+                </div>
+              </div>
+            </div>}
               data={orders}
               columns={columns}
               options={{
@@ -335,25 +433,6 @@ const Orders = (props) => {
                           Add New
                         </Button>
                       </Link>
-                      <div className='w-220 flex-end'>
-                        <TextField
-                          className='mb-4'
-                          name='mobileNo'
-                          label='Filter by source'
-                          variant='outlined'
-                          margin='normal'
-                          select
-                          fullWidth
-                          value={source}
-                          onChange={(e) => setSource(e.target.value)}
-                        >
-                          {sourceTypes.map((sourceType, idx) => (
-                            <MenuItem key={idx} value={sourceType.value}>
-                              {sourceType.type}
-                            </MenuItem>
-                          ))}
-                        </TextField>
-                      </div>
                     </>
                   )
                 },

@@ -1,11 +1,24 @@
 import React, { useState, useEffect } from 'react'
-import { Icon, Button, Divider, IconButton } from '@material-ui/core'
-import { Link } from 'react-router-dom'
-import { getInvoiceById } from './OrderService'
+import { getInvoiceById, updateInvoice } from './OrderService'
 import { format } from 'date-fns'
 import { makeStyles } from '@material-ui/core/styles'
-import clsx from 'clsx'
-import './order-view.css'
+import { useHistory } from "react-router-dom";
+import { errorState } from "../helpers/error-state";
+import clsx from 'clsx';
+import './order-view.css';
+import ChatBox from './ChatBox'
+import Downloads from './Downloads'
+import Notice from './Notice'
+import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
+import Grid from '@mui/material/Grid';
+import { styled } from '@mui/material/styles';
+import Button from '@mui/material/Button';
+import OrderEditor from './OrderEditor'
+import DeleteIcon from '@mui/icons-material/Delete';
+
+
+
 
 const useStyles = makeStyles(({ palette, ...theme }) => ({
   '@global': {
@@ -32,12 +45,14 @@ const useStyles = makeStyles(({ palette, ...theme }) => ({
     paddingBottom: '4px',
   },
   viewerAction: {
-    justifyContent: 'space-between !important',
+    justifyContent: '',
     display: 'flex',
+    flexDirection: 'column',
     marginTop: '10px',
     marginBottom: '2px',
     paddingLeft: '4px',
     paddingRight: '4px',
+    minHeight: '200px',
   },
   tableBottom: {
     display: 'flex',
@@ -45,8 +60,15 @@ const useStyles = makeStyles(({ palette, ...theme }) => ({
   },
 }))
 
-const OrderViewer = ({ toggleOrderEditor, id }) => {
+const OrderViewer = ({ id, order }) => {
   const [state, setState] = useState({})
+  const [changeStatus, setChangeStatus] = useState(false)
+  const [orderStatus, setOrderStatus] = useState("")
+  const history = useHistory()
+  const [error, setError] = React.useState("");
+  const [severity, setSeverity] = React.useState("");
+  const [isNewOrder, setIsNewOrder] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
 
   const classes = useStyles()
 
@@ -55,10 +77,19 @@ const OrderViewer = ({ toggleOrderEditor, id }) => {
       getInvoiceById(id).then((res) => {
         console.log(res.data)
         setState({ ...res.data.object })
+        setOrderStatus(status)
       })
+
   }, [id])
 
   const handlePrint = () => window.print()
+
+
+  const toggleOrderEditor = () => {
+    setIsOpen(prev => !prev)
+    console.log(state, "test")
+  }
+
 
   let {
     referenceNo,
@@ -67,116 +98,319 @@ const OrderViewer = ({ toggleOrderEditor, id }) => {
     createDate,
     deliveryAddress,
     shippingMethod,
+    orderSource,
+    orderItems,
+    totalPrice,
+    totalShippingCost,
+    subTotal
   } = state
 
+
+  const totalShippinCost = (total, shippingCost) => {
+    total += shippingCost
+    return total
+  }
+
+  const Item = styled(Paper)(({ theme }) => ({
+    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+    ...theme.typography.body2,
+    padding: theme.spacing(1),
+    color: theme.palette.text.secondary,
+  }));
+
+  const handleChange = (e) => {
+    setChangeStatus(true)
+    setOrderStatus(e.target.value)
+  }
+
+
+  let statusValues = [
+    { label: "PENDING", value: "PENDING" },
+    { label: "AWAITING PAYMENT", value: "AWAITING_PAYMENT" },
+    { label: "CONVERTED", value: "CONVERTED" },
+    { label: "PROCESSING", value: "PROCESSING" },
+    { label: "CANCELLED", value: "CANCELLED" },
+    { label: "COMPLETED", value: "COMPLETED" },
+  ]
+
+  useEffect(() => {
+    if (status === "PENDING") {
+      statusValues = []
+    }
+    else if (status === "AWAITING_PAYMENT") {
+      statusValues = []
+    }
+    else if (status === "PROCESSING") {
+      statusValues = []
+    }
+    else if (status === null) {
+      statusValues = []
+    }
+  }, [state])
+
+  const handleSubmit = () => {
+    const auth = JSON.parse(localStorage.getItem("auth_user"));
+    if (auth.role.name === "ROLE_ADMIN" || auth.role.name === "ROLE_MANAGER") {
+      let tempState = { status: orderStatus, id: id };
+      updateInvoice(tempState).then((res) => {
+        console.log(res);
+        if (res.status === 200) {
+          refresh()
+          // history.push("/orders");
+        }
+      });
+    } else {
+      let msg = "You dont have enough permission to perform action";
+      errorState(setError, setSeverity, msg);
+      return;
+    }
+  };
+
+  const refresh = () => {
+    window.location.reload()
+  }
+
+  const handleModal = () => {
+    toggleOrderEditor();
+    getInvoiceById(id).then((res) => {
+      console.log(res.data)
+      setState({ ...res.data.object })
+      setOrderStatus(status)
+    })
+  }
+
+
   return (
-    <>
-      <div className={clsx('invoice-viewer py-4', classes.orderViewer)}>
-        <div
-          className={clsx(
-            'viewer_actions px-4 mb-5 flex items-center',
-            classes.viewerAction
-          )}
-        >
-          <Link to='/orders'>
-            <IconButton>
-              <Icon>arrow_back</Icon>
-            </IconButton>
-          </Link>
-          <div>
-            <Button
-              className='mr-4 py-2'
-              variant='contained'
-              color='primary'
-              onClick={() => toggleOrderEditor()}
-            >
-              Edit Order
-            </Button>
-            <Button
-              onClick={handlePrint}
-              className='py-2'
-              variant='contained'
-              color='secondary'
-            >
-              Print Order
-            </Button>
-          </div>
-        </div>
+    <div className='order-container'>
+      <Box sx={{ flexGrow: 1 }}>
+        <Grid container spacing={2}>
+          <Grid item xs={8} className={"no-border"}>
+            <Grid container spacing={2}>
+              <Grid item xs={7} className={"no-border"}>
+                <Item>
+                  <div
+                    className={clsx(
+                      'viewer_actions px-2 mb-5',
+                      classes.viewerAction
+                    )}
+                  >
+                    <div className='order-header'>
+                      <h5 className='mb-2'>Order {referenceNo}</h5>
+                      <p className='mt-20'>{createDate ? `Date Created: ${format(new Date(createDate).getTime(), 'MMMM dd, yyyy')}` : ''}</p>
+                      <p>Time Created: 12:00 am</p> {/* Note that the time is hard coded. The time is not really coming from the backend*/}
+                    </div>
 
-        <div id='print-area'>
-          <div
-            className={clsx(
-              'viewer_actions px-4 mb-5 flex items-center justify-between',
-              classes.viewerAction
-            )}
-          >
-            <div>
-              <h5 className='mb-2'>Order Info</h5>
-              <p className='mb-4'>Reference Number</p>
-              <p className='mb-0'># {referenceNo}</p>
-            </div>
-            <div className={`text-right`}>
-              <span className={`mb-4 ORDER ${status}`}>
-                Order status: {status}
-              </span>
-              <h5 className='font-normal capitalize'>
-                <strong>Order date: </strong>
-                <span>
-                  {createDate
-                    ? format(new Date(createDate).getTime(), 'MMMM dd, yyyy')
-                    : ''}
-                </span>
-              </h5>
-            </div>
-          </div>
+                    {/* <div className='my-4 customer-details'>
+                  <div className='order-text-12'>
+                    <p className='order-text-12'>Order Status:</p>
+                  </div>
+                  <div className='ml-6 order-text-12'>
+                    <p className='order-text-12'><span className='font-weight-bold'>{status}</span></p>
+                  </div>
+                </div> */}
 
-          <Divider />
+                    <div className='customer-details'>
+                      <div className='order-text-12'>
+                        <p className='py-2'>Order Status: </p>
+                        <p>Customer Name: </p>
+                        <p>Customer ID: </p>
+                        <p>Email: </p>
+                        <p>Phone: </p>
+                      </div>
+                      <div className='ml-4 order-text-12'>
+                        <form onSubmit={handleChange} className='status-form'>
+                          <select value={orderStatus ? orderStatus : status} onChange={handleChange} className='status-box'>
+                            {statusValues.map(value => {
+                              return <option key={value.label} value={value.value}>{value.label}</option>
+                            })}
+                          </select>
+                        </form>
+                        {/* <p className='py-4'><strong>{status}</strong></p> */}
+                        <p><strong>{customerId ? `${customerId.firstName.toUpperCase()} ${customerId.lastName.toUpperCase()}` : null}</strong></p>
+                        <p><strong>{customerId ? customerId.id : null}</strong></p>
+                        <p><strong>{customerId ? customerId.email : null}</strong></p>
+                        <p><strong>{customerId ? customerId.mobileNo : null}</strong></p>
+                      </div>
+                      <div className='edit-action'>
+                        <Button color="primary" onClick={handleSubmit} style={changeStatus ? { "display": "inline-block" } : { "display": "none" }}>Save</Button>
+                      </div>
+                    </div>
+                  </div>
+                </Item>
+              </Grid>
+              <Grid item xs={5} className={"no-border"}>
+                <Item>
+                  <div className={clsx(
+                    'viewer_actions px-2 mb-5',
+                    classes.viewerAction
+                  )}>
+                    <div className='billing'>
+                      <div className='header-flex'>
+                        <h5>Shipping Address</h5>
+                        <div className='edit-action'>
+                          <Button color="primary" onClick={() => toggleOrderEditor()}>Edit</Button>
+                        </div>
+                      </div>
+                      {/* <h5>Billing Address</h5> */}
+                      {orderSource == 'ADMIN' ?
+                        <p>{customerId ? `${customerId.deliveryAddresses[0].address}` : null}</p>
+                        :
+                        orderSource == 'AGENT_APP' ?
+                          <p>{state.deliveryAddress ? `${state.deliveryAddress.address}` : null}</p>
+                          :
+                          <p>{customerId ? `${customerId.address}` : null}</p>
+                      }
+                    </div>
+                    {/* <div className='shipping'>
+                      <h5>Shipping Address</h5>
+                      <p>Shiping adress</p>
+                    </div> */}
+                  </div>
+                </Item>
+              </Grid>
+              <Grid item xs={12} className={"no-border"}>
+                <Item>
+                  <div className='order-items'>
+                    <div className='header-flex'>
+                      <h5>Order Items</h5>
+                      {/* <div className='edit-action'>
+                          <Button color="primary">Edit</Button>
+                      </div> */}
+                    </div>
+                    <table className='order-table'>
+                      <thead className='my-4'>
+                        <tr>
+                          <Grid item xs={5} className='order-text-14'><small>Item</small></Grid>
+                          <Grid item xs={2} className='text-center order-text-14'><small>Cost</small></Grid>
+                          <Grid item xs={2} className='text-center order-text-14'><small>Quantity</small></Grid>
+                          <Grid item xs={2} className='text-center order-text-14'><small>Total</small></Grid>
+                          <Grid item xs={1} className='text-center order-text-14'></Grid>
+                        </tr>
+                      </thead>
+                      <tbody className='order-items'>
+                        {orderItems ? orderItems.map((item, index) => (
+                          <tr key={item.id} className={index != orderItems.length - 1 ? "order-border-bottom my-4" : ""}>
+                            <Grid item xs={5}>
+                              <div className='order-flex'>
+                                <div className='order-image'>
+                                  <img style={{ height: "auto" }} src={item.productId.productImages[0].imageUrl} />
+                                </div>
+                                <div className='order-text-10'>
+                                  <span className='product-name'>{item.productId.name.slice(0, 50) + "..."}</span>
+                                  <div className='mt-20'>
+                                    <p>Capacity: {item.productId.description.slice(0, 20) + "..."}</p> {/* Please this is hardcoded. Will fix this later from the backend*/}
+                                    <p>Seller: {item.productId.storeId.sellerId.name}</p>
+                                  </div>
+                                </div>
+                              </div>
+                            </Grid>
+                            <Grid item xs={2} className='text-center order-text-10'>
+                              N{item.itemPrice ? item.itemPrice?.toLocaleString() : item.productId.price?.toLocaleString()}
+                            </Grid>
+                            <Grid item xs={2} className='text-center order-text-10'>
+                              {item.itemQuantity}
+                            </Grid>
+                            <Grid item xs={2} className='text-center order-text-10'>
+                              N{item.subTotal?.toLocaleString()}
+                            </Grid>
+                            <Grid item xs={1} className='text-center order-text-10'>
+                              <DeleteIcon className='del-icon' />
+                            </Grid>
+                          </tr>
+                        )) : ""}
+                      </tbody>
+                    </table>
+                  </div>
+                </Item>
+              </Grid>
+              <Grid item xs={12} className={"no-border1"}>
+                <Item>
+                  <div className='shipping-items'>
+                    <h5 className='mb-0'>Shipping for Order Items</h5>
+                    <table className='order-table'>
+                      <thead>
+                        <tr>
+                          <Grid item xs={10} className='order-text-14'></Grid>
+                          <Grid item xs={2} className='order-text-14 text-center'><small>Cost</small></Grid>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {orderItems ? orderItems.map((item, index) => (
+                          <Grid container key={item.id} className={index != orderItems.length - 1 ? "order-border-bottom my-4" : ""}>
+                            <Grid item xs={10}>
+                              <div className='order-flex'>
+                                <div className='order-image'>
+                                  <img style={{ height: "auto" }} src={item.productId.productImages[0].imageUrl} />
+                                </div>
+                                <div className='order-text-10' style={{ width: '70%' }}>
+                                  <h6>{item.productId.shippingClass?.name}</h6>
+                                  <p><span className='desc-width'>Description:</span> {item.productId.shippingClass?.description}</p>
+                                  <p><span className='desc-width'>Item:</span> <span className='product-name'>{item.productId.name.slice(0, 20) + "..."}</span></p>
+                                  <p><span className='desc-width'>Quantity:</span> {item.itemQuantity}</p>
+                                  <p><span>Seller:</span> {item.productId.storeId.sellerId.name}</p>
+                                </div>
+                              </div>
+                            </Grid>
+                            <Grid item xs={2} className='text-center order-text-10'>
+                              N{item.shippingCost?.toLocaleString()}
+                            </Grid>
+                          </Grid>
+                        )) : ""}
+                      </tbody>
+                    </table>
+                  </div>
+                </Item>
+              </Grid>
+              <Grid item xs={12} className={"no-border2"}>
+                <Item>
+                  <div className='order-total'>
+                    <div>
+                      <p><small>Item SubTotal:</small></p>
+                      <p><small>Shipping: </small></p>
+                      <p><strong><small>Total:</small></strong></p>
+                    </div>
+                    <div className='ml-4'>
+                      <p><small><strong>{subTotal}</strong></small></p>
+                      <p><small>{orderItems ? orderItems.length && orderItems.map(item => {
+                        return item.shippingCost ? item.shippingCost : ''
+                      }).reduce(totalShippinCost) : ""}</small></p>
+                      <p><small><strong>{totalPrice}</strong></small></p>
+                    </div>
+                  </div>
+                </Item>
+              </Grid>
+            </Grid>
+          </Grid>
 
-          <div
-            className={clsx(
-              'viewer__billing-info px-4 py-5 flex justify-between',
-              classes.viewerAction
-            )}
-          >
-            <div>
-              <h5 className='mb-2'>Customer Details</h5>
-              <p className='mb-4'>
-                {customerId
-                  ? `${customerId.firstName} ${customerId.lastName}`
-                  : null}
-              </p>
-              <p className='mb-0 whitespace-pre-wrap'>
-                {customerId ? customerId.mobileNo : null}
-              </p>
-              <p className='mb-0 whitespace-pre-wrap'>
-                {customerId ? customerId.email : null}
-              </p>
-              <p className='mb-0 whitespace-pre-wrap'>
-                {deliveryAddress ? deliveryAddress?.address : null}
-              </p>
-            </div>
-            <div className='text-right w-full'>
-              <h5 className='mb-2'>Shipping Details</h5>
-              <p className='mb-4'>
-                {customerId
-                  ? `${customerId.firstName} ${customerId.lastName}`
-                  : null}
-              </p>
-              <p className='mb-0 whitespace-pre-wrap'>
-                {customerId ? customerId.email : null}
-              </p>
-              <p className='mb-0 whitespace-pre-wrap'>
-                {deliveryAddress ? deliveryAddress?.address : null}
-              </p>
-              <p className='mb-0 whitespace-pre-wrap'>
-                Shipping Method: {shippingMethod ? shippingMethod : null}
-              </p>
-            </div>
-            <div />
-          </div>
-        </div>
-      </div>
-    </>
+          <Grid item xs={4} className={"no-border"}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} className={"no-border"}>
+                <ChatBox />
+              </Grid>
+              <Grid item xs={12} className={"no-border"}>
+                <Downloads />
+              </Grid>
+              <Grid item xs={12} className={"no-border"}>
+                <Notice />
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Box>
+      <OrderEditor
+        toggleOrderEditor={toggleOrderEditor}
+        isNewOrder={isNewOrder}
+        id={id}
+        isOpen={isOpen}
+        order={state}
+        name={"Edit Shipping Address"}
+        orderSource={orderSource}
+        handleClose={handleModal}
+      />
+
+
+
+    </div>
   )
 }
 

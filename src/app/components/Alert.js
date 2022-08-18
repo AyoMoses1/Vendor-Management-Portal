@@ -58,7 +58,7 @@ const Alert = ({ isOpen, handleModal, alertData, handleOK }) => {
       <Typography variant='h5' className='modal--header'>
         {alertData.title}
       </Typography>
-      <Typography className='modal-content'>
+      <Typography className='modal-content text-center'>
         {alertData.text}
       </Typography>
       {

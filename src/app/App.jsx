@@ -23,7 +23,7 @@ const App = () => {
   const dispatch = useDispatch()
 
 
-  const timeout = 1000 * 3  * 30
+  const timeout = 1000 * 60  * 30
   const promptTimeout = 1000 * 30
 
   const [isOpen, setIsOpen] = React.useState(false)
