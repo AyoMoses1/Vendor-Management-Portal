@@ -1,115 +1,67 @@
-import React from 'react'
-import { Card } from '@material-ui/core'
+import React from 'react';
+import { Card, Grid, Button } from '@material-ui/core';
+import ViewedCard from "./ViewedCard";
+import SalesStatistics from "./SalesStatistics";
 
 
+const views = [
+  {
+    id: 1,
+    name: "Knapsack Sprayer",
+    item: "Category: Equipment",
+    amount:"#245,092"
+  },
 
-const MostViewed = () => {
+  {
+    id: 2,
+    name: "Knapsack Sprayer",
+    item: "Category: Equipment",
+    amount:"#245,092"
+  },
+
+  {
+    id: 3,
+    name: "Knapsack Sprayer",
+    item: "Category: Equipment",
+    amount:"#245,092"
+  },
+
+  {
+    id: 4,
+    name: "Knapsack Sprayer",
+    item: "Category: Equipment",
+    amount:"#245,092"
+  },
+
+  {
+    id: 5,
+    name: "Knapsack Sprayer",
+    item: "Category: Equipment",
+    amount:"#245,092"
+  }
+]
+
+const MostViewed = ({theme}) => {
   return (
     <div>
-      <Card elevation={3} className='p-10'>
-        <div className='card-title'>Most Viewed</div>
+      <Card elevation={3} className="p-10">
+        <div className='dropdown'>
+          <div className="card-title">Most Viewed</div>
+          <div>
+          <Button variant="outlined">Date Range</Button>
+          </div>
+        </div>
         <div class="scrolling-wrapper-grid">
-          <div className='pt-8' />
-          <div className="scroll">
-            <div class="fig"> 
-              <h2>1 </h2>
-            </div>
-
-            <Card className="p-5 kord">
-              <div className="flix flex-middle">
-                <div className="pics"> </div>      
-                <div className="ml-12">
-                  <small className="text-muted">
-                      <h6> Knapsack Spray </h6>
-                      <p>Category: Equipment</p>
-                    </small>
-                    <h6> #245,092 </h6>
-                </div>
-              </div>
-            </Card>
-          </div>
-
-            <div className="py-4" />
-            <div className="scroll">
-              <div> 
-                <h2>2 </h2>
-              </div>
-              <Card className=" kerd">
-                <div className="flix flex-middle">
-                  <div className="pics"> </div>      
-                  <div className="ml-12">
-                    <small className="text-muted">
-                      <h6> Knapsack Spray </h6>
-                      <p>Category: Equipment</p>
-                    </small>
-                    <h6> #245,092 </h6>
-                 </div>
-               </div>
-              </Card>
-            </div>
-
-            <div className='py-4' />
-            <div className="scroll">
-              <div> 
-                <h2>3 </h2>
-              </div>
-              <Card className="kerd">
-                <div className="flix flex-middle">
-                  <div className="pics"> </div>      
-                  <div className="ml-12">
-                    <small className="text-muted">
-                      <h6> Knapsack Spray </h6>
-                      <p>Category: Equipment</p>
-                    </small>
-                    <h6> #245,092 </h6>
-                  </div>
-                </div>
-              </Card>
-            </div>
-           
-            <div className='py-4' />
-            <div className="scroll">
-              <div> 
-                <h2>4 </h2>
-              </div>
-              <Card className="kerd">
-                <div className="flix flex-middle">
-                  <div className="pics"> </div>      
-                  <div className="ml-12">
-                    <small className="text-muted">
-                      <h6> Knapsack Spray </h6>
-                      <p>Category: Equipment</p>
-                   </small>
-                   <h6> #245,092 </h6>
-                 </div>
-               </div>
-              </Card>
-            </div>
-           
-            <div className='py-4' />
-            <div className="scroll">
-              <div> 
-                <h2>5</h2>
-              </div>
-              <Card className=" kerd">
-                <div className="flix flex-middle">
-                  <div className="pics"> </div>      
-                  <div className="ml-12">
-                    <small className="text-muted">
-                      <h6> Knapsack Spray </h6>
-                      <p>Category: Equipment</p>
-                    </small>
-                    <h6> #245,092 </h6>
-                 </div>
-               </div>
-              </Card>
-            </div>
-           
-          </div>
-          </Card>
-      </div>
-    
-  )
+          {views.map((view) => (
+            <ViewedCard key={view.id} view={view} theme={theme} />
+          ))}
+        </div>
+        <Grid item xs={12} md={12}>
+          <SalesStatistics />
+        </Grid>
+      </Card>
+    </div>
+  );
 }
 
 export default MostViewed

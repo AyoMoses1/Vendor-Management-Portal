@@ -10,21 +10,18 @@
 
 .scrolling-wrapper-flexbox .scrollable-item {
     flex: 0 0 auto;
-    margin-right: 50px;
 }
 
 .scrollable-item {
     border: 1px solid white;
-    width: 230px;
-    height: 100px;
-    
+    width: 100%;
+    height: 100px; 
 }
 
 .scrolling-wrapper-flexbox {
     height: 160px;
     width: 100%;
-    -webkit-overflow-scrolling: touch;
-
+    justify-content: space-between;
 }
 
 scrolling-wrapper-flexbox::-webkit-scrollbar {
@@ -51,13 +48,6 @@ scrolling-wrapper-flexbox::-webkit-scrollbar {
 }
 
 
-.pics {
-    width: 70px;
-    border-radius: 50%;
-    background-color: grey;
-    height: 70px
-}
-
 .scrolling-wrapper-grid {
     overflow-x: auto;
 }
@@ -68,13 +58,6 @@ scrolling-wrapper-flexbox::-webkit-scrollbar {
 }
 
 
-.kord {
-    height: 80px;
-    border: 1px solid green;
-    padding: 3px 10px 0px 10px;
-    width: 70%;
-}
-
 .kerd {
     height: 80px;
     border: 1px solid green;
@@ -83,8 +66,54 @@ scrolling-wrapper-flexbox::-webkit-scrollbar {
     width: 70%;
 }
 
+.dropdown {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+
+/* Sales funnel */
+
+
+.wrapper {
+    height: 220px;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    width: 100%;
+    justify-content: space-between;
+    
+}
+
+
+.item {
+    border: 1px solid white;
+    width: 100%;
+    height: 100px; 
+}
+
+.kird{
+    height: 200px;
+    border: 1px solid rgb(174, 168, 168);
+    margin: 5px;
+}
+
+
+/* Most Viewed*/
+
+.pics {
+    width: 60px;
+    border-radius: 50%;
+    background-color: grey;
+    height: 50px
+}
+
 .scroll {
     display: flex;
     justify-content: space-around;
     Align-items: center;
+    margin-top: 35px;
 }
