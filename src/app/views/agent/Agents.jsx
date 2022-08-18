@@ -390,7 +390,6 @@ const Agents = () => {
             <Loading />
           ) : (
             <MUIDataTable
-
               title={'All Agents'}
               data={[...agentList]}
               columns={columns}
