@@ -203,9 +203,10 @@ export const getCondition = (cond) => {
     case calculationUnitEnum.DIMENSION:
     case calculationUnitEnum.VOLUME:
     case calculationUnitEnum.WEIGHT:
-      return regularObj;
     case calculationUnitEnum.SUBTOTAL:
-      return subTotalConditionObj;
+      return regularObj;
+   /*  case calculationUnitEnum.SUBTOTAL:
+      return subTotalConditionObj; */
     default:
       return '';
   }
