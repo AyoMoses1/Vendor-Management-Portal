@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Breadcrumb } from 'matx';
 import MUIDataTable from 'mui-datatables';
 import { Grow, Icon, IconButton, TextField, Button, Box, MenuItem, InputLabel} from '@material-ui/core';
@@ -22,62 +22,38 @@ import { getShippingOptionGroup } from 'app/redux/actions/shippingActions'
 
 
 const GetAllShippingOptions = () => {
-  const dispatch = useDispatch()
-  const shippingOptionGroupList = useSelector((state) => state.shippingOptionGroupList)
-  const {loading:shippingGroupLoading, shipping:  shippingGroups, error:shippingGroupError} = shippingOptionGroupList
-  
-  const [shippinOptions, setShippingOptions] = React.useState([]);
-  const [error, setError] = React.useState(false);
-  const [loading, setLoading] = React.useState(false);
-  const [severity, setSeverirty] = React.useState('');
-  const [group, setGroup] = React.useState('')
-  const [shippinOptionsByGroupName, setShippingOptionsByGroupName] = React.useState([])
-
-
+  const [{shippinOptions, totalCount, size}, setShippingOptions] = useState({size: 10});
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [severity, setSeverirty] = useState('');
   const dialog = useDialog();
+  const [page, setPage] = useState(0)
 
-  
-  const handleGroupChange = (e)=> {
-      setGroup(e.target.value)
-      getShippingOptionsByGroup(e.target.value)
-      console.log(group)
-  }
-
-  const getShippingOptionsByGroup = async (groupId) =>{
-    groupId === 'All' ? http
-    .get('/afrimash/shipping-option')
-    .then((res) => {
-      setShippingOptionsByGroupName(res?.data.object);
-      setLoading(false);
-    })
-    .catch((e) => console.log(e)) :
-
-    http
-        .get(`/afrimash/shipping-option?shippingOptionGroupId=${groupId}`)
-        .then((res) => {
-            setShippingOptionsByGroupName(res?.data.object);
-            // console.log(shippinOptionsByGroupName)
-            setLoading(false);
-        })
-        .catch((e) => console.log(e));
-}
-
-
-  const getAllShippingOptions = async () => {
+  const getAllShippingOptions = async (params) => {
     setLoading(true);
     http
-      .get('/afrimash/shipping-option')
+      .get(`/afrimash/shipping-option/?size=${params.size}&page=${params.page}`)
       .then((res) => {
-        setShippingOptions(res?.data.object)
+        setShippingOptions({shippinOptions: res?.data.object.content, totalCount: res?.data.object.totalElements, size:res?.data.object.size }) 
         setLoading(false);
       })
       .catch((e) => console.log(e));
   };
 
   useEffect(() => {
-    getAllShippingOptions();
-    
-  }, []);
+    getAllShippingOptions({size, page});
+  }, [size, page]);
+
+
+  const handleChangePage = (newPage) => {
+    console.log({ newPage })
+    setPage(newPage);
+    getAllShippingOptions({ page: newPage, size : size});
+  };
+
+  const handleChangeRowsPerPage = (value) => {
+    getAllShippingOptions({ page: 0, size: parseInt(value, 10) });
+  };
 
   React.useEffect(()=>{
     dispatch(getShippingOptionGroup({}))
@@ -111,31 +87,7 @@ const GetAllShippingOptions = () => {
         },
       },
     },
-   /*  {
-      name: 'description', // field name in the row object
-      label: 'Description', // column title that will be shown in table
-      options: {
-        filter: true,
-        customBodyRenderLite: (dataIndex) => {
-          const shippingZone = shippinOptions[dataIndex];
-          return (
-            <Link
-              to={{
-                pathname: `/shipping-option/details/${shippingZone.id}`,
-                state: {
-                  id: shippingZone.id,
-                },
-              }}
-              className='flex items-center'
-            >
-              <div className='ml-3'>
-                <p className='my-0 text-10'>{`${shippingZone?.description}`}</p>
-              </div>
-            </Link>
-          );
-        },
-      },
-    }, */
+   
     {
       name: 'Shipping Group', // field name in the row object
       label: 'shippingGroup', // column title that will be shown in table
@@ -251,7 +203,9 @@ const GetAllShippingOptions = () => {
                       .then((value) => {
                         http
                           .delete(`afrimash/shipping-option/${shippingZone.id}`)
-                          .then(() => window.location.reload());
+                          .then(() => {
+                            getAllShippingOptions()
+                          });
                       })
                       .catch(() => {
                         return false;
@@ -330,75 +284,74 @@ const GetAllShippingOptions = () => {
         <div className='min-w-750'>
           {loading ? (
             <Loading />
-          ) : group 
-                ? 
-              <Box mt={5}>
-                <ShippingOptionByGroup handleGroupChange = {handleGroupChange} group = {group} shippinOptions = {shippinOptionsByGroupName}/>
-              </Box> 
-                : 
-              (
-                <MUIDataTable
-                  title={'Shipping Options'}
-                  data={shippinOptions}
-                  columns={columns}
-                  options={{
-                    filter: true,
-                    sort: true,
-                    sortOrder: { name: 'id', direction: 'desc' },
-                    filterType: 'dropdown',
-                    responsive: 'standard',
-                    elevation: 0,
-                    rowsPerPageOptions: [10, 20, 40, 80, 100],
-                    customSearchRender: (
-                      searchText,
-                      handleSearch,
-                      hideSearch,
-                      options,
-                    ) => {
-                      return (
-                        <Grow appear in={true} timeout={300}>
-                          <TextField
-                            variant='outlined'
-                            size='small'
-                            fullWidth
-                            onChange={({ target: { value } }) =>
-                              handleSearch(value)
-                            }
-                            InputProps={{
-                              style: {
-                                paddingRight: 0,
-                              },
-                              startAdornment: (
-                                <Icon className='mr-2' fontSize='small'>
-                                  search
-                                </Icon>
-                              ),
-                              endAdornment: (
-                                <IconButton onClick={hideSearch}>
-                                  <Icon fontSize='small'>clear</Icon>
-                                </IconButton>
-                              ),
-                            }}
-                          />
-                        </Grow>
-                      );
-                    },
-                    customToolbar: () => {
-                      return (
-                        <Link
-                          to={{
-                            pathname: '/shipping-option/new',
-                            state: {},
-                          }}
-                        >
-                          <Button variant='contained' color='primary'>
-                            Create new shipping option
-                          </Button>
-                        </Link>
-                      );
-                    },
-                  }}
-                />
+          ) : (
+            <MUIDataTable
+              title={'Shipping Options'}
+              data={shippinOptions}
+              columns={columns}
+              options={{
+                serverSide: true,
+                count: totalCount,
+                page: page,
+                filter: true,
+                sort: true,
+                sortOrder: { name: 'id', direction: 'desc' },
+                filterType: 'dropdown',
+                responsive: 'standard',
+                onChangePage: (value) => handleChangePage(value),
+                onChangeRowsPerPage: handleChangeRowsPerPage,
+                rowsPerPage: size,
+                rowsPerPageOptions: [10, 20, 40, 50, 80, 100],
+                customSearchRender: (
+                  searchText,
+                  handleSearch,
+                  hideSearch,
+                  options,
+                ) => {
+                  return (
+                    <Grow appear in={true} timeout={300}>
+                      <TextField
+                        variant='outlined'
+                        size='small'
+                        fullWidth
+                        onChange={({ target: { value } }) =>
+                          handleSearch(value)
+                        }
+                        InputProps={{
+                          style: {
+                            paddingRight: 0,
+                          },
+                          startAdornment: (
+                            <Icon className='mr-2' fontSize='small'>
+                              search
+                            </Icon>
+                          ),
+                          endAdornment: (
+                            <IconButton onClick={hideSearch}>
+                              <Icon fontSize='small'>clear</Icon>
+                            </IconButton>
+                          ),
+                        }}
+                      />
+                    </Grow>
+                  );
+                },
+                customToolbar: () => {
+                  return (
+                    <Link
+                      to={{
+                        pathname: '/shipping-option/new',
+                        state: {},
+                      }}
+                    >
+                      <Button variant='contained' color='primary'>
+                        Create new shipping option
+                      </Button>
+                    </Link>
+                  );
+                },
+              }}
+            />
           )}
         </div>
       </div>

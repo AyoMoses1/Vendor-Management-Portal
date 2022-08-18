@@ -145,7 +145,9 @@ const GetAllShippingClass = () => {
                       .then((value) => {
                         http
                           .delete(`afrimash/shipping-class/${user.id}`)
-                          .then(() => window.location.reload())
+                          .then(() => {
+                            getAllShippingClasses()
+                          })
                       })
                       .catch(() => {
                         return false
