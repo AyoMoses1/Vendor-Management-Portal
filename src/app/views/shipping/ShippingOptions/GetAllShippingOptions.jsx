@@ -1,14 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { Breadcrumb } from 'matx';
 import MUIDataTable from 'mui-datatables';
-import { Grow, Icon, IconButton, TextField, Button } from '@material-ui/core';
+import { Grow, Icon, IconButton, TextField, Button, Box, MenuItem, InputLabel} from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { useDialog } from 'muibox';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+
+
 
 import http from '../../../services/api';
 
 import Loading from 'matx/components/MatxLoadable/Loading';
 import Notification from 'app/components/Notification';
+
+import ShippingOptionByGroup from './ShippingOptionsByGroup';
+import { getShippingOptionGroup } from 'app/redux/actions/shippingActions'
+
+
 
 const GetAllShippingOptions = () => {
   const [{shippinOptions, totalCount, size}, setShippingOptions] = useState({size: 10});
@@ -43,6 +54,12 @@ const GetAllShippingOptions = () => {
   const handleChangeRowsPerPage = (value) => {
     getAllShippingOptions({ page: 0, size: parseInt(value, 10) });
   };
+
+  React.useEffect(()=>{
+    dispatch(getShippingOptionGroup({}))
+},[])
+
+
 
   const columns = [
     {
@@ -244,6 +261,25 @@ const GetAllShippingOptions = () => {
           <Notification alert={error} severity={severity || ''} />
         )}
       </div>
+      <Box mt={4} mb = {10} sx={{ minWidth: '50%' }}>
+        <FormControl fullWidth>
+          <InputLabel id='demo-simple-select-label'>Filter by Shipping Option Group</InputLabel>
+          <Select
+            labelId='demo-simple-select-label'
+            id='demo-simple-select'
+            value={group}
+            label='Filter by Shipping Option Group'
+            onChange={handleGroupChange}
+            >
+            <MenuItem value = {'All'}>All</MenuItem>
+            {shippingGroups.map(option => {
+                return (<MenuItem key={option?.id} value={option?.id}>{option?.name}</MenuItem>)
+            })}
+            
+          </Select>
+        </FormControl>
+      </Box>
+      
       <div className='overflow-auto'>
         <div className='min-w-750'>
           {loading ? (

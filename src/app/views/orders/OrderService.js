@@ -5,12 +5,12 @@ export const getInvoiceById = (id) => {
     .get(`/afrimash/orders/${id}`)
 }
 
-export const getAllInvoice = (getOrders, setLoading, page,setCount,source) => {
+export const getAllInvoice = (getOrders, setLoading, page, setCount, _source) => {
   setLoading(true)
-  return http.get(`afrimash/orders?page=${page}&orderSource=${source}`).then(({ data }) => {
+  return http.get(_source ? `afrimash/orders?page=${page}&orderSource=${_source}` : `afrimash/orders?page=${page}`).then(({ data }) => {
     if (data instanceof Object) {
       getOrders(data.object.content)
-     setCount(data.object.totalElements);
+      setCount(data.object.totalElements);
     }
     setLoading(false)
   })
@@ -29,11 +29,11 @@ export const updateInvoice = (order) => {
 export const populate = (setCustomers, setAlert, setSeverity, url, setLoading) => {
   if (!url) return
   setLoading(true)
-  http.get(url).then(({data}) => {
+  http.get(url).then(({ data }) => {
     if (data instanceof Object) {
-        setLoading(false)
-        setSeverity('success')
-        setCustomers(data.object)
+      setLoading(false)
+      setSeverity('success')
+      setCustomers(data.object)
     }
   }).catch((err) => {
     setAlert('Ann error occurred while fetching data', err.message)

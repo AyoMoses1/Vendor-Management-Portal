@@ -3,11 +3,13 @@ import { Breadcrumb } from 'matx'
 import MUIDataTable from 'mui-datatables'
 import { Grow, Icon, IconButton, TextField, Button, MenuItem, Typography, Select } from '@material-ui/core'
 import { Link } from 'react-router-dom'
-
 import Notification from '../../components/Notification'
-
-import { getAllRoles, getAllUser } from './UserService'
+import { getAllRoles, getAllUser, deleteUser } from './UserService'
 import Loading from 'matx/components/MatxLoadable/Loading'
+import { useDialog } from 'muibox'
+import Alert from 'app/components/Alert';
+import './user.css';
+import { getUserStatistics } from '../dashboard/DashboardService'
 
 const Users = () => {
   const [isAlive, setIsAlive] = useState(true)
@@ -20,6 +22,12 @@ const Users = () => {
   const [roles, setRoles] = useState([])
   const [role, setRole] = useState(0)
   const [size, setSize] = useState(10);
+  const dialog = useDialog();
+  const [alertData, setAlertData] = useState({ success: false, text: '', title: '' });
+  const [alertOpen, setAlertOpen] = React.useState(false)
+  const [title, setTitle] = useState('All Users');
+  const [statistics, setStatistics] = useState([]);
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
     getAllUser(setUserList, isLoading, setAlert, setSeverity, setCount, page, size, role)
@@ -32,19 +40,48 @@ const Users = () => {
   }
 
   const handleCustomSearch = (value) => {
-    console.log(value);
     setRole(value);
     getAllUser(setUserList, isLoading, setAlert, setSeverity, setCount, page, size, value)
+    if (value === 0) {
+      setTitle('All Users')
+    } else {
+      let tempRole = roles.find(r => r.id === value).name.substr(5).split("_").join(" ");
+      setTitle(tempRole);
+    }
   }
 
   useEffect(() => {
     getRoles();
+    getUserStatistics(setStatistics);
   }, [])
+
+  useEffect(() => {
+    if (statistics.length) {
+      if (role === 0) {
+        setTotal(count);
+      } else {
+        const tempTotal = statistics.find(s => s.role.id === role)?.total ?? 0;
+        setTotal(tempTotal);
+      }
+    }
+  }, [statistics, role, count])
 
   const getRoles = () => {
     getAllRoles().then(({ data }) => {
       setRoles(data.object)
     })
+  }
+
+  const refresh = () => {
+    getAllUser(setUserList, isLoading, setAlert, setSeverity, setCount, page, size, role);
+  }
+
+  const handleAlertModal = () => {
+    setAlertOpen(prev => !prev)
+  }
+
+  const handleAlertOK = () => {
+    handleAlertModal();
   }
 
   const columns = [
@@ -166,7 +203,6 @@ const Users = () => {
           let user = userList[dataIndex]
           return (
             <div className='flex items-center'>
-              <div className='flex-grow'></div>
               <Link
                 to={{
                   pathname: '/user/edit',
@@ -186,13 +222,42 @@ const Users = () => {
       },
     },
     {
-      name: 'id', // field name in the row object
-      label: '', // column title that will be shown in table
+      name: 'delete',
+      label: ' ',
       options: {
         filter: false,
         customBodyRenderLite: (dataIndex) => {
+          let user = userList[dataIndex]
           return (
-            <div>{/* <h5 className='my-0 text-15'>{`${user?.id}`}</h5> */}</div>
+            <div className='flex items-center'>
+              <div>
+                <IconButton
+                  onClick={() =>
+                    dialog
+                      .confirm(`Are you sure you want to delete ${user?.firstName || 'N/A'} ${user?.lastName || 'N/A'
+                        }?`)
+                      .then(async (value) => {
+                        const result = await deleteUser(
+                          user?.id,
+                          isLoading,
+                        ).then((res) => {
+                          refresh();
+                          setAlertData({ success: true, text: 'User has been deleted successfully', title: 'User Deleted' })
+                          handleAlertModal();
+                        }).catch((err) => {
+                          setAlertData({ success: false, text: 'Unable to delete user. Please try again', title: 'User Deleted' })
+                          handleAlertModal();
+                        });
+                      })
+                      .catch(() => {
+                        return false;
+                      })
+                  }
+                >
+                  <Icon>delete</Icon>
+                </IconButton>
+              </div>
+            </div>
           )
         },
       },
@@ -201,6 +266,12 @@ const Users = () => {
 
   return (
     <div className='m-sm-30'>
+      <Alert
+        isOpen={alertOpen}
+        handleModal={handleAlertModal}
+        alertData={alertData}
+        handleOK={handleAlertOK}
+      />
       {severity === 'error' && (
         <Notification severity={severity} alert={alert} />
       )}
@@ -215,10 +286,39 @@ const Users = () => {
             <Loading />
           ) : (
             <MUIDataTable
-              title={'All Users'}
+              title={<div>
+                <h4 className='mt-4 mb-0'>{title}</h4>
+                <div className='w-full flex'>
+                  <div className='w-220 flex-end mt-4'>
+                    <Grow appear in={true} timeout={300}>
+                      <Select
+                        size='small'
+                        fullWidth
+                        variant='outlined'
+                        displayEmpty={true}
+                        renderValue={value => value?.length ? Array.isArray(value) ? value.join(', ') : value : 'Select Role'}
+                        onChange={({ target: { value } }) => handleCustomSearch(value)}
+                        style={{ width: "260px" }}
+                      >
+                        <MenuItem key={"null"} value={0}>
+                          All
+                        </MenuItem>
+                        {roles.map((role, idx) => (
+                          <MenuItem key={idx} value={role?.id}>
+                            {role.name.substr(5)}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </Grow>
+                  </div>
+                </div>
+              </div>}
               data={userList}
               columns={columns}
               options={{
+                setTableProps: () => ({ className: "user-table" }),
+                selectableRows: false,
+                filter: false,
                 filterType: 'textField',
                 responsive: 'standard',
                 elevation: 0,
@@ -284,6 +384,10 @@ const Users = () => {
                           <Icon>add</Icon>Add New
                         </Button>
                       </IconButton>
+                      <div className='w-full pr-20 flex justify-end items-center'>
+                        <p className='pr-10'>Total: </p>
+                        <h6 className='mb-0'>{total}</h6>
+                      </div>
                     </Link>
                   )
                 },

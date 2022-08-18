@@ -28,12 +28,19 @@ const Orders = (props) => {
   const [count, setCount] = useState(0)
   const dialog = useDialog()
   const dispatch = useDispatch()
-  const [source, setSource] = useState('')
+  const [source, setSource] = useState('ALL')
+  const [size, setSize] = useState(10);
+  const [title, setTitle] = useState('ALL ORDERS')
+
   
 
   // const productList = useSelector((state) => state.ecommerce)
   // const { orderList } = productList
   const sourceTypes = [
+    {
+      type: 'ALL ORDERS',
+      value: 'ALL',
+    },
     {
       type: 'USSD',
       value: 'USSD',
@@ -56,7 +63,8 @@ const Orders = (props) => {
     },
   ]
   useEffect(() => {
-    getAllInvoice(setOrders, setLoading, page, setCount, source)
+    const _source = source === 'ALL' ? '' : source;
+    getAllInvoice(setOrders, setLoading, page, setCount, _source)
     dispatch({ type: GET_ALL_ORDERS })
 
     return () => setIsAlive(false)
@@ -67,6 +75,9 @@ const Orders = (props) => {
     setPage(page)
   }
 
+  const handleTitle = (string) => {
+      string.includes('_') ? setTitle(string.split('_').shift() + " " + string.split('_').pop()): setTitle(string)
+  }
   const columns = [
     {
       name: 'referenceNo', // field name in the row object
@@ -262,7 +273,33 @@ const Orders = (props) => {
             <Loading />
           ) : (
             <MUIDataTable
-              title={'All Orders'}
+            title={<div>
+              <h3 className='mt-4 mb-0'>{title}</h3>
+              <div className='w-full flex'>
+                <div className='w-220 flex-end'>
+                  <TextField
+                    className='mb-4'
+                    name='mobileNo'
+                    label='Filter by source'
+                    variant='outlined'
+                    margin='normal'
+                    select
+                    value={source}
+                    onChange={(e) => {
+                      setSource(e.target.value)
+                      e.target.value == 'ALL' ? setTitle('ALL ORDERS'):
+                      handleTitle(e.target.value)
+                    }}
+                  >
+                    {sourceTypes.map((sourceType, idx) => (
+                      <MenuItem key={idx} value={sourceType.value}>
+                        {sourceType.type}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </div>
+              </div>
+            </div>}
               data={orders}
               columns={columns}
               options={{
@@ -335,25 +372,6 @@ const Orders = (props) => {
                           Add New
                         </Button>
                       </Link>
-                      <div className='w-220 flex-end'>
-                        <TextField
-                          className='mb-4'
-                          name='mobileNo'
-                          label='Filter by source'
-                          variant='outlined'
-                          margin='normal'
-                          select
-                          fullWidth
-                          value={source}
-                          onChange={(e) => setSource(e.target.value)}
-                        >
-                          {sourceTypes.map((sourceType, idx) => (
-                            <MenuItem key={idx} value={sourceType.value}>
-                              {sourceType.type}
-                            </MenuItem>
-                          ))}
-                        </TextField>
-                      </div>
                     </>
                   )
                 },

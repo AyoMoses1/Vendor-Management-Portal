@@ -5,9 +5,12 @@ import { Grow, Icon, IconButton, TextField, Button, MenuItem } from '@material-u
 import { Link } from 'react-router-dom'
 import Loading from 'matx/components/MatxLoadable/Loading'
 import './customer-view.css'
+// import { deleteUser } from '../user-management/UserService'
+import { useDialog } from 'muibox'
 
 import Notification from '../../components/Notification'
-import { getAllCustomer } from './CustomerService'
+import { getAllCustomer } from './CustomerService';
+import { getCustomerStatistics } from '../dashboard/DashboardService'
 
 const CustomerList = () => {
   const [isAlive, setIsAlive] = useState(true)
@@ -21,6 +24,10 @@ const CustomerList = () => {
   const [count, setCount] = useState(0)
   const [page, setPage] = useState(0)
   const [size, setSize] = useState(10);
+  const [statistics, setStatistics] = useState([]);
+  const [total, setTotal] = useState(0);
+
+  // const dialog = useDialog()
 
   const sourceTypes = [
     {
@@ -71,18 +78,32 @@ const CustomerList = () => {
   }
 
   useEffect(() => {
-    const _source = source === 'ALL' ? 'ADMIN' : source;
+    const _source = source === 'ALL' ? '' : source;
     getAllCustomer(setUserList, setCount, isLoading, setAlert, setSeverity, size, page, _source)
     return () => setIsAlive(false)
-  }, [isAlive, source, size])
+  }, [isAlive, source, size]);
+
+  useEffect(() => {
+    getCustomerStatistics(setStatistics);
+  }, [])
+
+  useEffect(() => {
+    if (statistics.length) {
+      if (source === 'ALL') {
+        setTotal(count);
+      } else {
+        const tempTotal = statistics.find(s => s.source === source)?.total ?? 0;
+        setTotal(tempTotal);
+      }
+    }
+  }, [statistics, source])
 
   const onPageChange = (page) => {
-    const _source = source === 'ALL' ? 'ADMIN' : source;
+    const _source = source === 'ALL' ? '' : source;
     getAllCustomer(setUserList, setCount, isLoading, setAlert, setSeverity, size, page, _source)
     setPage(page)
   }
 
-  console.log({ userList })
   const columns = [
     {
       name: 'firstName', // field name in the row object
@@ -128,7 +149,7 @@ const CustomerList = () => {
                 }}
                 className='ml-3'
               >
-                <h5 className='my-0 text-muted'>{user.address || '-----'}</h5>
+                <h6 className='my-0 text-muted'>{user.address || '-----'}</h6>
               </Link>
             </div>
           )
@@ -188,6 +209,47 @@ const CustomerList = () => {
         },
       },
     },
+    // {
+    //   name: 'delete',
+    //   label: ' ',
+    //   options: {
+    //     filter: false,
+    //     customBodyRenderLite: (dataIndex) => {
+    //       let user = userList[dataIndex]
+    //       return (
+    //         <div className='flex items-center'>
+    //           <div>
+    //             <IconButton
+    //               onClick={() =>
+    //                 dialog
+    //                   .confirm(`Are you sure you want to delete ${user?.firstName || 'N/A'} ${user?.lastName || 'N/A'
+    //                     }?`)
+    //                   .then(async (value) => {
+    //                     const result = await deleteUser(
+    //                       user?.id,
+    //                       isLoading,
+    //                     ).then((res) => {
+    //                       refresh();
+    //                       // setAlertData({ success: true, text: 'User has been deleted successfully', title: 'User Deleted' })
+    //                       // handleAlertModal();
+    //                     }).catch((err) => {
+    //                       // setAlertData({ success: false, text: 'Unable to delete user. Please try again', title: 'User Deleted' })
+    //                       // handleAlertModal();
+    //                     });
+    //                   })
+    //                   .catch(() => {
+    //                     return false;
+    //                   })
+    //               }
+    //             >
+    //               <Icon>delete</Icon>
+    //             </IconButton>
+    //           </div>
+    //         </div>
+    //       )
+    //     },
+    //   },
+    // },
     {
       name: 'action',
       label: ' ',
@@ -289,19 +351,14 @@ const CustomerList = () => {
               data={userList}
               columns={columns}
               options={{
-                filterType: 'textField',
+                filter: false,
                 responsive: 'standard',
                 serverSide: true,
                 count,
                 sort: true,
+                setTableProps: () => ({ className: "customer-table" }),
+                selectableRows: false,
                 sortOrder: { name: 'id', direction: 'desc' },
-                //   selectableRows: "none", // set checkbox for each row
-                //   search: false, // set search option
-                //   filter: false, // set data filter option
-                //   download: false, // set download option
-                //   print: false, // set print option
-                //   pagination: true, //set pagination option
-                //   viewColumns: false, // set column option
                 elevation: 0,
                 page,
                 onTableChange: (action, tableState) => {
@@ -362,6 +419,10 @@ const CustomerList = () => {
                             Add New
                           </Button>
                         </IconButton>
+                        <div className='w-full pr-20 flex justify-end items-center'>
+                          <p className='pr-10'>Total: </p>
+                          <h6 className='mb-0'>{total}</h6>
+                        </div>
                       </Link>
                     </>
                   )

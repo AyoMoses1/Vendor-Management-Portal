@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Breadcrumb, SimpleCard } from "matx";
-import UserForm from "./UserForm";
+import UpdateUserForm from "./UpdateUserForm";
 
-function EditUser({location}) {
-    let {id, user} = location.state
+function EditUser({ location }) {
+  let { id, user } = location.state
   return (
     <div className="m-sm-30">
       <div className="mb-sm-30">
@@ -15,7 +15,7 @@ function EditUser({location}) {
         />
       </div>
       <SimpleCard title={`Edit User`}>
-        <UserForm isNewUser={false} id={id} User={user}/>
+        <UpdateUserForm id={id} />
       </SimpleCard>
     </div>
   );

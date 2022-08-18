@@ -11,6 +11,7 @@ import Notification from '../../components/Notification'
 import { errorState } from '../helpers/error-state'
 import { states } from '../../../utils/states'
 import BulkUpload from './BulkUpload'
+import Alert from 'app/components/Alert'
 
 function NewCustomer({ isNewCustomer, id, Customer }) {
   const initialValues = {
@@ -52,8 +53,23 @@ function NewCustomer({ isNewCustomer, id, Customer }) {
   const [severity, setSeverity] = useState('')
   const [open, setOpen] = useState(false)
 
+  const [alertData, setAlertData] = useState({ success: false, text: '', title: '' });
+  const [alertOpen, setAlertOpen] = React.useState(false)
+
+  const handleAlertModal = () => {
+    setAlertOpen(prev => !prev)
+  }
+
   const handleModal = () => {
     setOpen(!open)
+  }
+
+  const handleAlertOK = () => {
+    history.goBack();
+  }
+
+  const completed = () => {
+    handleAlertModal();
   }
 
   // const handleChange = (e) => {
@@ -122,10 +138,19 @@ function NewCustomer({ isNewCustomer, id, Customer }) {
               Bulk Upload
             </Button>
           </div>
+          <Alert
+            isOpen={alertOpen}
+            handleModal={handleAlertModal}
+            alertData={alertData}
+            handleOK={handleAlertOK}
+          />
           <BulkUpload
             name={"Create Multiple Customers"}
             isOpen={open}
-            handleClose={handleModal} />
+            handleClose={handleModal}
+            completed={completed}
+            setSuccessData={(data) => setAlertData(data)}
+          />
           <Formik
             initialValues={values}
             onSubmit={handleSubmit}
