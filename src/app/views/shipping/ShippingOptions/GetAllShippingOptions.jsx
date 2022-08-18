@@ -35,7 +35,6 @@ const GetAllShippingOptions = () => {
 
 
   const handleChangePage = (newPage) => {
-    console.log({ newPage })
     setPage(newPage);
     getAllShippingOptions({ page: newPage, size : size});
   };
