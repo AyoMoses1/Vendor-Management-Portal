@@ -49,7 +49,7 @@ const Users = () => {
       setTitle(tempRole);
     }
   }
-
+  
   useEffect(() => {
     getRoles();
     getUserStatistics(setStatistics);
