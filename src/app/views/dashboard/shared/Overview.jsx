@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { Grid, Card, Icon, IconButton, Tooltip } from "@material-ui/core";
-import AdjustIcon from "@mui/icons-material/Adjust";
+import { Grid, Card, Icon, Button, Tooltip } from "@material-ui/core";
 import SalesStatistics from "./SalesStatistics";
 import OverviewCard from "./OverviewCard";
 
@@ -38,10 +37,22 @@ const overviews = [
 const Overview = ({ theme }) => {
   return (
     <Card className="play-card p-10 bg-paper mb-24">
-      <div className="card-title mb-12">Overview</div>
+      <div className="dropdown">
+        <div className="card-title mb-12">Overview</div>
+        <div>
+          <Button variant="outlined">Date Range</Button>
+        </div>
+      </div>
       <Grid container spacing={1}>
-        <div class="scrolling-wrapper-flexbox">
-          { overviews.map(overview => <OverviewCard key={overview.label} overview={overview} theme={theme} />) }
+        <div className="scrolling-wrapper-flexbox">
+          {overviews.map((overview) => (
+            <OverviewCard
+              key={overview.label}
+              overview={overview}
+              theme={theme}
+              className="overview-card"
+            />
+          ))}
         </div>
         <Grid item xs={12} md={12}>
           <SalesStatistics />
