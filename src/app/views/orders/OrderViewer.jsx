@@ -19,6 +19,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useDialog } from 'muibox';
 import Alert from 'app/components/Alert';
 import { CircularProgress } from '@material-ui/core';
+import { sendCustomerNote } from '../customers/CustomerService';
 
 const useStyles = makeStyles(({ palette, ...theme }) => ({
   '@global': {
@@ -75,6 +76,7 @@ const OrderViewer = ({ id, order }) => {
   const [alertOpen, setAlertOpen] = React.useState(false)
   const [downloading, setDownloading] = useState(false);
   const [downloadIndex, setDownloadIndex] = useState(0);
+  const [sending, setSending] = useState(false);
 
   const classes = useStyles()
 
@@ -88,7 +90,6 @@ const OrderViewer = ({ id, order }) => {
   }, [id])
 
   const handlePrint = () => window.print()
-
 
   const toggleOrderEditor = () => {
     setIsOpen(prev => !prev)
@@ -161,7 +162,6 @@ const OrderViewer = ({ id, order }) => {
         console.log(res);
         if (res.status === 200) {
           refresh()
-          // history.push("/orders");
         }
       });
     } else {
@@ -226,8 +226,28 @@ const OrderViewer = ({ id, order }) => {
     await downloadPdfInvoice(
       state?.id,
       setDownloading
-    ).then((res) => { }).catch((err) => { })
+    ).then((res) => {
+      setAlertData({ success: true, text: 'Invoice downloaded successfully', title: 'Invoice Downloaded' })
+      handleAlertModal();
+    }).catch((err) => { })
+  }
 
+  const handleSendCustomerNote = async (note) => {
+    console.log(note);
+
+    await sendCustomerNote(state?.customerId?.id, note, setSending).then((res) => {
+      console.log(res);
+      if (res && res?.data?.status === "OK") {
+        setAlertData({ success: true, text: 'Message sent successfully', title: 'Message Sent' })
+        handleAlertModal();
+      } else {
+        setAlertData({ success: false, text: 'Unable to send message. Please try again', title: 'Message Sent' })
+        handleAlertModal();
+      }
+    }).catch(err => {
+      setAlertData({ success: false, text: 'Unable to send message. Please try again', title: 'Message Sent' })
+      handleAlertModal();
+    })
   }
 
 
@@ -448,7 +468,7 @@ const OrderViewer = ({ id, order }) => {
                 <Downloads handleDownload={handleDownload} downloadIndex={downloadIndex} downloading={downloading} />
               </Grid>
               <Grid item xs={12} className={"no-border"}>
-                <Notice />
+                <Notice handleSendCustomerNote={handleSendCustomerNote} sending={sending} />
               </Grid>
             </Grid>
           </Grid>
@@ -464,9 +484,6 @@ const OrderViewer = ({ id, order }) => {
         orderSource={orderSource}
         handleClose={handleModal}
       />
-
-
-
     </div>
   )
 }
