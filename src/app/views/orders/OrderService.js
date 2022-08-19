@@ -5,15 +5,16 @@ export const getInvoiceById = (id) => {
     .get(`/afrimash/orders/${id}`)
 }
 
-export const getAllInvoice = (getOrders, setLoading, page, setCount, _source) => {
-  setLoading(true)
+
+export const getAllInvoice = (setLoading, page, _source) => {
+  
   return http.get(_source ? `afrimash/orders?page=${page}&orderSource=${_source}` : `afrimash/orders?page=${page}`).then(({ data }) => {
     if (data instanceof Object) {
-      getOrders(data.object.content)
-      setCount(data.object.totalElements);
+      return data.object
     }
-    setLoading(false)
   })
+
+
 }
 
 export const deleteInvoice = (order) => {
@@ -60,5 +61,18 @@ export const deleteOrderItem = (orderId, itemId, setLoading) => {
     setLoading(false)
   }).catch((err) => {
     setLoading(false)
+  })
+}
+
+export const getOrderStatus = (setLoading) => {
+  setLoading(true)
+  return http.get(`/afrimash/reporting/order-stats`).then(({data}) => {
+    if(data instanceof Object){
+      setLoading(false)
+      return data.object
+    }
+  }).catch((err) => {
+    setLoading(false)
+    console.log(err)
   })
 }
