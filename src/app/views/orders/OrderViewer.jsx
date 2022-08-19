@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { getInvoiceById, updateInvoice, deleteOrderItem } from './OrderService'
+import { getInvoiceById, updateInvoice, deleteOrderItem, downloadPdfInvoice } from './OrderService'
 import { format } from 'date-fns'
 import { makeStyles } from '@material-ui/core/styles'
 import { useHistory } from "react-router-dom";
@@ -73,6 +73,8 @@ const OrderViewer = ({ id, order }) => {
   const [loading, setLoading] = useState(false);
   const [alertData, setAlertData] = useState({ success: false, text: '', title: '' });
   const [alertOpen, setAlertOpen] = React.useState(false)
+  const [downloading, setDownloading] = useState(false);
+  const [downloadIndex, setDownloadIndex] = useState(0);
 
   const classes = useStyles()
 
@@ -217,6 +219,15 @@ const OrderViewer = ({ id, order }) => {
         }
         )
     }
+  }
+
+  const handleDownload = async (index) => {
+    setDownloadIndex(index);
+    await downloadPdfInvoice(
+      state?.id,
+      setDownloading
+    ).then((res) => { }).catch((err) => { })
+
   }
 
 
@@ -434,7 +445,7 @@ const OrderViewer = ({ id, order }) => {
                 <ChatBox />
               </Grid>
               <Grid item xs={12} className={"no-border"}>
-                <Downloads />
+                <Downloads handleDownload={handleDownload} downloadIndex={downloadIndex} downloading={downloading} />
               </Grid>
               <Grid item xs={12} className={"no-border"}>
                 <Notice />
