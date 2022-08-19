@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Grid, Card, Icon, Button, Tooltip } from "@material-ui/core";
 import SalesStatistics from "./SalesStatistics";
 import OverviewCard from "./OverviewCard";
+import DateRangePicker from "./DateRangePicker";
 
 const overviews = [
   {
@@ -42,13 +43,14 @@ const overviews = [
 ]
 
 const Overview = ({ theme }) => {
+  const getDateRangeValue = (value) => {
+    console.log(value);
+  }
   return (
     <Card className="play-card p-20 bg-paper mb-24">
       <div className="dropdown">
         <div className="analytics-title mb-12">Overview</div>
-        <div>
-          <Button variant="outlined">Date Range</Button>
-        </div>
+        <DateRangePicker getDateRangeValue={getDateRangeValue} />
       </div>
       <Grid container spacing={1}>
         <div className="scrolling-wrapper-flexbox">
