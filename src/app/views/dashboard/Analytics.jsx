@@ -5,7 +5,8 @@ import MostViewed from './shared/MostViewed'
 import { withStyles } from '@material-ui/styles'
 import SalesFunnel from './shared/SalesFunnel'
 import Audience from './shared/Audience'
-import TrafficSource from './shared/TrafficSource'
+import UsersCard from './shared/UsersCard'
+import PageViews from './shared/PageViews'
 
 class Dashboard1 extends Component {
   state = {}
@@ -26,7 +27,10 @@ class Dashboard1 extends Component {
               <div className='mb-16'>
                 <MostViewed />
               </div>
-              <TrafficSource />
+              <div className='mb-16'>
+                <UsersCard />
+              </div>
+              <PageViews />
             </Grid>
           </Grid>
         </div>

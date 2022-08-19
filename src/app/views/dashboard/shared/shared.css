@@ -1,3 +1,9 @@
+.analytics-title {
+    font-weight: 600;
+    font-size: 16px;
+    color: #000000;
+}
+
 .audience .echarts-for-react {
     height: 180px !important;
 }
@@ -10,60 +16,133 @@
 
 .scrolling-wrapper-flexbox .scrollable-item {
     flex: 0 0 auto;
+    margin-right: 1.5rem;
 }
 
 .scrollable-item {
     border: 1px solid white;
-    width: 100%;
-    height: 100px; 
+    width: 200px;
 }
 
 .scrolling-wrapper-flexbox {
     height: 160px;
     width: 100%;
-    justify-content: space-between;
+    -webkit-overflow-scrolling: touch;
 }
 
 scrolling-wrapper-flexbox::-webkit-scrollbar {
     display: none;
 }
 
-.flex {
-    justify-content: space-between;
+.overview-logo {
+    height: 16px;
 }
 
 
-.text-muted > h6 {
+.text-muted>h6 {
     font-size: 18px;
 }
 
-.text-muted > p {
+.text-muted>p {
     margin-top: -5px;
-    
+
 }
 
 .kard {
-    border: 1px solid green;
-    height: 130px;   
+    border: 0.391727px solid #5E8C0F;
+    box-shadow: 0px 0px 13.0576px 1.30576px rgba(0, 0, 0, 0.05);
+    border-radius: 5.22302px;
+    height: 120px;
+}
+
+.overview-top {
+    padding-top: 6px;
+    justify-content: space-between;
+}
+
+.overview-top p {
+    font-size: 8px;
+    margin: 0
+}
+
+.overview-top small {
+    font-size: 6px;
+    margin: 0
+}
+
+.overview-top-content {
+    line-height: 8px;
+    text-align: center;
+}
+
+.overview-amount {
+    margin-top: 28px;
+}
+
+.overview-footer {
+    font-weight: 100;
+    font-size: 13px;
 }
 
 
 .scrolling-wrapper-grid {
+    margin-top: 30px;
     overflow-x: auto;
+    height: 25rem;
+}
+
+.DEBIT {
+    color: #EB5757;
+}
+
+.CREDIT {
+    color: #27AE60;
 }
 
 .flix {
-    justify-content: space-around;
     display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.mostview-name {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 15px;
+    color: #000000;
+    margin-bottom: 6px;
+}
+
+.mostview-cat {
+    font-weight: 100;
+    margin-bottom: 2px;
+}
+
+.mostview-amount {
+    font-size: 13px;
+    margin: 0;
+    font-weight: 200;
+    color: #000000 !important;
 }
 
 
 .kerd {
-    height: 80px;
-    border: 1px solid green;
-    margin: -12px 0px;
+    height: 70px;
     padding: 3px 10px 0px 10px;
-    width: 70%;
+    background: #FFFFFF;
+    border: 0.162927px solid #5E8C0F;
+    border-radius: 3.25854px;
+}
+
+.mostview-number {
+    display: flex;
+    font-weight: 400;
+    font-size: 16px;
+    color: #000000;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    justify-content: center;
 }
 
 .dropdown {
@@ -81,34 +160,56 @@ scrolling-wrapper-flexbox::-webkit-scrollbar {
 .wrapper {
     height: 220px;
     display: flex;
-    flex-wrap: nowrap;
-    overflow-x: auto;
+    flex-wrap: wrap;
     width: 100%;
-    justify-content: space-between;
-    
+    /* overflow-x: auto;
+    width: 100%;
+    justify-content: space-between; */
+
 }
 
-
-.item {
-    border: 1px solid white;
-    width: 100%;
-    height: 100px; 
-}
-
-.kird{
+.kird {
     height: 200px;
-    border: 1px solid rgb(174, 168, 168);
+    border: 0.4px solid #CCE2A7;
+    border-radius: 0;
     margin: 5px;
+    flex: 1 0 18%;
+}
+
+.sales-card-data {
+    padding: 10px
+}
+
+.sales-card-label {
+    font-weight: 300;
+    font-size: 10px;
+    line-height: 12px;
+    color: #000000;
+}
+
+.sales-card-amount {
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    color: #000000;
+}
+
+.sales-funnel {
+    height: 50px;
+    width: 50px;
+    border-top: 50px solid transparent;
+    border-bottom: 50px solid transparent;
+    border-left: 100px solid #9AC84A;
 }
 
 
 /* Most Viewed*/
 
 .pics {
-    width: 60px;
+    width: 55px;
     border-radius: 50%;
-    background-color: grey;
-    height: 50px
+    background-color: #D9D9D9;
+    height: 55px;
 }
 
 .scroll {

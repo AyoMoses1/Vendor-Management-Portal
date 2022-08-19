@@ -2,10 +2,7 @@ import React, { Component } from "react";
 import {
   Card,
   Button,
-  Icon,
-  IconButton,
   Grid,
-  Tooltip,
 } from "@material-ui/core";
 import SalesStatistics from "./SalesStatistics";
 import SalesCard from "./SalesCard";
@@ -40,22 +37,19 @@ const salesFunnels = [
 
 const SalesFunnel = ({ theme }) => {
   return (
-    <Card elevation={3} className="p-10 mb-24">
+    <Card elevation={3} className="p-20 mb-24">
       <div className='dropdown'>
-        <div className="card-title mb-12">Sales Funnel</div>
+        <div className="analytics-title mb-12">Sales Funnel</div>
         <div>
           <Button variant="outlined">Date Range</Button>
         </div>
-        </div>
+      </div>
       <Grid container spacing={1}>
-        <div class="wrapper">
+        <div className="wrapper">
           {salesFunnels.map((sales) => (
             <SalesCard key={sales.label} sales={sales} theme={theme} />
           ))}
         </div>
-        <Grid item xs={12} md={12}>
-          <SalesStatistics />
-        </Grid>
       </Grid>
     </Card>
   );
