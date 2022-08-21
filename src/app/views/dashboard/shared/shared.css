@@ -218,3 +218,15 @@ scrolling-wrapper-flexbox::-webkit-scrollbar {
     Align-items: center;
     margin-top: 35px;
 }
+
+.hide{
+    display: none;
+}
+
+.date-flex{
+    display: flex;
+}
+
+.play-card{
+    position: relative;
+}
