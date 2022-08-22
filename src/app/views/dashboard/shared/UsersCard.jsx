@@ -1,12 +1,13 @@
 import React from 'react'
 import { Button, Card } from '@material-ui/core'
-import DoughnutChart from '../../charts/echarts/Doughnut'
 import DateRangePickerComponent from './DateRangePicker'
+import PieChart from 'app/views/charts/echarts/PieChart'
 
 const UsersCard = () => {
     const setSelectedDate = (date) => {
         console.log(date);
     }
+    const colorPalette = ['#5E8C0F', '#0F4E08'];
 
     return (
         <div>
@@ -15,9 +16,37 @@ const UsersCard = () => {
                     <div className="analytics-title">Users</div>
                     <DateRangePickerComponent setSelectedDate={setSelectedDate} />
                 </div>
-                <DoughnutChart
+                <PieChart
                     height='300px'
-                    color={['rgb(44, 102, 18)', ' rgb(149, 218, 117)', '#FFAF0F']}
+                    option={{
+                        tooltip: {
+                            trigger: 'item'
+                        },
+                        legend: {
+                            orient: 'vertical',
+                            left: 'left',
+                            itemGap: 4
+                        },
+                        series: [
+                            {
+                                name: 'Access From',
+                                type: 'pie',
+                                radius: '50%',
+                                data: [
+                                    { value: 402, name: 'New Users' },
+                                    { value: 958, name: 'Returning Users' },
+                                ],
+                                color: colorPalette,
+                                emphasis: {
+                                    itemStyle: {
+                                        shadowBlur: 10,
+                                        shadowOffsetX: 0,
+                                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                    }
+                                }
+                            }
+                        ]
+                    }}
                 />
             </Card>
         </div>

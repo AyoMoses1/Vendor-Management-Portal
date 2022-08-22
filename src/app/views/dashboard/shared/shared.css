@@ -306,3 +306,7 @@ scrolling-wrapper-flexbox::-webkit-scrollbar {
     height: 28px;
     font-size: 12px;
 }
+
+.card-subtitle {
+    color: #000000;
+}
