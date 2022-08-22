@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { getInvoiceById, updateInvoice, deleteOrderItem } from './OrderService'
+import { getInvoiceById, updateInvoice, deleteOrderItem, downloadPdfInvoice } from './OrderService'
 import { format } from 'date-fns'
 import { makeStyles } from '@material-ui/core/styles'
 import { useHistory } from "react-router-dom";
@@ -19,6 +19,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useDialog } from 'muibox';
 import Alert from 'app/components/Alert';
 import { CircularProgress } from '@material-ui/core';
+import { sendCustomerNote } from '../customers/CustomerService';
 
 const useStyles = makeStyles(({ palette, ...theme }) => ({
   '@global': {
@@ -73,6 +74,9 @@ const OrderViewer = ({ id, order }) => {
   const [loading, setLoading] = useState(false);
   const [alertData, setAlertData] = useState({ success: false, text: '', title: '' });
   const [alertOpen, setAlertOpen] = React.useState(false)
+  const [downloading, setDownloading] = useState(false);
+  const [downloadIndex, setDownloadIndex] = useState(0);
+  const [sending, setSending] = useState(false);
 
   const classes = useStyles()
 
@@ -86,7 +90,6 @@ const OrderViewer = ({ id, order }) => {
   }, [id])
 
   const handlePrint = () => window.print()
-
 
   const toggleOrderEditor = () => {
     setIsOpen(prev => !prev)
@@ -159,7 +162,6 @@ const OrderViewer = ({ id, order }) => {
         console.log(res);
         if (res.status === 200) {
           refresh()
-          // history.push("/orders");
         }
       });
     } else {
@@ -217,6 +219,35 @@ const OrderViewer = ({ id, order }) => {
         }
         )
     }
+  }
+
+  const handleDownload = async (index) => {
+    setDownloadIndex(index);
+    await downloadPdfInvoice(
+      state?.id,
+      setDownloading
+    ).then((res) => {
+      setAlertData({ success: true, text: 'Invoice downloaded successfully', title: 'Invoice Downloaded' })
+      handleAlertModal();
+    }).catch((err) => { })
+  }
+
+  const handleSendCustomerNote = async (note) => {
+    console.log(note);
+
+    await sendCustomerNote(state?.customerId?.id, note, setSending).then((res) => {
+      console.log(res);
+      if (res && res?.data?.status === "OK") {
+        setAlertData({ success: true, text: 'Message sent successfully', title: 'Message Sent' })
+        handleAlertModal();
+      } else {
+        setAlertData({ success: false, text: 'Unable to send message. Please try again', title: 'Message Sent' })
+        handleAlertModal();
+      }
+    }).catch(err => {
+      setAlertData({ success: false, text: 'Unable to send message. Please try again', title: 'Message Sent' })
+      handleAlertModal();
+    })
   }
 
 
@@ -434,10 +465,10 @@ const OrderViewer = ({ id, order }) => {
                 <ChatBox />
               </Grid>
               <Grid item xs={12} className={"no-border"}>
-                <Downloads />
+                <Downloads handleDownload={handleDownload} downloadIndex={downloadIndex} downloading={downloading} />
               </Grid>
               <Grid item xs={12} className={"no-border"}>
-                <Notice />
+                <Notice handleSendCustomerNote={handleSendCustomerNote} sending={sending} />
               </Grid>
             </Grid>
           </Grid>
@@ -453,9 +484,6 @@ const OrderViewer = ({ id, order }) => {
         orderSource={orderSource}
         handleClose={handleModal}
       />
-
-
-
     </div>
   )
 }
