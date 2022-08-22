@@ -1,16 +1,19 @@
 import React from 'react'
 import { Button, Card } from '@material-ui/core'
 import DoughnutChart from '../../charts/echarts/Doughnut'
+import DateRangePickerComponent from './DateRangePicker'
 
 const UsersCard = () => {
+    const setSelectedDate = (date) => {
+        console.log(date);
+    }
+
     return (
         <div>
             <Card elevation={3} className='p-20'>
                 <div className='dropdown'>
                     <div className="analytics-title">Users</div>
-                    <div>
-                        <Button variant="outlined">Date Range</Button>
-                    </div>
+                    <DateRangePickerComponent setSelectedDate={setSelectedDate} />
                 </div>
                 <DoughnutChart
                     height='300px'

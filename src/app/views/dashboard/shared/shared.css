@@ -21,7 +21,7 @@
 
 .scrollable-item {
     border: 1px solid white;
-    width: 200px;
+    width: 180px;
 }
 
 .scrolling-wrapper-flexbox {
@@ -125,6 +125,12 @@ scrolling-wrapper-flexbox::-webkit-scrollbar {
     color: #000000 !important;
 }
 
+.page-name {
+    font-size: 14px;
+    margin: 0;
+    color: #000000 !important;
+}
+
 
 .kerd {
     height: 70px;
@@ -219,14 +225,84 @@ scrolling-wrapper-flexbox::-webkit-scrollbar {
     margin-top: 35px;
 }
 
-.hide{
+.hide {
     display: none;
 }
 
-.date-flex{
+.date-flex {
     display: flex;
 }
 
-.play-card{
+.play-card {
     position: relative;
+}
+
+.react-datepicker__input-container input {
+    padding: 6px;
+    font-size: 12px;
+    /* width: 150px; */
+}
+
+.react-datepicker__close-icon::after {
+    height: 12px!important;
+    width: 12px!important;
+    font-size: 10px!important;
+}
+
+.first_input {
+    margin-right: 10px;
+}
+
+.date-toggler {
+    font-size: 10px;
+    border-radius: 0px;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: #0F4E08;
+}
+
+.tab-toggler-active {
+    font-size: 10px;
+    border-radius: 0px;
+    padding: 5px;
+    color: #555555;
+    border: none;
+    background: #5E8C0F26;
+    font-weight: 500;
+    border-radius: 4px;
+}
+
+.tab-toggler-inactive {
+    font-size: 10px;
+    border-radius: 0px;
+    padding: 5px;
+    color: #555555;
+    border: none;
+    font-weight: 100;
+}
+
+.default-set .MuiPopover-paper {
+    padding: 20px;
+}
+
+.card-popover .MuiPopover-paper {
+    height: 20rem;
+    padding: 20px;
+}
+
+.caret {
+    height: 4px;
+    margin-left: 4px;
+}
+
+.year-dropdown .MuiSelect-select {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 0px!important;
+}
+
+.year-dropdown .MuiOutlinedInput-root {
+    border-radius: 0px!important;
+    height: 28px;
+    font-size: 12px;
 }
