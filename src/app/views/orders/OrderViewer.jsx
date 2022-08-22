@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { getInvoiceById, updateInvoice } from './OrderService'
+import { getInvoiceById, updateInvoice, deleteOrderItem } from './OrderService'
 import { format } from 'date-fns'
 import { makeStyles } from '@material-ui/core/styles'
 import { useHistory } from "react-router-dom";
@@ -16,9 +16,9 @@ import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import OrderEditor from './OrderEditor'
 import DeleteIcon from '@mui/icons-material/Delete';
-
-
-
+import { useDialog } from 'muibox';
+import Alert from 'app/components/Alert';
+import { CircularProgress } from '@material-ui/core';
 
 const useStyles = makeStyles(({ palette, ...theme }) => ({
   '@global': {
@@ -69,6 +69,10 @@ const OrderViewer = ({ id, order }) => {
   const [severity, setSeverity] = React.useState("");
   const [isNewOrder, setIsNewOrder] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
+  const dialog = useDialog();
+  const [loading, setLoading] = useState(false);
+  const [alertData, setAlertData] = useState({ success: false, text: '', title: '' });
+  const [alertOpen, setAlertOpen] = React.useState(false)
 
   const classes = useStyles()
 
@@ -79,7 +83,6 @@ const OrderViewer = ({ id, order }) => {
         setState({ ...res.data.object })
         setOrderStatus(status)
       })
-
   }, [id])
 
   const handlePrint = () => window.print()
@@ -179,9 +182,52 @@ const OrderViewer = ({ id, order }) => {
     })
   }
 
+  const handleAlertModal = () => {
+    setAlertOpen(prev => !prev)
+  }
+
+  const handleAlertOK = () => {
+    handleAlertModal();
+  }
+
+  const _deleteOrderItem = (itemId) => {
+    if (!loading) {
+      console.log(itemId);
+      dialog
+        .confirm(`Are you sure you want to delete this order item?`)
+        .then(async (value) => {
+          const result = await deleteOrderItem(
+            state?.id,
+            itemId,
+            setLoading
+          ).then((res) => {
+            setAlertData({ success: true, text: 'Order item deleted successfully', title: 'Order Item Deleted' })
+            handleAlertModal();
+            getInvoiceById(id).then((res) => {
+              console.log(res.data)
+              setState({ ...res.data.object })
+              setOrderStatus(status)
+            })
+          }).catch((err) => {
+            setAlertData({ success: false, text: 'Unable to delete order items. Please try again', title: 'Order Item Deleted' })
+            handleAlertModal();
+          });
+        }).catch(() => {
+          return false;
+        }
+        )
+    }
+  }
+
 
   return (
     <div className='order-container'>
+      <Alert
+        isOpen={alertOpen}
+        handleModal={handleAlertModal}
+        alertData={alertData}
+        handleOK={handleAlertOK}
+      />
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={2}>
           <Grid item xs={8} className={"no-border"}>
@@ -284,7 +330,7 @@ const OrderViewer = ({ id, order }) => {
                           <Grid item xs={2} className='text-center order-text-14'><small>Cost</small></Grid>
                           <Grid item xs={2} className='text-center order-text-14'><small>Quantity</small></Grid>
                           <Grid item xs={2} className='text-center order-text-14'><small>Total</small></Grid>
-                          <Grid item xs={1} className='text-center order-text-14'></Grid>
+                          {state?.status === "PENDING" || state?.status === "AWAITING_PAYMENT" ? <Grid item xs={1} className='text-center order-text-14'></Grid> : <></>}
                         </tr>
                       </thead>
                       <tbody className='order-items'>
@@ -313,9 +359,9 @@ const OrderViewer = ({ id, order }) => {
                             <Grid item xs={2} className='text-center order-text-10'>
                               N{item.subTotal?.toLocaleString()}
                             </Grid>
-                            <Grid item xs={1} className='text-center order-text-10'>
-                              <DeleteIcon className='del-icon' />
-                            </Grid>
+                            {state?.status === "PENDING" || state?.status === "AWAITING_PAYMENT" ? <Grid item xs={1} className='text-center order-text-10'>
+                              {loading ? <CircularProgress size={15} /> : <Button color="primary" onClick={() => _deleteOrderItem(item?.id)}><DeleteIcon className='del-icon' /> </Button>}
+                            </Grid> : <></>}
                           </tr>
                         )) : ""}
                       </tbody>

@@ -35,18 +35,9 @@ const Orders = (props) => {
   const [title, setTitle] = useState('ALL ORDERS')
   const [allOrders, setAllOrders] = useState([])
   const [showAllOrders, setShowAllOrders] = useState(false)
-
   const [orderStatus, setOrderStatus] = useState([])
-  
-
-  // const [statsTotal, setStatsTotal] = useState(0)
-
   const [value, setValue] = React.useState(0);
 
-
-  // useEffect(()=>{
-  //   getOrderStatus(setLoading, setOrderStatus, orderStatus, setStatsTotal)
-  // },[orderStatus, statsTotal])
 
 
   const fetchOrderStatus = async(event, newValue) => {
@@ -117,7 +108,7 @@ const Orders = (props) => {
     setPage(page)
   }
 
-  const handleActiveLink = async (orderStats) => {
+  const handleActiveLink = async (orderStats, e) => {
       setLoading(true)
       const _source = source === 'ALL' ? '' : source;
       console.log(orderStats)
@@ -328,11 +319,11 @@ const Orders = (props) => {
           ) : (
             <MUIDataTable
             title={<div>
-              <h3 className='mt-4 mb-0'>{title}</h3>
+              <h5 className='mt-4 mb-0'>{title}</h5>
               <div className='w-full flex'>
                 <div className='w-220 flex-end'>
                   <TextField
-                    className='mb-4'
+                    className='mb-4 filter-area'
                     name='mobileNo'
                     label='Filter by source'
                     variant='outlined'
@@ -352,13 +343,11 @@ const Orders = (props) => {
                     ))}
                   </TextField>
                 </div>
-                <div>
-                  <ul className='stats-nav'>
-                    {orderStatus.map((stats) => {
-                      return <li key={stats.orderStatus} onClick={() => handleActiveLink(stats.orderStatus)} id={stats.orderStatus}>{stats.orderStatus}({stats.total})</li>
-                    })}
-                  </ul>
-                </div>
+                <ul className='stats-nav'>
+                  {orderStatus.map((stats) => {
+                    return <li key={stats.orderStatus} onClick={(e) => handleActiveLink(stats.orderStatus, e)} id={stats.orderStatus}>{stats.orderStatus}({stats.total})</li>
+                  })}
+                </ul>
               </div>
             </div>}
               data={orders}
