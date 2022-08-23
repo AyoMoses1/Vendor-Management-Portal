@@ -122,7 +122,7 @@ const Agents = () => {
               className='flex items-center'
             >
               <div className='ml-3'>
-                <h5 className='my-0 text-1'>{`${user?.firstName} ${user?.lastName}`}</h5>
+                <h5 className='my-0 text-1 text-control'>{`${user?.firstName} ${user?.lastName}`}</h5>
               </div>
             </Link>
           );
@@ -148,12 +148,12 @@ const Agents = () => {
               }}
               className='flex items-center'
             >
-              <div className='w-220'>
+              <div className='w-220 text-control'>
                 <h6>
                   <strong>Email:</strong> {user?.email}
                 </h6>
                 <br />
-                <h5 className='my-0'>Phone: {user?.mobileNo}</h5>
+                <h5 className='my-0 text-control'>Phone: {user?.mobileNo}</h5>
               </div>
             </Link>
           );
@@ -240,8 +240,8 @@ const Agents = () => {
       },
     },
     {
-      name: 'Actions',
-      label: 'actions',
+      name: 'actions',
+      label: 'Actions',
       options: {
         filter: false,
         customBodyRenderLite: (dataIndex, another) => {
@@ -299,7 +299,9 @@ const Agents = () => {
             <Loading />
           ) : (
             <MUIDataTable
-              title={'All Agents'}
+              title={<div>
+                <h4 className='mt-4 mb-0'>{'All Agents'}</h4>
+              </div>}
               data={[...agentList]}
               columns={columns}
               options={{

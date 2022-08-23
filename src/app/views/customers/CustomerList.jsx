@@ -9,8 +9,9 @@ import './customer-view.css'
 import { useDialog } from 'muibox'
 
 import Notification from '../../components/Notification'
-import { getAllCustomer } from './CustomerService';
+import { filterAllCustomer, getAllCustomer } from './CustomerService';
 import { getCustomerStatistics } from '../dashboard/DashboardService'
+import { debounce } from 'lodash'
 
 const CustomerList = () => {
   const [isAlive, setIsAlive] = useState(true)
@@ -26,6 +27,7 @@ const CustomerList = () => {
   const [size, setSize] = useState(10);
   const [statistics, setStatistics] = useState([]);
   const [total, setTotal] = useState(0);
+  const [query, setQuery] = useState('');
 
   // const dialog = useDialog()
 
@@ -79,7 +81,7 @@ const CustomerList = () => {
 
   useEffect(() => {
     const _source = source === 'ALL' ? '' : source;
-    getAllCustomer(setUserList, setCount, isLoading, setAlert, setSeverity, size, page, _source)
+    getAllCustomer(setUserList, setCount, isLoading, setAlert, setSeverity, size, page, _source, query)
     return () => setIsAlive(false)
   }, [isAlive, source, size]);
 
@@ -100,7 +102,7 @@ const CustomerList = () => {
 
   const onPageChange = (page) => {
     const _source = source === 'ALL' ? '' : source;
-    getAllCustomer(setUserList, setCount, isLoading, setAlert, setSeverity, size, page, _source)
+    getAllCustomer(setUserList, setCount, isLoading, setAlert, setSeverity, size, page, _source, query)
     setPage(page)
   }
 
@@ -123,7 +125,7 @@ const CustomerList = () => {
                 }}
                 className='ml-3'
               >
-                <h5 className='my-0 text-15'>{`${user?.firstName} ${user?.lastName}`}</h5>
+                <h5 className='my-0 text-12 text-control'>{`${user?.firstName} ${user?.lastName}`}</h5>
                 <small className='text-muted'>{user?.email}</small>
               </Link>
             </div>
@@ -174,7 +176,7 @@ const CustomerList = () => {
                 }}
                 className='ml-3'
               >
-                <h5 className='my-0 text-muted'> {user.mobileNo || '-----'}</h5>
+                <h5 className='my-0 text-muted ellipsis'> {user.mobileNo || '-----'}</h5>
               </Link>
             </div>
           )
@@ -270,7 +272,7 @@ const CustomerList = () => {
                 }}
               >
                 <IconButton>
-                  <Icon>edit</Icon>
+                  <Icon fontSize='small'>edit</Icon>
                 </IconButton>
               </Link>
             </div>
@@ -278,32 +280,48 @@ const CustomerList = () => {
         },
       },
     },
-    {
-      name: 'id', // field name in the row object
-      label: '', // column title that will be shown in table
-      options: {
-        filter: false,
-        customBodyRenderLite: (dataIndex) => {
-          let user = userList[dataIndex]
-          return (
-            <Link
-              to={{
-                pathname: `/agent/details/${user.id}`,
-                state: {
-                  id: user.id,
-                  user: user.user,
-                },
-              }}
-            >
-              <div>
-                {/* <h5 className='my-0 text-15'>{`${user?.id}`}</h5> */}
-              </div>
-            </Link>
-          )
-        },
-      },
-    },
+    // {
+    //   name: 'id', // field name in the row object
+    //   label: '', // column title that will be shown in table
+    //   options: {
+    //     filter: false,
+    //     customBodyRenderLite: (dataIndex) => {
+    //       let user = userList[dataIndex]
+    //       return (
+    //         <Link
+    //           to={{
+    //             pathname: `/agent/details/${user.id}`,
+    //             state: {
+    //               id: user.id,
+    //               user: user.user,
+    //             },
+    //           }}
+    //         >
+    //           <div>
+    //             <h5 className='my-0 text-15'>{`${user?.id}`}</h5>
+    //           </div>
+    //         </Link>
+    //       )
+    //     },
+    //   },
+    // },
   ]
+
+  const debouncedCustomers = debounce(value => {
+    const _source = source === 'ALL' ? '' : source;
+    if (value.length > 0) {
+      filterAllCustomer(setUserList, setCount, setAlert, setSeverity, size, page, _source, value);
+      setQuery(value);
+    } else {
+      filterAllCustomer(setUserList, setCount, setAlert, setSeverity, size, page, _source, '');
+      setQuery('');
+    }
+  }, 700);
+
+
+  const performSearch = (value) => {
+    debouncedCustomers(value)
+  }
 
   return (
     <div className='m-sm-30'>
@@ -325,9 +343,9 @@ const CustomerList = () => {
           ) : (
             <MUIDataTable
               title={<div>
-                <h3 className='mt-4 mb-0'>{title}</h3>
+                <h4 className='mt-4 mb-0'>{title}</h4>
                 <div className='w-full flex'>
-                  <div className='w-220 flex-end'>
+                  <div className='w-220 flex-end sources'>
                     <TextField
                       className='mb-4'
                       name='mobileNo'
@@ -383,8 +401,10 @@ const CustomerList = () => {
                         variant='outlined'
                         size='small'
                         fullWidth
-                        onChange={({ target: { value } }) =>
-                          handleSearch(value)
+                        onChange={({ target: { value } }) => {
+                          handleSearch(value);
+                          performSearch(value)
+                        }
                         }
                         InputProps={{
                           style: {
