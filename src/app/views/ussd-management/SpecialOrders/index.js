@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom'
 import { Breadcrumb } from 'matx'
 import MUIDataTable from 'mui-datatables'
 import { useDialog } from 'muibox'
-import "../../orders/order-view.css"
+// import "../../orders/order-view.css"
+import "../SpecialOrder/specialorder-view.css"
 import {
   Grow,
   Icon,
@@ -249,7 +250,7 @@ const columns = [
               selectableRows: false,
               filter: true,
               sort: true,
-              sortOrder: { name: 'id', direction: 'ascending' },
+              // sortOrder: { name: 'id', direction: 'descending' },
               filterType: 'dropdown',
               responsive: 'standard',
               serverSide: true,

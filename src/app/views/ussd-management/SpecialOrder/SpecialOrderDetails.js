@@ -5,10 +5,12 @@ import { getInvoiceById } from './SpecialOrderService'
 import { format } from 'date-fns'
 import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
-import '../../orders/order-view.css'
+import './specialorder-view.css'
 import Editor from './SpecialOrderEditor'
+import ProductModal from './ProductModal'
 import { getSpecialOrder } from '../USSDService'
 import { useIdleTimer } from 'react-idle-timer'
+import { searchProductsByKeyword } from 'app/views/products/ProductService'
 
 const useStyles = makeStyles(({ palette, ...theme }) => ({
   '@global': {
@@ -51,6 +53,8 @@ const useStyles = makeStyles(({ palette, ...theme }) => ({
 const SpecialOrderViewer = ({ toggleOrderEditor, id }) => {
   const [state, setState] = useState({})
   const [open, setOpen] = useState(false)
+  const [productModal, setProductModal] = useState(false)
+  const [products, setProducts] = useState([])
   const classes = useStyles();
   const history = useHistory();
 
@@ -60,12 +64,13 @@ const SpecialOrderViewer = ({ toggleOrderEditor, id }) => {
         console.log(res.data.object)
         setState({ ...res.data.object })
       })
+  
   }, [id])
 
   const handlePrint = () => window.print()
 
   const handleCheck = () => {
-    console.log('Hello Napster')
+    setProductModal(prev => !prev)
   }
   let {
     referenceNo,
@@ -103,7 +108,6 @@ const SpecialOrderViewer = ({ toggleOrderEditor, id }) => {
             <Icon>arrow_back</Icon>
           </IconButton>
           <div>
-            <Link to='/products'>
               <Button
                 onClick={handleCheck}
                 className='mr-4 py-2'
@@ -112,17 +116,6 @@ const SpecialOrderViewer = ({ toggleOrderEditor, id }) => {
               >
                 Check if product exists
               </Button>
-            </Link>
-
-
-            {/* <Button
-              className='mr-4 py-2'
-              variant='contained'
-              color='primary'
-              onClick={() => toggleOrderEditor()}
-            >
-              Edit Order
-            </Button> */}
             <Button
               className='mr-4 py-2'
               variant='contained'
@@ -203,6 +196,13 @@ const SpecialOrderViewer = ({ toggleOrderEditor, id }) => {
             refresh={() => refresh()}
           />
 
+          <ProductModal
+            name={"Check if product exists"}
+            isOpen={productModal}
+            specialOrder={state}
+            handleClose={handleCheck}
+            refresh={() => refresh()}
+          />
           <Divider />
 
           <div
@@ -248,4 +248,6 @@ const SpecialOrderViewer = ({ toggleOrderEditor, id }) => {
   )
 }
 
+
+// {{BASE_URL}}/afrimash/products?page=1&size=50
 export default SpecialOrderViewer
