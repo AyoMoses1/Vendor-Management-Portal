@@ -26,6 +26,7 @@ import Loading from 'matx/components/MatxLoadable/Loading';
 import Notification from 'app/components/Notification';
 import Modal from '../../components/Modal';
 import './agent.css';
+import { debounce } from 'lodash';
 
 const Agents = () => {
   const { agentList, total, error, severity, loading, pages } =
@@ -50,6 +51,7 @@ const Agents = () => {
   const [receipientAgent, setReceipientAgent] = useState('');
   const [page, setPage] = useState(0)
   const [size, setSize] = useState(10);
+  const [query, setQuery] = useState('');
 
   const handleChangePage = (newPage) => {
     setPage(newPage);
@@ -58,7 +60,7 @@ const Agents = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getAllAgents({ page: page, size: size }));
+    dispatch(getAllAgents({ page, size, query }));
   }, [size, page]);
 
   const handleMenu = (option, user) => {
@@ -280,6 +282,19 @@ const Agents = () => {
     },
   ];
 
+  const debouncedAgents = debounce(value => {
+    if (value.length > 0) {
+      dispatch(getAllAgents({ page, size, query: value }));
+    } else {
+      dispatch(getAllAgents({ page, size, query: value }));
+    }
+  }, 700);
+
+
+  const performSearch = (value) => {
+    debouncedAgents(value)
+  }
+
   return (
     <div className='m-sm-30'>
       <div className='mb-sm-30'>
@@ -334,8 +349,7 @@ const Agents = () => {
                         variant='outlined'
                         size='small'
                         fullWidth
-                        onChange={({ target: { value } }) =>
-                          handleSearch(value)
+                        onChange={({ target: { value } }) => { handleSearch(value); performSearch(value) }
                         }
                         InputProps={{
                           style: {
@@ -347,7 +361,7 @@ const Agents = () => {
                             </Icon>
                           ),
                           endAdornment: (
-                            <IconButton onClick={hideSearch}>
+                            <IconButton onClick={() => { hideSearch(); dispatch(getAllAgents({ page, size, query: '' })); }}>
                               <Icon fontSize='small'>clear</Icon>
                             </IconButton>
                           ),

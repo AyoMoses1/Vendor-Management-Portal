@@ -416,7 +416,11 @@ const CustomerList = () => {
                             </Icon>
                           ),
                           endAdornment: (
-                            <IconButton onClick={hideSearch}>
+                            <IconButton onClick={() => {
+                              hideSearch();
+                              const _source = source === 'ALL' ? '' : source;
+                              filterAllCustomer(setUserList, setCount, setAlert, setSeverity, size, page, _source, '');
+                            }}>
                               <Icon fontSize='small'>clear</Icon>
                             </IconButton>
                           ),
