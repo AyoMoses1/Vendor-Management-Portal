@@ -83,7 +83,7 @@ const OrderViewer = ({ id, order }) => {
   useEffect(() => {
     if (id !== 'add')
       getInvoiceById(id).then((res) => {
-        console.log(res.data)
+        console.log(res.data, "test")
         setState({ ...res.data.object })
         setOrderStatus(status)
       })
@@ -323,20 +323,21 @@ const OrderViewer = ({ id, order }) => {
                   )}>
                     <div className='billing'>
                       <div className='header-flex'>
-                        <h5>Shipping Address</h5>
+                        <h5>Delivery Address</h5>
                         <div className='edit-action'>
                           <Button color="primary" onClick={() => toggleOrderEditor()}>Edit</Button>
                         </div>
                       </div>
+                      <p>{customerId ? `${customerId?.deliveryAddresses[0].address}` : null}</p>
                       {/* <h5>Billing Address</h5> */}
-                      {orderSource == 'ADMIN' ?
+                      {/* {orderSource == 'ADMIN' ?
                         <p>{customerId ? `${customerId.deliveryAddresses[0].address}` : null}</p>
                         :
                         orderSource == 'AGENT_APP' ?
                           <p>{state.deliveryAddress ? `${state.deliveryAddress.address}` : null}</p>
                           :
                           <p>{customerId ? `${customerId.address}` : null}</p>
-                      }
+                      } */}
                     </div>
                     {/* <div className='shipping'>
                       <h5>Shipping Address</h5>

@@ -11,6 +11,7 @@ export const getAllResults = (setResults, setLoading, url) => {
   return http.get(url).then(({ data }) => {
     if (data instanceof Object) {
       setResults(data.object.content)
+      console.log(data.object.content, "tested")
       setLoading(false)
     }
   })
@@ -65,4 +66,12 @@ export const getBrands = (setAlert, setSeverity, setBrands) => {
     .catch((err) => {
       errorState(setAlert, setSeverity)
     })
+}
+
+export const searchProductsByKeyword = (keyword) => {
+  return http.get(`/afrimash/products/search?query=${keyword}&page=0&size=1000`).then(({ data }) => {
+    if (data instanceof Object) {
+      return data.object
+    }
+  }) /* Please check this out later. I mean the paginated stuff*/
 }
