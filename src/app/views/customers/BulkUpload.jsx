@@ -87,7 +87,7 @@ function BulkUpload({
         <div style={modalStyle} className={classes.paper}>
             <Grid container spacing={3}>
                 <h4 id='simple-modal-title'>{name}</h4>
-                <p>Upload a csv file that contains the following columns firstname, surname, gender, phonenumber, email. <a href={Sample} download="Sample.csv" style={{ color: "#FFAF0F" }}> Download Sample</a></p>
+                <p>Upload a csv file that contains the following columns firstname, surname, gender, phonenumber, email, state, age. <a href={Sample} download="Sample.csv" style={{ color: "#FFAF0F" }}> Download Sample</a></p>
                 <Grid container spacing={3}>
                     <Formik
                         initialValues={values}
