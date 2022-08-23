@@ -95,3 +95,7 @@ export const downloadPdfInvoice = (orderId, setDownloading) => {
     console.log(err)
   })
 }
+
+export const addDeliveryAddress = (address) => {
+  return http.post(`/afrimash/delivery-addresses`, address)
+}
