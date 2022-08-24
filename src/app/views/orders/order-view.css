@@ -268,3 +268,28 @@ select.status-box{
   font-size: 14px !important;
   cursor: pointer;
 }
+
+.stats-nav {
+  position: absolute;
+  left: 20;
+  top: 110px;
+  display: flex;
+  justify-content: space-between;
+  list-style-type: none;
+  padding: 0;
+}
+.stats-nav li{
+  cursor: pointer;
+  padding-right: 10px;
+  font-size: 12px;
+}
+.stats-nav li:hover{
+  font-weight: 600;
+}
+
+.filter-area{
+  margin-bottom: 40px !important;
+}
+.active{
+  color: red;
+}

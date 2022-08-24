@@ -88,6 +88,7 @@ function NewProduct({ isNewProduct, id, Product }) {
   const [severity, setSeverity] = useState('');
   const [shippinClasses, setShippingClasses] = React.useState([]);
   const [loading, setLoading] = useState(false);
+  const [category, setCategory] = useState([])
 
   const [alertData, setAlertData] = useState({ success: false, text: '', title: '' });
   const [isOpen, setIsOpen] = React.useState(false)
@@ -407,7 +408,7 @@ function NewProduct({ isNewProduct, id, Product }) {
                   getOptionLabel={(option) => option.name}
                   getOptionSelected={(option, value) => option.id === value.id}
                   onChange={(event, newValue) => {
-                    setState({ ...state, tags: newValue });
+                    setValues({ ...values, tags: newValue });
                   }}
                   renderOption={(option, { selected }) => (
                     <React.Fragment>
@@ -451,10 +452,10 @@ function NewProduct({ isNewProduct, id, Product }) {
                 />
                 <Autocomplete
                   multiple
-                  id='categoried'
+                  id='categories'
                   options={categories}
                   onChange={(event, newValue) => {
-                    setState({ ...state, productCategories: newValue });
+                    setValues({...values, productCategories:newValue})
                   }}
                   getOptionLabel={(option) => option.name}
                   getOptionSelected={(option, value) => option.id === value.id}

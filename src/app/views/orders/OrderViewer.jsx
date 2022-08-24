@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { getInvoiceById, updateInvoice } from './OrderService'
+import { getInvoiceById, updateInvoice, deleteOrderItem, downloadPdfInvoice } from './OrderService'
 import { format } from 'date-fns'
 import { makeStyles } from '@material-ui/core/styles'
 import { useHistory } from "react-router-dom";
@@ -16,9 +16,10 @@ import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import OrderEditor from './OrderEditor'
 import DeleteIcon from '@mui/icons-material/Delete';
-
-
-
+import { useDialog } from 'muibox';
+import Alert from 'app/components/Alert';
+import { CircularProgress } from '@material-ui/core';
+import { sendCustomerNote } from '../customers/CustomerService';
 
 const useStyles = makeStyles(({ palette, ...theme }) => ({
   '@global': {
@@ -69,21 +70,26 @@ const OrderViewer = ({ id, order }) => {
   const [severity, setSeverity] = React.useState("");
   const [isNewOrder, setIsNewOrder] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
+  const dialog = useDialog();
+  const [loading, setLoading] = useState(false);
+  const [alertData, setAlertData] = useState({ success: false, text: '', title: '' });
+  const [alertOpen, setAlertOpen] = React.useState(false)
+  const [downloading, setDownloading] = useState(false);
+  const [downloadIndex, setDownloadIndex] = useState(0);
+  const [sending, setSending] = useState(false);
 
   const classes = useStyles()
 
   useEffect(() => {
     if (id !== 'add')
       getInvoiceById(id).then((res) => {
-        console.log(res.data)
+        console.log(res.data, "test")
         setState({ ...res.data.object })
         setOrderStatus(status)
       })
-
   }, [id])
 
   const handlePrint = () => window.print()
-
 
   const toggleOrderEditor = () => {
     setIsOpen(prev => !prev)
@@ -156,7 +162,6 @@ const OrderViewer = ({ id, order }) => {
         console.log(res);
         if (res.status === 200) {
           refresh()
-          // history.push("/orders");
         }
       });
     } else {
@@ -179,9 +184,81 @@ const OrderViewer = ({ id, order }) => {
     })
   }
 
+  const handleAlertModal = () => {
+    setAlertOpen(prev => !prev)
+  }
+
+  const handleAlertOK = () => {
+    handleAlertModal();
+  }
+
+  const _deleteOrderItem = (itemId) => {
+    if (!loading) {
+      console.log(itemId);
+      dialog
+        .confirm(`Are you sure you want to delete this order item?`)
+        .then(async (value) => {
+          const result = await deleteOrderItem(
+            state?.id,
+            itemId,
+            setLoading
+          ).then((res) => {
+            setAlertData({ success: true, text: 'Order item deleted successfully', title: 'Order Item Deleted' })
+            handleAlertModal();
+            getInvoiceById(id).then((res) => {
+              console.log(res.data)
+              setState({ ...res.data.object })
+              setOrderStatus(status)
+            })
+          }).catch((err) => {
+            setAlertData({ success: false, text: 'Unable to delete order items. Please try again', title: 'Order Item Deleted' })
+            handleAlertModal();
+          });
+        }).catch(() => {
+          return false;
+        }
+        )
+    }
+  }
+
+  const handleDownload = async (index) => {
+    setDownloadIndex(index);
+    await downloadPdfInvoice(
+      state?.id,
+      setDownloading
+    ).then((res) => {
+      setAlertData({ success: true, text: 'Invoice downloaded successfully', title: 'Invoice Downloaded' })
+      handleAlertModal();
+    }).catch((err) => { })
+  }
+
+  const handleSendCustomerNote = async (note) => {
+    console.log(note);
+
+    await sendCustomerNote(state?.customerId?.id, note, setSending).then((res) => {
+      console.log(res);
+      if (res && res?.data?.status === "OK") {
+        setAlertData({ success: true, text: 'Message sent successfully', title: 'Message Sent' })
+        handleAlertModal();
+      } else {
+        setAlertData({ success: false, text: 'Unable to send message. Please try again', title: 'Message Sent' })
+        handleAlertModal();
+      }
+    }).catch(err => {
+      setAlertData({ success: false, text: 'Unable to send message. Please try again', title: 'Message Sent' })
+      handleAlertModal();
+    })
+  }
+
 
   return (
     <div className='order-container'>
+      <Alert
+        isOpen={alertOpen}
+        handleModal={handleAlertModal}
+        alertData={alertData}
+        handleOK={handleAlertOK}
+      />
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={2}>
           <Grid item xs={8} className={"no-border"}>
@@ -246,20 +323,21 @@ const OrderViewer = ({ id, order }) => {
                   )}>
                     <div className='billing'>
                       <div className='header-flex'>
-                        <h5>Shipping Address</h5>
+                        <h5>Delivery Address</h5>
                         <div className='edit-action'>
                           <Button color="primary" onClick={() => toggleOrderEditor()}>Edit</Button>
                         </div>
                       </div>
+                      <p>{customerId ? `${customerId?.deliveryAddresses[0].address}` : null}</p>
                       {/* <h5>Billing Address</h5> */}
-                      {orderSource == 'ADMIN' ?
+                      {/* {orderSource == 'ADMIN' ?
                         <p>{customerId ? `${customerId.deliveryAddresses[0].address}` : null}</p>
                         :
                         orderSource == 'AGENT_APP' ?
                           <p>{state.deliveryAddress ? `${state.deliveryAddress.address}` : null}</p>
                           :
                           <p>{customerId ? `${customerId.address}` : null}</p>
-                      }
+                      } */}
                     </div>
                     {/* <div className='shipping'>
                       <h5>Shipping Address</h5>
@@ -284,7 +362,7 @@ const OrderViewer = ({ id, order }) => {
                           <Grid item xs={2} className='text-center order-text-14'><small>Cost</small></Grid>
                           <Grid item xs={2} className='text-center order-text-14'><small>Quantity</small></Grid>
                           <Grid item xs={2} className='text-center order-text-14'><small>Total</small></Grid>
-                          <Grid item xs={1} className='text-center order-text-14'></Grid>
+                          {state?.status === "PENDING" || state?.status === "AWAITING_PAYMENT" ? <Grid item xs={1} className='text-center order-text-14'></Grid> : <></>}
                         </tr>
                       </thead>
                       <tbody className='order-items'>
@@ -313,9 +391,9 @@ const OrderViewer = ({ id, order }) => {
                             <Grid item xs={2} className='text-center order-text-10'>
                               N{item.subTotal?.toLocaleString()}
                             </Grid>
-                            <Grid item xs={1} className='text-center order-text-10'>
-                              <DeleteIcon className='del-icon' />
-                            </Grid>
+                            {state?.status === "PENDING" || state?.status === "AWAITING_PAYMENT" ? <Grid item xs={1} className='text-center order-text-10'>
+                              {loading ? <CircularProgress size={15} /> : <Button color="primary" onClick={() => _deleteOrderItem(item?.id)}><DeleteIcon className='del-icon' /> </Button>}
+                            </Grid> : <></>}
                           </tr>
                         )) : ""}
                       </tbody>
@@ -388,10 +466,10 @@ const OrderViewer = ({ id, order }) => {
                 <ChatBox />
               </Grid>
               <Grid item xs={12} className={"no-border"}>
-                <Downloads />
+                <Downloads handleDownload={handleDownload} downloadIndex={downloadIndex} downloading={downloading} />
               </Grid>
               <Grid item xs={12} className={"no-border"}>
-                <Notice />
+                <Notice handleSendCustomerNote={handleSendCustomerNote} sending={sending} />
               </Grid>
             </Grid>
           </Grid>
@@ -407,9 +485,6 @@ const OrderViewer = ({ id, order }) => {
         orderSource={orderSource}
         handleClose={handleModal}
       />
-
-
-
     </div>
   )
 }

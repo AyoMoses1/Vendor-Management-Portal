@@ -1,7 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { Breadcrumb } from 'matx';
 import MUIDataTable from 'mui-datatables';
-import { Grow, Icon, IconButton, TextField, Button, Box, MenuItem, InputLabel} from '@material-ui/core';
+import {
+  Grow,
+  Icon,
+  IconButton,
+  TextField,
+  Button,
+  Box,
+  MenuItem,
+  InputLabel,
+} from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { useDialog } from 'muibox';
 import FormControl from '@mui/material/FormControl';
@@ -9,57 +18,69 @@ import Select from '@mui/material/Select';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 
-
-
 import http from '../../../services/api';
 
 import Loading from 'matx/components/MatxLoadable/Loading';
 import Notification from 'app/components/Notification';
 
 import ShippingOptionByGroup from './ShippingOptionsByGroup';
-import { getShippingOptionGroup } from 'app/redux/actions/shippingActions'
-
-
+import { getShippingOptionGroup } from 'app/redux/actions/shippingActions';
 
 const GetAllShippingOptions = () => {
-  const [{shippinOptions, totalCount, size}, setShippingOptions] = useState({size: 10});
+  const [{ shippinOptions, totalCount, size }, setShippingOptions] = useState({
+    size: 10,
+  });
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [severity, setSeverirty] = useState('');
-  const dialog = useDialog();
-  const [page, setPage] = useState(0)
+  const dispatch = useDispatch();
+  const shippingOptionGroupList = useSelector(
+    (state) => state.shippingOptionGroupList,
+  );
+  const {
+    shipping: shippingGroups,
+  } = shippingOptionGroupList;
 
+  const [group, setGroup] = React.useState('');
+  
+
+  const dialog = useDialog();
+  const [page, setPage] = useState(0);
+
+  const handleGroupChange = (e) => {
+    setGroup(e.target.value);
+  };
   const getAllShippingOptions = async (params) => {
     setLoading(true);
     http
       .get(`/afrimash/shipping-option/?size=${params.size}&page=${params.page}`)
       .then((res) => {
-        setShippingOptions({shippinOptions: res?.data.object.content, totalCount: res?.data.object.totalElements, size:res?.data.object.size }) 
+        setShippingOptions({
+          shippinOptions: res?.data.object.content,
+          totalCount: res?.data.object.totalElements,
+          size: res?.data.object.size,
+        });
         setLoading(false);
       })
       .catch((e) => console.log(e));
   };
 
   useEffect(() => {
-    getAllShippingOptions({size, page});
+    getAllShippingOptions({ size, page });
   }, [size, page]);
 
-
   const handleChangePage = (newPage) => {
-    console.log({ newPage })
     setPage(newPage);
-    getAllShippingOptions({ page: newPage, size : size});
+    getAllShippingOptions({ page: newPage, size: size });
   };
 
   const handleChangeRowsPerPage = (value) => {
     getAllShippingOptions({ page: 0, size: parseInt(value, 10) });
   };
 
-  React.useEffect(()=>{
-    dispatch(getShippingOptionGroup({}))
-},[])
-
-
+  React.useEffect(() => {
+    dispatch(getShippingOptionGroup({}));
+  }, []);
 
   const columns = [
     {
@@ -87,7 +108,7 @@ const GetAllShippingOptions = () => {
         },
       },
     },
-   
+
     {
       name: 'Shipping Group', // field name in the row object
       label: 'shippingGroup', // column title that will be shown in table
@@ -204,7 +225,7 @@ const GetAllShippingOptions = () => {
                         http
                           .delete(`afrimash/shipping-option/${shippingZone.id}`)
                           .then(() => {
-                            getAllShippingOptions()
+                            getAllShippingOptions();
                           });
                       })
                       .catch(() => {
@@ -261,47 +282,59 @@ const GetAllShippingOptions = () => {
           <Notification alert={error} severity={severity || ''} />
         )}
       </div>
-      <Box mt={4} mb = {10} sx={{ minWidth: '50%' }}>
+      <Box mt={4} mb={10} sx={{ minWidth: '50%' }}>
         <FormControl fullWidth>
-          <InputLabel id='demo-simple-select-label'>Filter by Shipping Option Group</InputLabel>
+          <InputLabel id='demo-simple-select-label'>
+            Filter by Shipping Option Group
+          </InputLabel>
           <Select
             labelId='demo-simple-select-label'
             id='demo-simple-select'
             value={group}
             label='Filter by Shipping Option Group'
             onChange={handleGroupChange}
-            >
-            <MenuItem value = {'All'}>All</MenuItem>
-            {shippingGroups.map(option => {
-                return (<MenuItem key={option?.id} value={option?.id}>{option?.name}</MenuItem>)
+          >
+            <MenuItem value={'All'}>All</MenuItem>
+            {shippingGroups.map((option) => {
+              return (
+                <MenuItem key={option?.id} value={option?.id}>
+                  {option?.name}
+                </MenuItem>
+              );
             })}
-            
           </Select>
         </FormControl>
       </Box>
-      
+
       <div className='overflow-auto'>
         <div className='min-w-750'>
           {loading ? (
             <Loading />
+          ) : group && group !== 'All'? (
+            <Box mt={5}>
+              <ShippingOptionByGroup
+                group={group}
+              />
+            </Box>
           ) : (
             <MUIDataTable
               title={'Shipping Options'}
               data={shippinOptions}
               columns={columns}
               options={{
+                filter: true,
+                sort: true,
                 serverSide: true,
                 count: totalCount,
                 page: page,
-                filter: true,
-                sort: true,
-                sortOrder: { name: 'id', direction: 'desc' },
-                filterType: 'dropdown',
-                responsive: 'standard',
                 onChangePage: (value) => handleChangePage(value),
                 onChangeRowsPerPage: handleChangeRowsPerPage,
                 rowsPerPage: size,
-                rowsPerPageOptions: [10, 20, 40, 50, 80, 100],
+                sortOrder: { name: 'id', direction: 'desc' },
+                filterType: 'dropdown',
+                responsive: 'standard',
+                elevation: 0,
+                rowsPerPageOptions: [10, 20, 40, 80, 100],
                 customSearchRender: (
                   searchText,
                   handleSearch,

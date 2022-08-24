@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { Breadcrumb } from 'matx'
 import MUIDataTable from 'mui-datatables'
 import { useDialog } from 'muibox'
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 
 import {
   Grow,
@@ -13,7 +15,7 @@ import {
 } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 import './order-view.css'
-import { deleteInvoice, getAllInvoice } from './OrderService'
+import { deleteInvoice, getAllInvoice, getOrderStatus } from './OrderService'
 import Loading from 'matx/components/MatxLoadable/Loading'
 
 import { GET_ALL_ORDERS } from '../../redux/actions/EcommerceActions'
@@ -31,7 +33,30 @@ const Orders = (props) => {
   const [source, setSource] = useState('ALL')
   const [size, setSize] = useState(10);
   const [title, setTitle] = useState('ALL ORDERS')
+  const [allOrders, setAllOrders] = useState([])
+  const [showAllOrders, setShowAllOrders] = useState(false)
+  const [orderStatus, setOrderStatus] = useState([])
+  const [value, setValue] = React.useState(0);
 
+
+
+  const fetchOrderStatus = async(event, newValue) => {
+    setValue(newValue);
+    const response = await getOrderStatus(setLoading)
+    setOrderStatus(response)
+  };
+
+  function LinkTab(props) {
+    return (
+      <Tab
+        component="a"
+        onClick={(event) => {
+          event.preventDefault();
+        }}
+        {...props}
+      />
+    );
+  }
   
 
   // const productList = useSelector((state) => state.ecommerce)
@@ -63,17 +88,37 @@ const Orders = (props) => {
     },
   ]
   useEffect(() => {
+    setLoading(true)
     const _source = source === 'ALL' ? '' : source;
-    getAllInvoice(setOrders, setLoading, page, setCount, _source)
-    dispatch({ type: GET_ALL_ORDERS })
 
-    return () => setIsAlive(false)
+    const fetchAllOrders = async() => {
+      const response = await getAllInvoice(setLoading, page, _source)
+      setOrders(response?.content)
+      setCount(response?.totalElements)
+    }
+
+    fetchAllOrders()
+    dispatch({ type: GET_ALL_ORDERS })
+    fetchOrderStatus()
+    return () => setIsAlive(false)    
   }, [dispatch, isAlive, page, source])
 
   const onChangePage = (page) => {
     getAllInvoice(setOrders, setLoading, page, setCount)
     setPage(page)
   }
+
+  const handleActiveLink = async (orderStats, e) => {
+      setLoading(true)
+      const _source = source === 'ALL' ? '' : source;
+      console.log(orderStats)
+      const response = await getAllInvoice(setLoading, page, _source)
+      setLoading(false)
+      setOrders(response.content.filter(res => {
+        return res.status === orderStats
+      }))
+  }
+
 
   const handleTitle = (string) => {
       string.includes('_') ? setTitle(string.split('_').shift() + " " + string.split('_').pop()): setTitle(string)
@@ -274,11 +319,11 @@ const Orders = (props) => {
           ) : (
             <MUIDataTable
             title={<div>
-              <h3 className='mt-4 mb-0'>{title}</h3>
+              <h5 className='mt-4 mb-0'>{title}</h5>
               <div className='w-full flex'>
                 <div className='w-220 flex-end'>
                   <TextField
-                    className='mb-4'
+                    className='mb-4 filter-area'
                     name='mobileNo'
                     label='Filter by source'
                     variant='outlined'
@@ -298,6 +343,11 @@ const Orders = (props) => {
                     ))}
                   </TextField>
                 </div>
+                <ul className='stats-nav'>
+                  {orderStatus.map((stats) => {
+                    return <li key={stats.orderStatus} onClick={(e) => handleActiveLink(stats.orderStatus, e)} id={stats.orderStatus}>{stats.orderStatus}({stats.total})</li>
+                  })}
+                </ul>
               </div>
             </div>}
               data={orders}
