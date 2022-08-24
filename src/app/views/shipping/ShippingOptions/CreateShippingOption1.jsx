@@ -363,7 +363,7 @@ const ShippingOption = ({ location }) => {
         }
       });
 
-      if (emptyFields.length > 0) {
+      if (emptyFields?.length > 0) {
         setErrorFields(emptyFields);
     
       } else {
@@ -440,7 +440,7 @@ const ShippingOption = ({ location }) => {
         <Grid item sx={12} md={12}>
           <Box fontSize='h4.fontSize'>Create Shipping Option</Box>
         </Grid>
-        {errorFields.length > 0 && (
+        {errorFields?.length > 0 && (
           <Grid item sx={12} md={12}>
             <Alert severity='error'>
               <AlertTitle>Error</AlertTitle>
@@ -481,7 +481,7 @@ const ShippingOption = ({ location }) => {
             />
           </Box>
 
-          {conditions.length > 1 && (
+          {conditions?.length > 1 && (
             <Box
               p={3}
               border={1}
