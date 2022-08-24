@@ -173,6 +173,10 @@ const OrderViewer = ({ id, order }) => {
 
   const handleModal = () => {
     toggleOrderEditor();
+  }
+
+  const handleCallBack = () => {
+    toggleOrderEditor();
     getInvoiceById(id).then((res) => {
       setState({ ...res.data.object })
       setOrderStatus(status)
@@ -471,6 +475,7 @@ const OrderViewer = ({ id, order }) => {
         orderSource={orderSource}
         handleClose={handleModal}
         handleRefresh={handleRefresh}
+        handleCallBack={handleCallBack}
       />
     </div>
   )

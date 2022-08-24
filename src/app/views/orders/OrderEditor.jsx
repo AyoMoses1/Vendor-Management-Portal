@@ -43,6 +43,7 @@ function OrderEditor({
     order,
     handleClose,
     handleRefresh,
+    handleCallBack,
     toggleOrderEditor,
     orderSource
 }) {
@@ -61,7 +62,7 @@ function OrderEditor({
 
     useEffect(() => {
         if (order) {
-            setAddress(order?.deliveryAddress?.address ?? '')
+            setAddress(order?.deliveryAddress?.id ?? '')
         }
     }, [order])
 
@@ -74,7 +75,7 @@ function OrderEditor({
                 updateInvoice(tempState).then((res) => {
                     setLoading(false)
                     if (res.status === 200) {
-                        handleClose();
+                        handleCallBack();
                     } else {
                         setAlertData({ success: false, text: 'Unable to update shipping address. Please try again', title: 'Shipping Address' })
                         handleAlertModal();
