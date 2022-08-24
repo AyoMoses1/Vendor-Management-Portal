@@ -70,7 +70,7 @@ function OrderEditor({
             const auth = JSON.parse(localStorage.getItem("auth_user"));
             if (auth.role.name === "ROLE_ADMIN" || auth.role.name === "ROLE_MANAGER") {
                 setLoading(true)
-                let tempState = { deliveryAddresses: values.address, id: order.id, status: order?.status };
+                let tempState = { deliveryAddress: values.address, id: order.id };
                 updateInvoice(tempState).then((res) => {
                     setLoading(false)
                     if (res.status === 200) {
