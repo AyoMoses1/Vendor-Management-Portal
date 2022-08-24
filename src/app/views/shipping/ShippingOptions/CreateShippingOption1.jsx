@@ -57,7 +57,6 @@ const ShippingOption = ({ location }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
 
-  console.log({ costState, conditions, otherSettingsState });
 
   useEffect(() => {
     (async () => {
@@ -67,8 +66,7 @@ const ShippingOption = ({ location }) => {
             object: { conditions, shippingZone, shippingOptionGroup, name },
           },
         } = await services.getShippingOptionDetails(id);
-        console.log({ conditions, shippingZone, shippingOptionGroup });
-
+      
         const cost = {
           baseCost: conditions[0].baseCost,
           additionalCost: conditions[0].additionalCost,
@@ -160,10 +158,18 @@ const ShippingOption = ({ location }) => {
     setErrorFields([]);
   };
 
-  const costInputs = (conditions[0].data[0].value === 'SUB_TOTAL'
+  /* const costInputs = (conditions[0].data[0].value === 'SUB_TOTAL'
     ? [costInput[0], ...baseCostDefinition, ...costInput.slice(1)]
     : costInput
   ).map((input) => {
+    return generateInput({
+      ...input,
+      onChange: onCostChange,
+      value: costState[input.name],
+    });
+  }); */
+
+  const costInputs = costInput.map((input) => {
     return generateInput({
       ...input,
       onChange: onCostChange,
@@ -251,7 +257,7 @@ const ShippingOption = ({ location }) => {
       mainCond = handleMethodCondition(mainCond, name, value);
 
       const firstConditions = { ...thisCond.slice(0, 1)[0], data: mainCond };
-      console.log({ thisCond: thisCond.slice(0, 1)  });
+    
       setConditions([firstConditions, ...activeConditions.slice(1)]);
     } else {
       const selectedCond = [...activeConditions].find((cond) => cond.id === id);
@@ -357,9 +363,9 @@ const ShippingOption = ({ location }) => {
         }
       });
 
-      if (emptyFields.length > 0) {
+      if (emptyFields?.length > 0) {
         setErrorFields(emptyFields);
-        console.log({ emptyFields });
+    
       } else {
         const finalData = {
           ...otherSettingsFinal,
@@ -370,8 +376,7 @@ const ShippingOption = ({ location }) => {
           finalData.id = id;
         }
 
-        console.log({ finalData })
-
+  
         if(id){
           await services.updateShippingOption(finalData);
         }else{
@@ -435,7 +440,7 @@ const ShippingOption = ({ location }) => {
         <Grid item sx={12} md={12}>
           <Box fontSize='h4.fontSize'>Create Shipping Option</Box>
         </Grid>
-        {errorFields.length > 0 && (
+        {errorFields?.length > 0 && (
           <Grid item sx={12} md={12}>
             <Alert severity='error'>
               <AlertTitle>Error</AlertTitle>
@@ -476,7 +481,7 @@ const ShippingOption = ({ location }) => {
             />
           </Box>
 
-          {conditions.length > 1 && (
+          {conditions?.length > 1 && (
             <Box
               p={3}
               border={1}
@@ -509,7 +514,7 @@ const ShippingOption = ({ location }) => {
               color='primary'
               onClick={handleCreateShippingOptions}
             >
-              Create Shipping Option
+             {id?  'Update Shipping Option' : 'Create Shipping Option'}
             </Button>
           </Box>
         </Grid>

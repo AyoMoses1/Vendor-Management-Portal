@@ -322,11 +322,12 @@ const OrderViewer = ({ id, order }) => {
                   )}>
                     <div className='billing'>
                       <div className='header-flex'>
-                        <h5>Shipping Address</h5>
+                        <h5>Delivery Address</h5>
                         <div className='edit-action'>
                           <Button color="primary" onClick={() => toggleOrderEditor()}>Edit</Button>
                         </div>
                       </div>
+                      <p>{customerId ? `${customerId?.deliveryAddresses[0].address}` : null}</p>
                       {/* <h5>Billing Address</h5> */}
                       <p>{state?.deliveryAddress?.address ?? <small><i>No shipping address</i></small>}</p>
                     </div>

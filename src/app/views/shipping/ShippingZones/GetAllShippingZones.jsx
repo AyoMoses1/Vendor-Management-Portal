@@ -147,7 +147,9 @@ const GetAllShippingZones = () => {
                       .then((value) => {
                         http
                           .delete(`afrimash/shipping-zone/${user.id}`)
-                          .then(() => window.location.reload())
+                          .then(() => {
+                            getAllShippingZones()
+                          })
                       })
                       .catch(() => {
                         return false

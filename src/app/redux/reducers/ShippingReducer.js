@@ -1,4 +1,6 @@
-import { CREATE_GROUP_FAILED, CREATE_GROUP_REQUEST, CREATE_GROUP_RESET, CREATE_GROUP_SUCCESS, GET_GROUP_LIST_FAILED, GET_GROUP_LIST_REQUEST, GET_GROUP_LIST_SUCCESS } from "../actions/shippingActions"
+import { CREATE_GROUP_FAILED, CREATE_GROUP_REQUEST, CREATE_GROUP_RESET, CREATE_GROUP_SUCCESS, GET_GROUP_LIST_FAILED, GET_GROUP_LIST_REQUEST, GET_GROUP_LIST_SUCCESS, UPDATE_GROUP_LIST_REQUEST,
+  UPDATE_GROUP_LIST_SUCCESS, 
+  UPDATE_GROUP_LIST_FAILED } from "../actions/shippingActions"
 
 
 
@@ -10,17 +12,20 @@ import { CREATE_GROUP_FAILED, CREATE_GROUP_REQUEST, CREATE_GROUP_RESET, CREATE_G
 
 export const shippingGroupCreateReducer = (state = {}, action) => {
   switch (action.type) {
+    case UPDATE_GROUP_LIST_REQUEST:
     case CREATE_GROUP_REQUEST:
       return {
         ...state,
         loading: true
       }
+    case UPDATE_GROUP_LIST_SUCCESS:
     case CREATE_GROUP_SUCCESS:
       return {
         ...state,
         shipping: action.payload,
         loading: false,
       }
+    case UPDATE_GROUP_LIST_FAILED:  
     case CREATE_GROUP_FAILED:
       return {
         ...state,

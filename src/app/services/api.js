@@ -82,6 +82,8 @@ export default new (class Http {
   delete = async (urlpath, data) => {
     try {
       const response = await this.AxiosSetup().delete(urlpath, data)
+
+  
       if (
         response.data.errorMsg !== null
       ) {
