@@ -2,6 +2,7 @@ import React from 'react';
 import { Card, Grid, Button } from '@material-ui/core';
 import ViewedCard from "./ViewedCard";
 import SalesStatistics from "./SalesStatistics";
+import DateRangePickerComponent from "./DateRangePicker";
 
 
 const views = [
@@ -44,14 +45,16 @@ const views = [
 ]
 
 const MostViewed = ({ theme }) => {
+  const setSelectedDate = (date) => {
+    console.log(date);
+  }
+
   return (
     <div>
       <Card elevation={3} className="p-20">
-        <div className='dropdown'>
+        <div className="dropdown">
           <div className="analytics-title">Most Viewed</div>
-          <div>
-            <Button variant="outlined">Date Range</Button>
-          </div>
+          <DateRangePickerComponent setSelectedDate={setSelectedDate} />
         </div>
         <div className="scrolling-wrapper-grid">
           {views.map((view) => (

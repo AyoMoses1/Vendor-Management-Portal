@@ -293,3 +293,13 @@ select.status-box{
 .active{
   color: red;
 }
+
+.all-order-table thead tr th {
+  padding-left: 24px !important;
+  padding-right: 24px !important;
+}
+
+.all-order-table tbody tr td {
+  padding-left: 24px !important;
+  padding-right: 24px !important;
+}

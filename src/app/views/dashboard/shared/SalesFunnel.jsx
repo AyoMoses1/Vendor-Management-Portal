@@ -6,6 +6,7 @@ import {
 } from "@material-ui/core";
 import SalesStatistics from "./SalesStatistics";
 import SalesCard from "./SalesCard";
+import DateRangePickerComponent from "./DateRangePicker";
 
 
 const salesFunnels = [
@@ -32,17 +33,19 @@ const salesFunnels = [
   {
     amount: "287",
     label: "Purchase",
-  }
-];
+  },
+]
 
 const SalesFunnel = ({ theme }) => {
+  const setSelectedDate = (date) => {
+    console.log(date);
+  }
+
   return (
     <Card elevation={3} className="p-20 mb-24">
-      <div className='dropdown'>
-        <div className="analytics-title mb-12">Sales Funnel</div>
-        <div>
-          <Button variant="outlined">Date Range</Button>
-        </div>
+      <div className="dropdown">
+        <div className="analytics-title">Sales Funnel</div>
+        <DateRangePickerComponent setSelectedDate={setSelectedDate} />
       </div>
       <Grid container spacing={1}>
         <div className="wrapper">

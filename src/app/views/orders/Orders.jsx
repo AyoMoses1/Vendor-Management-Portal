@@ -40,7 +40,7 @@ const Orders = (props) => {
 
 
 
-  const fetchOrderStatus = async(event, newValue) => {
+  const fetchOrderStatus = async (event, newValue) => {
     setValue(newValue);
     const response = await getOrderStatus(setLoading)
     setOrderStatus(response)
@@ -57,7 +57,7 @@ const Orders = (props) => {
       />
     );
   }
-  
+
 
   // const productList = useSelector((state) => state.ecommerce)
   // const { orderList } = productList
@@ -91,7 +91,7 @@ const Orders = (props) => {
     setLoading(true)
     const _source = source === 'ALL' ? '' : source;
 
-    const fetchAllOrders = async() => {
+    const fetchAllOrders = async () => {
       const response = await getAllInvoice(setLoading, page, _source)
       setOrders(response?.content)
       setCount(response?.totalElements)
@@ -100,7 +100,7 @@ const Orders = (props) => {
     fetchAllOrders()
     dispatch({ type: GET_ALL_ORDERS })
     fetchOrderStatus()
-    return () => setIsAlive(false)    
+    return () => setIsAlive(false)
   }, [dispatch, isAlive, page, source])
 
   const onChangePage = (page) => {
@@ -109,19 +109,19 @@ const Orders = (props) => {
   }
 
   const handleActiveLink = async (orderStats, e) => {
-      setLoading(true)
-      const _source = source === 'ALL' ? '' : source;
-      console.log(orderStats)
-      const response = await getAllInvoice(setLoading, page, _source)
-      setLoading(false)
-      setOrders(response.content.filter(res => {
-        return res.status === orderStats
-      }))
+    setLoading(true)
+    const _source = source === 'ALL' ? '' : source;
+    console.log(orderStats)
+    const response = await getAllInvoice(setLoading, page, _source)
+    setLoading(false)
+    setOrders(response.content.filter(res => {
+      return res.status === orderStats
+    }))
   }
 
 
   const handleTitle = (string) => {
-      string.includes('_') ? setTitle(string.split('_').shift() + " " + string.split('_').pop()): setTitle(string)
+    string.includes('_') ? setTitle(string.split('_').shift() + " " + string.split('_').pop()) : setTitle(string)
   }
   const columns = [
     {
@@ -313,43 +313,44 @@ const Orders = (props) => {
         <Breadcrumb routeSegments={[{ name: 'Orders', path: '/orders' }]} />
       </div>
       <div className='overflow-auto'>
-        <div className='min-w-750'>
+        <div className='min-w-750 all-order-table'>
           {loading ? (
             <Loading />
           ) : (
             <MUIDataTable
-            title={<div>
-              <h5 className='mt-4 mb-0'>{title}</h5>
-              <div className='w-full flex'>
-                <div className='w-220 flex-end'>
-                  <TextField
-                    className='mb-4 filter-area'
-                    name='mobileNo'
-                    label='Filter by source'
-                    variant='outlined'
-                    margin='normal'
-                    select
-                    value={source}
-                    onChange={(e) => {
-                      setSource(e.target.value)
-                      e.target.value == 'ALL' ? setTitle('ALL ORDERS'):
-                      handleTitle(e.target.value)
-                    }}
-                  >
-                    {sourceTypes.map((sourceType, idx) => (
-                      <MenuItem key={idx} value={sourceType.value}>
-                        {sourceType.type}
-                      </MenuItem>
-                    ))}
-                  </TextField>
+              title={<div>
+                <h5 className='mt-4 mb-0'>{title}</h5>
+                <div className='w-full flex'>
+                  <div className='w-220 flex-end'>
+                    <TextField
+                      className='mb-4 filter-area'
+                      name='mobileNo'
+                      label='Filter by source'
+                      variant='outlined'
+                      margin='normal'
+                      select
+                      value={source}
+                      onChange={(e) => {
+                        setSource(e.target.value)
+                        e.target.value == 'ALL' ? setTitle('ALL ORDERS') :
+                          handleTitle(e.target.value)
+                      }}
+                    >
+                      {sourceTypes.map((sourceType, idx) => (
+                        <MenuItem key={idx} value={sourceType.value}>
+                          {sourceType.type}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </div>
+                  <ul className='stats-nav'>
+                    {orderStatus.map((stats) => {
+                      return <li key={stats.orderStatus} onClick={(e) => handleActiveLink(stats.orderStatus, e)} id={stats.orderStatus}>{stats.orderStatus}({stats.total})</li>
+                    })}
+                  </ul>
                 </div>
-                <ul className='stats-nav'>
-                  {orderStatus.map((stats) => {
-                    return <li key={stats.orderStatus} onClick={(e) => handleActiveLink(stats.orderStatus, e)} id={stats.orderStatus}>{stats.orderStatus}({stats.total})</li>
-                  })}
-                </ul>
               </div>
-            </div>}
+              }
               data={orders}
               columns={columns}
               options={{
@@ -366,6 +367,7 @@ const Orders = (props) => {
                 filterType: 'textField',
                 responsive: 'standard',
                 fixedHeader: true,
+                selectableRows: false,
                 rowsPerPageOptions: [10, 20, 40, 80, 100],
                 count,
                 page,

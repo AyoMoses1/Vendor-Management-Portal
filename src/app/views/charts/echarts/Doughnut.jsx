@@ -1,17 +1,17 @@
 import React from "react";
 import ReactEcharts from "echarts-for-react";
 import { withStyles } from "@material-ui/styles";
+import { merge } from 'lodash'
 
-const DoughnutChart = ({ height, color = [], theme }) => {
-  const option = {
+const DoughnutChart = ({ height, option, theme }) => {
+  const defaultOption = {
     legend: {
       show: true,
-      itemGap: 20,
       icon: "circle",
       bottom: 0,
       textStyle: {
         color: theme.palette.text.secondary,
-        fontSize: 13,
+        fontSize: 10,
         fontFamily: "roboto"
       }
     },
@@ -51,22 +51,12 @@ const DoughnutChart = ({ height, color = [], theme }) => {
         hoverOffset: 5,
         stillShowZeroSum: false,
         label: {
-          normal: {
-            show: false,
-            position: "center", // shows the description data to center, turn off to show in right side
-            textStyle: {
-              color: theme.palette.text.secondary,
-              fontSize: 13,
-              fontFamily: "roboto"
-            },
-            formatter: "{a}"
-          },
+          normal: { show: false, },
           emphasis: {
             show: true,
             textStyle: {
-              fontSize: "14",
+              fontSize: "12",
               fontWeight: "normal"
-              // color: "rgba(15, 21, 77, 1)"
             },
             formatter: "{b} \n{c} ({d}%)"
           }
@@ -76,17 +66,6 @@ const DoughnutChart = ({ height, color = [], theme }) => {
             show: false
           }
         },
-        data: [
-          {
-            value: 65,
-            name: "Google"
-          },
-          {
-            value: 20,
-            name: "Facebook"
-          },
-          { value: 15, name: "Others" }
-        ],
         itemStyle: {
           emphasis: {
             shadowBlur: 10,
@@ -101,10 +80,7 @@ const DoughnutChart = ({ height, color = [], theme }) => {
   return (
     <ReactEcharts
       style={{ height: height }}
-      option={{
-        ...option,
-        color: [...color]
-      }}
+      option={merge({}, defaultOption, option)}
     />
   );
 };

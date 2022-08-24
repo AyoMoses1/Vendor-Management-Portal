@@ -15,3 +15,11 @@
 .agent-table thead tr th:first-child {
     width: 100px !important;
 }
+
+.text-muted {
+    font-size: 14px;
+}
+
+.text-control {
+    font-size: 14px;
+}
