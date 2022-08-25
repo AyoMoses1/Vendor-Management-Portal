@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { Breadcrumb } from 'matx'
 import MUIDataTable from 'mui-datatables'
 import { useDialog } from 'muibox'
-import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 
 import {
@@ -21,6 +20,7 @@ import Loading from 'matx/components/MatxLoadable/Loading'
 import { GET_ALL_ORDERS } from '../../redux/actions/EcommerceActions'
 
 import { useDispatch } from 'react-redux'
+import { capitalize, formatDate, formatToCurrency } from 'utils';
 
 const Orders = (props) => {
   const [isAlive, setIsAlive] = useState(true)
@@ -126,7 +126,7 @@ const Orders = (props) => {
   const columns = [
     {
       name: 'referenceNo', // field name in the row object
-      label: 'Order', // column title that will be shown in table
+      label: 'Order ID', // column title that will be shown in table
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
@@ -144,9 +144,65 @@ const Orders = (props) => {
                 className='ml-3'
               >
                 <span className='my-0 text-15'>{order?.referenceNo}</span>
+              </Link>
+            </div>
+          )
+        },
+      },
+    },
+    {
+      name: 'createDate',
+      label: 'Date',
+      options: {
+        filter: true,
+        customBodyRenderLite: (dataIndex) => {
+          let order = orders[dataIndex]
+          return (
+            <div className='flex items-center'>
+              <Link
+                to={{
+                  pathname: '/order/details',
+                  state: {
+                    id: order.id,
+                    order,
+                  },
+                }}
+                className='ml-3'
+              >
+                <span className='my-0 text-15'>{formatDate(order?.createDate)?.dates}</span>
                 <br />
                 <small className='text-muted'>
-                  {order?.customerId.firstName}
+                  {formatDate(order?.createDate)?.time}
+                </small>
+              </Link>
+            </div>
+          )
+        },
+      },
+    },
+    {
+      name: '',
+      label: 'Name',
+      options: {
+        filter: true,
+        customBodyRenderLite: (dataIndex) => {
+          let order = orders[dataIndex]
+          return (
+            <div className='flex items-center'>
+              <Link
+                to={{
+                  pathname: '/order/details',
+                  state: {
+                    id: order.id,
+                    order,
+                  },
+                }}
+                className='ml-3'
+              >
+                <span className='my-0 text-15'>{capitalize(order?.customerId?.firstName)} {capitalize(order?.customerId?.lastName)}</span>
+                <br />
+                <small className='text-muted'>
+                  {order?.customerId?.email ?? ''}
                 </small>
               </Link>
             </div>
@@ -173,37 +229,8 @@ const Orders = (props) => {
                 }}
                 className='ml-3'
               >
-                <span className={`my-0 text-15 ORDER ${order.status}`}>
-                  {' '}
-                  {`${order.status}` || '-----'}
-                </span>
-              </Link>
-            </div>
-          )
-        },
-      },
-    },
-    {
-      name: 'deliveryAddress',
-      label: 'Billing Address',
-      options: {
-        filter: true,
-        customBodyRenderLite: (dataIndex) => {
-          let order = orders[dataIndex]
-          return (
-            <div className='flex items-center'>
-              <Link
-                to={{
-                  pathname: '/order/details',
-                  state: {
-                    id: order.id,
-                    order,
-                  },
-                }}
-                className='ml-3'
-              >
-                <span className='my-0'>
-                  {order?.deliveryAddress?.address || '-----'}
+                <span>
+                  {capitalize(order.status ?? '---')}
                 </span>
               </Link>
             </div>
@@ -213,7 +240,7 @@ const Orders = (props) => {
     },
     {
       name: 'totalPrice',
-      label: 'Gross Sales',
+      label: 'Amount',
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
@@ -230,7 +257,7 @@ const Orders = (props) => {
                 }}
                 className='ml-3'
               >
-                <span className='my-0'>₦{order?.totalPrice}</span>
+                <span className='my-0'>₦ {formatToCurrency(order?.totalPrice, 2)}</span>
               </Link>
             </div>
           )
@@ -238,8 +265,8 @@ const Orders = (props) => {
       },
     },
     {
-      name: 'createDate',
-      label: 'Date',
+      name: '',
+      label: 'Product',
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
@@ -256,7 +283,7 @@ const Orders = (props) => {
                 }}
                 className='ml-3'
               >
-                <span className='my-0 text-15'>{order?.createDate}</span>
+                <span className='my-0'>---</span>
               </Link>
             </div>
           )
@@ -264,10 +291,10 @@ const Orders = (props) => {
       },
     },
     {
-      name: 'action',
-      label: ' ',
+      name: '',
+      label: 'Seller',
       options: {
-        filter: false,
+        filter: true,
         customBodyRenderLite: (dataIndex) => {
           let order = orders[dataIndex]
           return (
@@ -280,26 +307,10 @@ const Orders = (props) => {
                     order,
                   },
                 }}
+                className='ml-3'
               >
-                <IconButton>
-                  <Icon>arrow_right_alt</Icon>
-                </IconButton>
+                <span className='my-0'>---</span>
               </Link>
-            </div>
-          )
-        },
-      },
-    },
-    {
-      name: 'id', // field name in the row object
-      label: '', // column title that will be shown in table
-      options: {
-        filter: false,
-        customBodyRenderLite: (dataIndex) => {
-          let order = orders[dataIndex]
-          return (
-            <div>
-              <h5 className='my-0 text-15'>{`${order?.id}`}</h5>
             </div>
           )
         },
