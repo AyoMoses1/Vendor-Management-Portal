@@ -37,6 +37,10 @@ export default new (class Http {
       return await this.AxiosSetup().post(urlpath, data, config);
   }
 
+  put_new = async (urlpath, data, config = {}) => {
+      return await this.AxiosSetup().put(urlpath, data, config);
+  }
+
   put = async (urlpath, data, config) => {
     try {
       const response = await this.AxiosSetup().put(urlpath, data, config)

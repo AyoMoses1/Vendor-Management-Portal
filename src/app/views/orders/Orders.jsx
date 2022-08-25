@@ -319,7 +319,7 @@ const Orders = (props) => {
           ) : (
             <MUIDataTable
             title={<div>
-              <h3 className='mt-4 mb-0'>{title}</h3>
+              <h5 className='mt-4 mb-0'>{title}</h5>
               <div className='w-full flex'>
                 <div className='w-220 flex-end'>
                   <TextField

@@ -189,7 +189,7 @@ const UserInfo = ({ location }) => {
           </div>
         </div>
         <div className='px-4 mb-5 mt-10'><h4 className='mb-2'>User Details</h4></div>
-        <div id='print-area'>
+        <div id='print-area' style={{display: "block"}}>
           <div
             className={clsx(
               'viewer_actions px-4 mb-5 flex items-center justify-between',
