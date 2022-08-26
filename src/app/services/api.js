@@ -14,7 +14,7 @@ export default new (class Http {
         return response
       },
       (error) => {
-         return Promise.reject(error)
+        return Promise.reject(error)
       }
     )
     return axiosInstance
@@ -25,20 +25,20 @@ export default new (class Http {
       const response = await this.AxiosSetup().post(urlpath, data, config)
       return response
     } catch (error) {
-      if(error.response){
+      if (error.response) {
         return error.response.data;
-      }else {
+      } else {
         return error;
       }
     }
   }
 
   post_new = async (urlpath, data, config = {}) => {
-      return await this.AxiosSetup().post(urlpath, data, config);
+    return await this.AxiosSetup().post(urlpath, data, config);
   }
 
   put_new = async (urlpath, data, config = {}) => {
-      return await this.AxiosSetup().put(urlpath, data, config);
+    return await this.AxiosSetup().put(urlpath, data, config);
   }
 
   put = async (urlpath, data, config) => {
@@ -82,6 +82,24 @@ export default new (class Http {
   delete = async (urlpath, data) => {
     try {
       const response = await this.AxiosSetup().delete(urlpath, data)
+
+  
+      if (
+        response.data.errorMsg !== null
+      ) {
+        // localStorage.removeItem("jwt_token")
+        // window.location.reload()
+      }
+      return response
+    } catch (err) {
+      return err
+    }
+  }
+
+  getDoc = async (urlpath) => {
+    const url = `${urlpath}`
+    try {
+      const response = await this.AxiosSetup().get(url, { responseType: 'arraybuffer' })
       if (
         response.data.errorMsg !== null
       ) {
@@ -96,5 +114,5 @@ export default new (class Http {
 
   delete_new = async (urlpath) => {
     return await this.AxiosSetup().delete(urlpath);
-}
+  }
 })()

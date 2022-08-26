@@ -11,6 +11,7 @@ import Notification from '../../../components/Notification'
 import { errorState } from '../../helpers/error-state'
 
 const CreateShippingZone = ({ location }) => {
+  console.log('HERE')
   const history = useHistory()
   const { id } = location?.state
   const initialValues = {
@@ -49,7 +50,6 @@ const CreateShippingZone = ({ location }) => {
       })
 
     }
-    console.log(values)
   }
 
   const getAllShippingZones = (zoneId) => {

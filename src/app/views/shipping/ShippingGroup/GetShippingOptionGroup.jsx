@@ -144,14 +144,14 @@ const dispatch = useDispatch()
       options: {
         filter: false,
         customBodyRenderLite: (dataIndex) => {
-          let shippingGroup = shipping[dataIndex]
+          const ShippingGroup = shipping[dataIndex]
           return (
             <div className='flex items-center ml-10'>
               <Link
                 to={{
-                  pathname: `/shipping-group/new`,
+                  pathname: `/shipping-groups/new`,
                   state: {
-                    id: shippingGroup.id,
+                    id: ShippingGroup.id,
                   },
                 }}
               >

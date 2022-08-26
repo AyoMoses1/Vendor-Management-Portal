@@ -45,14 +45,15 @@ const overviews = [
 ]
 
 const Overview = ({ theme }) => {
-  const getDateRangeValue = (value) => {
-    console.log(value);
+  const setSelectedDate = (date) => {
+    console.log(date);
   }
+
   return (
     <Card className="play-card p-20 bg-paper mb-24">
       <div className="dropdown">
-        <div className="analytics-title mb-12">Overview</div>
-        <DateRangePickerComponent getDateRangeValue={getDateRangeValue} />
+        <div className="analytics-title">Overview</div>
+        <DateRangePickerComponent setSelectedDate={setSelectedDate} />
       </div>
       <Grid container spacing={1}>
         <div className="scrolling-wrapper-flexbox">

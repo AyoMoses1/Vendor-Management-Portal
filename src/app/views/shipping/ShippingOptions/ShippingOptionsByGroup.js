@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Breadcrumb } from 'matx'
 import MUIDataTable from 'mui-datatables'
 
@@ -29,34 +29,48 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getShippingOptionGroup } from 'app/redux/actions/shippingActions'
 
 
-const ShippingOptionByGroup = ({handleGroupChange, group, shippinOptions}) => {
-    console.log(shippinOptions)
-    const dispatch = useDispatch()
-    const shippingOptionGroupList = useSelector((state) => state.shippingOptionGroupList)
-    const {loading:shippingGroupLoading, shipping:  shippingGroups, error:shippingGroupError} = shippingOptionGroupList
-    // const [group, setGroup] = React.useState('')
+const ShippingOptionByGroup = ({group}) => {
     const [loading, setLoading] = React.useState(false)
     const dialog = useDialog()
+    const [{ shippinOptions, totalCount, size }, setShippingOptions] = useState({
+      size: 10,
+    });
+    const [page, setPage] = useState(0);
 
-    const handleChange = (e) => {
-        handleGroupChange(e.target.value)
-        // getShippingOptionsByGroup(e.target.value)
-    }
 
-    // const getShippingOptionsByGroup = async (groupId) =>{
-    //     http
-    //         .get(`/afrimash/shipping-option?shippingOptionGroupId=${groupId}`)
-    //         .then((res) => {
-    //             setShippingOptions(res?.data.object);
-    //             console.log(shippinOptions)
-    //             setLoading(false);
-    //         })
-    //         .catch((e) => console.log(e));
-    // }
+    const getShippingOptionsByGroup = async (params) => {
+      setLoading(true);
+        http
+          .get(`/afrimash/shipping-option?shippingOptionGroupId=${params.groupId}&size=${params.size}&page=${params.page}`)
+          .then((res) => {
+            setShippingOptions({
+              shippinOptions: res?.data.object.content,
+              totalCount: res?.data.object.totalElements,
+              size: res?.data.object.size,
+            });
+            setLoading(false);
+          })
+          .catch((e) => {
+            setLoading(false);
+            console.log(e)
+          });
+    };
 
-    // React.useEffect(()=>{
-    //     dispatch(getShippingOptionGroup({}))
-    // },[])
+
+    const handleChangePage = (newPage) => {
+      setPage(newPage);
+      getShippingOptionsByGroup({ page: newPage, size: size , groupId: group});
+    };
+  
+    const handleChangeRowsPerPage = (value) => {
+      getShippingOptionsByGroup({ page: 0, size: parseInt(value, 10), groupId: group });
+    };
+
+
+    useEffect(() => {
+      getShippingOptionsByGroup({groupId: group, page: 0, size})
+      setPage(0)
+    }, [group])
 
 
     const columns = [
@@ -254,23 +268,7 @@ const ShippingOptionByGroup = ({handleGroupChange, group, shippinOptions}) => {
                         <loading/>
                     ): (
                         <>
-                            {/* <Box mt={4} mb = {10} sx={{ minWidth: '50%' }}>
-                                <FormControl fullWidth>
-                                    <InputLabel id='demo-simple-select-label'>Filter by Shipping Option Group</InputLabel>
-                                    <Select
-                                    labelId='demo-simple-select-label'
-                                    id='demo-simple-select'
-                                    value={group}
-                                    label='Filter by Shipping Option Group'
-                                    onChange={handleChange}
-                                    >
-
-                                    {shippingGroups.map(option => {
-                                        return (<MenuItem key={option?.id} value={option?.id}>{option?.name}</MenuItem>)
-                                    })}
-                                    </Select>
-                                </FormControl>
-                            </Box> */}
+                           
                             <MUIDataTable
                                 title={'Shipping Options'}
                                 data={shippinOptions}
@@ -278,6 +276,12 @@ const ShippingOptionByGroup = ({handleGroupChange, group, shippinOptions}) => {
                                 options={{
                                 filter: true,
                                 sort: true,
+                                serverSide: true,
+                                count: totalCount,
+                                page: page,
+                                onChangePage: (value) => handleChangePage(value),
+                                onChangeRowsPerPage: handleChangeRowsPerPage,
+                                rowsPerPage: size,
                                 sortOrder: { name: 'id', direction: 'desc' },
                                 filterType: 'dropdown',
                                 responsive: 'standard',

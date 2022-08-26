@@ -45,15 +45,16 @@ const views = [
 ]
 
 const MostViewed = ({ theme }) => {
-  const getDateRangeValue = (value) => {
-    console.log(value);
+  const setSelectedDate = (date) => {
+    console.log(date);
   }
+
   return (
     <div>
       <Card elevation={3} className="p-20">
         <div className="dropdown">
           <div className="analytics-title">Most Viewed</div>
-          <DateRangePickerComponent getDateRangeValue={getDateRangeValue} />
+          <DateRangePickerComponent setSelectedDate={setSelectedDate} />
         </div>
         <div className="scrolling-wrapper-grid">
           {views.map((view) => (

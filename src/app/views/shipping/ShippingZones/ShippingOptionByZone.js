@@ -47,14 +47,20 @@ const {loading:shippingGroupLoading, shipping:  shippingGroups, error:shippingGr
   }, [])
 
   const getAllShippingOptions = async (zoneId) => {
+
+    
     setLoading(true);
     http
       .get(`/afrimash/shipping-option?shippingZoneId=${zoneId}`)
       .then((res) => {
-        setShippingOptions(res?.data.object);
+           
+        setShippingOptions(res?.data.object.content);
         setLoading(false);
       })
-      .catch((e) => console.log(e));
+      .catch((e) => {
+        
+        console.log(e)
+      });
   };
 
   const getAllShippingOptionsByGroup = async (groupId) => {
@@ -62,7 +68,7 @@ const {loading:shippingGroupLoading, shipping:  shippingGroups, error:shippingGr
     http
       .get(`/afrimash/shipping-option?shippingOptionGroupId=${groupId}&shippingZoneId=${id}`)
       .then((res) => {
-        setShippingOptions(res?.data.object);
+        setShippingOptions(res?.data.object.content);
         setLoading(false);
       })
       .catch((e) => console.log(e));

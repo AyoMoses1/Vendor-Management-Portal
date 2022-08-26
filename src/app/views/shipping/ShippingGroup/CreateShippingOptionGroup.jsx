@@ -9,7 +9,7 @@ import * as yup from 'yup'
 import Notification from '../../../components/Notification'
 import { errorState } from '../../helpers/error-state'
 import { useDispatch, useSelector } from 'react-redux'
-import { addShippingGroup, CREATE_GROUP_RESET } from 'app/redux/actions/shippingActions'
+import { addShippingGroup, CREATE_GROUP_RESET, updateShippingGroup } from 'app/redux/actions/shippingActions'
 import { useHistory } from 'react-router-dom/cjs/react-router-dom'
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
@@ -17,13 +17,34 @@ const initialValues = {
   name: '',
   description: '',
 }
-const CreateShippingOptionGroup = () => {
+const CreateShippingOptionGroup = ({location}) => {
   const dispatch = useDispatch()
   const [shippinZones, setShippingZones] = React.useState([])
   const shipping = useSelector((state) => state.shipping)
   const {loading, shipping: shippingCreate, error} = shipping
   const history = useHistory();
   const [state, setState] = useState({shippingZone: null});
+  const [dataLoading, setLoading] = React.useState(false)
+  const [shippingOptionGroup, setShippingOptionGroup] = useState(initialValues);
+
+  console.log({ shippingOptionGroup })
+
+  const { id } = location?.state
+
+  const getShippingClassDetails = (classId) => {
+    setLoading(true)
+    http.get(`/afrimash/shipping-option-group/${classId}`).then((res) => {
+      console.log({ shippingOptionGroup: res})
+      setShippingOptionGroup(res?.data.object)
+      setLoading(false)
+    })
+  }
+
+  React.useEffect(() => {
+    if (id) {
+      getShippingClassDetails(id)
+    }
+  }, [id])
 
 
   const handleSelect = (newValue, fieldName) => {
@@ -32,10 +53,13 @@ const CreateShippingOptionGroup = () => {
   };
 
   const handleSubmit = (values) => {
-    values.shippingZone = state?.shippingZone;
-
-    console.log(values);
-    dispatch(addShippingGroup(values));
+    if(id){
+      dispatch(updateShippingGroup({...shippingOptionGroup, ...values}))
+    }else{
+      values.shippingZone = state?.shippingZone;
+      dispatch(addShippingGroup(values));
+    }
+   
   }
 
   const getAllShippingZones = () => {
@@ -64,7 +88,7 @@ if(shippingCreate) {
       {/* {errorCreate && <Notification alert={errorCreate} severity={severity || ''} /> }
       {shippingCreate && <Notification alert={shippingCreate} severity={severity || ''} /> } */}
       <Formik
-        initialValues={initialValues}
+        initialValues={shippingOptionGroup}
         enableReinitialize={true}
         onSubmit={handleSubmit}
         validationSchema={shippingGroupSchema}
@@ -96,7 +120,7 @@ if(shippingCreate) {
                   fullWidth
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  value={values.name}
+                  value={values?.name}
                   error={Boolean(touched.name && errors.name)}
                   helperText={touched.name && errors.name}
                 />
@@ -113,7 +137,7 @@ if(shippingCreate) {
                   error={Boolean(touched.description && errors.description)}
                   helperText={touched.description && errors.description}
                 />
-                 <Autocomplete
+                {/*  <Autocomplete
                   id='shippingZone'
                   name='shippingZone'
                   options={shippinZones}
@@ -130,7 +154,7 @@ if(shippingCreate) {
                       margin='normal'
                     />
                   )}
-                />
+                /> */}
               </Grid>
               
             </Grid>

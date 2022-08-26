@@ -46,7 +46,6 @@ const useStyles = makeStyles((theme) => ({
 
 
 const Alert = ({ isOpen, handleModal, alertData, handleOK }) => {
-  console.log(alertData)
   const classes = useStyles()
   const [modalStyle] = React.useState(getModalStyle)
   const [alert, setAlert] = React.useState('')

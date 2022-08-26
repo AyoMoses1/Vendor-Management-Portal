@@ -13,5 +13,18 @@
 }
 
 .customer-table thead tr th:first-child {
-    width: 100px !important;
+    width: 150px !important;
+}
+
+.customer-table thead tr th:last-child {
+    width: 50px !important;
+}
+
+.sources .MuiSelect-root {
+    padding: 12px;
+    font-size: 12px;
+}
+
+.text-control {
+    font-size: 14px;
 }
