@@ -75,21 +75,18 @@ class Layout1Topbar extends Component {
 
   render() {
     let { theme, settings, className, style } = this.props
-    const topbarTheme =
-      settings.themes[settings.layout1Settings.topbar.theme] || theme
-    const userName = JSON.parse(localStorage.getItem("auth_user"))
+    const topbarTheme = settings.themes[settings.layout1Settings.topbar.theme] || theme
+    const {username} = JSON.parse(localStorage.getItem("auth_user"))
 
     const date = new Date();
     const hour = date.getHours();
     const greeting = "Good" +" " + (hour >= 12 ? hour >= 16 ?" Evening," : " Afternoon," : "Morning,");
-    
 
 
     return (
       <MuiThemeProvider theme={topbarTheme}>
         <div className="topbar">
           <div
-            className={`topbar-hold ${className}`}
             style={Object.assign({}, { backgroundColor: " #0F4E08" }, style)}
           >
             <div className="flex flex-space-between flex-middle h-100">
@@ -103,7 +100,7 @@ class Layout1Topbar extends Component {
               </div>
               <div className="flex flex-middle">
                 <div className="username" style={{ color: "#fff" }}>
-                  {`${greeting} ${userName?.firstName} ${userName?.lastName}`}
+                  {`${greeting} ${username}`}
                 </div>
                 <MatxMenu
                   menuButton={
