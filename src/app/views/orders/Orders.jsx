@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { Breadcrumb } from 'matx'
 import MUIDataTable from 'mui-datatables'
 import { useDialog } from 'muibox'
-import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 
 import {
@@ -21,6 +20,7 @@ import Loading from 'matx/components/MatxLoadable/Loading'
 import { GET_ALL_ORDERS } from '../../redux/actions/EcommerceActions'
 
 import { useDispatch } from 'react-redux'
+import { capitalize, formatDate, formatToCurrency } from 'utils';
 
 const Orders = (props) => {
   const [isAlive, setIsAlive] = useState(true)
@@ -40,7 +40,7 @@ const Orders = (props) => {
 
 
 
-  const fetchOrderStatus = async(event, newValue) => {
+  const fetchOrderStatus = async (event, newValue) => {
     setValue(newValue);
     const response = await getOrderStatus(setLoading)
     setOrderStatus(response)
@@ -57,7 +57,7 @@ const Orders = (props) => {
       />
     );
   }
-  
+
 
   // const productList = useSelector((state) => state.ecommerce)
   // const { orderList } = productList
@@ -91,7 +91,7 @@ const Orders = (props) => {
     setLoading(true)
     const _source = source === 'ALL' ? '' : source;
 
-    const fetchAllOrders = async() => {
+    const fetchAllOrders = async () => {
       const response = await getAllInvoice(setLoading, page, _source)
       setOrders(response?.content)
       setCount(response?.totalElements)
@@ -100,7 +100,7 @@ const Orders = (props) => {
     fetchAllOrders()
     dispatch({ type: GET_ALL_ORDERS })
     fetchOrderStatus()
-    return () => setIsAlive(false)    
+    return () => setIsAlive(false)
   }, [dispatch, isAlive, page, source])
 
   const onChangePage = (page) => {
@@ -109,24 +109,24 @@ const Orders = (props) => {
   }
 
   const handleActiveLink = async (orderStats, e) => {
-      setLoading(true)
-      const _source = source === 'ALL' ? '' : source;
-      console.log(orderStats)
-      const response = await getAllInvoice(setLoading, page, _source)
-      setLoading(false)
-      setOrders(response.content.filter(res => {
-        return res.status === orderStats
-      }))
+    setLoading(true)
+    const _source = source === 'ALL' ? '' : source;
+    console.log(orderStats)
+    const response = await getAllInvoice(setLoading, page, _source)
+    setLoading(false)
+    setOrders(response.content.filter(res => {
+      return res.status === orderStats
+    }))
   }
 
 
   const handleTitle = (string) => {
-      string.includes('_') ? setTitle(string.split('_').shift() + " " + string.split('_').pop()): setTitle(string)
+    string.includes('_') ? setTitle(string.split('_').shift() + " " + string.split('_').pop()) : setTitle(string)
   }
   const columns = [
     {
       name: 'referenceNo', // field name in the row object
-      label: 'Order', // column title that will be shown in table
+      label: 'Order ID', // column title that will be shown in table
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
@@ -144,9 +144,65 @@ const Orders = (props) => {
                 className='ml-3'
               >
                 <span className='my-0 text-15'>{order?.referenceNo}</span>
+              </Link>
+            </div>
+          )
+        },
+      },
+    },
+    {
+      name: 'createDate',
+      label: 'Date',
+      options: {
+        filter: true,
+        customBodyRenderLite: (dataIndex) => {
+          let order = orders[dataIndex]
+          return (
+            <div className='flex items-center'>
+              <Link
+                to={{
+                  pathname: '/order/details',
+                  state: {
+                    id: order.id,
+                    order,
+                  },
+                }}
+                className='ml-3'
+              >
+                <span className='my-0 text-15'>{formatDate(order?.createDate)?.dates}</span>
                 <br />
                 <small className='text-muted'>
-                  {order?.customerId.firstName}
+                  {formatDate(order?.createDate)?.time}
+                </small>
+              </Link>
+            </div>
+          )
+        },
+      },
+    },
+    {
+      name: '',
+      label: 'Name',
+      options: {
+        filter: true,
+        customBodyRenderLite: (dataIndex) => {
+          let order = orders[dataIndex]
+          return (
+            <div className='flex items-center'>
+              <Link
+                to={{
+                  pathname: '/order/details',
+                  state: {
+                    id: order.id,
+                    order,
+                  },
+                }}
+                className='ml-3'
+              >
+                <span className='my-0 text-15'>{capitalize(order?.customerId?.firstName)} {capitalize(order?.customerId?.lastName)}</span>
+                <br />
+                <small className='text-muted'>
+                  {order?.customerId?.email ?? ''}
                 </small>
               </Link>
             </div>
@@ -173,37 +229,8 @@ const Orders = (props) => {
                 }}
                 className='ml-3'
               >
-                <span className={`my-0 text-15 ORDER ${order.status}`}>
-                  {' '}
-                  {`${order.status}` || '-----'}
-                </span>
-              </Link>
-            </div>
-          )
-        },
-      },
-    },
-    {
-      name: 'deliveryAddress',
-      label: 'Billing Address',
-      options: {
-        filter: true,
-        customBodyRenderLite: (dataIndex) => {
-          let order = orders[dataIndex]
-          return (
-            <div className='flex items-center'>
-              <Link
-                to={{
-                  pathname: '/order/details',
-                  state: {
-                    id: order.id,
-                    order,
-                  },
-                }}
-                className='ml-3'
-              >
-                <span className='my-0'>
-                  {order?.deliveryAddress?.address || '-----'}
+                <span>
+                  {capitalize(order.status ?? '---')}
                 </span>
               </Link>
             </div>
@@ -213,7 +240,7 @@ const Orders = (props) => {
     },
     {
       name: 'totalPrice',
-      label: 'Gross Sales',
+      label: 'Amount',
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
@@ -230,7 +257,7 @@ const Orders = (props) => {
                 }}
                 className='ml-3'
               >
-                <span className='my-0'>₦{order?.totalPrice}</span>
+                <span className='my-0'>₦ {formatToCurrency(order?.totalPrice, 2)}</span>
               </Link>
             </div>
           )
@@ -238,8 +265,8 @@ const Orders = (props) => {
       },
     },
     {
-      name: 'createDate',
-      label: 'Date',
+      name: '',
+      label: 'Product',
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
@@ -256,7 +283,7 @@ const Orders = (props) => {
                 }}
                 className='ml-3'
               >
-                <span className='my-0 text-15'>{order?.createDate}</span>
+                <span className='my-0'>---</span>
               </Link>
             </div>
           )
@@ -264,10 +291,10 @@ const Orders = (props) => {
       },
     },
     {
-      name: 'action',
-      label: ' ',
+      name: '',
+      label: 'Seller',
       options: {
-        filter: false,
+        filter: true,
         customBodyRenderLite: (dataIndex) => {
           let order = orders[dataIndex]
           return (
@@ -280,26 +307,10 @@ const Orders = (props) => {
                     order,
                   },
                 }}
+                className='ml-3'
               >
-                <IconButton>
-                  <Icon>arrow_right_alt</Icon>
-                </IconButton>
+                <span className='my-0'>---</span>
               </Link>
-            </div>
-          )
-        },
-      },
-    },
-    {
-      name: 'id', // field name in the row object
-      label: '', // column title that will be shown in table
-      options: {
-        filter: false,
-        customBodyRenderLite: (dataIndex) => {
-          let order = orders[dataIndex]
-          return (
-            <div>
-              <h5 className='my-0 text-15'>{`${order?.id}`}</h5>
             </div>
           )
         },
@@ -313,43 +324,44 @@ const Orders = (props) => {
         <Breadcrumb routeSegments={[{ name: 'Orders', path: '/orders' }]} />
       </div>
       <div className='overflow-auto'>
-        <div className='min-w-750'>
+        <div className='min-w-750 all-order-table'>
           {loading ? (
             <Loading />
           ) : (
             <MUIDataTable
-            title={<div>
-              <h5 className='mt-4 mb-0'>{title}</h5>
-              <div className='w-full flex'>
-                <div className='w-220 flex-end'>
-                  <TextField
-                    className='mb-4 filter-area'
-                    name='mobileNo'
-                    label='Filter by source'
-                    variant='outlined'
-                    margin='normal'
-                    select
-                    value={source}
-                    onChange={(e) => {
-                      setSource(e.target.value)
-                      e.target.value == 'ALL' ? setTitle('ALL ORDERS'):
-                      handleTitle(e.target.value)
-                    }}
-                  >
-                    {sourceTypes.map((sourceType, idx) => (
-                      <MenuItem key={idx} value={sourceType.value}>
-                        {sourceType.type}
-                      </MenuItem>
-                    ))}
-                  </TextField>
+              title={<div>
+                <h5 className='mt-4 mb-0'>{title}</h5>
+                <div className='w-full flex'>
+                  <div className='w-220 flex-end'>
+                    <TextField
+                      className='mb-4 filter-area'
+                      name='mobileNo'
+                      label='Filter by source'
+                      variant='outlined'
+                      margin='normal'
+                      select
+                      value={source}
+                      onChange={(e) => {
+                        setSource(e.target.value)
+                        e.target.value == 'ALL' ? setTitle('ALL ORDERS') :
+                          handleTitle(e.target.value)
+                      }}
+                    >
+                      {sourceTypes.map((sourceType, idx) => (
+                        <MenuItem key={idx} value={sourceType.value}>
+                          {sourceType.type}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </div>
+                  <ul className='stats-nav'>
+                    {orderStatus.map((stats) => {
+                      return <li key={stats.orderStatus} onClick={(e) => handleActiveLink(stats.orderStatus, e)} id={stats.orderStatus}>{stats.orderStatus}({stats.total})</li>
+                    })}
+                  </ul>
                 </div>
-                <ul className='stats-nav'>
-                  {orderStatus.map((stats) => {
-                    return <li key={stats.orderStatus} onClick={(e) => handleActiveLink(stats.orderStatus, e)} id={stats.orderStatus}>{stats.orderStatus}({stats.total})</li>
-                  })}
-                </ul>
               </div>
-            </div>}
+              }
               data={orders}
               columns={columns}
               options={{
@@ -366,6 +378,7 @@ const Orders = (props) => {
                 filterType: 'textField',
                 responsive: 'standard',
                 fixedHeader: true,
+                selectableRows: false,
                 rowsPerPageOptions: [10, 20, 40, 80, 100],
                 count,
                 page,

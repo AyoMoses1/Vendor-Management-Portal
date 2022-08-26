@@ -10,6 +10,10 @@ export const GET_GROUP_LIST_REQUEST = 'GET_GROUP_LIST_REQUEST'
 export const GET_GROUP_LIST_SUCCESS = 'GET_GROUP_LIST_SUCCESS'
 export const GET_GROUP_LIST_FAILED = 'GET_GROUP_LIST_FAILED'
 
+export const UPDATE_GROUP_LIST_REQUEST = 'UPDATE_GROUP_LIST_REQUEST'
+export const UPDATE_GROUP_LIST_SUCCESS = 'UPDATE_GROUP_LIST_SUCCESS'
+export const UPDATE_GROUP_LIST_FAILED = 'UPDATE_GROUP_LIST_FAILED'
+
 
 
 export const addShippingGroup = (values) => dispatch => {
@@ -27,6 +31,28 @@ export const addShippingGroup = (values) => dispatch => {
     console.log(e);
     dispatch({
       type: CREATE_GROUP_FAILED,
+      payload: e 
+    })
+  }
+  )
+}
+
+
+export const updateShippingGroup = (values) => dispatch => {
+  dispatch({ type: UPDATE_GROUP_LIST_REQUEST, payload: values })
+
+  http.put(`/afrimash/shipping-option-group`, values).then(
+    (res) => {
+    dispatch({
+      type: UPDATE_GROUP_LIST_SUCCESS,
+      payload: res.data.object
+
+    })
+  },
+  e =>{
+    console.log(e);
+    dispatch({
+      type: UPDATE_GROUP_LIST_FAILED,
       payload: e 
     })
   }

@@ -16,6 +16,9 @@ const initialValues = {
   description: '',
 }
 const CreatesShippingClass = ({ location }) => {
+  const [error, setError] = React.useState('')
+  const [severity, setSeverity] = React.useState('')
+  const [loading, setLoading] = React.useState(false)
   const history = useHistory()
   const [shippingClass, setShippingClass] = React.useState(initialValues)
 
@@ -35,9 +38,7 @@ const CreatesShippingClass = ({ location }) => {
     }
   }, [])
 
-  const [error, setError] = React.useState('')
-  const [severity, setSeverity] = React.useState('')
-  const [loading, setLoading] = React.useState(false)
+
 
   const handleSubmit = async (values, { setSubmitting }) => {
     setLoading(true)

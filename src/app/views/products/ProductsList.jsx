@@ -304,7 +304,7 @@ const Products = () => {
                   filter: true,
                   sortOrder: { name: 'id', direction: 'desc' },
                   filterType: 'textField',
-                  responsive: 'standard',
+                  //responsive: 'standard',
                   elevation: 0,
                   rowsPerPageOptions: [10, 20, 40, 80, 100],
                   customSearchRender: (

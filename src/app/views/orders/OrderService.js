@@ -1,28 +1,35 @@
-import http from "../../services/api"
+import http from "../../services/api";
+
+const download = (data) => {
+  const url = window.URL.createObjectURL(new Blob([data], { type: "application/pdf" }));
+  var link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', 'invoice.pdf');
+  document.body.appendChild(link);
+  link.click();
+}
 
 export const getInvoiceById = (id) => {
   return http
     .get(`/afrimash/orders/${id}`)
 }
 
-
 export const getAllInvoice = (setLoading, page, _source) => {
-  
   return http.get(_source ? `afrimash/orders?page=${page}&orderSource=${_source}` : `afrimash/orders?page=${page}`).then(({ data }) => {
     if (data instanceof Object) {
       return data.object
     }
   })
-
-
 }
 
 export const deleteInvoice = (order) => {
   return http.delete('/afrimash/orders/', order)
 }
+
 export const addInvoice = (order) => {
   return http.post('/afrimash/orders/', order)
 }
+
 export const updateInvoice = (order) => {
   return http.patch(`/afrimash/orders/`, order)
 }
@@ -66,8 +73,8 @@ export const deleteOrderItem = (orderId, itemId, setLoading) => {
 
 export const getOrderStatus = (setLoading) => {
   setLoading(true)
-  return http.get(`/afrimash/reporting/order-stats`).then(({data}) => {
-    if(data instanceof Object){
+  return http.get(`/afrimash/reporting/order-stats`).then(({ data }) => {
+    if (data instanceof Object) {
       setLoading(false)
       return data.object
     }
@@ -75,4 +82,20 @@ export const getOrderStatus = (setLoading) => {
     setLoading(false)
     console.log(err)
   })
+}
+
+export const downloadPdfInvoice = (orderId, setDownloading) => {
+  setDownloading(true)
+  return http.getDoc(`/afrimash/orders/${orderId}/pdf-invoice`).then(({ data }) => {
+    download(data);
+    setDownloading(false)
+    return data
+  }).catch((err) => {
+    setDownloading(false)
+    console.log(err)
+  })
+}
+
+export const addDeliveryAddress = (address) => {
+  return http.post(`/afrimash/delivery-addresses`, address)
 }
