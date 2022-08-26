@@ -81,7 +81,7 @@ class Layout1Topbar extends Component {
 
     const date = new Date();
     const hour = date.getHours();
-    const greeting = "Good" +" " + (hour > 12 ? hour >= 16 ?" Evening." : " Afternoon." : "Morning");
+    const greeting = "Good" +" " + (hour >= 12 ? hour >= 16 ?" Evening," : " Afternoon," : "Morning,");
     
 
 
