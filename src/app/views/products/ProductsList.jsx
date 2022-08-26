@@ -13,13 +13,25 @@ const Products = () => {
   const [isAlive, setIsAlive] = useState(true);
   const [loading, setLoading] = useState(false);
   const [products, setProducts] = useState([]);
+  const [page, setPageNo] = useState(0)
+  const [size, setSize] = useState(10)
+  const [count, setCount] = useState(0)
   const dialog = useDialog();
   const dispatcher = useDispatch();
 
   useEffect(() => {
-    getAllResults(setProducts, setLoading, '/afrimash/products/');
+    
+    const fetchAllProducts = async() => {
+      const response = await getAllResults(page, size)
+      console.log(response, "answer")
+      setProducts(response?.content)
+      setCount(response?.totalElements)
+
+    }
+
+    fetchAllProducts()
     return () => setIsAlive(false);
-  }, [isAlive]);
+  }, [isAlive, page, size]);
 
   const handleFeaturedOnUSSD = (product) => {
     const confirmMessage = product.isFeaturedOnUssd
@@ -43,6 +55,14 @@ const Products = () => {
       .catch((error) => console.error(error));
   };
 
+  const onChangePage = async(page) => {
+    console.log(page, "checl")
+    const response = await getAllResults(page,size);
+    setProducts(response.content)
+    setPageNo(page) 
+    console.log(response, "check response after page change")
+    console.log(products, "check products and compare with response")
+  }
   const columns = [
     {
       name: 'name', // field name in the row object
@@ -304,9 +324,25 @@ const Products = () => {
                   filter: true,
                   sortOrder: { name: 'id', direction: 'desc' },
                   filterType: 'textField',
-                  //responsive: 'standard',
+                  responsive: 'standard',
                   elevation: 0,
-                  rowsPerPageOptions: [10, 20, 40, 80, 100],
+                  rowsPerPage: size,
+                  rowsPerPageOptions: [10, 20, 30, 40, 50],
+                  count,
+                  page,
+                  onChangeRowsPerPage: (x) => {
+                    setSize(x)
+                  },
+                  onTableChange: (action, tableState) => {
+                    if (action === 'changePage') {
+                      console.log(tableState, "this is it")
+                      
+                      onChangePage(tableState.page+1)
+                    }
+                    else{
+                      console.log(action)
+                    }
+                  },
                   customSearchRender: (
                     searchText,
                     handleSearch,
