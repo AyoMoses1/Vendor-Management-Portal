@@ -92,7 +92,7 @@ const Orders = (props) => {
     const _source = source === 'ALL' ? '' : source;
 
     const fetchAllOrders = async () => {
-      const response = await getAllInvoice(setLoading, page, _source)
+      const response = await getAllInvoice(setLoading, page, size, _source)
       setOrders(response?.content)
       setCount(response?.totalElements)
     }
@@ -101,10 +101,9 @@ const Orders = (props) => {
     dispatch({ type: GET_ALL_ORDERS })
     fetchOrderStatus()
     return () => setIsAlive(false)
-  }, [dispatch, isAlive, page, source])
+  }, [dispatch, isAlive, page, source, size])
 
   const onChangePage = (page) => {
-    getAllInvoice(setOrders, setLoading, page, setCount)
     setPage(page)
   }
 
@@ -112,7 +111,7 @@ const Orders = (props) => {
     setLoading(true)
     const _source = source === 'ALL' ? '' : source;
     console.log(orderStats)
-    const response = await getAllInvoice(setLoading, page, _source)
+    const response = await getAllInvoice(setLoading, page, size, _source)
     setLoading(false)
     setOrders(response.content.filter(res => {
       return res.status === orderStats
@@ -377,9 +376,14 @@ const Orders = (props) => {
                 sortOrder: { name: 'id', direction: 'desc' },
                 filterType: 'textField',
                 responsive: 'standard',
+                serverSide: true,
                 fixedHeader: true,
                 selectableRows: false,
                 rowsPerPageOptions: [10, 20, 40, 80, 100],
+                rowsPerPage: size,
+                onChangeRowsPerPage: (x) => {
+                  setSize(x)
+                },
                 count,
                 page,
                 onTableChange: (action, tableState) => {

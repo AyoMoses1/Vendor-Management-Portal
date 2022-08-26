@@ -14,8 +14,8 @@ export const getInvoiceById = (id) => {
     .get(`/afrimash/orders/${id}`)
 }
 
-export const getAllInvoice = (setLoading, page, _source) => {
-  return http.get(_source ? `afrimash/orders?page=${page}&orderSource=${_source}` : `afrimash/orders?page=${page}`).then(({ data }) => {
+export const getAllInvoice = (setLoading, page, size, _source) => {
+  return http.get(_source ? `afrimash/orders?page=${page}&size=${size}&orderSource=${_source}` : `afrimash/orders?page=${page}&size=${size}`).then(({ data }) => {
     if (data instanceof Object) {
       return data.object
     }
