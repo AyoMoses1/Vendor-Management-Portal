@@ -20,7 +20,7 @@ import Loading from "matx/components/MatxLoadable/Loading";
 import { GET_ALL_ORDERS } from "../../redux/actions/EcommerceActions";
 import { useDispatch } from "react-redux";
 import { capitalize, formatDate, formatToCurrency } from "utils";
-
+import { filterAllCustomer, getAllCustomer } from "../customers/CustomerService";
 import { debounce } from "lodash";
 
 const Orders = (props) => {
@@ -328,6 +328,41 @@ const Orders = (props) => {
     },
   ];
 
+const debouncedCustomers = debounce((value) => {
+  const _source = source === "ALL" ? "" : source;
+  if (value.length > 0) {
+    filterAllCustomer(
+      setUserList,
+      setCount,
+      setAlert,
+      setSeverity,
+      size,
+      page,
+      _source,
+      value
+    );
+    setQuery(value);
+  } else {
+    filterAllCustomer(
+      setUserList,
+      setCount,
+      setAlert,
+      setSeverity,
+      size,
+      page,
+      _source,
+      ""
+    );
+    setQuery("");
+  }
+}, 700);
+
+const performSearch = (value) => {
+  debouncedCustomers(value);
+};
+
+
+
   return (
     <div className="m-sm-30">
       <div className="mb-sm-30">
@@ -427,8 +462,10 @@ const Orders = (props) => {
                         variant="outlined"
                         size="small"
                         fullWidth
-                        onChange={({ target: { value } }) =>
-                          handleSearch(value)
+                        onChange={({ target: { value } }) => {
+                          handleSearch(value);
+                          performSearch(value)
+                        }
                         }
                         InputProps={{
                           style: {

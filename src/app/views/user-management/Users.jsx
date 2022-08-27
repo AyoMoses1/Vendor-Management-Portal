@@ -11,6 +11,7 @@ import Alert from 'app/components/Alert';
 
 import './user.css';
 import { getUserStatistics } from '../dashboard/DashboardService'
+import { filterAllCustomer, getAllCustomer } from "../customers/CustomerService";
 import { debounce } from "lodash";
 
 const Users = () => {
@@ -268,7 +269,39 @@ const Users = () => {
     },
   ]
 
-  
+  const debouncedCustomers = debounce((value) => {
+    const _source = source === "ALL" ? "" : source;
+    if (value.length > 0) {
+      filterAllCustomer(
+        setUserList,
+        setCount,
+        setAlert,
+        setSeverity,
+        size,
+        page,
+        _source,
+        value
+      );
+      setQuery(value);
+    } else {
+      filterAllCustomer(
+        setUserList,
+        setCount,
+        setAlert,
+        setSeverity,
+        size,
+        page,
+        _source,
+        ""
+      );
+      setQuery("");
+    }
+  }, 700);
+
+  const performSearch = (value) => {
+    debouncedCustomers(value);
+  };
+
 
 
   return (
@@ -356,8 +389,10 @@ const Users = () => {
                         variant='outlined'
                         size='small'
                         fullWidth
-                        onChange={({ target: { value } }) => 
-                          handleSearch(value)
+                        onChange={({ target: { value } }) => {
+                          handleSearch(value);
+                          performSearch(value)
+                        }
                         }
                         InputProps={{
                           style: {
