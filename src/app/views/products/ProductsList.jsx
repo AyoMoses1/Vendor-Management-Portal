@@ -13,7 +13,7 @@ const Products = () => {
   const [isAlive, setIsAlive] = useState(true);
   const [loading, setLoading] = useState(false);
   const [products, setProducts] = useState([]);
-  const [page, setPageNo] = useState(0)
+  const [page, setPage] = useState(0)
   const [size, setSize] = useState(10)
   const [count, setCount] = useState(0)
   const dialog = useDialog();
@@ -23,10 +23,8 @@ const Products = () => {
     
     const fetchAllProducts = async() => {
       const response = await getAllResults(page, size)
-      console.log(response, "answer")
       setProducts(response?.content)
       setCount(response?.totalElements)
-
     }
 
     fetchAllProducts()
@@ -56,12 +54,7 @@ const Products = () => {
   };
 
   const onChangePage = async(page) => {
-    console.log(page, "checl")
-    const response = await getAllResults(page,size);
-    setProducts(response.content)
-    setPageNo(page) 
-    console.log(response, "check response after page change")
-    console.log(products, "check products and compare with response")
+    setPage(page)
   }
   const columns = [
     {
@@ -334,14 +327,10 @@ const Products = () => {
                     setSize(x)
                   },
                   onTableChange: (action, tableState) => {
-                    if (action === 'changePage') {
-                      console.log(tableState, "this is it")
-                      
-                      onChangePage(tableState.page+1)
+                    if (action === 'changePage') { 
+                      onChangePage(tableState.page)
                     }
-                    else{
-                      console.log(action)
-                    }
+                   
                   },
                   customSearchRender: (
                     searchText,
