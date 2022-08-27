@@ -18,11 +18,17 @@ import { deleteInvoice, getAllInvoice, getOrderStatus } from './OrderService'
 import Loading from 'matx/components/MatxLoadable/Loading'
 
 import { GET_ALL_ORDERS } from '../../redux/actions/EcommerceActions'
-
 import { useDispatch } from 'react-redux'
 import { capitalize, formatDate, formatToCurrency } from 'utils';
 
+import { debounce } from "lodash";
+
 const Orders = (props) => {
+
+   const [severity, setSeverity] = useState("");
+  const [userList, setUserList] = useState([]);
+  const [alert, setAlert] = useState("");
+  const [size, setSize] = useState(10);
   const [isAlive, setIsAlive] = useState(true)
   const [orders, setOrders] = useState([])
   const [loading, setLoading] = useState(false)
@@ -31,12 +37,13 @@ const Orders = (props) => {
   const dialog = useDialog()
   const dispatch = useDispatch()
   const [source, setSource] = useState('ALL')
-  const [size, setSize] = useState(10);
+  
   const [title, setTitle] = useState('ALL ORDERS')
   const [allOrders, setAllOrders] = useState([])
   const [showAllOrders, setShowAllOrders] = useState(false)
   const [orderStatus, setOrderStatus] = useState([])
   const [value, setValue] = React.useState(0);
+  const [query, setQuery] = useState("");
 
 
 
@@ -318,73 +325,88 @@ const Orders = (props) => {
     },
   ]
 
+  
+
   return (
-    <div className='m-sm-30'>
-      <div className='mb-sm-30'>
-        <Breadcrumb routeSegments={[{ name: 'Orders', path: '/orders' }]} />
+    <div className="m-sm-30">
+      <div className="mb-sm-30">
+        <Breadcrumb routeSegments={[{ name: "Orders", path: "/orders" }]} />
       </div>
-      <div className='overflow-auto'>
-        <div className='min-w-750 all-order-table'>
+      <div className="overflow-auto">
+        <div className="min-w-750 all-order-table">
           {loading ? (
             <Loading />
           ) : (
             <MUIDataTable
-              title={<div>
-                <h5 className='mt-4 mb-0'>{title}</h5>
-                <div className='w-full flex'>
-                  <div className='w-220 flex-end'>
-                    <TextField
-                      className='mb-4 filter-area'
-                      name='mobileNo'
-                      label='Filter by source'
-                      variant='outlined'
-                      margin='normal'
-                      select
-                      value={source}
-                      onChange={(e) => {
-                        setSource(e.target.value)
-                        e.target.value == 'ALL' ? setTitle('ALL ORDERS') :
-                          handleTitle(e.target.value)
-                      }}
-                    >
-                      {sourceTypes.map((sourceType, idx) => (
-                        <MenuItem key={idx} value={sourceType.value}>
-                          {sourceType.type}
-                        </MenuItem>
-                      ))}
-                    </TextField>
+              title={
+                <div>
+                  <h5 className="mt-4 mb-0">{title}</h5>
+                  <div className="w-full flex">
+                    <div className="w-220 flex-end">
+                      <TextField
+                        className="mb-4 filter-area"
+                        name="mobileNo"
+                        label="Filter by source"
+                        variant="outlined"
+                        margin="normal"
+                        select
+                        value={source}
+                        onChange={(e) => {
+                          setSource(e.target.value);
+                          e.target.value == "ALL"
+                            ? setTitle("ALL ORDERS")
+                            : handleTitle(e.target.value);
+                        }}
+                      >
+                        {sourceTypes.map((sourceType, idx) => (
+                          <MenuItem key={idx} value={sourceType.value}>
+                            {sourceType.type}
+                          </MenuItem>
+                        ))}
+                      </TextField>
+                    </div>
+                    <ul className="stats-nav">
+                      {orderStatus.map((stats) => {
+                        return (
+                          <li
+                            key={stats.orderStatus}
+                            onClick={(e) =>
+                              handleActiveLink(stats.orderStatus, e)
+                            }
+                            id={stats.orderStatus}
+                          >
+                            {stats.orderStatus}({stats.total})
+                          </li>
+                        );
+                      })}
+                    </ul>
                   </div>
-                  <ul className='stats-nav'>
-                    {orderStatus.map((stats) => {
-                      return <li key={stats.orderStatus} onClick={(e) => handleActiveLink(stats.orderStatus, e)} id={stats.orderStatus}>{stats.orderStatus}({stats.total})</li>
-                    })}
-                  </ul>
                 </div>
-              </div>
               }
               data={orders}
               columns={columns}
               options={{
                 onRowsDelete: (data) =>
                   dialog
-                    .confirm('Are you sure you want to delete?')
+                    .confirm("Are you sure you want to delete?")
                     .then((value) => deleteInvoice(data.data))
                     .catch(() => {
-                      return false
+                      return false;
                     }),
                 sort: true,
                 filter: true,
-                sortOrder: { name: 'id', direction: 'desc' },
-                filterType: 'textField',
-                responsive: 'standard',
+                sortOrder: { name: "id", direction: "desc" },
+                filterType: "textField",
+                responsive: "standard",
+                serverSide: true, 
                 fixedHeader: true,
                 selectableRows: false,
                 rowsPerPageOptions: [10, 20, 40, 80, 100],
                 count,
                 page,
                 onTableChange: (action, tableState) => {
-                  if (action === 'changePage') {
-                    onChangePage(tableState.page)
+                  if (action === "changePage") {
+                    onChangePage(tableState.page);
                   }
                 },
                 elevation: 0,
@@ -397,46 +419,47 @@ const Orders = (props) => {
                   return (
                     <Grow appear in={true} timeout={300}>
                       <TextField
-                        variant='outlined'
-                        size='small'
+                        variant="outlined"
+                        size="small"
                         fullWidth
-                        onChange={({ target: { value } }) =>
+                        onChange={({ target: { value } }) => 
                           handleSearch(value)
                         }
+                      
                         InputProps={{
                           style: {
                             paddingRight: 0,
                           },
                           startAdornment: (
-                            <Icon className='mr-2' fontSize='small'>
+                            <Icon className="mr-2" fontSize="small">
                               search
                             </Icon>
                           ),
                           endAdornment: (
                             <IconButton onClick={hideSearch}>
-                              <Icon fontSize='small'>clear</Icon>
+                              <Icon fontSize="small">clear</Icon>
                             </IconButton>
                           ),
                         }}
                       />
                     </Grow>
-                  )
+                  );
                 },
                 customToolbar: () => {
                   return (
                     <>
                       <Link
                         to={{
-                          pathname: '/order/new',
+                          pathname: "/order/new",
                           state: {},
                         }}
                       >
-                        <Button variant='contained' color='primary'>
+                        <Button variant="contained" color="primary">
                           Add New
                         </Button>
                       </Link>
                     </>
-                  )
+                  );
                 },
               }}
             />
@@ -444,6 +467,6 @@ const Orders = (props) => {
         </div>
       </div>
     </div>
-  )
+  );
 }
 export default Orders

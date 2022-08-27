@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Breadcrumb } from 'matx';
 import MUIDataTable from 'mui-datatables';
@@ -15,6 +16,15 @@ const Products = () => {
   const [products, setProducts] = useState([]);
   const dialog = useDialog();
   const dispatcher = useDispatch();
+  const [count, setCount] = useState(0);
+  const [page, setPage] = useState(0);
+  const [size, setSize] = useState(10);
+  const [statistics, setStatistics] = useState([]);
+  const [severity, setSeverity] = useState("");
+  const [userList, setUserList] = useState([]);
+  const [alert, setAlert] = useState("");
+  const [source, setSource] = useState("ALL");
+  const [query, setQuery] = useState("");
 
   useEffect(() => {
     getAllResults(setProducts, setLoading, '/afrimash/products/');
@@ -277,33 +287,37 @@ const Products = () => {
     },
   ];
 
+  
+
+
   return (
-    <div className='m-sm-30'>
-      <div className='mb-sm-30'>
-        <Breadcrumb routeSegments={[{ name: 'Products', path: '/products' }]} />
+    <div className="m-sm-30">
+      <div className="mb-sm-30">
+        <Breadcrumb routeSegments={[{ name: "Products", path: "/products" }]} />
       </div>
-      <div className='overflow-auto'>
-        <div className='min-w-750'>
+      <div className="overflow-auto">
+        <div className="min-w-750">
           {loading ? (
             <Loading />
           ) : (
             <div>
               <MUIDataTable
-                title={'All Products'}
+                title={"All Products"}
                 data={products}
                 columns={columns}
                 options={{
                   onRowsDelete: (data) =>
                     dialog
-                      .confirm('Are you sure you want to delete?')
+                      .confirm("Are you sure you want to delete?")
                       .then((value) => deleteProduct(data.data))
                       .catch(() => {
                         return false;
                       }),
                   sort: true,
+                  serverSide: true,
                   filter: true,
-                  sortOrder: { name: 'id', direction: 'desc' },
-                  filterType: 'textField',
+                  sortOrder: { name: "id", direction: "desc" },
+                  filterType: "textField",
                   //responsive: 'standard',
                   elevation: 0,
                   rowsPerPageOptions: [10, 20, 40, 80, 100],
@@ -311,29 +325,29 @@ const Products = () => {
                     searchText,
                     handleSearch,
                     hideSearch,
-                    options,
+                    options
                   ) => {
                     return (
                       <Grow appear in={true} timeout={300}>
                         <TextField
-                          variant='outlined'
-                          size='small'
+                          variant="outlined"
+                          size="small"
                           fullWidth
-                          onChange={({ target: { value } }) =>
-                            handleSearch(value)
+                          onChange={({ target: { value } }) => 
+                            handleSearch(value)      
                           }
                           InputProps={{
                             style: {
                               paddingRight: 0,
                             },
                             startAdornment: (
-                              <Icon className='mr-2' fontSize='small'>
+                              <Icon className="mr-2" fontSize="small">
                                 search
                               </Icon>
                             ),
                             endAdornment: (
                               <IconButton onClick={hideSearch}>
-                                <Icon fontSize='small'>clear</Icon>
+                                <Icon fontSize="small">clear</Icon>
                               </IconButton>
                             ),
                           }}
@@ -345,11 +359,11 @@ const Products = () => {
                     return (
                       <Link
                         to={{
-                          pathname: '/product/new',
+                          pathname: "/product/new",
                           state: {},
                         }}
                       >
-                        <Button variant='contained' color='primary'>
+                        <Button variant="contained" color="primary">
                           Add New
                         </Button>
                       </Link>
