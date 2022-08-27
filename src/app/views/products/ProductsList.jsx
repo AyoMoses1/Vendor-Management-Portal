@@ -319,6 +319,7 @@ const Products = () => {
                   filterType: 'textField',
                   responsive: 'standard',
                   elevation: 0,
+                  serverSide: true,
                   rowsPerPage: size,
                   rowsPerPageOptions: [10, 20, 30, 40, 50],
                   count,
