@@ -1,23 +1,22 @@
-
-import React, { useState, useEffect } from 'react';
-import { Breadcrumb } from 'matx';
-import MUIDataTable from 'mui-datatables';
-import { Grow, Icon, IconButton, TextField, Button } from '@material-ui/core';
-import { Link } from 'react-router-dom';
-import { useDialog } from 'muibox';
-import { deleteProduct, getAllResults } from './ProductService';
-import Loading from 'matx/components/MatxLoadable/Loading';
-import { useDispatch } from 'react-redux';
-import { updateProductFeature } from '../../redux/actions/ussd-action';
+import React, { useState, useEffect } from "react";
+import { Breadcrumb } from "matx";
+import MUIDataTable from "mui-datatables";
+import { Grow, Icon, IconButton, TextField, Button } from "@material-ui/core";
+import { Link } from "react-router-dom";
+import { useDialog } from "muibox";
+import { deleteProduct, getAllResults } from "./ProductService";
+import Loading from "matx/components/MatxLoadable/Loading";
+import { useDispatch } from "react-redux";
+import { updateProductFeature } from "../../redux/actions/ussd-action";
 
 const Products = () => {
   const [isAlive, setIsAlive] = useState(true);
   const [loading, setLoading] = useState(false);
   const [products, setProducts] = useState([]);
+  const [page, setPageNo] = useState(0);
   const dialog = useDialog();
   const dispatcher = useDispatch();
   const [count, setCount] = useState(0);
-  const [page, setPage] = useState(0);
   const [size, setSize] = useState(10);
   const [statistics, setStatistics] = useState([]);
   const [severity, setSeverity] = useState("");
@@ -27,9 +26,16 @@ const Products = () => {
   const [query, setQuery] = useState("");
 
   useEffect(() => {
-    getAllResults(setProducts, setLoading, '/afrimash/products/');
+    const fetchAllProducts = async () => {
+      const response = await getAllResults(page, size);
+      console.log(response, "answer");
+      setProducts(response?.content);
+      setCount(response?.totalElements);
+    };
+
+    fetchAllProducts();
     return () => setIsAlive(false);
-  }, [isAlive]);
+  }, [isAlive, page, size]);
 
   const handleFeaturedOnUSSD = (product) => {
     const confirmMessage = product.isFeaturedOnUssd
@@ -44,35 +50,43 @@ const Products = () => {
               id: product.id,
               isFeaturedOnUssd: !product.isFeaturedOnUssd,
             },
-          }),
+          })
         );
       })
       .then(() => {
-        getAllResults(setProducts, setLoading, '/afrimash/products/');
+        getAllResults(setProducts, setLoading, "/afrimash/products/");
       })
       .catch((error) => console.error(error));
   };
 
+  const onChangePage = async (page) => {
+    console.log(page, "checl");
+    const response = await getAllResults(page, size);
+    setProducts(response.content);
+    setPageNo(page);
+    console.log(response, "check response after page change");
+    console.log(products, "check products and compare with response");
+  };
   const columns = [
     {
-      name: 'name', // field name in the row object
-      label: 'Name', // column title that will be shown in table
+      name: "name", // field name in the row object
+      label: "Name", // column title that will be shown in table
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
           let product = products[dataIndex];
           return (
-            <div className='flex items-center'>
+            <div className="flex items-center">
               <Link
                 to={{
-                  pathname: '/product/details',
+                  pathname: "/product/details",
                   state: {
                     id: product.id,
                   },
                 }}
-                className='ml-3 mr-4'
+                className="ml-3 mr-4"
               >
-                <span className='my-0 text-15'>{product?.name}</span>
+                <span className="my-0 text-15">{product?.name}</span>
               </Link>
             </div>
           );
@@ -80,16 +94,16 @@ const Products = () => {
       },
     },
     {
-      name: 'sku',
-      label: 'Sku',
+      name: "sku",
+      label: "Sku",
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
           let product = products[dataIndex];
           return (
-            <div className='flex items-center'>
-              <div className='ml-3'>
-                <span className='my-0 text-15'> {product?.sku || '-----'}</span>
+            <div className="flex items-center">
+              <div className="ml-3">
+                <span className="my-0 text-15"> {product?.sku || "-----"}</span>
               </div>
             </div>
           );
@@ -97,26 +111,26 @@ const Products = () => {
       },
     },
     {
-      name: 'price',
-      label: 'Price',
+      name: "price",
+      label: "Price",
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
           let product = products[dataIndex];
           return (
-            <div className='flex items-center'>
+            <div className="flex items-center">
               <Link
                 to={{
-                  pathname: '/product/details',
+                  pathname: "/product/details",
                   state: {
                     id: product.id,
                   },
                 }}
-                className='ml-4'
+                className="ml-4"
               >
-                <span className='my-0 text-15'>
-                  {' '}
-                  {`₦${product.price}` || '-----'}
+                <span className="my-0 text-15">
+                  {" "}
+                  {`₦${product.price}` || "-----"}
                 </span>
               </Link>
             </div>
@@ -125,17 +139,17 @@ const Products = () => {
       },
     },
     {
-      name: 'categories',
-      label: 'Categories',
+      name: "categories",
+      label: "Categories",
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
           let product = products[dataIndex];
           let n = product.productCategories.map((name) => name.name);
           return (
-            <div className='flex items-center'>
-              <div className='ml-3'>
-                <span className='my-0 text-15'>{product && n.join(',')}</span>
+            <div className="flex items-center">
+              <div className="ml-3">
+                <span className="my-0 text-15">{product && n.join(",")}</span>
               </div>
             </div>
           );
@@ -143,18 +157,18 @@ const Products = () => {
       },
     },
     {
-      name: 'tags',
-      label: 'Tags',
+      name: "tags",
+      label: "Tags",
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
           let product = products[dataIndex];
           let n = product.tags.map((name) => name.name);
           return (
-            <div className='flex items-center'>
-              <div className='ml-4'>
-                <span className='my-0 text-15'>
-                  {n.length > 0 ? n.join(',') : ' ----'}
+            <div className="flex items-center">
+              <div className="ml-4">
+                <span className="my-0 text-15">
+                  {n.length > 0 ? n.join(",") : " ----"}
                 </span>
               </div>
             </div>
@@ -163,24 +177,24 @@ const Products = () => {
       },
     },
     {
-      name: 'brand',
-      label: 'Brand',
+      name: "brand",
+      label: "Brand",
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
           let product = products[dataIndex];
           return (
-            <div className='flex items-center'>
+            <div className="flex items-center">
               <Link
                 to={{
-                  pathname: '/product/details',
+                  pathname: "/product/details",
                   state: {
                     id: product.id,
                   },
                 }}
-                className='ml-4'
+                className="ml-4"
               >
-                <span className='my-0 text-15'>{product.brandId?.name}</span>
+                <span className="my-0 text-15">{product.brandId?.name}</span>
               </Link>
             </div>
           );
@@ -188,25 +202,25 @@ const Products = () => {
       },
     },
     {
-      name: 'seller',
-      label: 'Seller',
+      name: "seller",
+      label: "Seller",
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
           let product = products[dataIndex];
           return (
-            <div className='flex items-center'>
+            <div className="flex items-center">
               <Link
                 to={{
-                  pathname: '/product/details',
+                  pathname: "/product/details",
                   state: {
                     id: product.id,
                   },
                 }}
-                className='ml-4'
+                className="ml-4"
               >
-                <span className='my-0 text-15'>
-                  {product.storeId.sellerId.name || '-----'}
+                <span className="my-0 text-15">
+                  {product.storeId.sellerId.name || "-----"}
                 </span>
               </Link>
             </div>
@@ -215,8 +229,8 @@ const Products = () => {
       },
     },
     {
-      name: 'action',
-      label: ' ',
+      name: "action",
+      label: " ",
       options: {
         filter: false,
         customBodyRenderLite: (dataIndex) => {
@@ -224,27 +238,27 @@ const Products = () => {
           return (
             <Button
               onClick={() => handleFeaturedOnUSSD(product)}
-              variant='text'
+              variant="text"
             >
-              {product.isFeaturedOnUssd ? 'Remove from USSD' : 'Add to USSD'}
+              {product.isFeaturedOnUssd ? "Remove from USSD" : "Add to USSD"}
             </Button>
           );
         },
       },
     },
     {
-      name: 'action',
-      label: ' ',
+      name: "action",
+      label: " ",
       options: {
         filter: false,
         customBodyRenderLite: (dataIndex) => {
           let product = products[dataIndex];
           return (
-            <div className='flex items-center'>
-              <div className='flex-grow'></div>
+            <div className="flex items-center">
+              <div className="flex-grow"></div>
               <Link
                 to={{
-                  pathname: '/product/edit',
+                  pathname: "/product/edit",
                   state: {
                     id: product.id,
                     product,
@@ -261,8 +275,8 @@ const Products = () => {
       },
     },
     {
-      name: 'id', // field name in the row object
-      label: '', // column title that will be shown in table
+      name: "id", // field name in the row object
+      label: "", // column title that will be shown in table
       options: {
         filter: false,
         customBodyRenderLite: (dataIndex) => {
@@ -286,9 +300,6 @@ const Products = () => {
       },
     },
   ];
-
-  
-
 
   return (
     <div className="m-sm-30">
@@ -318,9 +329,25 @@ const Products = () => {
                   filter: true,
                   sortOrder: { name: "id", direction: "desc" },
                   filterType: "textField",
-                  //responsive: 'standard',
+                  responsive: "standard",
                   elevation: 0,
-                  rowsPerPageOptions: [10, 20, 40, 80, 100],
+                  serverSide: true,
+                  rowsPerPage: size,
+                  rowsPerPageOptions: [10, 20, 30, 40, 50],
+                  count,
+                  page,
+                  onChangeRowsPerPage: (x) => {
+                    setSize(x);
+                  },
+                  onTableChange: (action, tableState) => {
+                    if (action === "changePage") {
+                      console.log(tableState, "this is it");
+
+                      onChangePage(tableState.page + 1);
+                    } else {
+                      console.log(action);
+                    }
+                  },
                   customSearchRender: (
                     searchText,
                     handleSearch,
@@ -333,8 +360,8 @@ const Products = () => {
                           variant="outlined"
                           size="small"
                           fullWidth
-                          onChange={({ target: { value } }) => 
-                            handleSearch(value)      
+                          onChange={({ target: { value } }) =>
+                            handleSearch(value)
                           }
                           InputProps={{
                             style: {

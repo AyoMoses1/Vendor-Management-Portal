@@ -76,7 +76,7 @@ class Layout1Topbar extends Component {
   render() {
     let { theme, settings, className, style } = this.props
     const topbarTheme = settings.themes[settings.layout1Settings.topbar.theme] || theme
-    const {username} = JSON.parse(localStorage.getItem("auth_user"))
+    const username = JSON.parse(localStorage.getItem("auth_user"))
 
     const date = new Date();
     const hour = date.getHours();
@@ -100,7 +100,7 @@ class Layout1Topbar extends Component {
               </div>
               <div className="flex flex-middle">
                 <div className="username" style={{ color: "#fff" }}>
-                  {`${greeting} ${username}`}
+                  {`${greeting} ${username?.username}`}
                 </div>
                 <MatxMenu
                   menuButton={
