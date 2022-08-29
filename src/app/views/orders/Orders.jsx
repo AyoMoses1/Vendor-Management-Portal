@@ -328,6 +328,7 @@ const Orders = (props) => {
             <Loading />
           ) : (
             <MUIDataTable
+              style ={{maxWidth: '100%'}}
               title={<div>
                 <h5 className='mt-4 mb-0'>{title}</h5>
                 <div className='w-full flex'>

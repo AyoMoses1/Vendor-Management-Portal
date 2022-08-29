@@ -1,0 +1,159 @@
+
+
+.APPROVED {
+  color: #EF882C;
+  background-color: rgba(239, 136, 44, 0.15);
+}
+
+.PROCESSING {
+  color: #2F80ED;;
+  background-color: rgba(47, 128, 237, 0.15);
+}
+
+.CANCELLED {
+  color: #EB5757;
+  background-color: rgba(234, 95, 95, 0.15);
+}
+
+.COMPLETED {
+  color: #27AE60;
+  background-color: rgba(39, 174, 96, 0.1);
+}
+
+.CONVERTED {
+  color: black;
+  background-color: yellow;
+}
+
+.DELIVERED {
+  background-color: #5589ed;
+  color: #ffffff;
+}
+
+.ON_HOLD {
+  color: #926202;
+  background-color: #f8dda7;
+}
+
+.DISPUTED {
+  color: #900404;
+  background-color: #f9b1b1;
+}
+
+.AWAITING_PAYMENT {
+  color: #828282;
+  background-color: rgba(130, 130, 130, 0.15);
+  display: flex;
+}
+
+.AWAITING_FULFILMENT {
+  color: #076a70;
+  background-color: #d7fdff;
+}
+
+.MANUAL_VERIFICATION_REQUIRED {
+  color: #1f4535;
+  background-color: #e3e3e3;
+}
+
+.ORDER {
+  padding: 5px 8px;
+  width: fit-content;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500px;
+}
+
+.PAID {
+  color: #008a16;
+  font-weight: 800 !important;
+  background-color: #fcfcfc;
+}
+
+.all-products-table thead tr th{
+    padding-left: 48px;
+    background: #F0F2F5;
+    font-size: 14px;
+    justify-content: center;
+    padding-top: 4px;
+    padding-bottom: 4px;
+  }
+  
+  .all-products-table thead tr th .MuiButton-text {
+    font-weight: 800;
+    color: #000000;
+  }
+
+  .all-products-table tbody tr td .MuiTableCell-root{
+    color: red;
+    font-size: 12px;
+  }
+  
+  .all-products-table .MuiTableCell-root {
+    border-bottom: 4px solid #ffffff!important;
+  }
+  .all-products-table thead th{
+    color: red !important;
+    font-size: 8px !important;
+  }
+  .all-products-table tbody{
+    padding: 0 20px;
+    overflow-x: hidden;
+  }
+  .all-products-table tbody tr td {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+    background: #FAFBFD;
+    font-size: 12px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    color: #000000;
+  }
+  
+  .all-products-table .MuiTable-root {
+    margin-top: 10px;
+  }
+
+  .all-products-table tbody tr td{
+    text-align: center;
+  }
+  
+  .product__name{
+    width: 150px;
+  }
+  .product__categories{
+    width: 150px;
+    overflow: hidden;
+  }
+  .product__status{
+    width: 200px;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    padding: 0px 20px 10px 20px;
+    border-radius: 5px;
+  }
+  .product__tags{
+    width: 300px;
+  }
+  .product__seller{
+    width: 200px;
+  }
+  .product__date{
+    width: 200px;
+  }
+  .product__price{
+    width: 100px;
+  }
+  .product__sku{
+    width: 200px;
+  }
+  .product__seo{
+    width: 80px;
+  }
+  .seo__flex{
+    display: flex;
+    color: rgb(7, 162, 7);
+    justify-content: center;
+    align-items: center;
+  }
