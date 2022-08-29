@@ -20,13 +20,9 @@ import Loading from "matx/components/MatxLoadable/Loading";
 import { GET_ALL_ORDERS } from "../../redux/actions/EcommerceActions";
 import { useDispatch } from "react-redux";
 import { capitalize, formatDate, formatToCurrency } from "utils";
-import { filterAllCustomer, getAllCustomer } from "../customers/CustomerService";
 import { debounce } from "lodash";
 
 const Orders = (props) => {
-  const [severity, setSeverity] = useState("");
-  const [userList, setUserList] = useState([]);
-  const [alert, setAlert] = useState("");
   const [size, setSize] = useState(10);
   const [isAlive, setIsAlive] = useState(true);
   const [orders, setOrders] = useState([]);
@@ -42,7 +38,6 @@ const Orders = (props) => {
   const [showAllOrders, setShowAllOrders] = useState(false);
   const [orderStatus, setOrderStatus] = useState([]);
   const [value, setValue] = React.useState(0);
-  const [query, setQuery] = useState("");
 
   const fetchOrderStatus = async (event, newValue) => {
     setValue(newValue);
@@ -328,38 +323,13 @@ const Orders = (props) => {
     },
   ];
 
-const debouncedCustomers = debounce((value) => {
-  const _source = source === "ALL" ? "" : source;
-  if (value.length > 0) {
-    filterAllCustomer(
-      setUserList,
-      setCount,
-      setAlert,
-      setSeverity,
-      size,
-      page,
-      _source,
-      value
-    );
-    setQuery(value);
-  } else {
-    filterAllCustomer(
-      setUserList,
-      setCount,
-      setAlert,
-      setSeverity,
-      size,
-      page,
-      _source,
-      ""
-    );
-    setQuery("");
-  }
-}, 700);
+  const debouncedOrders = debounce((value) => {
+    console.log(value);
+  }, 700);
 
-const performSearch = (value) => {
-  debouncedCustomers(value);
-};
+  const performSearch = (value) => {
+    debouncedOrders(value);
+  };
 
 
 

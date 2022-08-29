@@ -8,6 +8,7 @@ import { deleteProduct, getAllResults } from "./ProductService";
 import Loading from "matx/components/MatxLoadable/Loading";
 import { useDispatch } from "react-redux";
 import { updateProductFeature } from "../../redux/actions/ussd-action";
+import { debounce } from "lodash";
 
 const Products = () => {
   const [isAlive, setIsAlive] = useState(true);
@@ -301,6 +302,14 @@ const Products = () => {
     },
   ];
 
+  const debouncedProducts = debounce((value) => {
+    console.log(value);
+  }, 700);
+
+  const performSearch = (value) => {
+    debouncedProducts(value);
+  };
+
   return (
     <div className="m-sm-30">
       <div className="mb-sm-30">
@@ -360,8 +369,10 @@ const Products = () => {
                           variant="outlined"
                           size="small"
                           fullWidth
-                          onChange={({ target: { value } }) =>
-                            handleSearch(value)
+                          onChange={({ target: { value } }) => {
+                            handleSearch(value);
+                            performSearch(value)
+                          }
                           }
                           InputProps={{
                             style: {
