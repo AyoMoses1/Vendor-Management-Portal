@@ -420,6 +420,7 @@ const CustomerList = () => {
                               hideSearch();
                               const _source = source === 'ALL' ? '' : source;
                               filterAllCustomer(setUserList, setCount, setAlert, setSeverity, size, page, _source, '');
+                              setQuery('');
                             }}>
                               <Icon fontSize='small'>clear</Icon>
                             </IconButton>

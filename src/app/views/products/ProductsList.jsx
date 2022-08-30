@@ -29,9 +29,8 @@ const Products = () => {
   const [query, setQuery] = useState("");
 
   useEffect(() => {
-    
-    const fetchAllProducts = async() => {
-      const response = await getAllResults(page, size)
+    const fetchAllProducts = async () => {
+      const response = await getAllResults(page, size, query)
       setProducts(response?.content)
       setCount(response?.totalElements)
       console.log(response, "tested unit")
@@ -63,7 +62,7 @@ const Products = () => {
       .catch((error) => console.error(error));
   };
 
-  const onChangePage = async(page) => {
+  const onChangePage = async (page) => {
     setPage(page)
   }
   const columns = [
@@ -85,7 +84,7 @@ const Products = () => {
                 }}
                 className="ml-3 mr-4"
               >
-                <span className='my-0 text-15'>{product?.name.slice(0, 8)+"..."}</span>
+                <span className='my-0 text-15'>{product?.name.slice(0, 8) + "..."}</span>
               </Link>
             </div>
           );
@@ -103,7 +102,7 @@ const Products = () => {
           return (
             <div className='flex items-center product__categories'>
               <div className='ml-3'>
-                <span className='my-0 text-15'>{product && n.join(',').slice(0, 8)+"..."}</span>
+                <span className='my-0 text-15'>{product && n.join(',').slice(0, 8) + "..."}</span>
               </div>
             </div>
           );
@@ -172,8 +171,8 @@ const Products = () => {
         },
       },
     },
-    
-   
+
+
     {
       name: "tags",
       label: "Tags",
@@ -186,7 +185,7 @@ const Products = () => {
             <div className='flex items-center product__tags'>
               <div className='ml-4'>
                 <span className='my-0 text-15'>
-                  {n.length > 0 ? n.join(',').slice(0, 8)+"..." : ' ----'}
+                  {n.length > 0 ? n.join(',').slice(0, 8) + "..." : ' ----'}
                 </span>
               </div>
             </div>
@@ -221,7 +220,7 @@ const Products = () => {
           return (
             <div className='flex items-center product__seo'>
               <div className='ml-3 seo__flex'>
-                <CircleIcon/>
+                <CircleIcon />
                 <span className='my-0 text-15'> {product?.seo || '70%'}</span>
               </div>
             </div>
@@ -248,7 +247,7 @@ const Products = () => {
                 className='ml-4'
               >
                 <span className='my-0 text-15'>
-                  {product.storeId.sellerId.name.slice(0, 10)+"..." || '-----'}
+                  {product.storeId.sellerId.name.slice(0, 10) + "..." || '-----'}
                 </span>
               </Link>
             </div>
@@ -329,13 +328,30 @@ const Products = () => {
     // },
   ];
 
-  const debouncedProducts = debounce((value) => {
-    console.log(value);
+  const debouncedProducts = debounce(async (value) => {
+    if (value.length > 0) {
+      const response = await getAllResults(page, size, value)
+      setProducts(response?.content)
+      setCount(response?.totalElements)
+      setQuery(value);
+    } else {
+      const response = await getAllResults(page, size, '')
+      setProducts(response?.content)
+      setCount(response?.totalElements)
+      setQuery('');
+    }
   }, 700);
 
   const performSearch = (value) => {
     debouncedProducts(value);
   };
+
+  const refresh = async () => {
+    const response = await getAllResults(page, size, '')
+    setProducts(response?.content)
+    setCount(response?.totalElements)
+    setQuery('');
+  }
 
   return (
     <div className="m-sm-30">
@@ -377,10 +393,10 @@ const Products = () => {
                     setSize(x);
                   },
                   onTableChange: (action, tableState) => {
-                    if (action === 'changePage') { 
+                    if (action === 'changePage') {
                       onChangePage(tableState.page)
                     }
-                   
+
                   },
                   customSearchRender: (
                     searchText,
@@ -409,7 +425,7 @@ const Products = () => {
                               </Icon>
                             ),
                             endAdornment: (
-                              <IconButton onClick={hideSearch}>
+                              <IconButton onClick={() => { hideSearch(); refresh() }}>
                                 <Icon fontSize="small">clear</Icon>
                               </IconButton>
                             ),
