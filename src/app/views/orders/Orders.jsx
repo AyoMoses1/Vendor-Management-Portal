@@ -106,6 +106,19 @@ const Orders = (props) => {
       ? setTitle(string.split("_").shift() + " " + string.split("_").pop())
       : setTitle(string);
   };
+
+  const listProducts = (orderItems) => {
+    return <>
+      {orderItems?.map((o, index) => <p className={index === orderItems.length - 1 ? "mb-0" : "mt-0"} style={{ lineHeight: "unset" }} key={o?.id + index}>{o?.productId?.name}</p>)}
+    </>
+  }
+
+  const listSellers = (orderItems) => {
+    return <>
+      {orderItems?.map((o, index) => <p className={index === orderItems.length - 1 ? "mb-0" : "mt-0"} style={{ lineHeight: "unset" }} key={o?.id + index}>{o?.productId?.storeId?.sellerId?.name}</p>)}
+    </>
+  }
+
   const columns = [
     {
       name: "referenceNo", // field name in the row object
@@ -271,7 +284,7 @@ const Orders = (props) => {
                 }}
                 className="ml-3"
               >
-                <span className="my-0">---</span>
+                <div className="my-0">{listProducts(order?.orderItems)}</div>
               </Link>
             </div>
           );
@@ -297,7 +310,7 @@ const Orders = (props) => {
                 }}
                 className="ml-3"
               >
-                <span className="my-0">---</span>
+                <div className="my-0">{listSellers(order?.orderItems)}</div>
               </Link>
             </div>
           );
