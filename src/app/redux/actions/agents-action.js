@@ -43,9 +43,13 @@ export const TRANSFER_CUSTOMERS = "TRANSFER_CUSTOMERS";
 export const TRANSFER_CUSTOMERS_SUCCESS = "TRANSFER_CUSTOMERS_SUCCESS";
 export const TRANSFER_CUSTOMERS_FAILED = "TRANSFER_CUSTOMERS_FAILED";
 
-export const getAllAgents = ({ page = '', size = '', query = '' }) => dispatch => {
+export const AGENT_TYPES = "AGENT_TYPES";
+export const AGENT_TYPES_SUCCESS = "AGENT_TYPES_SUCCESS";
+export const AGENT_TYPES_FAILED = "AGENT_TYPES_FAILED";
+
+export const getAllAgents = ({ page = '', size = '', query = '', agentType = '', state = '' }) => dispatch => {
   dispatch({ type: GET_AGENT_REQUEST })
-  http.get(`/afrimash/agents/search?size=${size}&page=${page}&query=${query}`).then(({ data }) => {
+  http.get(`/afrimash/agents/search?size=${size}&page=${page}&query=${query}&agentType=${agentType}&state=${state}`).then(({ data }) => {
     dispatch({
       type: GET_ALL_AGENTS_SUCCESS,
       payload: data.object,
@@ -64,6 +68,7 @@ export const getAgentById = (id) => dispatch => {
     dispatch({ type: ERROR_FETCH_DETILS_AGENT, payload: err })
   })
 }
+
 export const getAllAgentsApplications = () => dispatch => {
   dispatch({ type: GET_ALL_AGENT_APPLICATION });
   http.get(routes.agentApplicationRoute).then(({ data }) => {
@@ -138,13 +143,10 @@ export const updateAgent = (updateData) => dispatch => {
   })
 }
 
-
 export const deleteAgent = (agentId) => async dispatch => {
   try {
     dispatch({ type: DELETE_AGENT })
-
     const response = await http.delete(routes.deleteAgentRoute(agentId));
-
     dispatch({ type: DELETE_AGENT_SUCCESS, payload: response })
   } catch (error) {
     dispatch({ type: DELETE_AGENT_FAILED, payload: error?.response?.data?.errorMsg })
@@ -155,12 +157,22 @@ export const deleteAgent = (agentId) => async dispatch => {
 export const transferCustomer = (payload) => async dispatch => {
   try {
     dispatch({ type: TRANSFER_CUSTOMERS })
-
     const response = await http.patch(routes.transferCustomer(payload.sourceAgentId, payload.reciepientAgentId));
     deleteAgent(payload.sourceAgentId);
     dispatch({ type: TRANSFER_CUSTOMERS_SUCCESS, payload: response })
   } catch (error) {
     dispatch({ type: TRANSFER_CUSTOMERS_FAILED, payload: error?.response?.data?.errorMsg })
   }
+}
 
+export const getAgentTypes = () => dispatch => {
+  dispatch({ type: AGENT_TYPES });
+  http.get(routes.agentTypes).then(({ data }) => {
+    dispatch({
+      type: AGENT_TYPES_SUCCESS,
+      payload: data.object,
+    })
+  }).catch((err) => {
+    dispatch({ type: AGENT_TYPES_FAILED, payload: err })
+  })
 }
