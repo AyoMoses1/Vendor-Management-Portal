@@ -127,16 +127,23 @@
   }
   .product__status{
     width: 200px;
-    font-size: 10px;
+    font-size: 9px;
     display: flex;
     align-items: center;
     padding: 0px 20px 10px 20px;
     border-radius: 5px;
   }
   .product__tags{
-    width: 300px;
+    width: 200px;
   }
-  .product__seller{
+  .product__Seo{
+    width: 20px;
+    background: red;
+  }
+  /* .product__seller{
+    width: 200px;
+  } */
+  /* .product__seller{
     width: 200px;
   }
   .product__date{
@@ -150,7 +157,7 @@
   }
   .product__seo{
     width: 80px;
-  }
+  } */
   .seo__flex{
     display: flex;
     color: rgb(7, 162, 7);
