@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import { PropTypes } from 'prop-types'
 import { withRouter } from 'react-router-dom'
 
+
 import Notification from 'app/components/Notification'
 
 import './style.scss'
@@ -50,7 +51,7 @@ class SignIn extends Component {
     let { classes } = this.props
     return (
       <React.Fragment>
-        <Sidebar />
+         
         <div className='contianer__auth'>
           <div className='logo__container '>
             <img height={200} width={120} src={afrimash2} alt='afrimash-logo' />
