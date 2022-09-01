@@ -5,13 +5,12 @@ import { Grow, Icon, IconButton, TextField, Button, MenuItem } from '@material-u
 import { Link } from 'react-router-dom'
 import Loading from 'matx/components/MatxLoadable/Loading'
 import './customer-view.css'
-// import { deleteUser } from '../user-management/UserService'
-import { useDialog } from 'muibox'
-
+import { states } from '../../../utils/states';
 import Notification from '../../components/Notification'
 import { filterAllCustomer, getAllCustomer } from './CustomerService';
 import { getCustomerStatistics } from '../dashboard/DashboardService'
 import { debounce } from 'lodash'
+states.unshift('All');
 
 const CustomerList = () => {
   const [isAlive, setIsAlive] = useState(true)
@@ -21,6 +20,7 @@ const CustomerList = () => {
   const [alert, setAlert] = useState('')
   const [severity, setSeverity] = useState('')
   const [source, setSource] = useState('ALL')
+  const [state, setState] = useState('All')
   const [title, setTitle] = useState('All Customers')
   const [count, setCount] = useState(0)
   const [page, setPage] = useState(0)
@@ -81,9 +81,10 @@ const CustomerList = () => {
 
   useEffect(() => {
     const _source = source === 'ALL' ? '' : source;
-    getAllCustomer(setUserList, setCount, isLoading, setAlert, setSeverity, size, page, _source, query)
+    const _state = state === 'All' ? '' : state;
+    getAllCustomer(setUserList, setCount, isLoading, setAlert, setSeverity, size, page, _source, query, _state)
     return () => setIsAlive(false)
-  }, [isAlive, source, size]);
+  }, [isAlive, source, size, state]);
 
   useEffect(() => {
     getCustomerStatistics(setStatistics);
@@ -98,11 +99,12 @@ const CustomerList = () => {
         setTotal(tempTotal);
       }
     }
-  }, [statistics, source])
+  }, [statistics, source, state])
 
   const onPageChange = (page) => {
     const _source = source === 'ALL' ? '' : source;
-    getAllCustomer(setUserList, setCount, isLoading, setAlert, setSeverity, size, page, _source, query)
+    const _state = state === 'All' ? '' : state;
+    getAllCustomer(setUserList, setCount, isLoading, setAlert, setSeverity, size, page, _source, query, _state)
     setPage(page)
   }
 
@@ -309,11 +311,12 @@ const CustomerList = () => {
 
   const debouncedCustomers = debounce(value => {
     const _source = source === 'ALL' ? '' : source;
+    const _state = state === 'All' ? '' : state;
     if (value.length > 0) {
-      filterAllCustomer(setUserList, setCount, setAlert, setSeverity, size, page, _source, value);
+      filterAllCustomer(setUserList, setCount, setAlert, setSeverity, size, page, _source, value, _state);
       setQuery(value);
     } else {
-      filterAllCustomer(setUserList, setCount, setAlert, setSeverity, size, page, _source, '');
+      filterAllCustomer(setUserList, setCount, setAlert, setSeverity, size, page, _source, '', _state);
       setQuery('');
     }
   }, 700);
@@ -360,6 +363,25 @@ const CustomerList = () => {
                       {sourceTypes.map((sourceType, idx) => (
                         <MenuItem key={idx} value={sourceType.value}>
                           {sourceType.type}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </div>
+                  <div className='w-220 flex-end sources ml-4'>
+                    <TextField
+                      className='mb-4'
+                      name='mobileNo'
+                      label='Filter by location'
+                      variant='outlined'
+                      margin='normal'
+                      select
+                      fullWidth
+                      value={state}
+                      onChange={(e) => { setState(e.target.value) }}
+                    >
+                      {states.map((s, idx) => (
+                        <MenuItem key={idx} value={s}>
+                          {s}
                         </MenuItem>
                       ))}
                     </TextField>
@@ -419,7 +441,9 @@ const CustomerList = () => {
                             <IconButton onClick={() => {
                               hideSearch();
                               const _source = source === 'ALL' ? '' : source;
-                              filterAllCustomer(setUserList, setCount, setAlert, setSeverity, size, page, _source, '');
+                              const _state = state === 'All' ? '' : state;
+                              filterAllCustomer(setUserList, setCount, setAlert, setSeverity, size, page, _source, '', _state);
+                              setQuery('');
                             }}>
                               <Icon fontSize='small'>clear</Icon>
                             </IconButton>

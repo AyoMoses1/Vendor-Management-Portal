@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Breadcrumb } from "matx";
 import MUIDataTable from "mui-datatables";
 import { useDialog } from "muibox";
-import Tab from "@mui/material/Tab";
-
 import {
   Grow,
   Icon,
@@ -20,13 +18,9 @@ import Loading from "matx/components/MatxLoadable/Loading";
 import { GET_ALL_ORDERS } from "../../redux/actions/EcommerceActions";
 import { useDispatch } from "react-redux";
 import { capitalize, formatDate, formatToCurrency } from "utils";
-import { filterAllCustomer, getAllCustomer } from "../customers/CustomerService";
 import { debounce } from "lodash";
 
 const Orders = (props) => {
-  const [severity, setSeverity] = useState("");
-  const [userList, setUserList] = useState([]);
-  const [alert, setAlert] = useState("");
   const [size, setSize] = useState(10);
   const [isAlive, setIsAlive] = useState(true);
   const [orders, setOrders] = useState([]);
@@ -38,11 +32,9 @@ const Orders = (props) => {
   const [source, setSource] = useState("ALL");
 
   const [title, setTitle] = useState("ALL ORDERS");
-  const [allOrders, setAllOrders] = useState([]);
-  const [showAllOrders, setShowAllOrders] = useState(false);
   const [orderStatus, setOrderStatus] = useState([]);
   const [value, setValue] = React.useState(0);
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState('');
 
   const fetchOrderStatus = async (event, newValue) => {
     setValue(newValue);
@@ -50,20 +42,6 @@ const Orders = (props) => {
     setOrderStatus(response);
   };
 
-  function LinkTab(props) {
-    return (
-      <Tab
-        component="a"
-        onClick={(event) => {
-          event.preventDefault();
-        }}
-        {...props}
-      />
-    );
-  }
-
-  // const productList = useSelector((state) => state.ecommerce)
-  // const { orderList } = productList
   const sourceTypes = [
     {
       type: "ALL ORDERS",
@@ -95,7 +73,7 @@ const Orders = (props) => {
     const _source = source === "ALL" ? "" : source;
 
     const fetchAllOrders = async () => {
-      const response = await getAllInvoice(setLoading, page, size, _source);
+      const response = await getAllInvoice(setLoading, page, size, _source, query);
       setOrders(response?.content);
       setCount(response?.totalElements);
     };
@@ -114,7 +92,7 @@ const Orders = (props) => {
     setLoading(true);
     const _source = source === "ALL" ? "" : source;
     console.log(orderStats);
-    const response = await getAllInvoice(setLoading, page, size, _source);
+    const response = await getAllInvoice(setLoading, page, size, _source, query);
     setLoading(false);
     setOrders(
       response.content.filter((res) => {
@@ -128,6 +106,19 @@ const Orders = (props) => {
       ? setTitle(string.split("_").shift() + " " + string.split("_").pop())
       : setTitle(string);
   };
+
+  const listProducts = (orderItems) => {
+    return <>
+      {orderItems?.map((o, index) => <p className={index === orderItems.length - 1 ? "mb-0" : "mt-0"} style={{ lineHeight: "unset" }} key={o?.id + index}>{o?.productId?.name}</p>)}
+    </>
+  }
+
+  const listSellers = (orderItems) => {
+    return <>
+      {orderItems?.map((o, index) => <p className={index === orderItems.length - 1 ? "mb-0" : "mt-0"} style={{ lineHeight: "unset" }} key={o?.id + index}>{o?.productId?.storeId?.sellerId?.name}</p>)}
+    </>
+  }
+
   const columns = [
     {
       name: "referenceNo", // field name in the row object
@@ -293,7 +284,7 @@ const Orders = (props) => {
                 }}
                 className="ml-3"
               >
-                <span className="my-0">---</span>
+                <div className="my-0">{listProducts(order?.orderItems)}</div>
               </Link>
             </div>
           );
@@ -319,7 +310,7 @@ const Orders = (props) => {
                 }}
                 className="ml-3"
               >
-                <span className="my-0">---</span>
+                <div className="my-0">{listSellers(order?.orderItems)}</div>
               </Link>
             </div>
           );
@@ -328,40 +319,32 @@ const Orders = (props) => {
     },
   ];
 
-const debouncedCustomers = debounce((value) => {
-  const _source = source === "ALL" ? "" : source;
-  if (value.length > 0) {
-    filterAllCustomer(
-      setUserList,
-      setCount,
-      setAlert,
-      setSeverity,
-      size,
-      page,
-      _source,
-      value
-    );
-    setQuery(value);
-  } else {
-    filterAllCustomer(
-      setUserList,
-      setCount,
-      setAlert,
-      setSeverity,
-      size,
-      page,
-      _source,
-      ""
-    );
-    setQuery("");
+  const debouncedOrders = debounce(async (value) => {
+    const _source = source === "ALL" ? "" : source;
+    if (value.length > 0) {
+      const response = await getAllInvoice(setLoading, page, size, _source, value);
+      setOrders(response?.content);
+      setCount(response?.totalElements);
+      setQuery(value);
+    } else {
+      const response = await getAllInvoice(setLoading, page, size, _source, '');
+      setOrders(response?.content);
+      setCount(response?.totalElements);
+      setQuery('');
+    }
+  }, 700);
+
+  const performSearch = (value) => {
+    debouncedOrders(value);
+  };
+
+  const refresh = async () => {
+    const _source = source === "ALL" ? "" : source;
+    const response = await getAllInvoice(setLoading, page, size, _source, '');
+    setOrders(response?.content);
+    setCount(response?.totalElements);
+    setQuery('');
   }
-}, 700);
-
-const performSearch = (value) => {
-  debouncedCustomers(value);
-};
-
-
 
   return (
     <div className="m-sm-30">
@@ -378,7 +361,7 @@ const performSearch = (value) => {
                 <div>
                   <h5 className="mt-4 mb-0">{title}</h5>
                   <div className="w-full flex">
-                    <div className="w-220 flex-end">
+                    <div className="w-220 flex-end order-sources">
                       <TextField
                         className="mb-4 filter-area"
                         name="mobileNo"
@@ -462,6 +445,7 @@ const performSearch = (value) => {
                         variant="outlined"
                         size="small"
                         fullWidth
+                        placeholder="Search"
                         onChange={({ target: { value } }) => {
                           handleSearch(value);
                           performSearch(value)
@@ -477,7 +461,10 @@ const performSearch = (value) => {
                             </Icon>
                           ),
                           endAdornment: (
-                            <IconButton onClick={hideSearch}>
+                            <IconButton onClick={() => {
+                              hideSearch();
+                              refresh()
+                            }}>
                               <Icon fontSize="small">clear</Icon>
                             </IconButton>
                           ),

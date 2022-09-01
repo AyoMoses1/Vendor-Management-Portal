@@ -322,7 +322,7 @@ select.status-box{
   padding-left: 24px !important;
   padding-right: 24px !important;
   background: #FAFBFD;
-  font-size: 14px;
+  font-size: 12px;
   padding-top: 6px;
   padding-bottom: 6px;
   color: #000000;
@@ -330,4 +330,10 @@ select.status-box{
 
 .all-order-table .MuiTable-root {
   margin-top: 10px;
+}
+
+.order-sources .MuiSelect-root {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  font-size: 12px;
 }

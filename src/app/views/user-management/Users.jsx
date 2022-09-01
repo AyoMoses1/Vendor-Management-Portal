@@ -11,7 +11,6 @@ import Alert from 'app/components/Alert';
 
 import './user.css';
 import { getUserStatistics } from '../dashboard/DashboardService'
-import { filterAllCustomer, getAllCustomer } from "../customers/CustomerService";
 import { debounce } from "lodash";
 
 const Users = () => {
@@ -31,8 +30,6 @@ const Users = () => {
   const [title, setTitle] = useState('All Users');
   const [statistics, setStatistics] = useState([]);
   const [total, setTotal] = useState(0);
-  const [source, setSource] = useState("ALL");
-  const [query, setQuery] = useState("");
 
   useEffect(() => {
     getAllUser(setUserList, isLoading, setAlert, setSeverity, setCount, page, size, role)
@@ -54,7 +51,7 @@ const Users = () => {
       setTitle(tempRole);
     }
   }
-  
+
   useEffect(() => {
     getRoles();
     getUserStatistics(setStatistics);
@@ -269,37 +266,12 @@ const Users = () => {
     },
   ]
 
-  const debouncedCustomers = debounce((value) => {
-    const _source = source === "ALL" ? "" : source;
-    if (value.length > 0) {
-      filterAllCustomer(
-        setUserList,
-        setCount,
-        setAlert,
-        setSeverity,
-        size,
-        page,
-        _source,
-        value
-      );
-      setQuery(value);
-    } else {
-      filterAllCustomer(
-        setUserList,
-        setCount,
-        setAlert,
-        setSeverity,
-        size,
-        page,
-        _source,
-        ""
-      );
-      setQuery("");
-    }
+  const debouncedUsers = debounce((value) => {
+    console.log(value);
   }, 700);
 
   const performSearch = (value) => {
-    debouncedCustomers(value);
+    debouncedUsers(value);
   };
 
 
