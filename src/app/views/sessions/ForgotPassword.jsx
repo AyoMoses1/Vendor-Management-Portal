@@ -11,6 +11,8 @@ import {  withRouter  } from "react-router-dom";
 import { resetPassword } from "../../redux/actions/LoginActions";
 import afrimash2 from "./assets/svg/afrimash2.0.svg";
 import "./Forgotpassword.scss";
+import {Link} from "react-router-dom"
+
 
 
 
@@ -43,10 +45,10 @@ class ForgotPassword extends Component {
               Enter the email address associated with your account and we’ll
               send you a link to reset your password
             </p>
-            <h6>Email</h6>
+            <h6 className="mail">Email</h6>
             <ValidatorForm ref="form" onSubmit={this.handleFormSubmit}>
               <TextValidator
-                className="mb-24 w-100"
+                className="mb-20 w-100"
                 variant="outlined"
                 onChange={this.handleChange}
                 type="email"
@@ -55,10 +57,17 @@ class ForgotPassword extends Component {
                 validators={["required", "isEmail"]}
                 errorMessages={["this field is required", "email is not valid"]}
               />
-              <div className="flex flex-middle button">
-                <Button variant="outlined" disabled type="submit">
-                 Send Link
-                </Button>
+              <div className="flex flex-middle">
+                <Link to="/enter-new-password">
+                  <Button
+                    variant="outlined"
+                    disabled
+                    className="button"
+                    type="submit"
+                  >
+                    Send Link
+                  </Button>
+                </Link>
               </div>
             </ValidatorForm>
             ;

@@ -15,9 +15,9 @@ import "./Forgotpassword.scss";
 
 
 
-class ForgotPassword extends Component {
+class EnterNewPassword extends Component {
   state = {
-    email: "Enter email here",
+    password: "Enter password here",
   };
   handleChange = (event) => {
     event.persist();
@@ -29,7 +29,7 @@ class ForgotPassword extends Component {
     this.props.resetPassword({ ...this.state });
   };
   render() {
-    let { email } = this.state;
+    let { password } = this.state;
 
     return (
       <div>
@@ -40,19 +40,27 @@ class ForgotPassword extends Component {
         <Container maxWidth="sm" className="flex flex-middle contain">
           <div className="container">
             <h3 className="reset"> Reset your Password </h3>
-            <p className="reset-text">
-              Enter the email address associated with your account and we’ll
-              send you a link to reset your password
-            </p>
-            <h6>Email</h6>
+            <p className="reset-word">Enter your new password below.</p>
+            <p className="new-password">Enter new password</p>
             <ValidatorForm ref="form" onSubmit={this.handleFormSubmit}>
               <TextValidator
                 className="mb-24 w-100"
                 variant="outlined"
                 onChange={this.handleChange}
-                type="email"
-                name="email"
-                value={email}
+                type="password"
+                name="password"
+                value={password}
+                validators={["required", "isEmail"]}
+                errorMessages={["this field is required", "email is not valid"]}
+              />
+              <p className="new-password">Re-enter new password</p>
+              <TextValidator
+                className="mb-24 w-100 "
+                variant="outlined"
+                onChange={this.handleChange}
+                type="password"
+                name="password"
+                value={password}
                 validators={["required", "isEmail"]}
                 errorMessages={["this field is required", "email is not valid"]}
               />
@@ -75,6 +83,6 @@ const mapStateToProps = (state) => ({
   login: state.login,
 });
 export default withRouter(
-  connect(mapStateToProps, { resetPassword })(ForgotPassword)
+  connect(mapStateToProps, { resetPassword })(EnterNewPassword)
 );
 
