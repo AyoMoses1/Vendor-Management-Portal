@@ -136,10 +136,10 @@
   .product__tags{
     width: 200px;
   }
-  .product__Seo{
-    width: 20px;
+  /* .product__seo{
+    width: 100px;
     background: red;
-  }
+  } */
   /* .product__seller{
     width: 200px;
   } */
@@ -164,3 +164,8 @@
     justify-content: center;
     align-items: center;
   }
+
+  .seo__flex svg{
+    font-size: 18px;
+  }
+  
