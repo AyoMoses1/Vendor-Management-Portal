@@ -176,7 +176,7 @@ function NewCategory({ isNewCategory, id, Category }) {
                     <TextField
                       className='mb-4'
                       name='translatedName'
-                      label='Translated Name'
+                      label='Slug Name'
                       variant='outlined'
                       margin='normal'
                       fullWidth
