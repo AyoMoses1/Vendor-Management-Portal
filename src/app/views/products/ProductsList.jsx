@@ -102,7 +102,17 @@ const Products = () => {
           return (
             <div className='flex items-center product__categories'>
               <div className='ml-3'>
-                <span className='my-0 text-15'>{product && n.join(',').slice(0, 8) + "..."}</span>
+                <Link
+                  to={{
+                    pathname: "/product/details",
+                    state: {
+                      id: product.id,
+                    },
+                  }}
+                  className="ml-3 mr-4"
+                >
+                  <span className='my-0 text-15'>{product && n.join(',').slice(0, 8)+"..."}</span>
+                </Link>
               </div>
             </div>
           );
@@ -119,7 +129,17 @@ const Products = () => {
           return (
             <div className={`flex items-center`}>
               <div className={`ml-3  product__status  ${product?.status}`}>
-                <span className='my-0 text-15'> {product?.status || '-----'}</span>
+                <Link
+                  to={{
+                    pathname: "/product/details",
+                    state: {
+                      id: product.id,
+                    },
+                  }}
+                  className="ml-3 mr-4"
+                >
+                  <span className='my-0 text-15'> {product?.status || '-----'}</span>
+                  </Link>
               </div>
             </div>
           );
@@ -164,7 +184,17 @@ const Products = () => {
           return (
             <div className='flex items-center product__sku'>
               <div className='ml-3'>
-                <span className='my-0 text-15'> {product?.sku || '-----'}</span>
+                <Link
+                  to={{
+                    pathname: "/product/details",
+                    state: {
+                      id: product.id,
+                    },
+                  }}
+                  className="ml-3 mr-4"
+                >
+                  <span className='my-0 text-15'> {product?.sku || '-----'}</span>
+                  </Link>
               </div>
             </div>
           );
@@ -184,9 +214,19 @@ const Products = () => {
           return (
             <div className='flex items-center product__tags'>
               <div className='ml-4'>
-                <span className='my-0 text-15'>
-                  {n.length > 0 ? n.join(',').slice(0, 8) + "..." : ' ----'}
-                </span>
+                <Link
+                  to={{
+                    pathname: "/product/details",
+                    state: {
+                      id: product.id,
+                    },
+                  }}
+                  className="ml-3 mr-4"
+                >
+                  <span className='my-0 text-15'>
+                    {n.length > 0 ? n.join(',').slice(0, 8)+"..." : ' ----'}
+                  </span>
+                  </Link>
               </div>
             </div>
           );
@@ -203,7 +243,17 @@ const Products = () => {
           return (
             <div className='flex items-center product__date'>
               <div className='ml-3'>
-                <span className='my-0 text-15'> {product?.dateAdded || '-----'}</span>
+                <Link
+                  to={{
+                    pathname: "/product/details",
+                    state: {
+                      id: product.id,
+                    },
+                  }}
+                  className="ml-3 mr-4"
+                >
+                  <span className='my-0 text-15'> {product?.dateAdded || '-----'}</span>
+                  </Link>
               </div>
             </div>
           );
@@ -220,8 +270,18 @@ const Products = () => {
           return (
             <div className='flex items-center product__seo'>
               <div className='ml-3 seo__flex'>
-                <CircleIcon />
-                <span className='my-0 text-15'> {product?.seo || '70%'}</span>
+                <Link
+                  to={{
+                    pathname: "/product/details",
+                    state: {
+                      id: product.id,
+                    },
+                  }}
+                  className="ml-3 mr-4 seo__flex"
+                >
+                  <CircleIcon/>
+                  <span className='my-0 text-15'> {product?.seo || '70%'}</span>
+                  </Link>
               </div>
             </div>
           );
