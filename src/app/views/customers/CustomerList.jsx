@@ -83,9 +83,10 @@ const CustomerList = () => {
     const _source = source === 'ALL' ? '' : source;
     const _state = state === 'All' ? '' : state;
     getAllCustomer(setUserList, setCount, isLoading, setAlert, setSeverity, size, page, _source, query, _state)
+    
     return () => setIsAlive(false)
   }, [isAlive, source, size, state]);
-
+  
   useEffect(() => {
     getCustomerStatistics(setStatistics);
   }, [])
@@ -135,31 +136,7 @@ const CustomerList = () => {
         },
       },
     },
-    {
-      name: 'address',
-      label: 'Address',
-      options: {
-        filter: true,
-        customBodyRenderLite: (dataIndex) => {
-          let user = userList[dataIndex]
-          return (
-            <div className='flex items-center'>
-              <Link
-                to={{
-                  pathname: '/customer/details',
-                  state: {
-                    id: user.id,
-                  },
-                }}
-                className='ml-3'
-              >
-                <h6 className='my-0 text-muted'>{user.address || '-----'}</h6>
-              </Link>
-            </div>
-          )
-        },
-      },
-    },
+    
     {
       name: 'mobileNo',
       label: 'Phone Number',
@@ -185,6 +162,62 @@ const CustomerList = () => {
         },
       },
     },
+
+    {
+      name: 'email',
+      label: 'Email',
+      options: {
+        filter: true,
+        customBodyRenderLite: (dataIndex) => {
+          let user = userList[dataIndex]
+          return (
+            <div className='flex items-center'>
+              <Link
+                to={{
+                  pathname: '/customer/details',
+                  state: {
+                    id: user.id,
+                  },
+                }}
+                className='ml-3'
+              >
+                <h6 className='my-0 text-muted'>{user.email || '-----'}</h6>
+              </Link>
+            </div>
+          )
+        },
+      },
+    },
+
+    {
+      name: 'dateRegistered',
+      label: 'Date Registered',
+      options: {
+        filter: true,
+        customBodyRenderLite: (dataIndex) => {
+          let user = userList[dataIndex]
+          return (
+            <div className='flex items-center'>
+              <Link
+                to={{
+                  pathname: '/customer/details',
+                  state: {
+                    id: user.id,
+                  },
+                }}
+                className='ml-3'
+              >
+                <h5 className='my-0 text-muted'>
+                  {' '}
+                  {user.dateRegistered || '-----'}
+                </h5>
+              </Link>
+            </div>
+          )
+        },
+      },
+    },
+
     {
       name: 'lastActivity',
       label: 'Last Active',
@@ -213,6 +246,59 @@ const CustomerList = () => {
         },
       },
     },
+
+    {
+      name: 'creditSpent',
+      label: 'Total Spend',
+      options: {
+        filter: true,
+        customBodyRenderLite: (dataIndex) => {
+          let user = userList[dataIndex]
+          return (
+            <div className='flex items-center'>
+              <Link
+                to={{
+                  pathname: '/customer/details',
+                  state: {
+                    id: user.id,
+                  },
+                }}
+                className='ml-3'
+              >
+                <h6 className='my-0 text-muted'>{user.creditSpent || '-----'}</h6>
+              </Link>
+            </div>
+          )
+        },
+      },
+    },
+
+    {
+      name: 'creditLimit',
+      label: 'AOV',
+      options: {
+        filter: true,
+        customBodyRenderLite: (dataIndex) => {
+          let user = userList[dataIndex]
+          return (
+            <div className='flex items-center'>
+              <Link
+                to={{
+                  pathname: '/customer/details',
+                  state: {
+                    id: user.id,
+                  },
+                }}
+                className='ml-3'
+              >
+                <h6 className='my-0 text-muted'>{user.creditLimit || '-----'}</h6>
+              </Link>
+            </div>
+          )
+        },
+      },
+    },
+
     // {
     //   name: 'delete',
     //   label: ' ',
@@ -254,17 +340,17 @@ const CustomerList = () => {
     //     },
     //   },
     // },
-    {
-      name: 'action',
-      label: ' ',
-      options: {
-        filter: false,
-        customBodyRenderLite: (dataIndex) => {
-          let user = userList[dataIndex]
-          return (
-            <div className='flex items-center'>
-              <div className='flex-grow'></div>
-              <Link
+     {
+       name: 'action',
+       label: ' ',
+       options: {
+       filter: false,
+       customBodyRenderLite: (dataIndex) => {
+       let user = userList[dataIndex]
+        return (
+       <div className='flex items-center'>
+         <div className='flex-grow'></div>
+         <Link
                 to={{
                   pathname: '/customer/edit',
                   state: {
@@ -272,9 +358,9 @@ const CustomerList = () => {
                     user,
                   },
                 }}
-              >
+             >
                 <IconButton>
-                  <Icon fontSize='small'>edit</Icon>
+                 <Icon fontSize='small'>edit</Icon>
                 </IconButton>
               </Link>
             </div>
@@ -282,6 +368,8 @@ const CustomerList = () => {
         },
       },
     },
+
+    
     // {
     //   name: 'id', // field name in the row object
     //   label: '', // column title that will be shown in table

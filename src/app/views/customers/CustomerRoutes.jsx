@@ -15,6 +15,8 @@ const EditCustomer = MatxLoadable({
   loader: () =>  import("./EditCustomer")
 })
 
+
+
 const customerRoutes = [
   {
     path: "/customers",
@@ -31,7 +33,7 @@ const customerRoutes = [
   {
     path: "/customer/edit",
     component: EditCustomer
-  }
+  },
 ];
 
 export default customerRoutes;

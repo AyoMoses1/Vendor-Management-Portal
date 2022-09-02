@@ -40,7 +40,7 @@ class EnterNewPassword extends Component {
         <h2 className="main-header">Afrimash Admin</h2>
         <Container maxWidth="sm" className="flex flex-middle contain">
           <div className="container">
-            <h3 className="reset"> Password Created </h3>
+            <h3 className="reset "> Password Created </h3>
             <p className="reset-word">Your password has been reset and you will be redirected to the log in page.</p>
             <p className="word">Follow this link to be redirected manually.</p>
             
