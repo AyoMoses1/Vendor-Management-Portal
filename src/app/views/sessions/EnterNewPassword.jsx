@@ -41,8 +41,8 @@ class EnterNewPassword extends Component {
         <Container maxWidth="sm" className="flex flex-middle contain">
           <div className="container">
             <h3 className="reset"> Reset your Password </h3>
-            <p className="reset-word">Enter your new password below.</p>
-            <p className="new-password">Enter new password</p>
+            <p className="reword">Enter your new password below.</p>
+            <h6 className="new-password">Enter new password</h6>
             <ValidatorForm ref="form" onSubmit={this.handleFormSubmit}>
               <TextValidator
                 className="mb-24 w-100"
@@ -66,7 +66,7 @@ class EnterNewPassword extends Component {
                 errorMessages={["this field is required", "password is not valid"]}
               />
               <div className="flex flex-middle">
-                <Link to="/enter-new-password">
+                <Link to="/password-created">
                   <Button
                     variant="outlined"
                     disabled
