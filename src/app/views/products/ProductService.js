@@ -6,16 +6,25 @@ export const getProductById = (id) => {
     .get(`/afrimash/products/${id}`)
 }
 
-export const getAllResults = (setResults, setLoading, url) => {
-  setLoading(true)
-  return http.get(url).then(({ data }) => {
+export const getAllResults = (pageNo, size) => {
+  return http.get(`afrimash/products?page=${pageNo}&size=${size}`).then(({ data }) => {
     if (data instanceof Object) {
-      setResults(data.object.content)
-      console.log(data.object.content, "tested")
-      setLoading(false)
+      // setLoading(false)
+      return data.object
+      
     }
   })
 }
+// export const getAllResults = (setResults, setLoading, url, page) => {
+//   setLoading(true)
+//   return http.get(url).then(({ data }) => {
+//     if (data instanceof Object) {
+//       setResults(data.object.content)
+//       console.log(data.object.content, "tested")
+//       setLoading(false)
+//     }
+//   })
+// }
 export const createProduct = (payload) => {
   return http.post('/afrimash/products/', payload)
 }

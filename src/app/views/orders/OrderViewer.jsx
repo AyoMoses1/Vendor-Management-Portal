@@ -173,6 +173,10 @@ const OrderViewer = ({ id, order }) => {
 
   const handleModal = () => {
     toggleOrderEditor();
+  }
+
+  const handleCallBack = () => {
+    toggleOrderEditor();
     getInvoiceById(id).then((res) => {
       setState({ ...res.data.object })
       setOrderStatus(status)
@@ -327,8 +331,6 @@ const OrderViewer = ({ id, order }) => {
                           <Button color="primary" onClick={() => toggleOrderEditor()}>Edit</Button>
                         </div>
                       </div>
-                      <p>{customerId ? `${customerId?.deliveryAddresses[0].address}` : null}</p>
-                      {/* <h5>Billing Address</h5> */}
                       <p>{state?.deliveryAddress?.address ?? <small><i>No shipping address</i></small>}</p>
                     </div>
                   </div>
@@ -473,6 +475,7 @@ const OrderViewer = ({ id, order }) => {
         orderSource={orderSource}
         handleClose={handleModal}
         handleRefresh={handleRefresh}
+        handleCallBack={handleCallBack}
       />
     </div>
   )
