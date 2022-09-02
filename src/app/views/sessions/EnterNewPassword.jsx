@@ -12,6 +12,7 @@ import { withRouter } from "react-router-dom";
 import { resetPassword } from "../../redux/actions/LoginActions";
 import afrimash2 from "./assets/svg/afrimash2.0.svg";
 import "./Forgotpassword.scss";
+import {Link} from "react-router-dom"
 
 
 
@@ -50,10 +51,10 @@ class EnterNewPassword extends Component {
                 type="password"
                 name="password"
                 value={password}
-                validators={["required", "isEmail"]}
-                errorMessages={["this field is required", "email is not valid"]}
+                validators={["required", "isPassword"]}
+                errorMessages={["this field is required", "password is not valid"]}
               />
-              <p className="new-password">Re-enter new password</p>
+              <p className="new-password">Re-enter new password </p>
               <TextValidator
                 className="mb-24 w-100 "
                 variant="outlined"
@@ -61,13 +62,20 @@ class EnterNewPassword extends Component {
                 type="password"
                 name="password"
                 value={password}
-                validators={["required", "isEmail"]}
-                errorMessages={["this field is required", "email is not valid"]}
+                validators={["required", "isPassword"]}
+                errorMessages={["this field is required", "password is not valid"]}
               />
-              <div className="flex flex-middle button">
-                <Button variant="outlined" disabled type="submit">
-                  Send Link
-                </Button>
+              <div className="flex flex-middle">
+                <Link to="/enter-new-password">
+                  <Button
+                    variant="outlined"
+                    disabled
+                    className="button"
+                    type="submit"
+                  >
+                    Reset Password
+                  </Button>
+                </Link>
               </div>
             </ValidatorForm>
             ;
