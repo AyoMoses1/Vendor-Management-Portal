@@ -495,7 +495,7 @@ const CustomerList = () => {
                     onPageChange(tableState.page)
                   }
                 },
-                rowsPerPageOptions: [10, 20, 40, 80, 100],
+                rowsPerPageOptions: [20, 40, 60, 80, 100],
                 rowsPerPage: size,
                 onChangeRowsPerPage: (x) => {
                   setSize(x)
