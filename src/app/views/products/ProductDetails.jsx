@@ -13,6 +13,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
+import ProductType from './components/ProductType'
 
 
 
@@ -21,7 +22,7 @@ const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
   ...theme.typography.body2,
   padding: theme.spacing(1),
-  
+
   color: theme.palette.text.secondary,
 }));
 
@@ -88,8 +89,8 @@ const ProductDetails = ({ location }) => {
     <div className='m-sm-30'>
       <div className='mb-sm-30'>
         <Grid container spacing={2}>
-          <Grid container spacing={2} item xs = {8}>
-            <Grid item xs = {12}>
+          <Grid container spacing={2} item xs={8}>
+            <Grid item xs={12}>
               <Grid item xs={12}>
                 <Item>
                   <Box
@@ -101,106 +102,54 @@ const ProductDetails = ({ location }) => {
                     noValidate
                     autoComplete="off"
                   >
-                      <FormControl sx={{  width: '100%' }} variant="outlined">
-                        <label>Product Name</label>
-                        <OutlinedInput
-                          id="outlined-adornment-weight"
-                          value={values.weight}
-                          
-                          onChange={() => handleChange()}
-                          aria-describedby="outlined-weight-helper-text"
-                          inputProps={{
-                            'aria-label': 'weight',
-                          }}
-                        />
-                      </FormControl>
-                      <FormControl sx={{ width: '100%' }} variant="outlined">
-                        <label>Short Description</label>
-                        <OutlinedInput
-                          id="outlined-adornment-weight"
-                          value={values.weight}
-                          onChange={() => handleChange()}
-                          multiline
-                          minRows={3}
-                          aria-describedby="outlined-weight-helper-text"
-                          inputProps={{
-                            'aria-label': 'weight',
-                          }}
-                        />
-                      </FormControl>
-                      <FormControl sx={{ width: '100%' }} variant="outlined">
-                        <label>Long Description</label>
-                        <OutlinedInput
-                          id="outlined-adornment-weight"
-                          value={values.weight}
-                          onChange={() => handleChange()}
-                          multiline
-                          minRows={8}
-                          aria-describedby="outlined-weight-helper-text"
-                          inputProps={{
-                            'aria-label': 'weight',
-                          }}
-                        />
-                      </FormControl>
+                    <FormControl sx={{ width: '100%' }} variant="outlined">
+                      <label>Product Name</label>
+                      <OutlinedInput
+                        id="outlined-adornment-weight"
+                        value={values.weight}
+
+                        onChange={() => handleChange()}
+                        aria-describedby="outlined-weight-helper-text"
+                        inputProps={{
+                          'aria-label': 'weight',
+                        }}
+                      />
+                    </FormControl>
+                    <FormControl sx={{ width: '100%' }} variant="outlined">
+                      <label>Short Description</label>
+                      <OutlinedInput
+                        id="outlined-adornment-weight"
+                        value={values.weight}
+                        onChange={() => handleChange()}
+                        multiline
+                        minRows={3}
+                        aria-describedby="outlined-weight-helper-text"
+                        inputProps={{
+                          'aria-label': 'weight',
+                        }}
+                      />
+                    </FormControl>
+                    <FormControl sx={{ width: '100%' }} variant="outlined">
+                      <label>Long Description</label>
+                      <OutlinedInput
+                        id="outlined-adornment-weight"
+                        value={values.weight}
+                        onChange={() => handleChange()}
+                        multiline
+                        minRows={8}
+                        aria-describedby="outlined-weight-helper-text"
+                        inputProps={{
+                          'aria-label': 'weight',
+                        }}
+                      />
+                    </FormControl>
                   </Box>
                 </Item>
               </Grid>
             </Grid>
             <Grid item xs={12}>
               <Item>
-                    <Box
-                      component="form"
-                      className='product--form2'
-                      sx={{
-                        '& .MuiTextField-root': { m: 1, width: '100%' },
-                      }}
-                      noValidate
-                      autoComplete="off"
-                    >
-                      <FormControl sx={{  width: '100%' }} variant="outlined">
-                        <div className='form--flex'>
-                          <label>Product Name</label>
-                          <OutlinedInput
-                            id="outlined-adornment-weight"
-                            value={values.weight}
-                            
-                            onChange={() => handleChange()}
-                            aria-describedby="outlined-weight-helper-text"
-                            inputProps={{
-                              'aria-label': 'weight',
-                            }}
-                          />
-                        </div>
-                      </FormControl>
-                      <FormControl sx={{ width: '100%' }} variant="outlined">
-                        <div className='form--flex'>
-                        <label>Short Description</label>
-                        <OutlinedInput
-                          id="outlined-adornment-weight"
-                          value={values.weight}
-                          onChange={() => handleChange()}
-                          aria-describedby="outlined-weight-helper-text"
-                          inputProps={{
-                            'aria-label': 'weight',
-                          }}
-                        />
-                        </div>
-                      </FormControl>
-                      <FormControl sx={{ width: '100%' }} variant="outlined">
-                        <div className='form--flex'>
-                        <label>Long Description</label>
-                        <OutlinedInput
-                          id="outlined-adornment-weight"
-                          value={values.weight}
-                          onChange={() => handleChange()}
-                          aria-describedby="outlined-weight-helper-text"
-                          inputProps={{
-                            'aria-label': 'weight',
-                          }}
-                        />
-                        </div>
-                      </FormControl>
-                  </Box>
+                <ProductType />
               </Item>
             </Grid>
             <Grid item xs={12}>
