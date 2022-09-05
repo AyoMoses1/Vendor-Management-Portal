@@ -45,25 +45,27 @@ class EnterNewPassword extends Component {
             <h6 className="new-password">Enter new password</h6>
             <ValidatorForm ref="form" onSubmit={this.handleFormSubmit}>
               <TextValidator
-                className="mb-24 w-100"
+                className="mb-24 w-100 input"
                 variant="outlined"
                 onChange={this.handleChange}
                 type="password"
                 name="password"
-                value={password}
+                size="small"
+                value={this.password}
                 validators={["required", "isPassword"]}
                 errorMessages={["this field is required", "password is not valid"]}
               />
               <p className="new-password">Re-enter new password </p>
               <TextValidator
-                className="mb-24 w-100 "
+                className="mb-24 w-100"
                 variant="outlined"
                 onChange={this.handleChange}
                 type="password"
                 name="password"
-                value={password}
+                size="small"
+                value={this.passwordVerify}
                 validators={["required", "isPassword"]}
-                errorMessages={["this field is required", "password is not valid"]}
+                errorMessages={["this field is required", "password does not match"]}
               />
               <div className="flex flex-middle">
                 <Link to="/password-created">

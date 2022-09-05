@@ -42,7 +42,7 @@ class EnterNewPassword extends Component {
           <div className="container">
             <h3 className="reset "> Password Created </h3>
             <p className="reset-word">Your password has been reset and you will be redirected to the log in page.</p>
-            <p className="word">Follow this link to be redirected manually.</p>
+            <p className="word">Follow this <Link className="text-link" to="/SignIn" >Link </Link> to be redirected manually.</p>
             
           </div>
         </Container>

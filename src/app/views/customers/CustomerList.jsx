@@ -111,7 +111,7 @@ const CustomerList = () => {
 
   const columns = [
     {
-      name: 'firstName', // field name in the row object
+      name: 'fullName', // field name in the row object
       label: 'Name', // column title that will be shown in table
       options: {
         filter: true,
@@ -128,8 +128,7 @@ const CustomerList = () => {
                 }}
                 className='ml-3'
               >
-                <h5 className='my-0 text-12 text-control'>{`${user?.firstName} ${user?.lastName}`}</h5>
-                <small className='text-muted'>{user?.email}</small>
+                <h5 className='my-0 text-12 text-control'>{`${user?.fullName} ${user?.lastName}`}</h5>
               </Link>
             </div>
           )
@@ -340,34 +339,36 @@ const CustomerList = () => {
     //     },
     //   },
     // },
-     {
-       name: 'action',
-       label: ' ',
-       options: {
-       filter: false,
-       customBodyRenderLite: (dataIndex) => {
-       let user = userList[dataIndex]
-        return (
-       <div className='flex items-center'>
-         <div className='flex-grow'></div>
-         <Link
-                to={{
-                  pathname: '/customer/edit',
-                  state: {
-                    id: user.id,
-                    user,
-                  },
-                }}
-             >
-                <IconButton>
-                 <Icon fontSize='small'>edit</Icon>
-                </IconButton>
-              </Link>
-            </div>
-          )
-        },
-      },
-    },
+
+    
+     //{
+       //name: 'action',
+       //label: ' ',
+       //options: {
+       //filter: false,
+       //customBodyRenderLite: (dataIndex) => {
+       //let user = userList[dataIndex]
+        //return (
+       //<div className='flex items-center'>
+         //<div className='flex-grow'></div>
+         //<Link
+            //to={{
+            //pathname: '/customer/edit',
+            //state: {
+            //id: user.id,
+            //user,
+            //},
+            //  }}
+             //>
+              //  <IconButton>
+                // <Icon fontSize='small'>edit</Icon>
+          // </IconButton>
+            //  </Link>
+            //</div>
+         // )
+       // },
+     // },
+    //},
 
     
     // {
