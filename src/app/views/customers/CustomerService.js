@@ -9,6 +9,7 @@ export const getAllCustomer = (setData, setCount, isLoading, setAlert, setSeveri
   http.get(source ? `/afrimash/customers/search?page=${page}&size=${size}&source=${source}&query=${query}&state=${state}` : `/afrimash/customers/search?page=${page}&size=${size}&query=${query}&state=${state}`).then(({ data }) => {
     if (data instanceof Object) {
       setData(data.object.content);
+      console.log(data.object.content, "ayo moses")
       setCount(data.object.totalElements);
       isLoading(false)
     } else {
