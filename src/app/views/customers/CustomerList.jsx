@@ -128,7 +128,7 @@ const CustomerList = () => {
                 }}
                 className='ml-3'
               >
-                <h5 className='my-0 text-12 text-control'>{`${user?.fullName} ${user?.lastName}`}</h5>
+                <h5 className='my-0 text-12 text-control'>{`${user?.fullName}`}</h5>
               </Link>
             </div>
           )
