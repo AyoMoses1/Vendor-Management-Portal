@@ -38,3 +38,52 @@
     color: #000000;
     font-size: 13px;
 }
+
+.product-type-input-end label {
+    text-decoration: underline;
+}
+
+.product-type-input-end.child-action {
+    display: flex;
+    align-items: center;
+}
+
+.product-type-input-end img {
+    height: 16px;
+    margin-right: 10px;
+}
+
+.salesPrice {
+    position: relative;
+}
+
+.schedule {
+    position: absolute;
+    font-size: 10px;
+    right: 0px;
+    bottom: 12%;
+    cursor: pointer;
+    text-decoration: underline;
+    color: #000000;
+    font-weight: 300;
+}
+
+.product-type-download {
+    margin-top: 24px;
+    position: relative;
+}
+
+.product-type-download div {
+    position: absolute;
+    top: 80%;
+    font-size: 8px;
+    color: #2F80ED;
+    font-weight: 300;
+}
+
+.product-gallery-save-btn {
+    background: #5E8C0F;
+    border-radius: 0;
+    padding: 2px 20px;
+    font-size: 12px;
+}

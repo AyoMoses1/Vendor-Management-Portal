@@ -14,6 +14,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import ProductType from './components/ProductType'
+import ProductGallery from './components/ProductGallery'
 
 
 
@@ -164,10 +165,9 @@ const ProductDetails = ({ location }) => {
               <Item>Regular Price</Item>
             </Grid>
             <Grid item xs={12}>
-              <Item>Sale Price</Item>
-            </Grid>
-            <Grid item xs={12}>
-              <Item>Coupons</Item>
+              <Item>
+                <ProductGallery />
+              </Item>
             </Grid>
           </Grid>
         </Grid>
