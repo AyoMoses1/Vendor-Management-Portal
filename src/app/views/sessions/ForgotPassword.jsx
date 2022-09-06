@@ -53,7 +53,7 @@ class ForgotPassword extends Component {
                 onChange={this.handleChange}
                 type="email"
                 name="email"
-                value={email}
+                placeholder={email}
                 validators={["required", "isEmail"]}
                 errorMessages={["this field is required", "email is not valid"]}
               />
