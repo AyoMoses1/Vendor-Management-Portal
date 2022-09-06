@@ -15,6 +15,7 @@ import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import ProductType from './components/ProductType'
 import ProductGallery from './components/ProductGallery'
+import ProductShipping from './components/ProductShipping'
 
 
 
@@ -162,7 +163,9 @@ const ProductDetails = ({ location }) => {
               <Item>Simple</Item>
             </Grid>
             <Grid item xs={12}>
-              <Item>Regular Price</Item>
+              <Item>
+                <ProductShipping />
+              </Item>
             </Grid>
             <Grid item xs={12}>
               <Item>
