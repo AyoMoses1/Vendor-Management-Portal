@@ -4,7 +4,6 @@ import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator'
 import { connect } from 'react-redux'
 import { PropTypes } from 'prop-types'
 import { withRouter } from 'react-router-dom'
-
 import Notification from 'app/components/Notification'
 
 import './style.scss'
@@ -51,68 +50,76 @@ class SignIn extends Component {
     return (
       <React.Fragment>
         <Sidebar />
-        <div className='contianer__auth'>
-          <div className='logo__container '>
-            <img height={200} width={120} src={afrimash2} alt='afrimash-logo' />
-          </div>
-          <h3 className='main__header'>Sign in to your workspace.</h3>
-          <h4 className='sub__header'>Enter your details below to continue</h4>
-          {this.props.login.error.errorCode && (
-            <Notification
-              alert={'Invalid email or password.'}
-              severity='error'
-            />
-          )}
-          <ValidatorForm ref='form' onSubmit={this.handleFormSubmit}>
-            <TextValidator
-              className='mt-20 mb-24 w-100'
-              variant='outlined'
-              label='Email'
-              onChange={this.handleChange}
-              type='email'
-              name='username'
-              value={username}
-              disabled={this.props.login.loading}
-              validators={['required', 'isEmail']}
-              errorMessages={['this field is required', 'User is not valid']}
-            />
-            <TextValidator
-              className='mb-16 w-100'
-              label='Password'
-              variant='outlined'
-              onChange={this.handleChange}
-              name='password'
-              disabled={this.props.login.loading}
-              type='password'
-              value={password}
-              validators={['required']}
-              errorMessages={['this field is required']}
-            />
-            <div className='wrapper__buttons w-100'>
-              <button
-                className='button__signin'
-                disabled={this.props.login.loading}
-                type='submit'
-              >
-                Sign In
-                {this.props.login.loading && (
-                  <CircularProgress
-                    size={24}
-                    className={classes.buttonProgress}
-                  />
-                )}
-              </button>
-              <button
-                className='outlined__button mt-10'
-                onClick={() => this.props.history.push('/forgot-password')}
-              >
-                Forgot password ?
-              </button>
+          <div className="contianer__auth">
+            <div className="logo__container ">
+              <img
+                height={200}
+                width={120}
+                src={afrimash2}
+                alt="afrimash-logo"
+              />
             </div>
-          </ValidatorForm>
-        </div>
+            <h3 className="main__header">Sign in to your workspace.</h3>
+            <h4 className="sub__header">
+              Enter your details below to continue
+            </h4>
+            {this.props.login.error.errorCode && (
+              <Notification
+                alert={"Invalid email or password."}
+                severity="error"
+              />
+            )}
+            <ValidatorForm ref="form" onSubmit={this.handleFormSubmit}>
+              <TextValidator
+                className="mt-20 mb-24 w-100"
+                variant="outlined"
+                label="Email"
+                onChange={this.handleChange}
+                type="email"
+                name="username"
+                value={username}
+                disabled={this.props.login.loading}
+                validators={["required", "isEmail"]}
+                errorMessages={["this field is required", "User is not valid"]}
+              />
+              <TextValidator
+                className="mb-16 w-100"
+                label="Password"
+                variant="outlined"
+                onChange={this.handleChange}
+                name="password"
+                disabled={this.props.login.loading}
+                type="password"
+                value={password}
+                validators={["required"]}
+                errorMessages={["this field is required"]}
+              />
+              <div className="wrapper__buttons w-100">
+                <button
+                  className="button__signin"
+                  disabled={this.props.login.loading}
+                  type="submit"
+                >
+                  Sign In
+                  {this.props.login.loading && (
+                    <CircularProgress
+                      size={24}
+                      className={classes.buttonProgress}
+                    />
+                  )}
+                </button>
+                <button
+                  className="outlined__button mt-10"
+                  onClick={() => this.props.history.push("/forgot-password")}
+                >
+                  Forgot password ?
+                </button>
+              </div>
+            </ValidatorForm>
+          </div>
+        
       </React.Fragment>
-    )
+    );
   }
 }
 

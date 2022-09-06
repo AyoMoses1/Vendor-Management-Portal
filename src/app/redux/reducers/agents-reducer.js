@@ -21,7 +21,10 @@ import {
   DELETE_AGENT_SUCCESS,
   TRANSFER_CUSTOMERS,
   TRANSFER_CUSTOMERS_FAILED,
-  TRANSFER_CUSTOMERS_SUCCESS
+  TRANSFER_CUSTOMERS_SUCCESS,
+  AGENT_TYPES,
+  AGENT_TYPES_FAILED,
+  AGENT_TYPES_SUCCESS
 } from '../actions/agents-action'
 
 const initialState = {
@@ -140,41 +143,41 @@ export const createAgentReducer = (state = { response: [], loading: false }, act
         response: action.payload,
         loading: false,
       }
-      default:
+    default:
       return state
   }
 }
 
-export const agentApplicationReducer = (state = {content: [], pageNumber:0, pageSize: 0, offset:0, loading: false}, action) => {
-  switch(action.type){
-    case GET_ALL_AGENT_APPLICATION: 
-    return {
-      ...state,
-      loading: true
-    }
-    case GET_ALL_AGENT_APPLICATION_SUCCESS: 
-    return {
-      ...state,
-      content: action.payload.content,
-      loading: false,
-      pageNumber: action.payload?.pageable?.pageNumber,
-      pageSize: action.payload?.pageable?.pageSize,
-      offset: action.payload?.pageable?.offset,
+export const agentApplicationReducer = (state = { content: [], pageNumber: 0, pageSize: 0, offset: 0, loading: false }, action) => {
+  switch (action.type) {
+    case GET_ALL_AGENT_APPLICATION:
+      return {
+        ...state,
+        loading: true
+      }
+    case GET_ALL_AGENT_APPLICATION_SUCCESS:
+      return {
+        ...state,
+        content: action.payload.content,
+        loading: false,
+        pageNumber: action.payload?.pageable?.pageNumber,
+        pageSize: action.payload?.pageable?.pageSize,
+        offset: action.payload?.pageable?.offset,
 
-    }
+      }
     case GET_ALL_AGENT_APPLICATION_FAILED:
       return {
         ...state,
         response: action.payload,
         loading: false,
       }
-      default:
+    default:
       return state
   }
 }
 
-export const agentApprovalReducer = (state = {loading: false, showSnackBar: false}, {type, payload}) => {
-  switch(type){
+export const agentApprovalReducer = (state = { loading: false, showSnackBar: false }, { type, payload }) => {
+  switch (type) {
     case APPROVE_AGENT_APPLICATION:
       return {
         ...state,
@@ -193,18 +196,18 @@ export const agentApprovalReducer = (state = {loading: false, showSnackBar: fals
         loading: false,
         showSnackBar: true
       }
-      default:
+    default:
       return state
   }
 }
 
-export const deleteAgentReducer = (state={loading: false, errMsg:'', data:''}, {type, payload}) => {
-  switch(type){
-    case DELETE_AGENT: 
-    return {
-      ...state,
-      loading: true
-    }
+export const deleteAgentReducer = (state = { loading: false, errMsg: '', data: '' }, { type, payload }) => {
+  switch (type) {
+    case DELETE_AGENT:
+      return {
+        ...state,
+        loading: true
+      }
     case DELETE_AGENT_SUCCESS:
       return {
         ...state,
@@ -217,13 +220,13 @@ export const deleteAgentReducer = (state={loading: false, errMsg:'', data:''}, {
         loading: false,
         errMsg: payload
       }
-      default:
-        return state
+    default:
+      return state
   }
 }
 
-export const transferCustomerReducer = (state={loading: false}, {type, payload}) => {
-  switch(type){
+export const transferCustomerReducer = (state = { loading: false }, { type, payload }) => {
+  switch (type) {
     case TRANSFER_CUSTOMERS:
       return {
         ...state,
@@ -231,6 +234,29 @@ export const transferCustomerReducer = (state={loading: false}, {type, payload})
       }
     case TRANSFER_CUSTOMERS_SUCCESS:
     case TRANSFER_CUSTOMERS_FAILED:
+      return {
+        ...state,
+        loading: false
+      }
+    default:
+      return state;
+  }
+}
+
+export const getAgentTypes = (state = { loading: false }, { type, payload }) => {
+  switch (type) {
+    case AGENT_TYPES:
+      return {
+        ...state,
+        loading: true
+      }
+    case AGENT_TYPES_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        agentTypes: payload
+      }
+    case AGENT_TYPES_FAILED:
       return {
         ...state,
         loading: false

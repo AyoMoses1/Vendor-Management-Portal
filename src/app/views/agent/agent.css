@@ -23,3 +23,8 @@
 .text-control {
     font-size: 14px;
 }
+
+.sources .MuiSelect-root {
+    padding: 12px;
+    font-size: 12px;
+}

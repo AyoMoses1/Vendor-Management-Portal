@@ -2,12 +2,13 @@ import React, { Component } from "react";
 import {
   Button,
   withStyles,
-  CircularProgress, Container
+  CircularProgress,
+  Container,
 } from "@material-ui/core";
 import { TextValidator, ValidatorForm } from "react-material-ui-form-validator";
 import { connect } from "react-redux";
 import { PropTypes } from "prop-types";
-import {  withRouter  } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import { resetPassword } from "../../redux/actions/LoginActions";
 import afrimash2 from "./assets/svg/afrimash2.0.svg";
 import "./Forgotpassword.scss";
@@ -15,22 +16,21 @@ import {Link} from "react-router-dom"
 
 
 
-
-class ForgotPassword extends Component {
+class EnterNewPassword extends Component {
   state = {
-    email: "Enter email here"
+    password: "Enter password here",
   };
-  handleChange = event => {
+  handleChange = (event) => {
     event.persist();
     this.setState({
-      [event.target.name]: event.target.value
+      [event.target.name]: event.target.value,
     });
   };
   handleFormSubmit = () => {
     this.props.resetPassword({ ...this.state });
   };
   render() {
-    let { email } = this.state;
+    let { password } = this.state;
 
     return (
       <div>
@@ -41,31 +41,41 @@ class ForgotPassword extends Component {
         <Container maxWidth="sm" className="flex flex-middle contain">
           <div className="container">
             <h3 className="reset"> Reset your Password </h3>
-            <p className="reset-text">
-              Enter the email address associated with your account and we’ll
-              send you a link to reset your password
-            </p>
-            <h6 className="mail">Email</h6>
+            <p className="reword">Enter your new password below.</p>
+            <h6 className="new-password">Enter new password</h6>
             <ValidatorForm ref="form" onSubmit={this.handleFormSubmit}>
               <TextValidator
-                className="mb-20 w-100"
+                className="mb-24 w-100 input"
                 variant="outlined"
                 onChange={this.handleChange}
-                type="email"
-                name="email"
-                value={email}
-                validators={["required", "isEmail"]}
-                errorMessages={["this field is required", "email is not valid"]}
+                type="password"
+                name="password"
+                size="small"
+                value={this.password}
+                validators={["required", "isPassword"]}
+                errorMessages={["this field is required", "password is not valid"]}
+              />
+              <p className="new-password">Re-enter new password </p>
+              <TextValidator
+                className="mb-24 w-100"
+                variant="outlined"
+                onChange={this.handleChange}
+                type="password"
+                name="password"
+                size="small"
+                value={this.passwordVerify}
+                validators={["required", "isPassword"]}
+                errorMessages={["this field is required", "password does not match"]}
               />
               <div className="flex flex-middle">
-                <Link to="/enter-new-password">
+                <Link to="/password-created">
                   <Button
                     variant="outlined"
                     disabled
                     className="button"
                     type="submit"
                   >
-                    Send Link
+                    Reset Password
                   </Button>
                 </Link>
               </div>
@@ -78,42 +88,11 @@ class ForgotPassword extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   resetPassword: PropTypes.func.isRequired,
-  login: state.login
+  login: state.login,
 });
 export default withRouter(
-  connect(
-    mapStateToProps,
-    { resetPassword }
-  )(ForgotPassword)
+  connect(mapStateToProps, { resetPassword })(EnterNewPassword)
 );
 
-
-
-/*
-<ValidatorForm ref="form" onSubmit={this.handleFormSubmit}>
-  <TextValidator
-    className="mb-24 w-100"
-    variant="outlined"
-    label="Email"
-    onChange={this.handleChange}
-    type="email"
-    name="email"
-    value={email}
-    validators={["required", "isEmail"]}
-    errorMessages={["this field is required", "email is not valid"]}
-  />
-  <div className="flex flex-middle">
-    <Button variant="contained" color="primary" type="submit">
-      Reset Password
-    </Button>
-    <span className="ml-16 mr-8">or</span>
-    <Button
-      className="capitalize"
-      onClick={() => this.props.history.push("/signin")}
-    >
-      Sign in
-    </Button>
-  </div>
-</ValidatorForm>; */
