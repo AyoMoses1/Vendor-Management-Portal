@@ -155,7 +155,7 @@ const ProductDetails = ({ location, placeholder }) => {
                 </Item>
               </Grid>
             </Grid>
-            <Grid item xs={12}>
+            {/* <Grid item xs={12}>
               <Item>
                 <ProductType />
               </Item>
@@ -177,7 +177,7 @@ const ProductDetails = ({ location, placeholder }) => {
               <Item>
                 <ProductGallery />
               </Item>
-            </Grid>
+            </Grid> */}
           </Grid>
         </Grid>
       </div>
