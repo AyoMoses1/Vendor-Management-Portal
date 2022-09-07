@@ -1,5 +1,20 @@
 import moment from "moment";
 
+const months = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
+];
+
 export const convertHexToRGB = (hex) => {
   // check if it's a rgba
   if (hex.match('rgba')) {
@@ -185,4 +200,12 @@ export const formatDate = (date) => {
     return { dates, time }
   }
   return date;
+}
+
+export const formatFullDate = (date) => {
+  const dd = new Date(date);
+  const y = dd.getFullYear();
+  const m = dd.getMonth();
+  const d = dd.getDate().toString();
+  return `${d} ${months[m]}, ${y}`;
 }
