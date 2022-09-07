@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import './shared.css'
 import Box from '@mui/material/Box';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import FormControl from '@mui/material/FormControl';
-import { Checkbox, Grid, MenuItem, TextField } from '@material-ui/core';
+import { Checkbox, Grid, InputAdornment, MenuItem, TextField } from '@material-ui/core';
 
 const productTypes = [
     {
@@ -83,13 +81,20 @@ const ProductType = () => {
                     <Grid item lg={9} md={9} sm={12} xs={12}>
                         <div className='product-types'>
                             <TextField
+                                InputProps={{
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                            <img src="/assets/icon/naira.svg" alt="naira" style={{ height: '32px' }} />
+                                        </InputAdornment>
+                                    )
+                                }}
                                 onChange={(e, newValues) => { }}
                                 // value={values.regularPrice}
                                 name='regularPrice'
                                 id='regularPrice'
                                 defaultValue=''
                                 margin='normal'
-                                type='text'
+                                type='number'
                                 variant='outlined'
                                 placeholder='Enter Price'
                             />
@@ -104,13 +109,20 @@ const ProductType = () => {
                     <Grid item lg={9} md={9} sm={12} xs={12} className={"salesPrice"}>
                         <div className='product-types mb-4'>
                             <TextField
+                                InputProps={{
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                            <img src="/assets/icon/naira.svg" alt="naira" style={{ height: '32px' }} />
+                                        </InputAdornment>
+                                    )
+                                }}
                                 onChange={(e, newValues) => { }}
                                 // value={values.salesPrice}
                                 name='salesPrice'
                                 id='salesPrice'
                                 defaultValue=''
                                 margin='normal'
-                                type='text'
+                                type='number'
                                 variant='outlined'
                                 placeholder='Enter Price'
                             />

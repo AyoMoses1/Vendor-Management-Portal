@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import './shared.css'
 import Box from '@mui/material/Box';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import FormControl from '@mui/material/FormControl';
-import { Button, Checkbox, Grid, MenuItem, TextField } from '@material-ui/core';
+import { Button, Grid, MenuItem, TextField } from '@material-ui/core';
 
 const shippingClasses = [
     {
@@ -13,25 +11,8 @@ const shippingClasses = [
 ]
 
 const ProductShipping = () => {
-    const [shippingClass, setShippingClass] = useState('RABBIT_CAGE')
-    const [values, setValues] = React.useState({
-        name: '',
-        coupons: '',
-        longDescription: '',
-        weightRange: '',
-        showPassword: false,
-    });
+    const [shippingClass, setShippingClass] = useState('RABBIT_CAGE');
 
-    const [state, setState] = React.useState({ gilad: false });
-    const { gilad } = state;
-
-    const handleChange = (event) => {
-        // setValue(event.target.value);
-    };
-
-    const handleCheck = name => event => {
-        setState({ ...state, [name]: event.target.checked });
-    };
 
     return <Box
         component="form"
@@ -57,7 +38,7 @@ const ProductShipping = () => {
                         id='salesPrice'
                         defaultValue=''
                         margin='normal'
-                        type='text'
+                        type='number'
                         variant='outlined'
                         placeholder='Enter Weight'
                         className='m-0'
@@ -74,7 +55,7 @@ const ProductShipping = () => {
                                 id='salesPrice'
                                 defaultValue=''
                                 margin='normal'
-                                type='text'
+                                type='number'
                                 variant='outlined'
                                 placeholder='Length'
                                 className='m-0'
@@ -90,7 +71,7 @@ const ProductShipping = () => {
                                 id='salesPrice'
                                 defaultValue=''
                                 margin='normal'
-                                type='text'
+                                type='number'
                                 variant='outlined'
                                 placeholder='Width'
                                 className='m-0'
@@ -106,7 +87,7 @@ const ProductShipping = () => {
                                 id='salesPrice'
                                 defaultValue=''
                                 margin='normal'
-                                type='text'
+                                type='number'
                                 variant='outlined'
                                 placeholder='Height'
                                 className='m-0'

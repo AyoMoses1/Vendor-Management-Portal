@@ -115,7 +115,7 @@
 
 .product-gallery-image-container {
     width: 100%;
-    height: 100px;
+    /* height: 100px; */
     border-radius: 6px;
 }
 
@@ -181,6 +181,21 @@
 
 .product-shipping-weight fieldset {
     border-color: #B3DAB9;
+}
+
+/* Chrome, Safari, Edge, Opera */
+.product-shipping-weight input::-webkit-outer-spin-button,
+.product-shipping-weight input::-webkit-inner-spin-button,
+.product-types input::-webkit-outer-spin-button,
+.product-types input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+.product-shipping-weight input[type=number],
+.product-types input[type=number] {
+    -moz-appearance: textfield;
 }
 
 .product-shipping-weight {

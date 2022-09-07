@@ -1,41 +1,24 @@
 import React, { useState, useEffect } from 'react'
 import './shared.css'
 import Box from '@mui/material/Box';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import FormControl from '@mui/material/FormControl';
-import { Button, Checkbox, Grid, MenuItem, TextField } from '@material-ui/core';
+import { Button, Grid } from '@material-ui/core';
 
-const productTypes = [
+const files = [
     {
-        type: 'Simple',
-        value: 'SIMPLE',
+        id: 1,
+        file: '/assets/images/gallery1.png'
     },
     {
-        type: 'Complex',
-        value: 'COMPLEX',
+        id: 2,
+        file: '/assets/images/gallery2.png'
     },
 ]
 
 const ProductGallery = () => {
-    const [productType, setProductType] = useState('SIMPLE')
-    const [values, setValues] = React.useState({
-        name: '',
-        coupons: '',
-        longDescription: '',
-        weightRange: '',
-        showPassword: false,
-    });
-
-    const [state, setState] = React.useState({ gilad: false });
-    const { gilad } = state;
-
-    const handleChange = (event) => {
-        // setValue(event.target.value);
-    };
-
-    const handleCheck = name => event => {
-        setState({ ...state, [name]: event.target.checked });
-    };
+    const [displayImage, setDisplayImage] = useState(0);
+    const [displayVideo, setDisplayVideo] = useState(0);
+    const [images, setImages] = useState(files)
+    const [videos, setVideos] = useState(files)
 
     return <Box
         component="form"
@@ -55,34 +38,23 @@ const ProductGallery = () => {
                 <div className='product-details-subs'>Product Images</div>
                 <div className='product-gallery-images-frame'>
                     <Grid container spacing={3} style={{ marginTop: '2px' }}>
-                        <Grid item lg={4} md={4} sm={4} xs={4}>
+                        {images.map((_image, i) => <Grid key={i + 'image'} item lg={4} md={4} sm={4} xs={4}>
                             <div className='product-gallery-image-frame'>
                                 <div className='product-gallery-image-container'>
-                                    <img src='/assets/images/gallery1.png' />
+                                    <img src={_image.file} />
                                 </div>
                                 <div className='gallery-base'>
-                                    <div>Display Photo</div>
+                                    <div onClick={() => {
+                                        if (i !== displayImage)
+                                            setDisplayImage(i)
+                                    }} className={i === displayImage ? '' : 'action-item'}>{i === displayImage ? 'Display Photo' : 'Set as display'}</div>
                                     <img src='/assets/icon/delete-basket.svg' />
                                 </div>
                                 <div className='gallery-base'>
                                     <div className='action-item'>View</div>
                                 </div>
                             </div>
-                        </Grid>
-                        <Grid item lg={4} md={4} sm={4} xs={4}>
-                            <div className='product-gallery-image-frame'>
-                                <div className='product-gallery-image-container'>
-                                    <img src='/assets/images/gallery2.png' />
-                                </div>
-                                <div className='gallery-base'>
-                                    <div className='action-item'>Set as display</div>
-                                    <img src='/assets/icon/delete-basket.svg' />
-                                </div>
-                                <div className='gallery-base'>
-                                    <div className='action-item'>View</div>
-                                </div>
-                            </div>
-                        </Grid>
+                        </Grid>)}
                         <Grid item lg={4} md={4} sm={4} xs={4}>
                             <div className='product-gallery-image-blank'>
                                 <div className='gallery-add'>
@@ -98,39 +70,28 @@ const ProductGallery = () => {
                 <div className='product-details-subs'>Videos</div>
                 <div className='product-gallery-images-frame'>
                     <Grid container spacing={3} style={{ marginTop: '2px' }}>
-                        <Grid item lg={4} md={4} sm={4} xs={4}>
+                        {videos.map((_video, i) => <Grid key={i + 'image'} item lg={4} md={4} sm={4} xs={4}>
                             <div className='product-gallery-image-frame'>
                                 <div className='product-gallery-image-container'>
-                                    <img src='/assets/images/gallery1.png' />
+                                    <img src={_video.file} />
                                 </div>
                                 <div className='gallery-base'>
-                                    <div>Display Photo</div>
+                                    <div onClick={() => {
+                                        if (i !== displayVideo)
+                                            setDisplayVideo(i)
+                                    }} className={i === displayVideo ? '' : 'action-item'}>{i === displayVideo ? 'Display Photo' : 'Set as display'}</div>
                                     <img src='/assets/icon/delete-basket.svg' />
                                 </div>
                                 <div className='gallery-base'>
                                     <div className='action-item'>View</div>
                                 </div>
                             </div>
-                        </Grid>
-                        <Grid item lg={4} md={4} sm={4} xs={4}>
-                            <div className='product-gallery-image-frame'>
-                                <div className='product-gallery-image-container'>
-                                    <img src='/assets/images/gallery2.png' />
-                                </div>
-                                <div className='gallery-base'>
-                                    <div className='action-item'>Set as display</div>
-                                    <img src='/assets/icon/delete-basket.svg' />
-                                </div>
-                                <div className='gallery-base'>
-                                    <div className='action-item'>View</div>
-                                </div>
-                            </div>
-                        </Grid>
+                        </Grid>)}
                         <Grid item lg={4} md={4} sm={4} xs={4}>
                             <div className='product-gallery-image-blank'>
                                 <div className='gallery-add'>
                                     <img src='/assets/icon/gallery-add.svg' />
-                                    <div>Add Image</div>
+                                    <div>Add Video</div>
                                 </div>
                             </div>
                         </Grid>
