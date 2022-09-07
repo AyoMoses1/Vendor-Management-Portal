@@ -1,0 +1,203 @@
+.product-details-title {
+    font-weight: 500;
+    font-size: 14px;
+    color: #000000;
+}
+
+.product-details-subs {
+    color: #000000;
+}
+
+.product-details-subs-light {
+    color: #000000;
+    font-weight: 300;
+}
+
+.product-type-box {
+    padding: 4px 6px;
+}
+
+.product-types,
+.product-shipping-weight {
+    width: 100%;
+}
+
+.product-types .MuiSelect-root {
+    padding: 14px;
+}
+
+.product-types .MuiInputBase-input {
+    padding: 14px;
+}
+
+.product-types fieldset {
+    border-color: #B3DAB9;
+}
+
+.product-type-input-container {
+    display: flex;
+    align-items: center;
+}
+
+.product-type-input-label {
+    font-weight: 300;
+    color: #000000;
+    font-size: 12px;
+}
+
+.product-type-input-end {
+    display: flex;
+    justify-content: flex-end;
+    font-weight: 300;
+    color: #000000;
+    font-size: 13px;
+}
+
+.product-type-input-end label {
+    text-decoration: underline;
+}
+
+.product-type-input-end.child-action {
+    display: flex;
+    align-items: center;
+}
+
+.product-type-input-end img {
+    height: 16px;
+    margin-right: 10px;
+}
+
+.salesPrice {
+    position: relative;
+}
+
+.schedule {
+    position: absolute;
+    font-size: 10px;
+    right: 0px;
+    bottom: 12%;
+    cursor: pointer;
+    text-decoration: underline;
+    color: #000000;
+    font-weight: 300;
+}
+
+.product-type-download {
+    margin-top: 24px;
+    position: relative;
+}
+
+.product-type-download div {
+    position: absolute;
+    top: 80%;
+    font-size: 8px;
+    color: #2F80ED;
+    font-weight: 300;
+}
+
+.product-gallery-save-btn {
+    background: #5E8C0F;
+    border-radius: 0;
+    padding: 2px 20px;
+    font-size: 12px;
+}
+
+.product-gallery-images-frame {
+    background: #D9D9D91A;
+    padding: 0 10px;
+    border-radius: 6px;
+}
+
+.product-gallery-image-frame {
+    border-radius: 6px;
+    background: #ffffff;
+}
+
+.product-gallery-image-container {
+    width: 100%;
+    /* height: 100px; */
+    border-radius: 6px;
+}
+
+.product-gallery-image-container img {
+    height: 100%;
+    width: 100%;
+    border-radius: 6px;
+}
+
+.gallery-base {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 4px;
+}
+
+.gallery-base div {
+    font-size: 7px;
+}
+
+.gallery-base img {
+    height: 10px;
+    cursor: pointer;
+}
+
+.action-item {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.gallery-add {
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    flex-direction: column;
+}
+
+.gallery-add img {
+    height: 70px;
+}
+
+.gallery-add div {
+    font-size: 10px;
+}
+
+.product-gallery-image-blank {
+    width: 100%;
+    height: 100px;
+    background: #FFFFFF;
+    border: 0.512px solid #DEDEDE;
+    border-radius: 5.12px;
+}
+
+.product-shipping-weight .MuiInputBase-input {
+    padding: 14px;
+}
+
+.product-shipping-weight .MuiSelect-root {
+    padding: 14px;
+}
+
+.product-shipping-weight fieldset {
+    border-color: #B3DAB9;
+}
+
+/* Chrome, Safari, Edge, Opera */
+.product-shipping-weight input::-webkit-outer-spin-button,
+.product-shipping-weight input::-webkit-inner-spin-button,
+.product-types input::-webkit-outer-spin-button,
+.product-types input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+.product-shipping-weight input[type=number],
+.product-types input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.product-shipping-weight {
+    margin-top: 4px;
+}

@@ -10,6 +10,7 @@ const routes = {
     ussdPickupCenters: '/afrimash/pickup-centers',
     shippingState: '/afrimash/shipping-states',
     specialOrders: '/afrimash/special-orders/search',
+    agentTypes: '/afrimash/agents/types'
 }
 
 export default routes;

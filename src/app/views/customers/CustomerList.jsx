@@ -5,13 +5,12 @@ import { Grow, Icon, IconButton, TextField, Button, MenuItem } from '@material-u
 import { Link } from 'react-router-dom'
 import Loading from 'matx/components/MatxLoadable/Loading'
 import './customer-view.css'
-// import { deleteUser } from '../user-management/UserService'
-import { useDialog } from 'muibox'
-
+import { states } from '../../../utils/states';
 import Notification from '../../components/Notification'
 import { filterAllCustomer, getAllCustomer } from './CustomerService';
 import { getCustomerStatistics } from '../dashboard/DashboardService'
 import { debounce } from 'lodash'
+states.unshift('All');
 
 const CustomerList = () => {
   const [isAlive, setIsAlive] = useState(true)
@@ -21,6 +20,7 @@ const CustomerList = () => {
   const [alert, setAlert] = useState('')
   const [severity, setSeverity] = useState('')
   const [source, setSource] = useState('ALL')
+  const [state, setState] = useState('All')
   const [title, setTitle] = useState('All Customers')
   const [count, setCount] = useState(0)
   const [page, setPage] = useState(0)
@@ -81,10 +81,12 @@ const CustomerList = () => {
 
   useEffect(() => {
     const _source = source === 'ALL' ? '' : source;
-    getAllCustomer(setUserList, setCount, isLoading, setAlert, setSeverity, size, page, _source, query)
+    const _state = state === 'All' ? '' : state;
+    getAllCustomer(setUserList, setCount, isLoading, setAlert, setSeverity, size, page, _source, query, _state)
+    
     return () => setIsAlive(false)
-  }, [isAlive, source, size]);
-
+  }, [isAlive, source, size, state]);
+  
   useEffect(() => {
     getCustomerStatistics(setStatistics);
   }, [])
@@ -98,17 +100,18 @@ const CustomerList = () => {
         setTotal(tempTotal);
       }
     }
-  }, [statistics, source])
+  }, [statistics, source, state])
 
   const onPageChange = (page) => {
     const _source = source === 'ALL' ? '' : source;
-    getAllCustomer(setUserList, setCount, isLoading, setAlert, setSeverity, size, page, _source, query)
+    const _state = state === 'All' ? '' : state;
+    getAllCustomer(setUserList, setCount, isLoading, setAlert, setSeverity, size, page, _source, query, _state)
     setPage(page)
   }
 
   const columns = [
     {
-      name: 'firstName', // field name in the row object
+      name: 'fullName', // field name in the row object
       label: 'Name', // column title that will be shown in table
       options: {
         filter: true,
@@ -125,39 +128,14 @@ const CustomerList = () => {
                 }}
                 className='ml-3'
               >
-                <h5 className='my-0 text-12 text-control'>{`${user?.firstName} ${user?.lastName}`}</h5>
-                <small className='text-muted'>{user?.email}</small>
+                <h5 className='my-0 text-12 text-control'>{`${user?.fullName}`}</h5>
               </Link>
             </div>
           )
         },
       },
     },
-    {
-      name: 'address',
-      label: 'Address',
-      options: {
-        filter: true,
-        customBodyRenderLite: (dataIndex) => {
-          let user = userList[dataIndex]
-          return (
-            <div className='flex items-center'>
-              <Link
-                to={{
-                  pathname: '/customer/details',
-                  state: {
-                    id: user.id,
-                  },
-                }}
-                className='ml-3'
-              >
-                <h6 className='my-0 text-muted'>{user.address || '-----'}</h6>
-              </Link>
-            </div>
-          )
-        },
-      },
-    },
+    
     {
       name: 'mobileNo',
       label: 'Phone Number',
@@ -183,6 +161,62 @@ const CustomerList = () => {
         },
       },
     },
+
+    {
+      name: 'email',
+      label: 'Email',
+      options: {
+        filter: true,
+        customBodyRenderLite: (dataIndex) => {
+          let user = userList[dataIndex]
+          return (
+            <div className='flex items-center'>
+              <Link
+                to={{
+                  pathname: '/customer/details',
+                  state: {
+                    id: user.id,
+                  },
+                }}
+                className='ml-3'
+              >
+                <h6 className='my-0 text-muted'>{user.email || '-----'}</h6>
+              </Link>
+            </div>
+          )
+        },
+      },
+    },
+
+    {
+      name: 'dateRegistered',
+      label: 'Date Registered',
+      options: {
+        filter: true,
+        customBodyRenderLite: (dataIndex) => {
+          let user = userList[dataIndex]
+          return (
+            <div className='flex items-center'>
+              <Link
+                to={{
+                  pathname: '/customer/details',
+                  state: {
+                    id: user.id,
+                  },
+                }}
+                className='ml-3'
+              >
+                <h5 className='my-0 text-muted'>
+                  {' '}
+                  {user.dateRegistered || '-----'}
+                </h5>
+              </Link>
+            </div>
+          )
+        },
+      },
+    },
+
     {
       name: 'lastActivity',
       label: 'Last Active',
@@ -211,6 +245,59 @@ const CustomerList = () => {
         },
       },
     },
+
+    {
+      name: 'creditSpent',
+      label: 'Total Spend',
+      options: {
+        filter: true,
+        customBodyRenderLite: (dataIndex) => {
+          let user = userList[dataIndex]
+          return (
+            <div className='flex items-center'>
+              <Link
+                to={{
+                  pathname: '/customer/details',
+                  state: {
+                    id: user.id,
+                  },
+                }}
+                className='ml-3'
+              >
+                <h6 className='my-0 text-muted'>{user.creditSpent || '-----'}</h6>
+              </Link>
+            </div>
+          )
+        },
+      },
+    },
+
+    {
+      name: 'creditLimit',
+      label: 'AOV',
+      options: {
+        filter: true,
+        customBodyRenderLite: (dataIndex) => {
+          let user = userList[dataIndex]
+          return (
+            <div className='flex items-center'>
+              <Link
+                to={{
+                  pathname: '/customer/details',
+                  state: {
+                    id: user.id,
+                  },
+                }}
+                className='ml-3'
+              >
+                <h6 className='my-0 text-muted'>{user.creditLimit || '-----'}</h6>
+              </Link>
+            </div>
+          )
+        },
+      },
+    },
+
     // {
     //   name: 'delete',
     //   label: ' ',
@@ -252,34 +339,38 @@ const CustomerList = () => {
     //     },
     //   },
     // },
-    {
-      name: 'action',
-      label: ' ',
-      options: {
-        filter: false,
-        customBodyRenderLite: (dataIndex) => {
-          let user = userList[dataIndex]
-          return (
-            <div className='flex items-center'>
-              <div className='flex-grow'></div>
-              <Link
-                to={{
-                  pathname: '/customer/edit',
-                  state: {
-                    id: user.id,
-                    user,
-                  },
-                }}
-              >
-                <IconButton>
-                  <Icon fontSize='small'>edit</Icon>
-                </IconButton>
-              </Link>
-            </div>
-          )
-        },
-      },
-    },
+
+    
+     //{
+       //name: 'action',
+       //label: ' ',
+       //options: {
+       //filter: false,
+       //customBodyRenderLite: (dataIndex) => {
+       //let user = userList[dataIndex]
+        //return (
+       //<div className='flex items-center'>
+         //<div className='flex-grow'></div>
+         //<Link
+            //to={{
+            //pathname: '/customer/edit',
+            //state: {
+            //id: user.id,
+            //user,
+            //},
+            //  }}
+             //>
+              //  <IconButton>
+                // <Icon fontSize='small'>edit</Icon>
+          // </IconButton>
+            //  </Link>
+            //</div>
+         // )
+       // },
+     // },
+    //},
+
+    
     // {
     //   name: 'id', // field name in the row object
     //   label: '', // column title that will be shown in table
@@ -309,11 +400,12 @@ const CustomerList = () => {
 
   const debouncedCustomers = debounce(value => {
     const _source = source === 'ALL' ? '' : source;
+    const _state = state === 'All' ? '' : state;
     if (value.length > 0) {
-      filterAllCustomer(setUserList, setCount, setAlert, setSeverity, size, page, _source, value);
+      filterAllCustomer(setUserList, setCount, setAlert, setSeverity, size, page, _source, value, _state);
       setQuery(value);
     } else {
-      filterAllCustomer(setUserList, setCount, setAlert, setSeverity, size, page, _source, '');
+      filterAllCustomer(setUserList, setCount, setAlert, setSeverity, size, page, _source, '', _state);
       setQuery('');
     }
   }, 700);
@@ -364,6 +456,25 @@ const CustomerList = () => {
                       ))}
                     </TextField>
                   </div>
+                  <div className='w-220 flex-end sources ml-4'>
+                    <TextField
+                      className='mb-4'
+                      name='mobileNo'
+                      label='Filter by location'
+                      variant='outlined'
+                      margin='normal'
+                      select
+                      fullWidth
+                      value={state}
+                      onChange={(e) => { setState(e.target.value) }}
+                    >
+                      {states.map((s, idx) => (
+                        <MenuItem key={idx} value={s}>
+                          {s}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </div>
                 </div>
               </div>}
               data={userList}
@@ -384,7 +495,7 @@ const CustomerList = () => {
                     onPageChange(tableState.page)
                   }
                 },
-                rowsPerPageOptions: [10, 20, 40, 80, 100],
+                rowsPerPageOptions: [20, 40, 60, 80, 100],
                 rowsPerPage: size,
                 onChangeRowsPerPage: (x) => {
                   setSize(x)
@@ -419,7 +530,9 @@ const CustomerList = () => {
                             <IconButton onClick={() => {
                               hideSearch();
                               const _source = source === 'ALL' ? '' : source;
-                              filterAllCustomer(setUserList, setCount, setAlert, setSeverity, size, page, _source, '');
+                              const _state = state === 'All' ? '' : state;
+                              filterAllCustomer(setUserList, setCount, setAlert, setSeverity, size, page, _source, '', _state);
+                              setQuery('');
                             }}>
                               <Icon fontSize='small'>clear</Icon>
                             </IconButton>
