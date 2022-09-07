@@ -89,6 +89,7 @@ function NewProduct({ isNewProduct, id, Product }) {
   const [shippinClasses, setShippingClasses] = React.useState([]);
   const [loading, setLoading] = useState(false);
   const [category, setCategory] = useState([])
+  const [shippingC, setShippingC]= useState("")
 
   const [alertData, setAlertData] = useState({ success: false, text: '', title: '' });
   const [isOpen, setIsOpen] = React.useState(false)
@@ -154,10 +155,12 @@ function NewProduct({ isNewProduct, id, Product }) {
       getProductById(id).then(({ data }) => {
         setState(data.object);
         setValues(data.object);
+        console.log(data.object, "test shipping class")
+        setShippingC(data.object.status)
       });
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [acceptedFiles, id, isNewProduct]);
+  }, [acceptedFiles, id, isNewProduct, shippingC]);
 
   const handleSelect = (newValue, fieldName) => {
     const { id } = newValue;
@@ -381,11 +384,31 @@ function NewProduct({ isNewProduct, id, Product }) {
                     />
                   )}
                 />
-
+                <TextField
+                  className='mb-4'
+                  name='shippingClass'
+                  label='Select Shipping Class'
+                  variant='outlined'
+                  value = {values.status}
+                  fullWidth
+                  select
+                  margin='normal'
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  error={Boolean(touched.productType && errors.productType)}
+                  helperText={touched.productType && errors.productType}
+                >
+                  {productTypes.sort().map((productType) => (
+                    <MenuItem value={productType} key={productType}>
+                      {productType}
+                    </MenuItem>
+                  ))}
+                </TextField>
                 <Autocomplete
                   id='shippingClass'
                   name='shippingClass'
                   options={shippinClasses}
+                  value={values.shippingClass?.name}
                   getOptionLabel={(option) => option.name}
                   getOptionSelected={(option, value) => option.id === value.id}
                   onChange={(event, newValue) =>

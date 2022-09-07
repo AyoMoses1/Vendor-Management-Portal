@@ -334,34 +334,34 @@ const Products = () => {
     //     },
     //   },
     // },
-    // {
-    //   name: 'action',
-    //   label: ' ',
-    //   options: {
-    //     filter: false,
-    //     customBodyRenderLite: (dataIndex) => {
-    //       let product = products[dataIndex];
-    //       return (
-    //         <div className='flex items-center'>
-    //           <div className='flex-grow'></div>
-    //           <Link
-    //             to={{
-    //               pathname: '/product/edit',
-    //               state: {
-    //                 id: product.id,
-    //                 product,
-    //               },
-    //             }}
-    //           >
-    //             <IconButton>
-    //               <Icon>edit</Icon>
-    //             </IconButton>
-    //           </Link>
-    //         </div>
-    //       );
-    //     },
-    //   },
-    // },
+    {
+      name: 'action',
+      label: ' ',
+      options: {
+        filter: false,
+        customBodyRenderLite: (dataIndex) => {
+          let product = products[dataIndex];
+          return (
+            <div className='flex items-center'>
+              <div className='flex-grow'></div>
+              <Link
+                to={{
+                  pathname: '/product/edit',
+                  state: {
+                    id: product.id,
+                    product,
+                  },
+                }}
+              >
+                <IconButton>
+                  <Icon>edit</Icon>
+                </IconButton>
+              </Link>
+            </div>
+          );
+        },
+      },
+    },
     // {
     //   name: 'id', // field name in the row object
     //   label: '', // column title that will be shown in table
