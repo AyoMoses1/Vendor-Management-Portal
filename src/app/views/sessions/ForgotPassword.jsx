@@ -16,9 +16,10 @@ import {Link} from "react-router-dom"
 
 
 
+
 class ForgotPassword extends Component {
   state = {
-    email: "Enter email here"
+    email: "Enter email here", 
   };
   handleChange = event => {
     event.persist();
@@ -29,8 +30,13 @@ class ForgotPassword extends Component {
   handleFormSubmit = () => {
     this.props.resetPassword({ ...this.state });
   };
+
   render() {
     let { email } = this.state;
+
+
+    
+
 
     return (
       <div>
@@ -58,7 +64,7 @@ class ForgotPassword extends Component {
                 errorMessages={["this field is required", "email is not valid"]}
               />
               <div className="flex flex-middle">
-                <Link to="/enter-new-password">
+                <Link to="">
                   <Button
                     variant="outlined"
                     disabled
