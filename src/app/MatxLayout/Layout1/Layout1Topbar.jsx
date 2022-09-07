@@ -75,33 +75,39 @@ class Layout1Topbar extends Component {
 
   render() {
     let { theme, settings, className, style } = this.props
-    const topbarTheme =
-      settings.themes[settings.layout1Settings.topbar.theme] || theme
-    const userName = JSON.parse(localStorage.getItem("auth_user"))
+    const topbarTheme = settings.themes[settings.layout1Settings.topbar.theme] || theme
+    const username = JSON.parse(localStorage.getItem("auth_user"))
+
+    const date = new Date();
+    const hour = date.getHours();
+    const greeting = "Good" +" " + (hour >= 12 ? hour >= 16 ?" Evening," : " Afternoon," : "Morning,");
+
+
     return (
       <MuiThemeProvider theme={topbarTheme}>
-        <div className='topbar'>
+        <div className="topbar">
           <div
-            className={`topbar-hold ${className}`}
-            style={Object.assign({}, { backgroundColor: ' #0F4E08' }, style)}
+            style={Object.assign({}, { backgroundColor: " #0F4E08" }, style)}
           >
-            <div className='flex flex-space-between flex-middle h-100'>
-              <div className='flex'>
+            <div className="flex flex-space-between flex-middle h-100">
+              <div className="flex">
                 <IconButton
                   onClick={this.handleSidebarToggle}
-                  className='hide-on-lg'
+                  className="hide-on-lg"
                 >
                   <Icon>menu</Icon>
                 </IconButton>
               </div>
-              <div className='flex flex-middle'>
-                <div className="username" style={{color:'#fff'}}>{`Hello ${userName?.firstName} ${userName?.lastName}`}</div>
+              <div className="flex flex-middle">
+                <div className="username" style={{ color: "#fff" }}>
+                  {`${greeting} ${username?.username}`}
+                </div>
                 <MatxMenu
                   menuButton={
                     <IconButtonWhite
-                      aria-label='Delete'
-                      className='mx-8 text-middle circular-image-small cursor-pointer'
-                      size='small'
+                      aria-label="Delete"
+                      className="mx-8 text-middle circular-image-small cursor-pointer"
+                      size="small"
                     >
                       <IconSmall>person</IconSmall>
                     </IconButtonWhite>
@@ -113,31 +119,31 @@ class Layout1Topbar extends Component {
                   }
                 >
                   <MenuItem style={{ minWidth: 185 }}>
-                    <Link className='flex flex-middle' to='/'>
+                    <Link className="flex flex-middle" to="/">
                       <Icon> home </Icon>
-                      <span className='pl-16'> Home </span>
+                      <span className="pl-16"> Home </span>
                     </Link>
                   </MenuItem>
                   <MenuItem style={{ minWidth: 185 }}>
-                    <Link className='flex flex-middle' to='/user-profile'>
+                    <Link className="flex flex-middle" to="/user-profile">
                       <Icon> person </Icon>
-                      <span className='pl-16'> Profile </span>
+                      <span className="pl-16"> Profile </span>
                     </Link>
                   </MenuItem>
                   <MenuItem
-                    className='flex flex-middle'
+                    className="flex flex-middle"
                     style={{ minWidth: 185 }}
                   >
                     <Icon> settings </Icon>
-                    <span className='pl-16'> Settings </span>
+                    <span className="pl-16"> Settings </span>
                   </MenuItem>
                   <MenuItem
                     onClick={this.handleSignOut}
-                    className='flex flex-middle'
+                    className="flex flex-middle"
                     style={{ minWidth: 185 }}
                   >
                     <Icon> power_settings_new </Icon>
-                    <span className='pl-16'> Logout </span>
+                    <span className="pl-16"> Logout </span>
                   </MenuItem>
                 </MatxMenu>
               </div>
@@ -145,7 +151,7 @@ class Layout1Topbar extends Component {
           </div>
         </div>
       </MuiThemeProvider>
-    )
+    );
   }
 }
 

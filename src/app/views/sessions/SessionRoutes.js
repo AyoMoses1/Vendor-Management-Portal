@@ -1,6 +1,8 @@
 import SignIn from "./SignIn";
 import NotFound from "./NotFound";
 import ForgotPassword from "./ForgotPassword";
+import EnterNewPassword from "./EnterNewPassword";
+import PasswordCreated from "./PasswordCreated"
 import Profile from "./Profile";
 
 const settings = {
@@ -37,6 +39,17 @@ const sessionRoutes = [
     component: ForgotPassword,
     settings
   },
+  {
+    path: "/enter-new-password",
+    component: EnterNewPassword,
+    settings
+  },
+  {
+    path: "/password-created",
+    component: PasswordCreated,
+    settings
+  },
+  
   {
     path: "/404",
     component: NotFound,

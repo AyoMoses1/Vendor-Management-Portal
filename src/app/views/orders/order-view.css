@@ -1,16 +1,21 @@
 .PENDING {
-  background-color: #ffc8a7;
-  color: #bf510f;
+  color: #EF882C;
+  background-color: rgba(239, 136, 44, 0.15);
 }
 
 .PROCESSING {
-  color: #197e19;
-  background-color: #c6e1c6;
+  color: #2F80ED;;
+  background-color: rgba(47, 128, 237, 0.15);
+}
+
+.CANCELLED {
+  color: #EB5757;
+  background-color: rgba(234, 95, 95, 0.15);
 }
 
 .COMPLETED {
-  color: #095aba;
-  background-color: #85bbfa;
+  color: #27AE60;
+  background-color: rgba(39, 174, 96, 0.1);
 }
 
 .CONVERTED {
@@ -34,8 +39,8 @@
 }
 
 .AWAITING_PAYMENT {
-  color: #9f6a00;
-  background-color: #fff8d7;
+  color: #828282;
+  background-color: rgba(130, 130, 130, 0.15);
   display: flex;
 }
 
@@ -50,10 +55,11 @@
 }
 
 .ORDER {
-  padding: 5px;
+  padding: 5px 8px;
   width: fit-content;
-  border-radius: 5px;
-  font-weight: 600 !important;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500px;
 }
 
 .PAID {
@@ -271,7 +277,7 @@ select.status-box{
 
 .stats-nav {
   position: absolute;
-  left: 20;
+  left: 25%;
   top: 110px;
   display: flex;
   justify-content: space-between;
@@ -292,4 +298,42 @@ select.status-box{
 }
 .active{
   color: red;
+}
+
+.all-order-table thead tr th {
+  padding-left: 24px !important;
+  padding-right: 24px !important;
+  background: #F0F2F5;
+  font-size: 14px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.all-order-table thead tr th .MuiButton-text {
+  font-weight: 500;
+  color: #000000;
+}
+
+.all-order-table .MuiTableCell-root {
+  border-bottom: 4px solid #ffffff!important;
+}
+
+.all-order-table tbody tr td {
+  padding-left: 24px !important;
+  padding-right: 24px !important;
+  background: #FAFBFD;
+  font-size: 12px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  color: #000000;
+}
+
+.all-order-table .MuiTable-root {
+  margin-top: 10px;
+}
+
+.order-sources .MuiSelect-root {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  font-size: 12px;
 }

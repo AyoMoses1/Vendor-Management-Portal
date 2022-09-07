@@ -14,8 +14,8 @@ export const getInvoiceById = (id) => {
     .get(`/afrimash/orders/${id}`)
 }
 
-export const getAllInvoice = (setLoading, page, _source) => {
-  return http.get(_source ? `afrimash/orders?page=${page}&orderSource=${_source}` : `afrimash/orders?page=${page}`).then(({ data }) => {
+export const getAllInvoice = (setLoading, page, size, _source, query) => {
+  return http.get(_source ? `afrimash/orders?page=${page}&size=${size}&orderSource=${_source}&query=${query}` : `afrimash/orders?page=${page}&size=${size}&query=${query}`).then(({ data }) => {
     if (data instanceof Object) {
       return data.object
     }
@@ -94,4 +94,8 @@ export const downloadPdfInvoice = (orderId, setDownloading) => {
     setDownloading(false)
     console.log(err)
   })
+}
+
+export const addDeliveryAddress = (address) => {
+  return http.post(`/afrimash/delivery-addresses`, address)
 }

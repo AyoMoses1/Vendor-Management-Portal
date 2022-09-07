@@ -31,6 +31,7 @@
     "firebase": "^6.6.1",
     "formik": "^2.2.6",
     "history": "^4.10.0",
+    "i": "^0.3.7",
     "lodash": "^4.17.15",
     "material-ui": "^1.0.0-beta.47",
     "moment": "^2.29.1",
@@ -44,6 +45,7 @@
     "react-autosuggest": "^9.4.3",
     "react-beautiful-dnd": "^11.0.4",
     "react-big-calendar": "^0.22.0",
+    "react-datepicker": "^4.8.0",
     "react-dom": "^16.8.6",
     "react-dropzone": "^11.3.2",
     "react-google-maps": "^9.4.5",
@@ -98,6 +100,7 @@
   "devDependencies": {
     "@babel/runtime": "^7.5.5",
     "cross-env": "^5.2.0",
-    "gh-pages": "^2.1.1"
+    "gh-pages": "^2.1.1",
+    "react-error-overlay": "^6.0.9"
   }
 }

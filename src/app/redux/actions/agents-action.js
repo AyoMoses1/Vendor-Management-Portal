@@ -43,9 +43,13 @@ export const TRANSFER_CUSTOMERS = "TRANSFER_CUSTOMERS";
 export const TRANSFER_CUSTOMERS_SUCCESS = "TRANSFER_CUSTOMERS_SUCCESS";
 export const TRANSFER_CUSTOMERS_FAILED = "TRANSFER_CUSTOMERS_FAILED";
 
-export const getAllAgents = ({search = '', size = '', page = ''}) => dispatch => {
+export const AGENT_TYPES = "AGENT_TYPES";
+export const AGENT_TYPES_SUCCESS = "AGENT_TYPES_SUCCESS";
+export const AGENT_TYPES_FAILED = "AGENT_TYPES_FAILED";
+
+export const getAllAgents = ({ page = '', size = '', query = '', agentType = '', state = '' }) => dispatch => {
   dispatch({ type: GET_AGENT_REQUEST })
-  http.get(`/afrimash/agents/search?size=${size}&page=${page}`).then(({ data }) => {
+  http.get(`/afrimash/agents/search?size=${size}&page=${page}&query=${query}&agentType=${agentType}&state=${state}`).then(({ data }) => {
     dispatch({
       type: GET_ALL_AGENTS_SUCCESS,
       payload: data.object,
@@ -64,26 +68,27 @@ export const getAgentById = (id) => dispatch => {
     dispatch({ type: ERROR_FETCH_DETILS_AGENT, payload: err })
   })
 }
+
 export const getAllAgentsApplications = () => dispatch => {
   dispatch({ type: GET_ALL_AGENT_APPLICATION });
-  http.get(routes.agentApplicationRoute).then(({data}) => {
+  http.get(routes.agentApplicationRoute).then(({ data }) => {
     dispatch({
       type: GET_ALL_AGENT_APPLICATION_SUCCESS,
       payload: data.object,
     })
   }).catch((err) => {
-    dispatch({type: GET_ALL_AGENT_APPLICATION_FAILED, payload: err})
+    dispatch({ type: GET_ALL_AGENT_APPLICATION_FAILED, payload: err })
   })
 }
 
 export const approveAgentApplication = (payload) => dispatch => {
-  dispatch({type: APPROVE_AGENT_APPLICATION});
-  http.post(`${routes.approveApplicationRoute}/${payload.applicationId}`).then(({data}) => {
+  dispatch({ type: APPROVE_AGENT_APPLICATION });
+  http.post(`${routes.approveApplicationRoute}/${payload.applicationId}`).then(({ data }) => {
     dispatch({
-      type:  APPROVE_AGENT_APPLICATION_SUCCESS,
+      type: APPROVE_AGENT_APPLICATION_SUCCESS,
     })
   }).catch((err) => {
-    dispatch({type: APPROVE_AGENT_APPLICATION_FAILED, payload: err})
+    dispatch({ type: APPROVE_AGENT_APPLICATION_FAILED, payload: err })
   })
 }
 export const getAgentCustomers = (agentCode) => dispatch => {
@@ -113,12 +118,12 @@ export const createAgent = (formData) => dispatch => {
     },
   }
   http.post(`/afrimash/agents`, formData, config).then((res) => {
-      dispatch({
-        type: CREATE_AGENT_SUCCESS,
-        payload: res
-      })
+    dispatch({
+      type: CREATE_AGENT_SUCCESS,
+      payload: res
+    })
   })
-  
+
 }
 
 export const updateAgent = (updateData) => dispatch => {
@@ -138,29 +143,36 @@ export const updateAgent = (updateData) => dispatch => {
   })
 }
 
-
 export const deleteAgent = (agentId) => async dispatch => {
   try {
-    dispatch({type: DELETE_AGENT})
-
-    const response =  await http.delete(routes.deleteAgentRoute(agentId));
-
-    dispatch({type: DELETE_AGENT_SUCCESS, payload: response})
+    dispatch({ type: DELETE_AGENT })
+    const response = await http.delete(routes.deleteAgentRoute(agentId));
+    dispatch({ type: DELETE_AGENT_SUCCESS, payload: response })
   } catch (error) {
-    dispatch({type: DELETE_AGENT_FAILED, payload: error?.response?.data?.errorMsg})
+    dispatch({ type: DELETE_AGENT_FAILED, payload: error?.response?.data?.errorMsg })
   }
 
 }
 
 export const transferCustomer = (payload) => async dispatch => {
   try {
-    dispatch({type: TRANSFER_CUSTOMERS})
-
-    const response =  await http.patch(routes.transferCustomer(payload.sourceAgentId, payload.reciepientAgentId));
+    dispatch({ type: TRANSFER_CUSTOMERS })
+    const response = await http.patch(routes.transferCustomer(payload.sourceAgentId, payload.reciepientAgentId));
     deleteAgent(payload.sourceAgentId);
-    dispatch({type: TRANSFER_CUSTOMERS_SUCCESS, payload: response})
+    dispatch({ type: TRANSFER_CUSTOMERS_SUCCESS, payload: response })
   } catch (error) {
-    dispatch({type: TRANSFER_CUSTOMERS_FAILED, payload: error?.response?.data?.errorMsg})
+    dispatch({ type: TRANSFER_CUSTOMERS_FAILED, payload: error?.response?.data?.errorMsg })
   }
+}
 
+export const getAgentTypes = () => dispatch => {
+  dispatch({ type: AGENT_TYPES });
+  http.get(routes.agentTypes).then(({ data }) => {
+    dispatch({
+      type: AGENT_TYPES_SUCCESS,
+      payload: data.object,
+    })
+  }).catch((err) => {
+    dispatch({ type: AGENT_TYPES_FAILED, payload: err })
+  })
 }

@@ -4,11 +4,12 @@ export const getCustomerById = (id) => {
   return http
     .get(`/afrimash/customers/${id}`)
 }
-export const getAllCustomer = (setData, setCount, isLoading, setAlert, setSeverity, size, page, source) => {
+export const getAllCustomer = (setData, setCount, isLoading, setAlert, setSeverity, size, page, source, query, state) => {
   isLoading(true)
-  http.get(source ? `/afrimash/customers/search?page=${page}&size=${size}&source=${source}` : `/afrimash/customers/search?page=${page}&size=${size}`).then(({ data }) => {
+  http.get(source ? `/afrimash/customers/search?page=${page}&size=${size}&source=${source}&query=${query}&state=${state}` : `/afrimash/customers/search?page=${page}&size=${size}&query=${query}&state=${state}`).then(({ data }) => {
     if (data instanceof Object) {
       setData(data.object.content);
+      console.log(data.object.content, "ayo moses")
       setCount(data.object.totalElements);
       isLoading(false)
     } else {
@@ -16,6 +17,18 @@ export const getAllCustomer = (setData, setCount, isLoading, setAlert, setSeveri
     }
   })
 }
+
+export const filterAllCustomer = (setData, setCount, setAlert, setSeverity, size, page, source, query, state) => {
+  http.get(source ? `/afrimash/customers/search?page=${page}&size=${size}&source=${source}&query=${query}&state=${state}` : `/afrimash/customers/search?page=${page}&size=${size}&query=${query}&state=${state}`).then(({ data }) => {
+    if (data instanceof Object) {
+      setData(data.object.content);
+      setCount(data.object.totalElements);
+    } else {
+      errorState(setAlert, setSeverity)
+    }
+  })
+}
+
 export const deleteCustomer = (customer) => {
   return http.delete('/afrimash/customers', customer)
 }

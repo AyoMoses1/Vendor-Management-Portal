@@ -6,16 +6,25 @@ export const getProductById = (id) => {
     .get(`/afrimash/products/${id}`)
 }
 
-export const getAllResults = (setResults, setLoading, url) => {
-  setLoading(true)
-  return http.get(url).then(({ data }) => {
+export const getAllResults = (pageNo, size, query) => {
+  return http.get(`afrimash/products?page=${pageNo}&size=${size}&search=${query}`).then(({ data }) => {
     if (data instanceof Object) {
-      setResults(data.object.content)
-      console.log(data.object.content, "tested")
-      setLoading(false)
+      // setLoading(false)
+      return data.object
+
     }
   })
 }
+// export const getAllResults = (setResults, setLoading, url, page) => {
+//   setLoading(true)
+//   return http.get(url).then(({ data }) => {
+//     if (data instanceof Object) {
+//       setResults(data.object.content)
+//       console.log(data.object.content, "tested")
+//       setLoading(false)
+//     }
+//   })
+// }
 export const createProduct = (payload) => {
   return http.post('/afrimash/products/', payload)
 }
@@ -50,7 +59,7 @@ export const updateProductCategory = (product) => {
 }
 
 export const getData = (url, setData, setAlert, setSeverity) => {
-  http.get(url).then(({data}) => {
+  http.get(url).then(({ data }) => {
     setData(data.object)
   }).catch((err) => {
     errorState(setAlert, setSeverity)
@@ -60,7 +69,7 @@ export const getData = (url, setData, setAlert, setSeverity) => {
 export const getBrands = (setAlert, setSeverity, setBrands) => {
   http
     .get(`/afrimash/brands/`)
-    .then(({data}) => {
+    .then(({ data }) => {
       setBrands(data)
     })
     .catch((err) => {

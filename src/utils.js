@@ -1,31 +1,31 @@
 import moment from "moment";
 
 export const convertHexToRGB = (hex) => {
-    // check if it's a rgba
-    if (hex.match('rgba')) {
-        let triplet = hex.slice(5).split(',').slice(0, -1).join(',')
-        return triplet
-    }
+  // check if it's a rgba
+  if (hex.match('rgba')) {
+    let triplet = hex.slice(5).split(',').slice(0, -1).join(',')
+    return triplet
+  }
 
-    let c
-    if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
-        c = hex.substring(1).split('')
-        if (c.length === 3) {
-            c = [c[0], c[0], c[1], c[1], c[2], c[2]]
-        }
-        c = '0x' + c.join('')
-
-        return [(c >> 16) & 255, (c >> 8) & 255, c & 255].join(',')
+  let c
+  if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
+    c = hex.substring(1).split('')
+    if (c.length === 3) {
+      c = [c[0], c[0], c[1], c[1], c[2], c[2]]
     }
+    c = '0x' + c.join('')
+
+    return [(c >> 16) & 255, (c >> 8) & 255, c & 255].join(',')
+  }
 }
 
 export function debounce(func, wait, immediate) {
   var timeout;
-  return function() {
+  return function () {
     var context = this,
       args = arguments;
     clearTimeout(timeout);
-    timeout = setTimeout(function() {
+    timeout = setTimeout(function () {
       timeout = null;
       if (!immediate) func.apply(context, args);
     }, wait);
@@ -91,7 +91,7 @@ export function scrollTo(scrollableElement, elmID) {
   if (stopY > startY) {
     for (var i = startY; i < stopY; i += step) {
       setTimeout(
-        (function(leapY) {
+        (function (leapY) {
           return () => {
             scrollableElement.scrollTo(0, leapY);
           };
@@ -106,7 +106,7 @@ export function scrollTo(scrollableElement, elmID) {
   }
   for (let i = startY; i > stopY; i -= step) {
     setTimeout(
-      (function(leapY) {
+      (function (leapY) {
         return () => {
           scrollableElement.scrollTo(0, leapY);
         };
@@ -148,7 +148,7 @@ export function getQueryParam(prop) {
     window.location.href.slice(window.location.href.indexOf("?") + 1)
   );
   var definitions = search.split("&");
-  definitions.forEach(function(val, key) {
+  definitions.forEach(function (val, key) {
     var parts = val.split("=", 2);
     params[parts[0]] = parts[1];
   });
@@ -160,4 +160,29 @@ export function classList(classes) {
     .filter(entry => entry[1])
     .map(entry => entry[0])
     .join(" ");
+}
+
+export const capitalize = (string) => {
+  return string
+    ? string.charAt(0).toUpperCase() + string.slice(1).toLowerCase()
+    : '';
+}
+
+export const formatToCurrency = (num, p) => {
+  if (num) {
+    num = num.toFixed(p).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+    return num;
+  }
+  return num;
+}
+
+export const formatDate = (date) => {
+  if (date) {
+    let day = date.split(" ")[0]
+    let time = date.split(" ")[1]
+    let day_ = day.split("-").reverse();
+    let dates = day_[0] + "/" + day_[1] + "/" + day_[2];
+    return { dates, time }
+  }
+  return date;
 }

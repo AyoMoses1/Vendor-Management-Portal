@@ -4,6 +4,27 @@ import { Breadcrumb, SimpleCard } from 'matx'
 import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
 import http from '../../services/api'
+import './product-details.css'
+import { styled } from '@mui/material/styles';
+import Paper from '@mui/material/Paper';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import InputAdornment from '@mui/material/InputAdornment';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import FormHelperText from '@mui/material/FormHelperText';
+import FormControl from '@mui/material/FormControl';
+import ProductType from './components/ProductType'
+
+
+
+
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+
+  color: theme.palette.text.secondary,
+}));
 
 const usestyles = makeStyles(({ palette, ...theme }) => ({
   imageBorder: {
@@ -21,6 +42,21 @@ const ProductDetails = ({ location }) => {
   const [imageList, setImageList] = useState([])
   const [store, setStore] = useState([])
   const [seller, setSeller] = useState([])
+
+
+  const [value, setValue] = React.useState('Controlled');
+  const [values, setValues] = React.useState({
+    name: '',
+    shortDescription: '',
+    longDescription: '',
+    weightRange: '',
+    showPassword: false,
+  });
+
+
+  const handleChange = (event) => {
+    // setValue(event.target.value);
+  };
 
   const getProduct = () => {
     http
@@ -52,73 +88,90 @@ const ProductDetails = ({ location }) => {
   return (
     <div className='m-sm-30'>
       <div className='mb-sm-30'>
-        <Breadcrumb
-          routeSegments={[
-            { name: 'Products', path: '/products' },
-            { name: 'View Product' },
-          ]}
-        />
-      </div>
-      <SimpleCard>
-        <Grid container spacing={3}>
-          <Grid item md={6} xs={12}>
-            <div className='flex-column justify-center items-center'>
-              <img
-                className='max-w-full mb-4 max-h-400'
-                src={selectedImage}
-                alt='selected img'
-              />
-              <div className='flex justify-center items-center'>
-                {imageList.map((imgUrl) => (
-                  <img
-                    className={clsx({
-                      'w-80 mx-2 p-2 border-radius-4': true,
-                      [classes.imageBorder]: selectedImage === imgUrl.imageUrl,
-                    })}
-                    src={imgUrl.imageUrl}
-                    alt='Product'
-                    key={imgUrl.imageUrl}
-                    onClick={() => setSelectedImage(imgUrl.imageUrl)}
-                  />
-                ))}
-              </div>
-            </div>
+        <Grid container spacing={2}>
+          <Grid container spacing={2} item xs={8}>
+            <Grid item xs={12}>
+              <Grid item xs={12}>
+                <Item>
+                  <Box
+                    component="form"
+                    className='product--form'
+                    sx={{
+                      '& .MuiTextField-root': { m: 1, width: '100%' },
+                    }}
+                    noValidate
+                    autoComplete="off"
+                  >
+                    <FormControl sx={{ width: '100%' }} variant="outlined">
+                      <label>Product Name</label>
+                      <OutlinedInput
+                        id="outlined-adornment-weight"
+                        value={values.weight}
+
+                        onChange={() => handleChange()}
+                        aria-describedby="outlined-weight-helper-text"
+                        inputProps={{
+                          'aria-label': 'weight',
+                        }}
+                      />
+                    </FormControl>
+                    <FormControl sx={{ width: '100%' }} variant="outlined">
+                      <label>Short Description</label>
+                      <OutlinedInput
+                        id="outlined-adornment-weight"
+                        value={values.weight}
+                        onChange={() => handleChange()}
+                        multiline
+                        minRows={3}
+                        aria-describedby="outlined-weight-helper-text"
+                        inputProps={{
+                          'aria-label': 'weight',
+                        }}
+                      />
+                    </FormControl>
+                    <FormControl sx={{ width: '100%' }} variant="outlined">
+                      <label>Long Description</label>
+                      <OutlinedInput
+                        id="outlined-adornment-weight"
+                        value={values.weight}
+                        onChange={() => handleChange()}
+                        multiline
+                        minRows={8}
+                        aria-describedby="outlined-weight-helper-text"
+                        inputProps={{
+                          'aria-label': 'weight',
+                        }}
+                      />
+                    </FormControl>
+                  </Box>
+                </Item>
+              </Grid>
+            </Grid>
+            <Grid item xs={12}>
+              <Item>
+                <ProductType />
+              </Item>
+            </Grid>
+            <Grid item xs={12}>
+              <Item>Product Specification</Item>
+            </Grid>
           </Grid>
-          <Grid item md={6} xs={12}>
-            <h4 className='mt-0 mb-4'>{product.name}</h4>
-            <p className='text-muted mt-0 mb-2'>Price: {product.price}</p>
-            <p className='text-muted mt-0 mb-2'>SKU: {product.sku}</p>
-            <p className='mt-0 mb-4'>
-              <span className='text-muted'>BRAND: </span>
-              <span className='text-primary'>{brand.name}</span>
-            </p>
-
-            <Divider className='mb-4' />
-            <p className='mt-0 mb-4'>
-              <span className='text-muted'>STORE: </span>
-              <span className='text-primary'>{store.name}</span>
-            </p>
-            <p className='mt-0 mb-4'>
-              <span className='text-muted'>SELLER: </span>
-              <span className='text-primary'>{seller.name}</span>
-            </p>
-            <Divider className='mb-4' />
-            <p className='mt-0 mb-2 font-medium text-muted'>
-              Have questions about this product
-            </p>
-            <div className='flex items-center mb-4'>
-              <Icon className='mr-2' fontSize='small' color='primary'>
-                call
-              </Icon>
-              <h5 className='text-primary m-0'>{seller.mobileNo}</h5>
-            </div>
-            <Divider className='mb-4' />
-
-            <h4 className='mt-0 mb-4'>Description</h4>
-            <p>{product.description}</p>
+          <Grid container spacing={2} item xs={4}>
+            <Grid item xs={12}>
+              <Item>Simple</Item>
+            </Grid>
+            <Grid item xs={12}>
+              <Item>Regular Price</Item>
+            </Grid>
+            <Grid item xs={12}>
+              <Item>Sale Price</Item>
+            </Grid>
+            <Grid item xs={12}>
+              <Item>Coupons</Item>
+            </Grid>
           </Grid>
         </Grid>
-      </SimpleCard>
+      </div>
     </div>
   )
 }

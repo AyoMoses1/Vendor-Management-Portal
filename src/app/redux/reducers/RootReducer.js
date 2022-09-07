@@ -14,7 +14,8 @@ import {
   agentApplicationReducer,
   agentApprovalReducer,
   deleteAgentReducer,
-  transferCustomerReducer
+  transferCustomerReducer,
+  getAgentTypes
 } from './agents-reducer';
 import {
   shippingGroupCreateReducer,
@@ -55,6 +56,7 @@ const RootReducer = combineReducers({
   updateUssdProductFeature,
   getShippingStates,
   getSpecialOrders,
+  getAgentTypes,
 });
 
 export default RootReducer;

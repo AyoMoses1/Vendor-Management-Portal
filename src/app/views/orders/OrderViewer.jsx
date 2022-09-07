@@ -65,7 +65,6 @@ const OrderViewer = ({ id, order }) => {
   const [state, setState] = useState({})
   const [changeStatus, setChangeStatus] = useState(false)
   const [orderStatus, setOrderStatus] = useState("")
-  const history = useHistory()
   const [error, setError] = React.useState("");
   const [severity, setSeverity] = React.useState("");
   const [isNewOrder, setIsNewOrder] = useState(false)
@@ -83,7 +82,6 @@ const OrderViewer = ({ id, order }) => {
   useEffect(() => {
     if (id !== 'add')
       getInvoiceById(id).then((res) => {
-        console.log(res.data, "test")
         setState({ ...res.data.object })
         setOrderStatus(status)
       })
@@ -93,7 +91,6 @@ const OrderViewer = ({ id, order }) => {
 
   const toggleOrderEditor = () => {
     setIsOpen(prev => !prev)
-    console.log(state, "test")
   }
 
 
@@ -159,7 +156,6 @@ const OrderViewer = ({ id, order }) => {
     if (auth.role.name === "ROLE_ADMIN" || auth.role.name === "ROLE_MANAGER") {
       let tempState = { status: orderStatus, id: id };
       updateInvoice(tempState).then((res) => {
-        console.log(res);
         if (res.status === 200) {
           refresh()
         }
@@ -177,8 +173,20 @@ const OrderViewer = ({ id, order }) => {
 
   const handleModal = () => {
     toggleOrderEditor();
+  }
+
+  const handleCallBack = () => {
+    toggleOrderEditor();
     getInvoiceById(id).then((res) => {
-      console.log(res.data)
+      setState({ ...res.data.object })
+      setOrderStatus(status)
+    })
+    setAlertData({ success: true, text: 'Shipping address updated successfully', title: 'Shipping Address' })
+    handleAlertModal();
+  }
+
+  const handleRefresh = () => {
+    getInvoiceById(id).then((res) => {
       setState({ ...res.data.object })
       setOrderStatus(status)
     })
@@ -194,7 +202,6 @@ const OrderViewer = ({ id, order }) => {
 
   const _deleteOrderItem = (itemId) => {
     if (!loading) {
-      console.log(itemId);
       dialog
         .confirm(`Are you sure you want to delete this order item?`)
         .then(async (value) => {
@@ -206,7 +213,6 @@ const OrderViewer = ({ id, order }) => {
             setAlertData({ success: true, text: 'Order item deleted successfully', title: 'Order Item Deleted' })
             handleAlertModal();
             getInvoiceById(id).then((res) => {
-              console.log(res.data)
               setState({ ...res.data.object })
               setOrderStatus(status)
             })
@@ -233,10 +239,7 @@ const OrderViewer = ({ id, order }) => {
   }
 
   const handleSendCustomerNote = async (note) => {
-    console.log(note);
-
     await sendCustomerNote(state?.customerId?.id, note, setSending).then((res) => {
-      console.log(res);
       if (res && res?.data?.status === "OK") {
         setAlertData({ success: true, text: 'Message sent successfully', title: 'Message Sent' })
         handleAlertModal();
@@ -296,7 +299,7 @@ const OrderViewer = ({ id, order }) => {
                       </div>
                       <div className='ml-4 order-text-12'>
                         <form onSubmit={handleChange} className='status-form'>
-                          <select value={orderStatus ? orderStatus : status} onChange={handleChange} className='status-box'>
+                          <select value={orderStatus ? orderStatus ?? '' : status ?? ''} onChange={handleChange} className='status-box'>
                             {statusValues.map(value => {
                               return <option key={value.label} value={value.value}>{value.label}</option>
                             })}
@@ -328,21 +331,8 @@ const OrderViewer = ({ id, order }) => {
                           <Button color="primary" onClick={() => toggleOrderEditor()}>Edit</Button>
                         </div>
                       </div>
-                      <p>{customerId ? `${customerId?.deliveryAddresses[0].address}` : null}</p>
-                      {/* <h5>Billing Address</h5> */}
-                      {/* {orderSource == 'ADMIN' ?
-                        <p>{customerId ? `${customerId.deliveryAddresses[0].address}` : null}</p>
-                        :
-                        orderSource == 'AGENT_APP' ?
-                          <p>{state.deliveryAddress ? `${state.deliveryAddress.address}` : null}</p>
-                          :
-                          <p>{customerId ? `${customerId.address}` : null}</p>
-                      } */}
+                      <p>{state?.deliveryAddress?.address ?? <small><i>No shipping address</i></small>}</p>
                     </div>
-                    {/* <div className='shipping'>
-                      <h5>Shipping Address</h5>
-                      <p>Shiping adress</p>
-                    </div> */}
                   </div>
                 </Item>
               </Grid>
@@ -371,7 +361,7 @@ const OrderViewer = ({ id, order }) => {
                             <Grid item xs={5}>
                               <div className='order-flex'>
                                 <div className='order-image'>
-                                  <img style={{ height: "auto" }} src={item.productId.productImages[0].imageUrl} />
+                                  <img style={{ height: "auto" }} src={item.productId.productImages[0]?.imageUrl} />
                                 </div>
                                 <div className='order-text-10'>
                                   <span className='product-name'>{item.productId.name.slice(0, 50) + "..."}</span>
@@ -418,7 +408,7 @@ const OrderViewer = ({ id, order }) => {
                             <Grid item xs={10}>
                               <div className='order-flex'>
                                 <div className='order-image'>
-                                  <img style={{ height: "auto" }} src={item.productId.productImages[0].imageUrl} />
+                                  <img style={{ height: "auto" }} src={item.productId.productImages[0]?.imageUrl} />
                                 </div>
                                 <div className='order-text-10' style={{ width: '70%' }}>
                                   <h6>{item.productId.shippingClass?.name}</h6>
@@ -448,11 +438,11 @@ const OrderViewer = ({ id, order }) => {
                       <p><strong><small>Total:</small></strong></p>
                     </div>
                     <div className='ml-4'>
-                      <p><small><strong>{subTotal}</strong></small></p>
+                      <p><small><strong>{subTotal?.toLocaleString()}</strong></small></p>
                       <p><small>{orderItems ? orderItems.length && orderItems.map(item => {
-                        return item.shippingCost ? item.shippingCost : ''
+                        return item.shippingCost ? item.shippingCost?.toLocaleString() : ''
                       }).reduce(totalShippinCost) : ""}</small></p>
-                      <p><small><strong>{totalPrice}</strong></small></p>
+                      <p><small><strong>{totalPrice?.toLocaleString()}</strong></small></p>
                     </div>
                   </div>
                 </Item>
@@ -481,9 +471,11 @@ const OrderViewer = ({ id, order }) => {
         id={id}
         isOpen={isOpen}
         order={state}
-        name={"Edit Shipping Address"}
+        name={"Update Shipping Address"}
         orderSource={orderSource}
         handleClose={handleModal}
+        handleRefresh={handleRefresh}
+        handleCallBack={handleCallBack}
       />
     </div>
   )

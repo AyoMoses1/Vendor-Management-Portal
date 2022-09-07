@@ -8,8 +8,10 @@ import { getAllRoles, getAllUser, deleteUser } from './UserService'
 import Loading from 'matx/components/MatxLoadable/Loading'
 import { useDialog } from 'muibox'
 import Alert from 'app/components/Alert';
+
 import './user.css';
 import { getUserStatistics } from '../dashboard/DashboardService'
+import { debounce } from "lodash";
 
 const Users = () => {
   const [isAlive, setIsAlive] = useState(true)
@@ -49,7 +51,7 @@ const Users = () => {
       setTitle(tempRole);
     }
   }
-  
+
   useEffect(() => {
     getRoles();
     getUserStatistics(setStatistics);
@@ -264,6 +266,16 @@ const Users = () => {
     },
   ]
 
+  const debouncedUsers = debounce((value) => {
+    console.log(value);
+  }, 700);
+
+  const performSearch = (value) => {
+    debouncedUsers(value);
+  };
+
+
+
   return (
     <div className='m-sm-30'>
       <Alert
@@ -349,8 +361,10 @@ const Users = () => {
                         variant='outlined'
                         size='small'
                         fullWidth
-                        onChange={({ target: { value } }) =>
-                          handleSearch(value)
+                        onChange={({ target: { value } }) => {
+                          handleSearch(value);
+                          performSearch(value)
+                        }
                         }
                         InputProps={{
                           style: {

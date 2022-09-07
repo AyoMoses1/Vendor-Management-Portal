@@ -20,12 +20,16 @@ import {
   approveAgentApplication,
   deleteAgent,
   transferCustomer,
+  getAgentTypes
 } from 'app/redux/actions/agents-action';
 import './style.scss';
 import Loading from 'matx/components/MatxLoadable/Loading';
 import Notification from 'app/components/Notification';
 import Modal from '../../components/Modal';
 import './agent.css';
+import { debounce } from 'lodash';
+import { states } from '../../../utils/states';
+states.unshift('All');
 
 const Agents = () => {
   const { agentList, total, error, severity, loading, pages } =
@@ -39,6 +43,9 @@ const Agents = () => {
   const { loading: transferCustomerLoading } = useSelector(
     (state) => state.transferCustomerReducer,
   );
+  const { agentTypes } = useSelector(
+    (state) => state.getAgentTypes,
+  );
   const [id, setId] = useState(0);
   const [openApprovalModal, setopenApprovalModal] = useState(false);
   const [activeAgent, setActiveAgent] = useState({});
@@ -50,6 +57,11 @@ const Agents = () => {
   const [receipientAgent, setReceipientAgent] = useState('');
   const [page, setPage] = useState(0)
   const [size, setSize] = useState(10);
+  const [query, setQuery] = useState('');
+  const [state, setState] = useState('All')
+  const [types, setTypes] = useState([{ name: 'All Agents', value: 'ALL' }]);
+  const [agentType, setAgentType] = useState('ALL');
+  const [title, setTitle] = useState('All Agents')
 
   const handleChangePage = (newPage) => {
     setPage(newPage);
@@ -58,8 +70,24 @@ const Agents = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getAllAgents({ page: page, size: size }));
-  }, [size, page]);
+    const _agentType = agentType === 'ALL' ? '' : agentType;
+    const _state = state === 'All' ? '' : state;
+    dispatch(getAllAgents({ page, size, query, agentType: _agentType, state: _state }));
+  }, [size, page, agentType, state]);
+
+  useEffect(() => {
+    dispatch(getAgentTypes());
+  }, []);
+
+  useEffect(() => {
+    const allTypes = types;
+    if (agentTypes && agentTypes.length) {
+      agentTypes.map(a => {
+        allTypes.push({ name: a.split('_').join(" "), value: a })
+      })
+      setTypes(allTypes);
+    }
+  }, [agentTypes])
 
   const handleMenu = (option, user) => {
     setActiveAgent(user);
@@ -81,7 +109,9 @@ const Agents = () => {
 
   const handleDeleteAgent = async () => {
     await dispatch(deleteAgent(activeAgent.id));
-    dispatch(getAllAgents({ page }));
+    const _agentType = agentType === 'ALL' ? '' : agentType;
+    const _state = state === 'All' ? '' : state;
+    dispatch(getAllAgents({ page, size, query, agentType: _agentType, state: _state }));
     setOpenDeleteAgentModal(false);
   };
 
@@ -122,7 +152,7 @@ const Agents = () => {
               className='flex items-center'
             >
               <div className='ml-3'>
-                <h5 className='my-0 text-1'>{`${user?.firstName} ${user?.lastName}`}</h5>
+                <h5 className='my-0 text-1 text-control'>{`${user?.firstName} ${user?.lastName}`}</h5>
               </div>
             </Link>
           );
@@ -148,12 +178,12 @@ const Agents = () => {
               }}
               className='flex items-center'
             >
-              <div className='w-220'>
+              <div className='w-220 text-control'>
                 <h6>
                   <strong>Email:</strong> {user?.email}
                 </h6>
                 <br />
-                <h5 className='my-0'>Phone: {user?.mobileNo}</h5>
+                <h5 className='my-0 text-control'>Phone: {user?.mobileNo}</h5>
               </div>
             </Link>
           );
@@ -240,8 +270,8 @@ const Agents = () => {
       },
     },
     {
-      name: 'Actions',
-      label: 'actions',
+      name: 'actions',
+      label: 'Actions',
       options: {
         filter: false,
         customBodyRenderLite: (dataIndex, another) => {
@@ -280,6 +310,28 @@ const Agents = () => {
     },
   ];
 
+  const debouncedAgents = debounce(value => {
+    const _agentType = agentType === 'ALL' ? '' : agentType;
+    const _state = state === 'All' ? '' : state;
+    if (value.length > 0) {
+      dispatch(getAllAgents({ page, size, query: value, agentType: _agentType, state: _state }));
+      setQuery(value);
+    } else {
+      dispatch(getAllAgents({ page, size, query: '', agentType: _agentType, state: _state }));
+      setQuery('');
+    }
+  }, 700);
+
+
+  const performSearch = (value) => {
+    debouncedAgents(value)
+  }
+
+  const handleTitle = (value) => {
+    const v = types.find(t => t.value === value).name;
+    setTitle(v);
+  }
+
   return (
     <div className='m-sm-30'>
       <div className='mb-sm-30'>
@@ -299,7 +351,49 @@ const Agents = () => {
             <Loading />
           ) : (
             <MUIDataTable
-              title={'All Agents'}
+              title={<div>
+                <h4 className='mt-4 mb-0'>{title}</h4>
+                <div className='w-full flex'>
+                  <div className='w-220 flex-end sources'>
+                    <TextField
+                      className='mb-4'
+                      name='mobileNo'
+                      label='Filter by Agent Type'
+                      variant='outlined'
+                      margin='normal'
+                      select
+                      fullWidth
+                      value={agentType}
+                      onChange={(e) => { setAgentType(e.target.value); handleTitle(e.target.value) }}
+                    >
+                      {types.map((t, idx) => (
+                        <MenuItem key={idx} value={t.value}>
+                          {t.name}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </div>
+                  <div className='w-220 flex-end sources ml-4'>
+                    <TextField
+                      className='mb-4'
+                      name='mobileNo'
+                      label='Filter by location'
+                      variant='outlined'
+                      margin='normal'
+                      select
+                      fullWidth
+                      value={state}
+                      onChange={(e) => { setState(e.target.value) }}
+                    >
+                      {states.map((s, idx) => (
+                        <MenuItem key={idx} value={s}>
+                          {s}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </div>
+                </div>
+              </div>}
               data={[...agentList]}
               columns={columns}
               options={{
@@ -332,8 +426,7 @@ const Agents = () => {
                         variant='outlined'
                         size='small'
                         fullWidth
-                        onChange={({ target: { value } }) =>
-                          handleSearch(value)
+                        onChange={({ target: { value } }) => { handleSearch(value); performSearch(value) }
                         }
                         InputProps={{
                           style: {
@@ -345,7 +438,13 @@ const Agents = () => {
                             </Icon>
                           ),
                           endAdornment: (
-                            <IconButton onClick={hideSearch}>
+                            <IconButton onClick={() => {
+                              hideSearch();
+                              const _agentType = agentType === 'ALL' ? '' : agentType;
+                              const _state = state === 'All' ? '' : state;
+                              dispatch(getAllAgents({ page, size, query: '', agentType: _agentType, state: _state }));
+                              setQuery('');
+                            }}>
                               <Icon fontSize='small'>clear</Icon>
                             </IconButton>
                           ),

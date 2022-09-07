@@ -8,12 +8,12 @@ import { Grid } from '@material-ui/core'
 const ViewedCard = ({ theme, view }) => {
     return (
         <Grid container spacing={3}>
-            <Grid item lg={3} md={3} sm={3} xs={3}>
+            <Grid item lg={2} md={2} sm={2} xs={2}>
                 <div className="mostview-number">
                     <div>{view?.id}</div>
                 </div>
             </Grid>
-            <Grid item lg={9} md={9} sm={9} xs={9}>
+            <Grid item lg={10} md={10} sm={10} xs={10}>
                 <Card className="kerd">
                     <div className="flix">
                         <div className="pics"> </div>
