@@ -3,8 +3,21 @@
     flex-direction: column;
     min-height: 80vh;
     justify-content: space-between;
+    gap: 20px;
 }
 .form--flex{
     display: flex;
     justify-content: space-between;
+}
+
+.section-title{
+    font-weight: 500;
+    font-size: 12px;
+    color: black;
+    padding-bottom: 5px;
+}
+
+.form-border{
+    border: none;
+    outline: red;
 }
