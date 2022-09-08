@@ -14,6 +14,10 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import JoditEditor from 'jodit-react'
+import ProductType from './components/ProductType'
+import ProductSpecification from './components/ProductSpecification'
+import ProductGallery from './components/ProductGallery'
+import ProductShipping from './components/ProductShipping'
 
 
 
@@ -155,13 +159,15 @@ const ProductDetails = ({ location, placeholder }) => {
                 </Item>
               </Grid>
             </Grid>
-            {/* <Grid item xs={12}>
+            <Grid item xs={12}>
               <Item>
-                <ProductType />
+                <ProductType/>
               </Item>
             </Grid>
             <Grid item xs={12}>
-              <Item>Product Specification</Item>
+              <Item>
+                <ProductSpecification/>
+              </Item>
             </Grid>
           </Grid>
           <Grid container spacing={2} item xs={4}>
@@ -177,7 +183,7 @@ const ProductDetails = ({ location, placeholder }) => {
               <Item>
                 <ProductGallery />
               </Item>
-            </Grid> */}
+            </Grid>
           </Grid>
         </Grid>
       </div>

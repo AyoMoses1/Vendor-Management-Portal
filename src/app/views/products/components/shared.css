@@ -201,3 +201,20 @@
 .product-shipping-weight {
     margin-top: 4px;
 }
+
+.product-color-section {
+    border: 1px solid rgb(227, 227, 227);
+    padding: 10px 20px !important;
+}
+
+.title-divider{
+    border: 0;
+    border-top: 1px solid rgb(227, 227, 227);
+    margin: 10px 0;
+}
+.product-checkbox{
+    font-size: 12px;
+}
+/* .product-color-section .product-details-title{
+    padd
+} */
