@@ -11,35 +11,35 @@ const overviews = [
     rate: "+24.4%",
     period: "From Last Month",
     amount: "₦ 1,546,805,865.76",
-    label: "Total Sales",
+    label: "Total Received Sales",
     type: "CREDIT"
   },
   {
     rate: "-24.4%",
     period: "From Last Month",
     amount: "₦ 1,546,805,865.76",
-    label: "Total Expenses",
+    label: "Total Completed Sales",
     type: "DEBIT"
   },
   {
     rate: "+24.4%",
     period: "From Last Month",
-    amount: "₦ 18,043",
-    label: "Total Visitors",
+    amount: "₦ 23,654",
+    label: "Total Received Orders",
     type: "CREDIT"
   },
   {
     rate: "-24.4%",
     period: "From Last Month",
     amount: "₦ 23,654",
-    label: "Total Orders",
+    label: "Total Completed Orders",
     type: "DEBIT"
   },
   {
     rate: "-24.4%",
     period: "From Last Month",
     amount: "₦ 23,654",
-    label: "Total Orders",
+    label: "Total Visitors",
     type: "DEBIT"
   },
 ]

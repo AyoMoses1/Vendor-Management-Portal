@@ -2,56 +2,48 @@ import React, { Component } from "react";
 import {
   Button,
   withStyles,
-  CircularProgress, Container
+  CircularProgress,
+  Container,
 } from "@material-ui/core";
 import { TextValidator, ValidatorForm } from "react-material-ui-form-validator";
 import { connect } from "react-redux";
 import { PropTypes } from "prop-types";
-import {  withRouter  } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import { resetPassword } from "../../redux/actions/LoginActions";
 import afrimash2 from "./assets/svg/afrimash2.0.svg";
 import "./Forgotpassword.scss";
-import {Link} from "react-router-dom"
+import service from "./reset";
 
 
 
+class ForgotPassword extends Component {
+  constructor() {
+    super();
+    this.state = {
+      email: "",
+    };
+  }
 
 
-//class ForgotPassword extends Component {
-//  state = {
-//    email: "Enter email here", 
-//  };
-//  handleChange = event => {
-//    event.persist();
-//    this.setState({
-//      [event.target.name]: event.target.value
-//    });
-//  };
-//  handleFormSubmit = () => {
-//    this.props.resetPassword({ ...this.state });
-//  };
+  handleChange = (event) => {
+    this.setState({
+      [event.target.name]: event.target.value,
+    });
+  };
 
-//  render() {
-//    let { email } = this.state;
+  handleFormSubmit = async () => {
+    //this.props.resetPassword({ ...this.state })
+    console.log('HERE')
+    try{
+      await service.resetUserPassword({ email: this.state.email });
+      alert("Check your email for reset link")
+    }catch(e){
+      console.log(e)
+    }
+  };
 
-
-    
-    const ForgotPassword = () => {
-      const [email, setEmail] = React.useState('')
-      const handleChange = (e) => {
-        e.persist();
-        setEmail({
-          [e.target.name]: e.target.value
-        });
-      };
-      const handleFormSubmit = () => {
-        // this.props.resetPassword({ ...this.state });
-        resetPassword(email)
-      };
-
-
-
-
+  render() {
+    let { email } = this.state;
     return (
       <div>
         <div className="logo__container ">
@@ -68,26 +60,25 @@ import {Link} from "react-router-dom"
             <h6 className="mail">Email</h6>
             <ValidatorForm ref="form" onSubmit={this.handleFormSubmit}>
               <TextValidator
+                value={email}
                 className="mb-20 w-100"
                 variant="outlined"
                 onChange={this.handleChange}
                 type="email"
                 name="email"
-                placeholder={email}
+                placeholder='Enter your email'
                 validators={["required", "isEmail"]}
                 errorMessages={["this field is required", "email is not valid"]}
               />
               <div className="flex flex-middle">
-                <Link to="">
-                  <Button
-                    variant="outlined"
-                    disabled
-                    className="button"
-                    type="submit"
-                  >
-                    Send Link
-                  </Button>
-                </Link>
+                <Button
+                  variant="outlined"
+                  className="button"
+                  type="submit"
+                 
+                >
+                  Send Link
+                </Button>
               </div>
             </ValidatorForm>
             ;
@@ -96,44 +87,12 @@ import {Link} from "react-router-dom"
       </div>
     );
   }
-//}
+}
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   resetPassword: PropTypes.func.isRequired,
-  login: state.login
+  login: state.login,
 });
-export default withRouter(
-  connect(
-    mapStateToProps,
-    { resetPassword }
-  )(ForgotPassword)
+export default (
+  connect(mapStateToProps, { resetPassword })(ForgotPassword)
 );
-
-
-
-/*
-<ValidatorForm ref="form" onSubmit={this.handleFormSubmit}>
-  <TextValidator
-    className="mb-24 w-100"
-    variant="outlined"
-    label="Email"
-    onChange={this.handleChange}
-    type="email"
-    name="email"
-    value={email}
-    validators={["required", "isEmail"]}
-    errorMessages={["this field is required", "email is not valid"]}
-  />
-  <div className="flex flex-middle">
-    <Button variant="contained" color="primary" type="submit">
-      Reset Password
-    </Button>
-    <span className="ml-16 mr-8">or</span>
-    <Button
-      className="capitalize"
-      onClick={() => this.props.history.push("/signin")}
-    >
-      Sign in
-    </Button>
-  </div>
-</ValidatorForm>; */

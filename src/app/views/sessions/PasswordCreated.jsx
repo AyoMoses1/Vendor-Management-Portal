@@ -13,10 +13,11 @@ import { resetPassword } from "../../redux/actions/LoginActions";
 import afrimash2 from "./assets/svg/afrimash2.0.svg";
 import "./Forgotpassword.scss";
 import {Link} from "react-router-dom"
+import { Password } from "@mui/icons-material";
 
 
 
-class EnterNewPassword extends Component {
+class PasswordCreated extends Component {
   state = {
     password: "Enter password here",
   };
@@ -56,6 +57,6 @@ const mapStateToProps = (state) => ({
   login: state.login,
 });
 export default withRouter(
-  connect(mapStateToProps, { resetPassword })(EnterNewPassword)
+  connect(mapStateToProps, { resetPassword })(PasswordCreated)
 );
 
