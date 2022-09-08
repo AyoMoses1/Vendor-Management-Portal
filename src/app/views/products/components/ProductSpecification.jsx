@@ -4,6 +4,7 @@ import Box from '@mui/material/Box';
 import { Checkbox, Grid, InputAdornment, MenuItem, TextField } from '@material-ui/core';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import {Button} from '@material-ui/core';
 // import Checkbox from '@mui/material/Checkbox';
 const productAttributes = [
     {
@@ -75,36 +76,36 @@ const ProductSpecification = () => {
             <Grid item lg={12} md={12} sm={12} xs={12} className='product-color-section'>
                 <div className="product-details-title">Colour</div>
                 <div className='title-divider'></div>
-                <Grid container spacing={1} className="product-type-input-container">
-                    <Grid item lg={4} md={4} sm={6} xs={12}>
+                <Grid container spacing={1} className="product-specification-input-container">
+                    <Grid item lg={4} md={4} sm={6} xs={12} className="product-specification-input-col">
                         <div className='product-specification'>
                            <div className='color-title'>Name:</div>
                            <label className='section-title'>Colour</label>
                            <FormGroup>
                                 <FormControlLabel control={<Checkbox defaultChecked />} label="Visible on the product page" className='product-checkbox' />
-                                <FormControlLabel control={<Checkbox />} label="Used for variation" />
+                                <FormControlLabel control={<Checkbox />} label="Used for variation" className='product-checkbox' />
                             </FormGroup>
                         </div>
                     </Grid>
-                    <Grid item lg={8} md={8} sm={6} xs={12}>
+                    <Grid item lg={8} md={8} sm={6} xs={12} className="product-specification-input-col">
                         <div className='product-specification'>
                         <div className='color-title'>Value(s)</div>
-                            {/* <TextField
-                                className='mb-4'
-                                name='productAttribute'
-                                variant='outlined'
-                                margin='normal'
-                                select
-                                fullWidth
-                                value={productAttribute} 
-                                onChange={(e) => { }}
+                        <TextField
+                            className='mb-4 color-input'
+                            name='productAttribute'
+                            variant='outlined'
+                            margin='normal'
+                            select
+                            fullWidth
+                            value={productAttribute} 
+                            onChange={(e) => { }}
                             >
-                                {productAttributes.map((type, idx) => (
-                                    <MenuItem key={idx} value={type.value}>
-                                        {type.type}
-                                    </MenuItem>
-                                ))}
-                            </TextField> */}
+                            {productAttributes.map((type, idx) => (
+                                <MenuItem key={idx} value={type.value}>
+                                    {type.type}
+                                </MenuItem>
+                            ))}
+                        </TextField>
                         </div>
                     </Grid>
                 </Grid>
@@ -140,6 +141,9 @@ const ProductSpecification = () => {
                     </Grid>
                 </Grid> */}
         </Grid>
+        <div className='button-flex'>
+            <Button variant='contained' color='primary' className='product-gallery-save-btn'>Save</Button>
+        </div>
     </Box>
 }
 

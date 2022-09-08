@@ -18,6 +18,8 @@ import ProductType from './components/ProductType'
 import ProductSpecification from './components/ProductSpecification'
 import ProductGallery from './components/ProductGallery'
 import ProductShipping from './components/ProductShipping'
+import ProductStatus from './components/ProductStatus'
+import ProductCategory from './components/ProductCategory'
 
 
 
@@ -172,7 +174,9 @@ const ProductDetails = ({ location, placeholder }) => {
           </Grid>
           <Grid container spacing={2} item xs={4}>
             <Grid item xs={12}>
-              <Item>Simple</Item>
+              <Item>
+                <ProductStatus />
+              </Item>
             </Grid>
             <Grid item xs={12}>
               <Item>
@@ -182,6 +186,11 @@ const ProductDetails = ({ location, placeholder }) => {
             <Grid item xs={12}>
               <Item>
                 <ProductGallery />
+              </Item>
+            </Grid>
+            <Grid item xs={12}>
+              <Item>
+                <ProductCategory />
               </Item>
             </Grid>
           </Grid>
