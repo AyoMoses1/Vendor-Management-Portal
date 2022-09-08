@@ -8,6 +8,7 @@ import DateRangePickerComponent from "./DateRangePicker";
 
 const overviews = [
   {
+    imgLogo: "/assets/icon/discount.png",
     rate: "+24.4%",
     period: "From Last Month",
     amount: "₦ 1,546,805,865.76",
@@ -15,6 +16,7 @@ const overviews = [
     type: "CREDIT"
   },
   {
+    imgLogo: "/assets/icon/business-and-finance.png",
     rate: "-24.4%",
     period: "From Last Month",
     amount: "₦ 1,546,805,865.76",
@@ -22,6 +24,7 @@ const overviews = [
     type: "DEBIT"
   },
   {
+    imgLogo: "/assets/icon/sent.png",
     rate: "+24.4%",
     period: "From Last Month",
     amount: "₦ 23,654",
@@ -29,6 +32,7 @@ const overviews = [
     type: "CREDIT"
   },
   {
+    imgLogo: "/assets/icon/sent.png",
     rate: "-24.4%",
     period: "From Last Month",
     amount: "₦ 23,654",
@@ -36,6 +40,7 @@ const overviews = [
     type: "DEBIT"
   },
   {
+    imgLogo: "/assets/icon/audiences.png",
     rate: "-24.4%",
     period: "From Last Month",
     amount: "₦ 23,654",

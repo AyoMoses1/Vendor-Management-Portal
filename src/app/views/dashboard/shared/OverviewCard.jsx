@@ -9,7 +9,7 @@ const OverviewCard = ({ theme, overview }) => {
             <div className="scrollable-item">
                 <Card className="p-10 kard">
                     <div className="flex overview-top">
-                        <img className="overview-logo" src="/assets/icon/overview.svg" alt="company-logo" />
+                        <img className="overview-logo" src={overview?.imgLogo} alt="company-logo" />
                         <div className="ml-12">
                             <div className="overview-top-content">
                                 <p className={overview?.type}>{overview?.rate}</p>
