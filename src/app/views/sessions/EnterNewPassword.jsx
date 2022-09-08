@@ -50,6 +50,7 @@ class EnterNewPassword extends Component {
                 onChange={this.handleChange}
                 type="password"
                 name="password"
+                placeholder="********"
                 size="small"
                 value={this.password}
                 validators={["required", "isPassword"]}
@@ -62,6 +63,7 @@ class EnterNewPassword extends Component {
                 onChange={this.handleChange}
                 type="password"
                 name="password"
+                placeholder="********"
                 size="small"
                 value={this.passwordVerify}
                 validators={["required", "isPassword"]}

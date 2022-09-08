@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef, useMemo } from 'react'
 import { Divider, Grid, Icon } from '@material-ui/core'
 import { Breadcrumb, SimpleCard } from 'matx'
 import { makeStyles } from '@material-ui/core/styles'
@@ -13,7 +13,14 @@ import InputAdornment from '@mui/material/InputAdornment';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
+import JoditEditor from 'jodit-react'
 import ProductType from './components/ProductType'
+import ProductSpecification from './components/ProductSpecification'
+import ProductGallery from './components/ProductGallery'
+import ProductShipping from './components/ProductShipping'
+import ProductStatus from './components/ProductStatus'
+import ProductCategory from './components/ProductCategory'
+
 
 
 
@@ -32,7 +39,7 @@ const usestyles = makeStyles(({ palette, ...theme }) => ({
   },
 }))
 
-const ProductDetails = ({ location }) => {
+const ProductDetails = ({ location, placeholder }) => {
   const State = location.state
   const { id } = State
   const [selectedImage, setSelectedImage] = useState('')
@@ -53,10 +60,23 @@ const ProductDetails = ({ location }) => {
     showPassword: false,
   });
 
+  const editor = useRef(null)
+  const [shortDesc, setShortDesc] = useState('')
+  const [longDesc, setLongDesc] = useState('')
+
+
+  const config = useMemo(() =>({
+    readonly: false,
+    toolbarButtonSize: 'middle',
+    placeholder: placeholder || 'Start typings...'
+  }), [placeholder])
+
+
 
   const handleChange = (event) => {
     // setValue(event.target.value);
   };
+
 
   const getProduct = () => {
     http
@@ -89,8 +109,8 @@ const ProductDetails = ({ location }) => {
     <div className='m-sm-30'>
       <div className='mb-sm-30'>
         <Grid container spacing={2}>
-          <Grid container spacing={2} item xs={8}>
-            <Grid item xs={12}>
+          <Grid container spacing={2} item xs = {8}>
+            <Grid item xs = {12}>
               <Grid item xs={12}>
                 <Item>
                   <Box
@@ -102,72 +122,76 @@ const ProductDetails = ({ location }) => {
                     noValidate
                     autoComplete="off"
                   >
-                    <FormControl sx={{ width: '100%' }} variant="outlined">
-                      <label>Product Name</label>
-                      <OutlinedInput
-                        id="outlined-adornment-weight"
-                        value={values.weight}
-
-                        onChange={() => handleChange()}
-                        aria-describedby="outlined-weight-helper-text"
-                        inputProps={{
-                          'aria-label': 'weight',
-                        }}
-                      />
-                    </FormControl>
-                    <FormControl sx={{ width: '100%' }} variant="outlined">
-                      <label>Short Description</label>
-                      <OutlinedInput
-                        id="outlined-adornment-weight"
-                        value={values.weight}
-                        onChange={() => handleChange()}
-                        multiline
-                        minRows={3}
-                        aria-describedby="outlined-weight-helper-text"
-                        inputProps={{
-                          'aria-label': 'weight',
-                        }}
-                      />
-                    </FormControl>
-                    <FormControl sx={{ width: '100%' }} variant="outlined">
-                      <label>Long Description</label>
-                      <OutlinedInput
-                        id="outlined-adornment-weight"
-                        value={values.weight}
-                        onChange={() => handleChange()}
-                        multiline
-                        minRows={8}
-                        aria-describedby="outlined-weight-helper-text"
-                        inputProps={{
-                          'aria-label': 'weight',
-                        }}
-                      />
-                    </FormControl>
+                      <FormControl sx={{  width: '100%' }} variant="outlined">
+                        <label className='section-title'>Product Name</label>
+                        <OutlinedInput
+                          id="outlined-adornment-weight"
+                          value={values.weight}
+                          className="form-border"
+                          onChange={() => handleChange()}
+                          aria-describedby="outlined-weight-helper-text"
+                          inputProps={{
+                            'aria-label': 'weight',
+                          }}
+                        />
+                      </FormControl>
+                      <FormControl sx={{ width: '100%' }} variant="outlined">
+                        <label className='section-title'>Short Description</label>
+                        <JoditEditor
+                          ref={editor}
+                          value={shortDesc}
+                          config={config}
+                          tabIndex={1} // tabIndex of textarea
+                          onBlur={newContent => setShortDesc(newContent)} // preferred to use only this option to update the content for performance reasons
+                          onChange={newContent => {}}
+                        />
+                      </FormControl>
+                      <FormControl sx={{ width: '100%' }} variant="outlined">
+                        <label className='section-title'>Long Description</label>
+                        <JoditEditor
+                          ref={editor}
+                          value={longDesc}
+                          config={config}
+                          tabIndex={0} // tabIndex of textarea
+                          onBlur={newContent => setLongDesc(newContent)} // preferred to use only this option to update the content for performance reasons
+                          onChange={newContent => {}}
+                        />
+                      </FormControl>
                   </Box>
                 </Item>
               </Grid>
             </Grid>
             <Grid item xs={12}>
               <Item>
-                <ProductType />
+                <ProductType/>
               </Item>
             </Grid>
             <Grid item xs={12}>
-              <Item>Product Specification</Item>
+              <Item>
+                <ProductSpecification/>
+              </Item>
             </Grid>
           </Grid>
           <Grid container spacing={2} item xs={4}>
             <Grid item xs={12}>
-              <Item>Simple</Item>
+              <Item>
+                <ProductStatus />
+              </Item>
             </Grid>
             <Grid item xs={12}>
-              <Item>Regular Price</Item>
+              <Item>
+                <ProductShipping />
+              </Item>
             </Grid>
             <Grid item xs={12}>
-              <Item>Sale Price</Item>
+              <Item>
+                <ProductGallery />
+              </Item>
             </Grid>
             <Grid item xs={12}>
-              <Item>Coupons</Item>
+              <Item>
+                <ProductCategory />
+              </Item>
             </Grid>
           </Grid>
         </Grid>

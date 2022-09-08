@@ -45,7 +45,7 @@ class SignIn extends Component {
     this.props.loginWithEmailAndPassword({ ...this.state })
   }
   render() {
-    let { username, password } = this.state
+    let { username, password} = this.state
     let { classes } = this.props
     return (
       <React.Fragment>
@@ -69,7 +69,9 @@ class SignIn extends Component {
                 severity="error"
               />
             )}
-            <ValidatorForm ref="form" onSubmit={this.handleFormSubmit}>
+            <ValidatorForm 
+              ref="form" 
+              onSubmit={this.handleFormSubmit}>
               <TextValidator
                 className="mt-20 mb-24 w-100"
                 variant="outlined"
