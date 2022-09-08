@@ -17,25 +17,39 @@ import {Link} from "react-router-dom"
 
 
 
-class ForgotPassword extends Component {
-  state = {
-    email: "Enter email here", 
-  };
-  handleChange = event => {
-    event.persist();
-    this.setState({
-      [event.target.name]: event.target.value
-    });
-  };
-  handleFormSubmit = () => {
-    this.props.resetPassword({ ...this.state });
-  };
+//class ForgotPassword extends Component {
+//  state = {
+//    email: "Enter email here", 
+//  };
+//  handleChange = event => {
+//    event.persist();
+//    this.setState({
+//      [event.target.name]: event.target.value
+//    });
+//  };
+//  handleFormSubmit = () => {
+//    this.props.resetPassword({ ...this.state });
+//  };
 
-  render() {
-    let { email } = this.state;
+//  render() {
+//    let { email } = this.state;
 
 
     
+    const ForgotPassword = () => {
+      const [email, setEmail] = React.useState('')
+      const handleChange = (e) => {
+        e.persist();
+        setEmail({
+          [e.target.name]: e.target.value
+        });
+      };
+      const handleFormSubmit = () => {
+        // this.props.resetPassword({ ...this.state });
+        resetPassword(email)
+      };
+
+
 
 
     return (
@@ -82,7 +96,7 @@ class ForgotPassword extends Component {
       </div>
     );
   }
-}
+//}
 
 const mapStateToProps = state => ({
   resetPassword: PropTypes.func.isRequired,
