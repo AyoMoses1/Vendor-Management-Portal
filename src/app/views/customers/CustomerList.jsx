@@ -15,7 +15,6 @@ states.unshift('All');
 const CustomerList = () => {
   const [isAlive, setIsAlive] = useState(true)
   const [userList, setUserList] = useState([])
-
   const [loading, isLoading] = useState(false)
   const [alert, setAlert] = useState('')
   const [severity, setSeverity] = useState('')
@@ -118,7 +117,7 @@ const CustomerList = () => {
         customBodyRenderLite: (dataIndex) => {
           let user = userList[dataIndex]
           return (
-            <div className='flex items-center'>
+            <div className='flex items-center customer__name'>
               <Link
                 to={{
                   pathname: '/customer/details',
@@ -144,7 +143,7 @@ const CustomerList = () => {
         customBodyRenderLite: (dataIndex) => {
           let user = userList[dataIndex]
           return (
-            <div className='flex items-center'>
+            <div className='flex items-center customer__email'>
               <Link
                 to={{
                   pathname: '/customer/details',
@@ -196,7 +195,7 @@ const CustomerList = () => {
         customBodyRenderLite: (dataIndex) => {
           let user = userList[dataIndex]
           return (
-            <div className='flex items-center'>
+            <div className='flex items-center date__registered'>
               <Link
                 to={{
                   pathname: '/customer/details',
@@ -341,34 +340,34 @@ const CustomerList = () => {
     // },
 
     
-     //{
-       //name: 'action',
-       //label: ' ',
-       //options: {
-       //filter: false,
-       //customBodyRenderLite: (dataIndex) => {
-       //let user = userList[dataIndex]
-        //return (
-       //<div className='flex items-center'>
-         //<div className='flex-grow'></div>
-         //<Link
-            //to={{
-            //pathname: '/customer/edit',
-            //state: {
-            //id: user.id,
-            //user,
-            //},
-            //  }}
-             //>
-              //  <IconButton>
-                // <Icon fontSize='small'>edit</Icon>
-          // </IconButton>
-            //  </Link>
-            //</div>
-         // )
-       // },
-     // },
-    //},
+     {
+       name: 'action',
+       label: ' ',
+       options: {
+       filter: false,
+       customBodyRenderLite: (dataIndex) => {
+       let user = userList[dataIndex]
+        return (
+       <div className='flex items-center'>
+         <div className='flex-grow'></div>
+         <Link
+            to={{
+            pathname: '/customer/edit',
+            state: {
+            id: user.id,
+            user,
+            },
+              }}
+             >
+                <IconButton>
+                 <Icon fontSize='small'>edit</Icon>
+           </IconButton>
+              </Link>
+            </div>
+          )
+        },
+      },
+    },
 
     
     // {

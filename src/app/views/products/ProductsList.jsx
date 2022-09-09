@@ -28,6 +28,7 @@ const Products = () => {
   const [source, setSource] = useState("ALL");
   const [query, setQuery] = useState("");
 
+  
   useEffect(() => {
     const fetchAllProducts = async () => {
       const response = await getAllResults(page, size, query)

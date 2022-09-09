@@ -8,7 +8,6 @@ import {
 import { TextValidator, ValidatorForm } from "react-material-ui-form-validator";
 import { connect } from "react-redux";
 import { PropTypes } from "prop-types";
-import { withRouter } from "react-router-dom";
 import { resetPassword } from "../../redux/actions/LoginActions";
 import afrimash2 from "./assets/svg/afrimash2.0.svg";
 import "./Forgotpassword.scss";
@@ -44,6 +43,7 @@ class ForgotPassword extends Component {
 
   render() {
     let { email } = this.state;
+    
     return (
       <div>
         <div className="logo__container ">

@@ -102,6 +102,7 @@ export function resetPassword({ email }) {
   };
 }
 
+
 export function firebaseLoginEmailPassword({ email, password }) {
   return dispatch => {
     FirebaseAuthService.signInWithEmailAndPassword(email, password)
