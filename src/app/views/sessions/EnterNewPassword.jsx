@@ -13,24 +13,37 @@ import { resetPassword } from "../../redux/actions/LoginActions";
 import afrimash2 from "./assets/svg/afrimash2.0.svg";
 import "./Forgotpassword.scss";
 import {Link} from "react-router-dom"
-
+import service from "./reset";
 
 
 class EnterNewPassword extends Component {
-  state = {
-    password: "Enter password here",
-  };
+  constructor() {
+    super();
+    this.state = {
+      password: "",
+    };
+  }
+
   handleChange = (event) => {
-    event.persist();
     this.setState({
       [event.target.name]: event.target.value,
     });
   };
-  handleFormSubmit = () => {
-    this.props.resetPassword({ ...this.state });
+
+  handleFormSubmit = async () => {
+    console.log('HERE')
+    try{
+      await service.resetUserPassword({ password: this.state.password });
+      alert("Password Reset")
+    }catch(e){
+      console.log(e)
+    }
   };
+
   render() {
     let { password } = this.state;
+    let { passwordVerify } = this.state;
+
 
     return (
       <div>
@@ -52,7 +65,7 @@ class EnterNewPassword extends Component {
                 name="password"
                 placeholder="********"
                 size="small"
-                value={this.password}
+                value={password}
                 validators={["required", "isPassword"]}
                 errorMessages={["this field is required", "password is not valid"]}
               />
@@ -65,7 +78,7 @@ class EnterNewPassword extends Component {
                 name="password"
                 placeholder="********"
                 size="small"
-                value={this.passwordVerify}
+                value={passwordVerify}
                 validators={["required", "isPassword"]}
                 errorMessages={["this field is required", "password does not match"]}
               />
