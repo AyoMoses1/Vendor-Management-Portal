@@ -44,7 +44,7 @@ const CustomerList = () => {
     {
       type: 'ADMIN',
       value: 'ADMIN',
-      name: 'Admin'
+      name: 'Admin' 
     },
     {
       type: 'AGENT APP',
@@ -436,44 +436,7 @@ const CustomerList = () => {
               title={<div>
                 <h4 className='mt-4 mb-0'>{title}</h4>
                 <div className='w-full flex'>
-                  <div className='w-220 flex-end sources'>
-                    <TextField
-                      className='mb-4'
-                      name='mobileNo'
-                      label='Filter by source'
-                      variant='outlined'
-                      margin='normal'
-                      select
-                      fullWidth
-                      value={source}
-                      onChange={(e) => { setSource(e.target.value); handleTitle(e.target.value) }}
-                    >
-                      {sourceTypes.map((sourceType, idx) => (
-                        <MenuItem key={idx} value={sourceType.value}>
-                          {sourceType.type}
-                        </MenuItem>
-                      ))}
-                    </TextField>
-                  </div>
-                  <div className='w-220 flex-end sources ml-4'>
-                    <TextField
-                      className='mb-4'
-                      name='mobileNo'
-                      label='Filter by location'
-                      variant='outlined'
-                      margin='normal'
-                      select
-                      fullWidth
-                      value={state}
-                      onChange={(e) => { setState(e.target.value) }}
-                    >
-                      {states.map((s, idx) => (
-                        <MenuItem key={idx} value={s}>
-                          {s}
-                        </MenuItem>
-                      ))}
-                    </TextField>
-                  </div>
+                  
                 </div>
               </div>}
               data={userList}
