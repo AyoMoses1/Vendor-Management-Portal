@@ -7,6 +7,7 @@ import PropTypes from "prop-types";
 import { navigations } from "../../navigations";
 import { MatxVerticalNav } from "matx";
 import { setLayoutSettings } from "app/redux/actions/LayoutActions";
+import '../override.css'
 
 class Sidenav extends Component {
   state = {};
