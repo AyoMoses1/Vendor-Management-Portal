@@ -266,7 +266,7 @@ const CustomerList = () => {
                 }}
                 className='ml-3'
               >
-                <h6 className='my-0 text-muted'>{user.creditSpent || '#145,023,500.0'}</h6>
+                <h6 className='my-0 text-muted'>{user.creditSpent || '----------'}</h6>
               </Link>
             </div>
           )

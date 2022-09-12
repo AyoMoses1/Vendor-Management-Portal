@@ -177,22 +177,43 @@ const Agents = () => {
                 },
               }}
               className='flex items-center'
-            >
-              <div className='w-220 text-control'>
-                <h6>
-                  <strong>Email:</strong> {user?.email}
-                </h6>
-                <br />
-                <h5 className='my-0 text-control'>Phone: {user?.mobileNo}</h5>
-              </div>
+            >      
+                <h5 className='my-0 text-control'>{user?.mobileNo}</h5>
             </Link>
           );
         },
       },
     },
+
     {
-      name: 'agentType', // field name in the row object
-      label: 'Agent Type', // column title that will be shown in table
+      name: 'email', // field name in the row object
+      label: 'Email', // column title that will be shown in table
+      options: {
+        filter: true,
+        customBodyRenderLite: (dataIndex) => {
+          let user = agentList[dataIndex];
+          setId(user.id);
+          return (
+            <Link
+              to={{
+                pathname: `/agent/details/${user.id}`,
+                state: {
+                  id: user.id,
+                  agentCode: user.agentCode,
+                },
+              }}
+              className='flex items-center'
+            >      
+                <h5 className='my-0 text-control'> {user?.email}</h5>
+            </Link>
+          );
+        },
+      },
+    },
+
+    {
+      name: 'dateRegistered', // field name in the row object
+      label: 'Date Registered', // column title that will be shown in table
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
@@ -211,7 +232,7 @@ const Agents = () => {
             >
               <div className='ml-10'>
                 <h5 className='my-0'>
-                  {user?.agentType === 'BD_AGENT' ? 'BDA AGENT' : 'LEAD AGENT'}
+                  {user?.dateRegistered || '-----'}
                 </h5>
               </div>
             </Link>
@@ -247,7 +268,7 @@ const Agents = () => {
     },
     {
       name: 'status', // field name in the row object
-      label: 'Application status', // column title that will be shown in table
+      label: 'Status', // column title that will be shown in table
       options: {
         filter: false,
         customBodyRenderLite: (dataIndex) => {
@@ -271,7 +292,7 @@ const Agents = () => {
     },
     {
       name: 'actions',
-      label: 'Actions',
+      label: 'Quick Actions',
       options: {
         filter: false,
         customBodyRenderLite: (dataIndex, another) => {
@@ -280,29 +301,17 @@ const Agents = () => {
             <>
               <Link
                 to={{
-                  pathname: '/agent/edit',
+                  pathname: '',
                   state: {
                     id: user.id,
                     user,
                   },
                 }}
               >
-                <MenuItem>Edit Agent</MenuItem>
+                <MenuItem>Activate</MenuItem>
+                <MenuItem>Suspend</MenuItem>
               </Link>
-              <Link
-                to={{
-                  pathname: `/agent/details/${user.id}`,
-                  state: {
-                    id: user.id,
-                    agentCode: user.agentCode,
-                  },
-                }}
-              >
-                <MenuItem>View Details</MenuItem>
-              </Link>
-              <MenuItem onClick={() => handleMenu('Delete Agent', user)}>
-                Delete Agent
-              </MenuItem>
+              
             </>
           );
         },

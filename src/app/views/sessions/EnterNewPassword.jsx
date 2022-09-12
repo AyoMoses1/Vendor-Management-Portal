@@ -12,6 +12,7 @@ import { resetPassword } from "../../redux/actions/LoginActions";
 import afrimash2 from "./assets/svg/afrimash2.0.svg";
 import "./Forgotpassword.scss";
 import service from "./reset";
+import queryString from 'query-string'
 
 
 class EnterNewPassword extends Component {
@@ -21,6 +22,7 @@ class EnterNewPassword extends Component {
       password: "",
       repeatPassword: "",
     };
+   
   }
 
   componentDidMount() {
@@ -57,6 +59,8 @@ handleChange = (event) => {
   render() {
     const { password } = this.state;
     const { repeatPassword } = this.state;
+    const params=queryString.parse(this.props.location.search);
+    console.log(params)
    
 
 
@@ -98,6 +102,19 @@ handleChange = (event) => {
                 validators={["required", "isPasswordMatch"]}
                 errorMessages={[ "this field is required", "password mismatch",]}
               />
+
+             <p className="new-password">One Time Password (OTP) </p>
+              <TextValidator
+                className="mb-24 w-100"
+                variant="outlined"
+                onChange={this.handleChange}
+                type="password"
+                name="number"
+                size="small"
+                value= "params"
+                validators={["required"]}
+              />
+
               <div className="flex flex-middle">
                   <Button
                     variant="outlined"
@@ -109,7 +126,6 @@ handleChange = (event) => {
                   </Button>
               </div>
             </ValidatorForm>
-            ;
           </div>
         </Container>
       </div>

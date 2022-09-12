@@ -43,6 +43,7 @@ class ForgotPassword extends Component {
 
   render() {
     let { email } = this.state;
+    console.log({email})
     
     return (
       <div>
