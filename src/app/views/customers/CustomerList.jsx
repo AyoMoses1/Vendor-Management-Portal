@@ -239,7 +239,7 @@ const CustomerList = () => {
               >
                 <h5 className='my-0 text-muted'>
                   {' '}
-                  {user.lastActivity || '27/01/2021'}
+                  {user.lastActivity|| '------'}
                 </h5>
               </Link>
             </div>
