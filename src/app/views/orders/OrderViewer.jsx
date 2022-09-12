@@ -361,7 +361,7 @@ const OrderViewer = ({ id, order }) => {
                             <Grid item xs={5}>
                               <div className='order-flex'>
                                 <div className='order-image'>
-                                  <img style={{ height: "auto" }} src={item.productId.productImages[0].imageUrl} />
+                                  <img style={{ height: "auto" }} src={item.productId.productImages[0]?.imageUrl} />
                                 </div>
                                 <div className='order-text-10'>
                                   <span className='product-name'>{item.productId.name.slice(0, 50) + "..."}</span>
@@ -408,7 +408,7 @@ const OrderViewer = ({ id, order }) => {
                             <Grid item xs={10}>
                               <div className='order-flex'>
                                 <div className='order-image'>
-                                  <img style={{ height: "auto" }} src={item.productId.productImages[0].imageUrl} />
+                                  <img style={{ height: "auto" }} src={item.productId.productImages[0]?.imageUrl} />
                                 </div>
                                 <div className='order-text-10' style={{ width: '70%' }}>
                                   <h6>{item.productId.shippingClass?.name}</h6>

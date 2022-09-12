@@ -201,3 +201,77 @@
 .product-shipping-weight {
     margin-top: 4px;
 }
+
+.product-color-section {
+    border: 1px solid rgb(227, 227, 227);
+    padding: 20px !important;
+}
+
+.title-divider{
+    border: 0;
+    border-top: 1px solid rgb(227, 227, 227);
+    margin: 10px 0;
+}
+.product-checkbox .MuiFormControlLabel-label{
+    font-size: 10px !important;
+    font-weight: 700;
+}
+.MuiSvgIcon-root{
+    font-size: 12px;
+}
+.MuiCheckbox-colorSecondary.Mui-checked{
+    color: black;
+}
+.product-color-section .MuiOutlinedInput-input{
+    padding: 5px 10px !important;
+}
+.section-title{
+    display: inline-block;
+    margin:10px 0;
+}
+.button-flex{
+    margin-top: 10px;
+    display: flex;
+    justify-content: flex-end;
+}
+.product-status{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.MuiOutlinedInput-root{
+    max-width: 90%;
+}
+
+.product-status-save-btn{
+    background: #fff;
+    border: 1px solid #06b01f;
+    font-size: 10px;
+    color: #06b01f;
+    height: 20px;
+    border-radius: 0;
+}
+
+.status-flex{
+    display: flex;
+    justify-content: space-between;
+}
+.status-flex div{
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.del-icon{
+    color: rgb(211, 2, 2);
+    text-decoration: underline;
+    font-size: 10px;
+    margin-top: 20px;
+    display: flex;
+    justify-content: start;
+    padding: 0;
+    background: transparent;
+}
+.del-icon:hover{
+    background: transparent;
+    text-decoration: underline;
+}

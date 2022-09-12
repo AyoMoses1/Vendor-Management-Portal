@@ -1,5 +1,5 @@
 import React, { Component, useEffect, useState } from "react";
-import { Grid, Card, Icon, Button, Tooltip, Popover, Typography, } from "@material-ui/core";
+import { Grid, Card, Icon, Box, Button, Tooltip, Popover, Typography, } from "@material-ui/core";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./shared.css";
@@ -100,6 +100,7 @@ const DateRangePickerComponent = ({ setSelectedDate }) => {
                 return new Date() > d;
               }}
               placeholderText="Select Start Date"
+              size="xsmall"
               dateFormat="MMMM d, yyyy h:mmaa"
               selected={startDate}
               selectsStart
@@ -110,6 +111,7 @@ const DateRangePickerComponent = ({ setSelectedDate }) => {
               onCalendarClose={handleCalendarClose}
             />
           </div>
+          <Box sx={{ mx: 1 }}> to </Box>
           <div>
             <DatePicker
               isClearable
@@ -117,6 +119,7 @@ const DateRangePickerComponent = ({ setSelectedDate }) => {
                 return new Date() > d;
               }}
               placeholderText="Select End Date"
+              size="xsmall"
               dateFormat="MMMM d, yyyy h:mmaa"
               selected={endDate}
               selectsEnd
