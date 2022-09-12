@@ -207,8 +207,11 @@ const CustomerList = () => {
               >
                 <h5 className='my-0 text-muted'>
                   {' '}
-                  {user.dateRegistered || '-----'}
+                  {user.dateRegistered.split(" ")[0] || '-----'}
                 </h5>
+                <span className='date'>
+                {user.dateRegistered.split(" ")[1] || '-----'}
+                </span>
               </Link>
             </div>
           )
@@ -236,7 +239,7 @@ const CustomerList = () => {
               >
                 <h5 className='my-0 text-muted'>
                   {' '}
-                  {user.lastActivity || '-----'}
+                  {user.lastActivity || '27/01/2021'}
                 </h5>
               </Link>
             </div>
@@ -263,7 +266,7 @@ const CustomerList = () => {
                 }}
                 className='ml-3'
               >
-                <h6 className='my-0 text-muted'>{user.creditSpent || '-----'}</h6>
+                <h6 className='my-0 text-muted'>{user.creditSpent || '#145,023,500.0'}</h6>
               </Link>
             </div>
           )
@@ -289,7 +292,7 @@ const CustomerList = () => {
                 }}
                 className='ml-3'
               >
-                <h6 className='my-0 text-muted'>{user.creditLimit || '-----'}</h6>
+                <h6 className='my-0 text-muted'>{user.creditLimit || '#5,023,500.00'}</h6>
               </Link>
             </div>
           )
@@ -340,34 +343,34 @@ const CustomerList = () => {
     // },
 
     
-     {
-       name: 'action',
-       label: ' ',
-       options: {
-       filter: false,
-       customBodyRenderLite: (dataIndex) => {
-       let user = userList[dataIndex]
-        return (
-       <div className='flex items-center'>
-         <div className='flex-grow'></div>
-         <Link
-            to={{
-            pathname: '/customer/edit',
-            state: {
-            id: user.id,
-            user,
-            },
-              }}
-             >
-                <IconButton>
-                 <Icon fontSize='small'>edit</Icon>
-           </IconButton>
-              </Link>
-            </div>
-          )
-        },
-      },
-    },
+     //{
+       //name: 'action',
+       //label: ' ',
+       //options: {
+       //filter: false,
+       //customBodyRenderLite: (dataIndex) => {
+       //let user = userList[dataIndex]
+        //return (
+       //<div className='flex items-center'>
+         //<div className='flex-grow'></div>
+         //<Link
+            //to={{
+            //pathname: '/customer/edit',
+            //state: {
+            //id: user.id,
+            //user,
+            //},
+              //}}
+             //>
+                //<IconButton>
+                 //<Icon fontSize='small'>edit</Icon>
+           //</IconButton>
+              //</Link>
+            //</div>
+          //)
+        //},
+      //},
+    //},
 
     
     // {

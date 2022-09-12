@@ -2,16 +2,16 @@
     width: 100%;
 }
 
-.customer-table thead tr th {
-   /*padding-left: 24px !important;
-   padding-right: 24px !important;*/
+.customer-table {
+    font-size: 14px!important;
+}
 
+.customer-table thead tr th {
     padding-left: 48px;
     background: #F0F2F5;
-    font-size: 14px;
     justify-content: center;
     padding-top: 4px;
-    padding-bottom: 4px
+    padding-bottom: 4px;
 }
 
 .customer-table thead tr th .MuiButton-text {
@@ -25,7 +25,6 @@
 
 .customer-table tbody{
     padding: 0 20px;
-    overflow-x: hidden;
   }
 
 .customer-table tbody tr td {
@@ -37,8 +36,8 @@
     padding-left: 24px !important;
     padding-right: 24px !important;
     background: #FAFBFD;
-    font-size: 12px;
-    padding-top: 6px;
+    padding-top: 12px;
+    padding-bottom: 12px;
     padding-bottom: 6px;
     color: #000000;
   }
@@ -56,16 +55,8 @@
   }
 
   .customer-table tbody tr td{
-    text-align: center;
+    text-align: left;    
   }
-
-.customer-table thead tr th:first-child {
-    width: 150px !important;
-}
-
-.customer-table thead tr th:last-child {
-    width: 50px !important;
-}
 
 .sources .MuiSelect-root {
     padding: 12px;
@@ -74,11 +65,31 @@
 
 .text-control {
     font-size: 14px;
+    color:#4A466DDE;
+    
+}
+
+.ellipsis {
+    font-size: 14px;
+    color:#4A466DDE;
+   
+}
+
+.text-muted {
+    font-size: 14px;
+    color:#4A466DDE;
+    
+}
+
+.date {
+    font-size: 11px;
+    padding-left: 6px;
 }
 
 .customer__name{
     width: 150px;
     overflow: hidden;
+    
 }
 
 .customer__email{
@@ -89,4 +100,5 @@
 .date__registered {
     width: 150px;
     overflow: hidden;
+    text-align: left;
 }
