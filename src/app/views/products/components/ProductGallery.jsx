@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import './shared.css'
 import Box from '@mui/material/Box';
 import { Button, Grid } from '@material-ui/core';
@@ -31,7 +31,7 @@ const ProductGallery = () => {
     >
         <div className='flex justify-between items-center'>
             <div className="product-details-title">Gallery</div>
-            <Button variant='contained' color='primary' className='product-gallery-save-btn'>Save</Button>
+            <Button variant='contained' color='primary' className='product-outline-save-btn'>Save</Button>
         </div>
         <Grid container spacing={2} className='mt-4'>
             <Grid item lg={12} md={12} sm={12} xs={12}>

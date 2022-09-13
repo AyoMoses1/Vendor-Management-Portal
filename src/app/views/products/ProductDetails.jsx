@@ -65,7 +65,7 @@ const ProductDetails = ({ location, placeholder }) => {
   const [longDesc, setLongDesc] = useState('')
 
 
-  const config = useMemo(() =>({
+  const config = useMemo(() => ({
     readonly: false,
     toolbarButtonSize: 'middle',
     placeholder: placeholder || 'Start typings...'
@@ -109,8 +109,8 @@ const ProductDetails = ({ location, placeholder }) => {
     <div className='m-sm-30'>
       <div className='mb-sm-30'>
         <Grid container spacing={2}>
-          <Grid container spacing={2} item xs = {8}>
-            <Grid item xs = {12}>
+          <Grid container spacing={2} item xs={8}>
+            <Grid item xs={12}>
               <Grid item xs={12}>
                 <Item>
                   <Box
@@ -122,57 +122,57 @@ const ProductDetails = ({ location, placeholder }) => {
                     noValidate
                     autoComplete="off"
                   >
-                      <FormControl sx={{  width: '100%' }} variant="outlined">
-                        <label className='section-title'>Product Name</label>
-                        <OutlinedInput
-                          id="outlined-adornment-weight"
-                          value={values.weight}
-                          className="form-border"
-                          onChange={() => handleChange()}
-                          aria-describedby="outlined-weight-helper-text"
-                          inputProps={{
-                            'aria-label': 'weight',
-                          }}
-                        />
-                      </FormControl>
-                      <FormControl sx={{ width: '100%' }} variant="outlined">
-                        <label className='section-title'>Short Description</label>
-                        <JoditEditor
-                          ref={editor}
-                          value={shortDesc}
-                          config={config}
-                          tabIndex={1} // tabIndex of textarea
-                          onBlur={newContent => setShortDesc(newContent)} // preferred to use only this option to update the content for performance reasons
-                          onChange={newContent => {}}
-                        />
-                      </FormControl>
-                      <FormControl sx={{ width: '100%' }} variant="outlined">
-                        <label className='section-title'>Long Description</label>
-                        <JoditEditor
-                          ref={editor}
-                          value={longDesc}
-                          config={config}
-                          tabIndex={0} // tabIndex of textarea
-                          onBlur={newContent => setLongDesc(newContent)} // preferred to use only this option to update the content for performance reasons
-                          onChange={newContent => {}}
-                        />
-                      </FormControl>
+                    <FormControl sx={{ width: '100%' }} variant="outlined">
+                      <label className='section-title'>Product Name</label>
+                      <OutlinedInput
+                        id="outlined-adornment-weight"
+                        value={values.weight}
+                        className="form-border"
+                        onChange={() => handleChange()}
+                        aria-describedby="outlined-weight-helper-text"
+                        inputProps={{
+                          'aria-label': 'weight',
+                        }}
+                      />
+                    </FormControl>
+                    <FormControl sx={{ width: '100%' }} variant="outlined">
+                      <label className='section-title'>Short Description</label>
+                      <JoditEditor
+                        ref={editor}
+                        value={shortDesc}
+                        config={config}
+                        tabIndex={1} // tabIndex of textarea
+                        onBlur={newContent => setShortDesc(newContent)} // preferred to use only this option to update the content for performance reasons
+                        onChange={newContent => { }}
+                      />
+                    </FormControl>
+                    <FormControl sx={{ width: '100%' }} variant="outlined">
+                      <label className='section-title'>Long Description</label>
+                      <JoditEditor
+                        ref={editor}
+                        value={longDesc}
+                        config={config}
+                        tabIndex={0} // tabIndex of textarea
+                        onBlur={newContent => setLongDesc(newContent)} // preferred to use only this option to update the content for performance reasons
+                        onChange={newContent => { }}
+                      />
+                    </FormControl>
                   </Box>
                 </Item>
               </Grid>
             </Grid>
             <Grid item xs={12}>
               <Item>
-                <ProductType/>
+                <ProductType />
               </Item>
             </Grid>
             <Grid item xs={12}>
               <Item>
-                <ProductSpecification/>
+                <ProductSpecification />
               </Item>
             </Grid>
           </Grid>
-          <Grid container spacing={2} item xs={4}>
+          <Grid container spacing={2} item xs={4} style={{ display: 'initial' }}>
             <Grid item xs={12}>
               <Item>
                 <ProductStatus />
