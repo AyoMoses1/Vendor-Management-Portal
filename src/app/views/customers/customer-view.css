@@ -27,10 +27,6 @@
     padding: 0 20px;
   }
 
-.customer-table tbody tr td {
-    padding-left: 24px !important;
-    padding-right: 24px !important;
-}
 
 .customer-table tbody tr td {
     padding-left: 24px !important;
@@ -77,8 +73,7 @@
 
 .text-muted {
     font-size: 14px;
-    color:#4A466DDE;
-    
+    color:#4A466DDE;    
 }
 
 .date {

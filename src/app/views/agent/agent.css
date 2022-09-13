@@ -13,14 +13,24 @@
     background-color: #f8dda7;
   }
 
+  agent-table {
+    font-size: 14px!important;
+}
+
+  .agent-table tbody tr td .MuiTableCell-root{
+    font-size: 12px;
+  }
 
 .agent-table thead tr th {
     padding-left: 48px;
     background: #F0F2F5;
-    font-size: 14px;
     justify-content: center;
     padding-top: 4px;
     padding-bottom: 4px;
+}
+
+.agent-table .MuiTableCell-root {
+  border-bottom: 4px solid #ffffff!important;
 }
 
 .agent-table thead tr th .MuiButton-text {
@@ -28,24 +38,16 @@
     color: #000000;
   }
 
-.agent-table tbody tr td .MuiTableCell-root{
-    color: red;
-    font-size: 12px;
-  }
-
-.agent-table thead th{
-    color: red !important;
-    font-size: 8px !important;
-  }
+  .agent-table .MuiTableCell-root {
+    margin-top: 10px;
+}
 
 .agent-table tbody tr td {
-    padding-left: 24px !important;
-    padding-right: 24px !important;
+  text-align: left;
 }
 
 .agent-table tbody{
     padding: 0 20px;
-    overflow-x: hidden;
   }
   
 .agent-table tbody tr td {
@@ -63,26 +65,59 @@
   }
 
 .agent-table tbody tr td{
-    text-align: center;
+    text-align: left;
   }
 
 .w-full {
     width: 100%;
 }
 
-.agent-table thead tr th:first-child {
-    width: 100px !important;
-}
-
 .text-muted {
-    font-size: 14px;
+  font-size: 14px;
+  color:#4A466DDE; 
 }
 
 .text-control {
-    font-size: 14px;
+  font-size: 14px;
+  color:#4A466DDE;
+  
+}
+
+.agent-table thead th{
+  font-size: 8px !important;
 }
 
 .sources .MuiSelect-root {
     padding: 12px;
     font-size: 12px;
+}
+
+.date {
+  font-size: 11px;
+  padding-left: 6px;
+}
+
+.agent__name{
+  width: 150px;
+  overflow: hidden;
+  
+}
+
+.agent__email{
+  width: 150px;
+  overflow: hidden;
+}
+
+.date__registered {
+  width: 150px;
+  overflow: hidden;
+  text-align: left;
+}
+
+.menu__item {
+  text-decoration: underline;
+}
+
+.agent__status {
+  font-size: 10px;
 }
