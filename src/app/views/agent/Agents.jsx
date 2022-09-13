@@ -275,17 +275,22 @@ const Agents = () => {
           let user = agentList[dataIndex];
           setId(user.id);
           return (
+            <div className={`flex items-center`}>
+            <div className={`ml-3  agent__status  ${user?.status}`}>
             <Link
               to={{
-                pathname: `/agent/details/${user.id}`,
+                pathname: "/agent/details",
                 state: {
                   id: user.id,
                   agentCode: user.agentCode,
                 },
               }}
+              className="ml-3 mr-4"
             >
-              <div>{user.status}</div>
+              <span className='text'>{user?.status || '------'}</span>
             </Link>
+          </div>
+        </div>
           );
         },
       },
@@ -309,7 +314,7 @@ const Agents = () => {
                 }}
               >
                 <MenuItem>Activate</MenuItem>
-                <MenuItem>Suspend</MenuItem>
+                
               </Link>
               
             </>
@@ -362,46 +367,7 @@ const Agents = () => {
             <MUIDataTable
               title={<div>
                 <h4 className='mt-4 mb-0'>{title}</h4>
-                <div className='w-full flex'>
-                  <div className='w-220 flex-end sources'>
-                    <TextField
-                      className='mb-4'
-                      name='mobileNo'
-                      label='Filter by Agent Type'
-                      variant='outlined'
-                      margin='normal'
-                      select
-                      fullWidth
-                      value={agentType}
-                      onChange={(e) => { setAgentType(e.target.value); handleTitle(e.target.value) }}
-                    >
-                      {types.map((t, idx) => (
-                        <MenuItem key={idx} value={t.value}>
-                          {t.name}
-                        </MenuItem>
-                      ))}
-                    </TextField>
-                  </div>
-                  <div className='w-220 flex-end sources ml-4'>
-                    <TextField
-                      className='mb-4'
-                      name='mobileNo'
-                      label='Filter by location'
-                      variant='outlined'
-                      margin='normal'
-                      select
-                      fullWidth
-                      value={state}
-                      onChange={(e) => { setState(e.target.value) }}
-                    >
-                      {states.map((s, idx) => (
-                        <MenuItem key={idx} value={s}>
-                          {s}
-                        </MenuItem>
-                      ))}
-                    </TextField>
-                  </div>
-                </div>
+                
               </div>}
               data={[...agentList]}
               columns={columns}

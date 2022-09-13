@@ -49,7 +49,7 @@ handleChange = (event) => {
   handleFormSubmit = async () => {
     console.log('HERE')
     try{
-      await service.userChangePassword({ password: this.state.password });
+      await service.userChangePassword({ password: this.state.password, repeatPassword:this.state.repeatPassword});
       alert("Password Reset")
     }catch(e){
       console.log(e)
@@ -59,7 +59,7 @@ handleChange = (event) => {
   render() {
     const { password } = this.state;
     const { repeatPassword } = this.state;
-    const params=queryString.parse(this.props.location.search);
+    const params = queryString.parse(this.props.location.search);
     console.log(params)
    
 

@@ -521,10 +521,6 @@ const CustomerList = () => {
                             Add New
                           </Button>
                         </IconButton>
-                        <div className='w-full pr-20 flex justify-end items-center'>
-                          <p className='pr-10'>Total: </p>
-                          <h6 className='mb-0'>{total}</h6>
-                        </div>
                       </Link>
                     </>
                   )
