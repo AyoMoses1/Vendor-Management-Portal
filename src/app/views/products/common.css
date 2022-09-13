@@ -55,3 +55,8 @@
     color: #27AE60;
     background-color: rgba(39, 174, 96, 0.1);
 }
+
+.page-title {
+    font-size: 18px;
+    color: #000000;
+}

@@ -1,17 +1,12 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react'
-import { Divider, Grid, Icon } from '@material-ui/core'
-import { Breadcrumb, SimpleCard } from 'matx'
+import { Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import clsx from 'clsx'
 import http from '../../services/api'
 import './product-details.css'
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
-import InputAdornment from '@mui/material/InputAdornment';
 import OutlinedInput from '@mui/material/OutlinedInput';
-import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import JoditEditor from 'jodit-react'
 import ProductType from './components/ProductType'
@@ -20,10 +15,7 @@ import ProductGallery from './components/ProductGallery'
 import ProductShipping from './components/ProductShipping'
 import ProductStatus from './components/ProductStatus'
 import ProductCategory from './components/ProductCategory'
-
-
-
-
+import "./common.css"
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -49,9 +41,6 @@ const ProductDetails = ({ location, placeholder }) => {
   const [imageList, setImageList] = useState([])
   const [store, setStore] = useState([])
   const [seller, setSeller] = useState([])
-
-
-  const [value, setValue] = React.useState('Controlled');
   const [values, setValues] = React.useState({
     name: '',
     shortDescription: '',
@@ -109,10 +98,15 @@ const ProductDetails = ({ location, placeholder }) => {
     <div className='m-sm-30'>
       <div className='mb-sm-30'>
         <Grid container spacing={2}>
+          <Grid container spacing={2} item xs={12}>
+            <Grid item xs={12}>
+              <div className='page-title'>Edit Product</div>
+            </Grid>
+          </Grid>
           <Grid container spacing={2} item xs={8}>
             <Grid item xs={12}>
               <Grid item xs={12}>
-                <Item>
+                <Item className='no-shadow'>
                   <Box
                     component="form"
                     className='product--form'
@@ -162,34 +156,34 @@ const ProductDetails = ({ location, placeholder }) => {
               </Grid>
             </Grid>
             <Grid item xs={12}>
-              <Item>
+              <Item className='no-shadow'>
                 <ProductType />
               </Item>
             </Grid>
             <Grid item xs={12}>
-              <Item>
+              <Item className='no-shadow'>
                 <ProductSpecification />
               </Item>
             </Grid>
           </Grid>
           <Grid container spacing={2} item xs={4} style={{ display: 'initial' }}>
             <Grid item xs={12}>
-              <Item>
+              <Item className='no-shadow'>
                 <ProductStatus />
               </Item>
             </Grid>
             <Grid item xs={12}>
-              <Item>
+              <Item className='no-shadow'>
                 <ProductShipping />
               </Item>
             </Grid>
             <Grid item xs={12}>
-              <Item>
+              <Item className='no-shadow'>
                 <ProductGallery />
               </Item>
             </Grid>
             <Grid item xs={12}>
-              <Item>
+              <Item className='no-shadow'>
                 <ProductCategory />
               </Item>
             </Grid>

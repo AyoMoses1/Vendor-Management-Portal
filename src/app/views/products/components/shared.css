@@ -221,7 +221,7 @@
 }
 
 .attribute-case .MuiTextField-root {
-    margin: 0px!important;
+    margin: 0px !important;
 }
 
 .product-shipping-weight fieldset,
@@ -391,4 +391,24 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.no-shadow {
+    box-shadow: none !important;
+}
+
+.category-input-container .MuiTextField-root {
+    margin: 0px!important;
+    padding: 12px 4px;
+}
+
+.category-area {
+    display: flex;
+    align-items: center;
+}
+
+.category-checkbox {
+    display: flex;
+    width: 100%;
+    justify-content: center;
 }

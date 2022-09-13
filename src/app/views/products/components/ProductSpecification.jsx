@@ -34,14 +34,6 @@ const productItems = [
 
 const ProductSpecification = () => {
     const [productAttribute, setProductAttribute] = useState('SIMPLE')
-    const [productItem, setProductItem] = useState('ITEM_1')
-
-    const [state, setState] = React.useState({ gilad: false });
-    const { gilad } = state;
-
-    const handleCheck = name => event => {
-        setState({ ...state, [name]: event.target.checked });
-    };
 
     return <Box
         component="form"

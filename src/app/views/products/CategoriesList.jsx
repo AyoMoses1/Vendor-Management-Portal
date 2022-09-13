@@ -74,7 +74,17 @@ const CategoriesList = () => {
           return (
             <div className='flex items-center'>
               <div className='ml-3'>
-                {category.parentCategoryId?.name}
+                <Link
+                  to={{
+                    pathname: "/product-category/details",
+                    state: {
+                      id: category.id,
+                    },
+                  }}
+                >
+
+                  {category.parentCategoryId?.name}
+                </Link>
               </div>
             </div>
           );
