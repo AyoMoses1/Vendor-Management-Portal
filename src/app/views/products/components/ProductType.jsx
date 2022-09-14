@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import './shared.css'
 import Box from '@mui/material/Box';
 import { Checkbox, Grid, InputAdornment, MenuItem, TextField } from '@material-ui/core';
@@ -16,20 +16,8 @@ const productTypes = [
 
 const ProductType = () => {
     const [productType, setProductType] = useState('SIMPLE')
-    const [values, setValues] = React.useState({
-        name: '',
-        coupons: '',
-        longDescription: '',
-        weightRange: '',
-        showPassword: false,
-    });
-
     const [state, setState] = React.useState({ gilad: false });
     const { gilad } = state;
-
-    const handleChange = (event) => {
-        // setValue(event.target.value);
-    };
 
     const handleCheck = name => event => {
         setState({ ...state, [name]: event.target.checked });

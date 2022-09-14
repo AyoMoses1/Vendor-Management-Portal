@@ -10,7 +10,7 @@ const statuses = [
     },
 ]
 
-const ProductStatus = () => {
+const CategoryStatus = () => {
     const [status, setStatus] = useState('DRAFT');
 
     return <Box
@@ -23,7 +23,7 @@ const ProductStatus = () => {
         autoComplete="off"
     >
         <div className='flex justify-between items-center'>
-            <div className="product-details-title">Product Status</div>
+            <div className="product-details-title">Category Status</div>
             <Button variant='contained' color='primary' className='product-gallery-save-btn'>Update</Button>
         </div>
         <Grid container spacing={2} className='mt-4'>
@@ -66,7 +66,7 @@ const ProductStatus = () => {
                             <div>12:01AM 27/3/2022 by @IgeAbdulla</div>
                         </Grid>
                         <Grid item lg={12} md={12} sm={12} xs={12} className='status-flex no-border'>
-                            <div>Product Views:</div>
+                            <div>Category Views:</div>
                             <div>4,235</div>
                         </Grid>
                     </Grid>
@@ -78,4 +78,4 @@ const ProductStatus = () => {
     </Box>
 }
 
-export default ProductStatus;
+export default CategoryStatus;

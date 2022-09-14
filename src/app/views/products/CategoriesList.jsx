@@ -15,6 +15,7 @@ import { useDialog } from 'muibox';
 import { updateCategoryFeature } from '../../redux/actions/ussd-action';
 import { useDispatch } from 'react-redux';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import "./common.css";
 
 const CategoriesList = () => {
   const [categories, setCategories] = useState([]);
@@ -22,7 +23,7 @@ const CategoriesList = () => {
 
   const dialog = useDialog();
 
-  const dispatcher = useDispatch(); 
+  const dispatcher = useDispatch();
 
   useEffect(() => {
     http.get(`/afrimash/product-categories/search?`).then((response) => {
@@ -45,7 +46,7 @@ const CategoriesList = () => {
 
   const handleFeaturedOnUSSD = async (productCat) => {
     try {
-      
+
       const confirmMessage = productCat.isFeaturedOnUssd
         ? `Do you want to remove ${productCat.name} from USSD menu?`
         : `Do you want to feature ${productCat.name} on USSD menu?`;
@@ -64,46 +65,8 @@ const CategoriesList = () => {
 
   const columns = [
     {
-      name: 'name', // field name in the row object
-      label: 'Name', // column title that will be shown in table
-      options: {
-        filter: true,
-        customBodyRenderLite: (dataIndex) => {
-          let category = categories[dataIndex];
-
-          return (
-            <div className='flex items-center'>
-              <div className='ml-3'>
-                <h5 className='my-0 text-15'>{category?.name}</h5>
-              </div>
-            </div>
-          );
-        },
-      },
-    },
-    {
-      name: 'translatedName',
-      label: 'Translated Name',
-      options: {
-        filter: true,
-        customBodyRenderLite: (dataIndex) => {
-          let category = categories[dataIndex];
-          return (
-            <div className='flex items-center'>
-              <div className='ml-3'>
-                <h5 className='my-0 text-15'>
-                  {' '}
-                  {category.translatedName || '-----'}
-                </h5>
-              </div>
-            </div>
-          );
-        },
-      },
-    },
-    {
       name: 'parentCategory',
-      label: 'Parent Category',
+      label: 'Category',
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
@@ -111,9 +74,17 @@ const CategoriesList = () => {
           return (
             <div className='flex items-center'>
               <div className='ml-3'>
-                <h5 className='my-0 text-15'>
+                <Link
+                  to={{
+                    pathname: "/product-category/details",
+                    state: {
+                      id: category.id,
+                    },
+                  }}
+                >
+
                   {category.parentCategoryId?.name}
-                </h5>
+                </Link>
               </div>
             </div>
           );
@@ -122,7 +93,7 @@ const CategoriesList = () => {
     },
     {
       name: 'subCategories',
-      label: 'Sub Categories',
+      label: 'Sub-Categories',
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
@@ -142,50 +113,121 @@ const CategoriesList = () => {
     },
     {
       name: 'status', // field name in the row object
-      label: 'Featured Status', // column title that will be shown in table
+      label: 'Status', // column title that will be shown in table
       options: {
         filter: true,
+        setCellHeaderProps: () => { return { width: "75px" } },
         customBodyRenderLite: (dataIndex) => {
           let category = categories[dataIndex];
-
           return category.isFeaturedOnUssd ? (
-            <Chip label='Featured' color='success' variant='outlined' />
+            <div className={`items-center category isFeatured`}>
+              <span className="ml-3">Published</span>
+            </div>
           ) : (
-            <Chip label='Not Featured' color='failed' />
+            <div className={`items-center category isNotFeatured`}>
+              <span className="ml-3">Draft</span>
+            </div>
           );
         },
       },
     },
     {
       name: 'action',
-      label: ' ',
+      label: 'Product Qty',
       options: {
         filter: false,
         customBodyRenderLite: (dataIndex) => {
           let category = categories[dataIndex];
-          return (
-            <Button
-              onClick={() => handleFeaturedOnUSSD(category)}
-              variant='text'
-            >
-              {category.isFeaturedOnUssd ? 'Remove from USSD' : 'Add to USSD'}
-            </Button>
-          );
-        },
-      },
-    },
-    {
-      name: 'action',
-      label: ' ',
-      options: {
-        filter: false,
-        customBodyRenderLite: (dataIndex) => {
           return (
             <div className='flex items-center'>
-              <div className='flex-grow items-center'></div>
-              <IconButton>
-                <Icon>delete</Icon>
-              </IconButton>
+              <div className='ml-3'>
+                {category.parentCategoryId?.quantity ?? '---'}
+              </div>
+            </div>
+          );
+        },
+      },
+    },
+    {
+      name: 'action',
+      label: 'Views',
+      options: {
+        filter: false,
+        customBodyRenderLite: (dataIndex) => {
+          let category = categories[dataIndex];
+          return (
+            <div className='flex items-center'>
+              <div className='ml-3'>
+                {category.parentCategoryId?.views ?? '---'}
+              </div>
+            </div>
+          );
+        },
+      },
+    },
+    {
+      name: 'action',
+      label: 'Tag',
+      options: {
+        filter: false,
+        customBodyRenderLite: (dataIndex) => {
+          let category = categories[dataIndex];
+          return (
+            <div className='flex items-center'>
+              <div className='ml-3'>
+                {category.parentCategoryId?.tags ?? '---'}
+              </div>
+            </div>
+          );
+        },
+      },
+    },
+    {
+      name: 'action',
+      label: 'Key Phrase',
+      options: {
+        filter: false,
+        customBodyRenderLite: (dataIndex) => {
+          let category = categories[dataIndex];
+          return (
+            <div className='flex items-center'>
+              <div className='ml-3'>
+                {category.parentCategoryId?.keyPhrase ?? '---'}
+              </div>
+            </div>
+          );
+        },
+      },
+    },
+    {
+      name: 'action',
+      label: 'Slug',
+      options: {
+        filter: false,
+        customBodyRenderLite: (dataIndex) => {
+          let category = categories[dataIndex];
+          return (
+            <div className='flex items-center'>
+              <div className='ml-3'>
+                {category.parentCategoryId?.slug ?? '---'}
+              </div>
+            </div>
+          );
+        },
+      },
+    },
+    {
+      name: 'action',
+      label: 'Date Created',
+      options: {
+        filter: false,
+        customBodyRenderLite: (dataIndex) => {
+          let category = categories[dataIndex];
+          return (
+            <div className='flex items-center'>
+              <div className='ml-3'>
+                {category.parentCategoryId?.createdAt ?? '---'}
+              </div>
             </div>
           );
         },
@@ -195,7 +237,7 @@ const CategoriesList = () => {
 
   return (
     <div className='m-sm-30'>
-      <div className='mb-sm-30' style={{display: 'flex', justifyContent: 'space-between'}}>
+      <div className='mb-sm-30' style={{ display: 'flex', justifyContent: 'space-between' }}>
         <Breadcrumb
           routeSegments={[
             { name: 'Product Categories', path: '/product-categories' },
@@ -204,13 +246,13 @@ const CategoriesList = () => {
         {loading && <CircularProgress size={20} />}
       </div>
       <div className='overflow-auto'>
-        <div className='min-w-750'>
+        <div className='min-w-750 all-product-categories'>
           <MUIDataTable
             title={'Product Categories'}
             data={categories}
             columns={columns}
             options={{
-              serverSide: true,
+              serverSide: false,
               onRowsDelete: (data) =>
                 dialog
                   .confirm('Are you sure you want to delete?')
@@ -220,13 +262,7 @@ const CategoriesList = () => {
                   }),
               filterType: 'textField',
               responsive: 'standard',
-              // selectableRows: "none", // set checkbox for each row
-              // search: false, // set search option
-              // filter: false, // set data filter option
-              // download: false, // set download option
-              // print: false, // set print option
-              // pagination: true, //set pagination option
-              // viewColumns: false, // set column option
+              selectableRows: false,
               elevation: 0,
               rowsPerPageOptions: [10, 20, 40, 80, 100],
               customSearchRender: (

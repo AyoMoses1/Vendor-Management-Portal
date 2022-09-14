@@ -24,3 +24,8 @@
 .user-table thead tr th:first-child {
     width: 100px !important;
 }
+
+.user-roles .MuiSelect-root {
+    padding: 12px;
+    font-size: 12px;
+}
