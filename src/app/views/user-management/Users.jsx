@@ -4,7 +4,7 @@ import MUIDataTable from 'mui-datatables'
 import { Grow, Icon, IconButton, TextField, Button, MenuItem, Typography, Select } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 import Notification from '../../components/Notification'
-import { getAllRoles, getAllUser, deleteUser } from './UserService'
+import { getAllRoles, getAllUser, deleteUser, filterAllUser } from './UserService'
 import Loading from 'matx/components/MatxLoadable/Loading'
 import { useDialog } from 'muibox'
 import Alert from 'app/components/Alert';
@@ -30,20 +30,21 @@ const Users = () => {
   const [title, setTitle] = useState('All Users');
   const [statistics, setStatistics] = useState([]);
   const [total, setTotal] = useState(0);
+  const [query, setQuery] = useState('');
 
   useEffect(() => {
-    getAllUser(setUserList, isLoading, setAlert, setSeverity, setCount, page, size, role)
+    getAllUser(setUserList, isLoading, setAlert, setSeverity, setCount, page, size, role, query)
     return () => setIsAlive(false)
   }, [isAlive, page, size])
 
   const onPageChange = (page) => {
-    getAllUser(setUserList, isLoading, setAlert, setSeverity, setCount, page, size, role)
+    getAllUser(setUserList, isLoading, setAlert, setSeverity, setCount, page, size, role, query)
     setPage(page)
   }
 
   const handleCustomSearch = (value) => {
     setRole(value);
-    getAllUser(setUserList, isLoading, setAlert, setSeverity, setCount, page, size, value)
+    getAllUser(setUserList, isLoading, setAlert, setSeverity, setCount, page, size, value, query)
     if (value === 0) {
       setTitle('All Users')
     } else {
@@ -75,7 +76,7 @@ const Users = () => {
   }
 
   const refresh = () => {
-    getAllUser(setUserList, isLoading, setAlert, setSeverity, setCount, page, size, role);
+    getAllUser(setUserList, isLoading, setAlert, setSeverity, setCount, page, size, role, query);
   }
 
   const handleAlertModal = () => {
@@ -268,6 +269,13 @@ const Users = () => {
 
   const debouncedUsers = debounce((value) => {
     console.log(value);
+    if (value.length > 0) {
+      filterAllUser(setUserList, setAlert, setSeverity, setCount, page, size, role, value);
+      setQuery(value);
+    } else {
+      filterAllUser(setUserList, setAlert, setSeverity, setCount, page, size, role, '');
+      setQuery('');
+    }
   }, 700);
 
   const performSearch = (value) => {
@@ -301,7 +309,7 @@ const Users = () => {
               title={<div>
                 <h4 className='mt-4 mb-0'>{title}</h4>
                 <div className='w-full flex'>
-                  <div className='w-220 flex-end mt-4'>
+                  <div className='w-220 flex-end mt-4 user-roles'>
                     <Grow appear in={true} timeout={300}>
                       <Select
                         size='small'
@@ -376,7 +384,11 @@ const Users = () => {
                             </Icon>
                           ),
                           endAdornment: (
-                            <IconButton onClick={hideSearch}>
+                            <IconButton onClick={() => {
+                              hideSearch();
+                              filterAllUser(setUserList, setAlert, setSeverity, setCount, page, size, role, '');
+                              setQuery('');
+                            }}>
                               <Icon fontSize='small'>clear</Icon>
                             </IconButton>
                           ),

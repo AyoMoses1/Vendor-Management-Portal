@@ -75,6 +75,10 @@ scrolling-wrapper-flexbox::-webkit-scrollbar {
     text-align: center;
 }
 
+.overview-top-content > p {
+   font-size: 12px;
+}
+
 .overview-amount {
     margin-top: 28px;
 }

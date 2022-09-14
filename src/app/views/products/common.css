@@ -1,0 +1,62 @@
+.all-product-categories thead tr th {
+    padding-left: 18px !important;
+    padding-right: 18px !important;
+    background: #F0F2F5;
+    font-size: 12px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+.all-product-categories thead tr th .MuiButton-label {
+    font-size: 12px;
+}
+
+.all-product-categories thead tr th .MuiButton-label div div:last-child {
+    display: none;
+}
+
+.all-product-categories thead tr th .MuiButton-text {
+    font-weight: 500;
+    color: #000000;
+}
+
+.all-product-categories .MuiTableCell-root {
+    border-bottom: 4px solid #ffffff !important;
+}
+
+.all-product-categories tbody tr td {
+    padding-left: 18px !important;
+    padding-right: 18px !important;
+    background: #FAFBFD;
+    font-size: 12px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    color: #000000;
+}
+
+.all-product-categories .MuiTable-root {
+    margin-top: 10px;
+}
+
+.category {
+    padding: 5px 12px;
+    width: fit-content;
+    border-radius: 6px;
+    font-size: 10px;
+    font-weight: 500px;
+}
+
+.isFeatured {
+    color: #BB6BD9;
+    background-color: rgba(187, 107, 217, 0.15);
+}
+
+.isNotFeatured {
+    color: #27AE60;
+    background-color: rgba(39, 174, 96, 0.1);
+}
+
+.page-title {
+    font-size: 18px;
+    color: #000000;
+}

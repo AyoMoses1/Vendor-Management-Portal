@@ -1,23 +1,28 @@
-.product--form{
+.product--form {
     display: flex;
     flex-direction: column;
-    min-height: 80vh;
-    justify-content: space-between;
+    /* min-height: 80vh; */
+    /* justify-content: space-between; */
     gap: 20px;
 }
-.form--flex{
+
+.form--flex {
     display: flex;
     justify-content: space-between;
 }
 
-.section-title{
+.section-title {
     font-weight: 500;
     font-size: 12px;
     color: black;
     padding-bottom: 5px;
 }
 
-.form-border{
-    border: none;
-    outline: red;
+.form-border .MuiOutlinedInput-input {
+    border: 1px solid #B3DAB9;
+    border-radius: 4px;
+}
+
+.product--form .jodit-container {
+    border: 1px solid #B3DAB9!important;
 }

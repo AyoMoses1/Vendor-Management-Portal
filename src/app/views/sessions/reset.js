@@ -1,8 +1,9 @@
-import route from './route';
-import http from '../../../services/api';
+import route from './Passwordroute';
+import http from '../../services/api';
 
 class Reset {
   async resetUserPassword(data) {
+    console.log({ data })
     return await http.post(route.passwordReset, data);
   }
 

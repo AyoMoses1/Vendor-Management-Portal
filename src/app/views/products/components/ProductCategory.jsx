@@ -1,22 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import './shared.css'
 import Box from '@mui/material/Box';
-import { Checkbox, Button, Grid, MenuItem, TextField } from '@material-ui/core';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { Checkbox, Button, Grid } from '@material-ui/core';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
-const shippingClasses = [
-    {
-        name: 'Rabbit Cage',
-        value: 'RABBIT_CAGE',
-    },
-]
-
 const ProductCategory = () => {
-    const [shippingClass, setShippingClass] = useState('RABBIT_CAGE');
-
-
     return <Box
         component="form"
         className='product-type-box'
@@ -28,7 +17,7 @@ const ProductCategory = () => {
     >
         <div className='flex justify-between items-center'>
             <div className="product-details-title">Product Category</div>
-            <Button variant='contained' color='primary' className='product-gallery-save-btn'>Save</Button>
+            <Button variant='contained' color='primary' className='product-outline-save-btn'>Save</Button>
         </div>
         <Grid container spacing={2} className='mt-4'>
             <Grid item lg={12} md={12} sm={12} xs={12}>
