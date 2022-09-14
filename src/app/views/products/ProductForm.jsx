@@ -185,6 +185,7 @@ function NewProduct({ isNewProduct, id, Product }) {
       discountRate: values?.discountRate || state.discountRate,
       shippingClass: state.shippingClass
     };
+    delete payload.shippingClass;
     data.append('product', JSON.stringify(payload));
 
     imageList.forEach((file, imageFile) => {
