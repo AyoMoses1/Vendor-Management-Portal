@@ -1,7 +1,7 @@
 const route = {
     passwordReset: '/afrimash/users/password/reset',
-    passwordChange: '/afrimash/users/password/change',
-    passwordConfirm: '/afrimash/users/password/confirm'
+    passwordChange: '/user/password/confirm/{otp}',
+    
 }
 
 export default route;
