@@ -19,13 +19,20 @@ const ProductCategory = () => {
             <div className="product-details-title">Product Category</div>
             <Button variant='contained' color='primary' className='product-outline-save-btn'>Save</Button>
         </div>
-        <Grid container spacing={2} className='mt-4'>
+        <Grid container spacing={2} className='mt-4 product-category'>
             <Grid item lg={12} md={12} sm={12} xs={12}>
-                <FormGroup>
+                <FormGroup className='form-group'>
+                    <div className='form-title'>All Categories</div>
                     <FormControlLabel control={<Checkbox defaultChecked />} label="Primary Category" className='product-checkbox' />
+                    <FormControlLabel control={<Checkbox />} label="Sub Category" className='product-checkbox sub' />
+                    <FormControlLabel control={<Checkbox />} label="Sub Sub Category" className='product-checkbox sub-sub' />
+                    <FormControlLabel control={<Checkbox />} label="Sub Category" className='product-checkbox sub' />
+                    <FormControlLabel control={<Checkbox />} label="Sub Sub Category" className='product-checkbox sub-sub' />
                     <FormControlLabel control={<Checkbox />} label="Primary Category" className='product-checkbox' />
+                    <FormControlLabel control={<Checkbox />} label="Sub Category" className='product-checkbox sub' />
+                    <FormControlLabel control={<Checkbox />} label="Sub Sub Category" className='product-checkbox sub-sub' />
                 </FormGroup>
-                {/* <Button color="primary" className='del-icon'><DeleteIcon  />Move to trash</Button> */}
+                <Button>Add New Category</Button>
             </Grid>
         </Grid>
 

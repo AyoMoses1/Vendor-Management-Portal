@@ -26,3 +26,32 @@
 .product--form .jodit-container {
     border: 1px solid #B3DAB9!important;
 }
+.form-group{
+    border: 1px solid #E3E3E3;
+    border-radius: 5px;
+    padding: 10px;
+    font-weight: 500;
+    color: black;
+}
+
+.sub{
+    padding-left: 20px;
+}
+.sub-sub{
+    padding-left: 40px;
+}
+.form-group button{
+    color: #000;
+    padding: 0 !important;
+}
+.product-category button.MuiButton-text{
+    padding: 0 !important;
+    text-decoration: underline !important;
+    color: #000 !important;
+}
+.product-category button.MuiButton-text{
+    background: transparent;
+}
+/* .form-group button span{
+    text-decoration: underline;
+} */
