@@ -15,6 +15,14 @@ export const getAllResults = (pageNo, size, query) => {
     }
   })
 }
+
+export const getAllProducts = (query) => {
+  return http.get(`afrimash/products?search=${query}`).then(({ data }) => {
+    if (data instanceof Object) {
+      return data.object
+    }
+  })
+}
 // export const getAllResults = (setResults, setLoading, url, page) => {
 //   setLoading(true)
 //   return http.get(url).then(({ data }) => {

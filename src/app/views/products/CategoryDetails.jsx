@@ -9,6 +9,7 @@ import {
   TableRow,
   Box,
   Grid,
+  Button,
 } from '@material-ui/core'
 import { SimpleCard, Breadcrumb } from 'matx'
 import Loading from 'matx/components/MatxLoadable/Loading'
@@ -16,12 +17,17 @@ import http from '../../services/api';
 import { useState } from 'react';
 import ProductSubcategories from './components/ProductSubcategories'
 import CategoryProducts from './components/CategoryProducts'
+import AddProduct from './components/AddProduct'
+import Alert from 'app/components/Alert'
 
 const CategoryDetails = ({ location }) => {
   const [loading, setLoading] = React.useState(false)
+  const [alertData, setAlertData] = React.useState({ success: false, text: '', title: '' });
   const [category, setCategory] = useState(null);
   const [subCategories, setSubCategories] = useState(null);
   const [categoryProducts, setCategoryProducts] = useState(null);
+  const [open, setOpen] = useState(false)
+  const [alertOpen, setAlertOpen] = useState(false)
   const State = location.state
   const { id } = State
 
@@ -44,11 +50,25 @@ const CategoryDetails = ({ location }) => {
     }).catch(err => { });
   }
 
-
   useEffect(() => {
     getCategory();
     getCategoryProducts();
   }, [])
+
+  const handleModal = () => {
+    setOpen(!open)
+  }
+
+  const handleAlertModal = () => {
+    setAlertOpen(prev => !prev)
+  }
+
+  const refresh = () => {
+    setAlertData({ success: true, text: "Product added to category successfully", title: 'Product Added' })
+    handleAlertModal();
+    getCategory();
+    getCategoryProducts();
+  }
 
   return (
     <div className='m-sm-30'>
@@ -67,13 +87,28 @@ const CategoryDetails = ({ location }) => {
           <SimpleCard>
             <div className='flex flex-space-between flex-middle'>
               <h5 className='text-left'>Product Category Details</h5>
-              {/* <Button
+              <Button
                 variant='contained'
                 color='primary'
+                onClick={() => {
+                  handleModal()
+                }}
               >
-                Edit Product Category
-              </Button> */}
+                Associate Product
+              </Button>
             </div>
+            <AddProduct
+              name={"Add Product to Category"}
+              isOpen={open}
+              handleClose={handleModal}
+              refresh={() => refresh()}
+              categoryId={id} />
+            <Alert
+              isOpen={alertOpen}
+              handleModal={handleAlertModal}
+              alertData={alertData}
+              handleOK={handleAlertModal}
+            />
             <Divider className='mt-4' />
             <Table className='mb-4'>
               <TableBody>

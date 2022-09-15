@@ -453,6 +453,10 @@
     margin: 0px !important;
 }
 
+.product-tables .undefined {
+    box-shadow: none !important;
+}
+
 .APPROVED {
     color: #EF882C;
     background-color: rgba(239, 136, 44, 0.15);
