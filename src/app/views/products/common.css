@@ -60,3 +60,19 @@
     font-size: 18px;
     color: #000000;
 }
+
+.category-images {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.category-images div {
+    width: 100%;
+    text-align: center;
+}
+
+.category-images div img {
+    height: 100px;
+}

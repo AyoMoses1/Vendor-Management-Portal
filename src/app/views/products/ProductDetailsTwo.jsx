@@ -4,6 +4,8 @@ import { Breadcrumb, SimpleCard } from 'matx'
 import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
 import http from '../../services/api'
+import { Button } from '@material-ui/core';
+import { Link } from 'react-router-dom'
 
 const usestyles = makeStyles(({ palette, ...theme }) => ({
   imageBorder: {
@@ -42,13 +44,14 @@ const ProductDetailsTwo = ({ location }) => {
           }
         }
       })
-      .catch((err) => alert(err.response.data))
+      .catch((err) => alert(err?.response?.data))
   }
 
   useEffect(() => {
     getProduct()
   }, [])
 
+  console.log(product, "test product data")
   return (
     <div className='m-sm-30'>
       <div className='mb-sm-30'>
@@ -61,7 +64,7 @@ const ProductDetailsTwo = ({ location }) => {
       </div>
       <SimpleCard>
         <Grid container spacing={3}>
-          <Grid item md={6} xs={12}>
+          <Grid item md={4} xs={12}>
             <div className='flex-column justify-center items-center'>
               <img
                 className='max-w-full mb-4 max-h-400'
@@ -102,6 +105,18 @@ const ProductDetailsTwo = ({ location }) => {
               <span className='text-muted'>SELLER: </span>
               <span className='text-primary'>{seller.name}</span>
             </p>
+            <p className='mt-0 mb-4'>
+              <span className='text-muted'>CATEGORIES: </span>
+              <span className='text-primary'>{product?.productCategories?.map((category) => category.name + ", ")}</span>
+            </p>
+            <p className='mt-0 mb-4'>
+              <span className='text-muted'>SHIPPING CLASS: </span>
+              <span className='text-primary'>{product?.shippingClass?.name}</span>
+            </p>
+            <p className='mt-0 mb-4'>
+              <span className='text-muted'>TAGS: </span>
+              <span className='text-primary'>{product?.tags?.map((tag) => tag.name + ", ")}</span>
+            </p>
             <Divider className='mb-4' />
             <p className='mt-0 mb-2 font-medium text-muted'>
               Have questions about this product
@@ -116,6 +131,19 @@ const ProductDetailsTwo = ({ location }) => {
 
             <h4 className='mt-0 mb-4'>Description</h4>
             <p>{product.description}</p>
+          </Grid>
+          <Grid item md={2}>
+            <Link
+              to={{
+                pathname: '/product/edit',
+                state: {
+                  id: product.id,
+                  product,
+                },
+              }}
+            >
+              <Button variant='contained' color='primary'>Edit</Button>
+            </Link>
           </Grid>
         </Grid>
       </SimpleCard>
