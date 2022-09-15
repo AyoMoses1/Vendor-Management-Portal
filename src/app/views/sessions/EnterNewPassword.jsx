@@ -33,18 +33,18 @@ class EnterNewPassword extends Component {
         }
         return true;
     });
-}
+  }
 
-componentWillUnmount() {
-    // remove rule when it is not needed
-    ValidatorForm.removeValidationRule('isPasswordMatch');
-}
+  componentWillUnmount() {
+      // remove rule when it is not needed
+      ValidatorForm.removeValidationRule('isPasswordMatch');
+  }
 
-handleChange = (event) => {
-  this.setState({ 
-  [event.target.name] : event.target.value,
-  });
-}
+  handleChange = (event) => {
+    this.setState({ 
+    [event.target.name] : event.target.value,
+    });
+  }
 
   handleFormSubmit = async () => {
     console.log('HERE')
