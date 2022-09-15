@@ -42,13 +42,14 @@ const ProductDetailsTwo = ({ location }) => {
           }
         }
       })
-      .catch((err) => alert(err.response.data))
+      .catch((err) => alert(err?.response?.data))
   }
 
   useEffect(() => {
     getProduct()
   }, [])
 
+  console.log(product, "test product data")
   return (
     <div className='m-sm-30'>
       <div className='mb-sm-30'>
@@ -101,6 +102,18 @@ const ProductDetailsTwo = ({ location }) => {
             <p className='mt-0 mb-4'>
               <span className='text-muted'>SELLER: </span>
               <span className='text-primary'>{seller.name}</span>
+            </p>
+            <p className='mt-0 mb-4'>
+              <span className='text-muted'>CATEGORIES: </span>
+              <span className='text-primary'>{product?.productCategories?.map((category) => category.name + ", ")}</span>
+            </p>
+            <p className='mt-0 mb-4'>
+              <span className='text-muted'>SHIPPING CLASS: </span>
+              <span className='text-primary'>{product?.shippingClass?.name}</span>
+            </p>
+            <p className='mt-0 mb-4'>
+              <span className='text-muted'>TAGS: </span>
+              <span className='text-primary'>{product?.tags?.map((tag) => tag.name + ", ")}</span>
             </p>
             <Divider className='mb-4' />
             <p className='mt-0 mb-2 font-medium text-muted'>

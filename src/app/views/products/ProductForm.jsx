@@ -185,7 +185,7 @@ function NewProduct({ isNewProduct, id, Product }) {
       discountRate: values?.discountRate || state.discountRate,
       shippingClass: state.shippingClass
     };
-    delete payload.shippingClass;
+    // delete payload.shippingClass;
     data.append('product', JSON.stringify(payload));
 
     imageList.forEach((file, imageFile) => {
@@ -385,7 +385,7 @@ function NewProduct({ isNewProduct, id, Product }) {
                     />
                   )}
                 />
-                <TextField
+                {/* <TextField
                   className='mb-4'
                   name='shippingClass'
                   label='Select Shipping Class'
@@ -404,7 +404,7 @@ function NewProduct({ isNewProduct, id, Product }) {
                       {productType}
                     </MenuItem>
                   ))}
-                </TextField>
+                </TextField> */}
                 <Autocomplete
                   id='shippingClass'
                   name='shippingClass'
