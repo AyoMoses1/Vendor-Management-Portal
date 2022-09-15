@@ -7,7 +7,6 @@ import {
   IconButton,
   TextField,
   Button,
-  Chip,
 } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import http from '../../services/api';
@@ -83,7 +82,7 @@ const CategoriesList = () => {
                   }}
                 >
 
-                  {category.parentCategoryId?.name}
+                  {category.parentCategoryId?.name ?? '---'}
                 </Link>
               </div>
             </div>
@@ -102,9 +101,18 @@ const CategoriesList = () => {
           return (
             <div className='flex items-center'>
               <div className='ml-3'>
-                {subCategories.map((subcategory) => {
-                  return `${subcategory.name}, `;
-                })}
+                <Link
+                  to={{
+                    pathname: "/product-category/details",
+                    state: {
+                      id: category.id,
+                    },
+                  }}
+                >
+                  {subCategories?.length ? subCategories.map((subcategory) => {
+                    return `${subcategory.name}, `;
+                  }) : `---`}
+                </Link>
               </div>
             </div>
           );

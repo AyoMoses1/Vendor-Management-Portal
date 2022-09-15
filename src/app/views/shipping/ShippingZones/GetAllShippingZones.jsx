@@ -4,11 +4,10 @@ import MUIDataTable from 'mui-datatables'
 import { Grow, Icon, IconButton, TextField, Button } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 import http from '../../../services/api'
-
 import Loading from 'matx/components/MatxLoadable/Loading'
 import { useDialog } from 'muibox'
-
 import Notification from 'app/components/Notification'
+import '../styles.css';
 
 
 
@@ -206,7 +205,7 @@ const GetAllShippingZones = () => {
         )}
       </div>
       <div className='overflow-auto'>
-        <div className='min-w-750'>
+        <div className='min-w-750 shipping-tables'>
           {loading ? (
             <Loading />
           ) : (
@@ -221,6 +220,7 @@ const GetAllShippingZones = () => {
                 filterType: 'dropdown',
                 responsive: 'standard',
                 elevation: 0,
+                selectableRows: false,
                 rowsPerPageOptions: [10, 20, 40, 80, 100],
                 customSearchRender: (
                   searchText,

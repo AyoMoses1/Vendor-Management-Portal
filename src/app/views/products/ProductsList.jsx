@@ -21,11 +21,6 @@ const Products = () => {
   const [count, setCount] = useState(0)
   const dialog = useDialog();
   const dispatcher = useDispatch();
-  const [statistics, setStatistics] = useState([]);
-  const [severity, setSeverity] = useState("");
-  const [userList, setUserList] = useState([]);
-  const [alert, setAlert] = useState("");
-  const [source, setSource] = useState("ALL");
   const [query, setQuery] = useState("");
 
   useEffect(() => {
