@@ -398,7 +398,7 @@
 }
 
 .category-input-container .MuiTextField-root {
-    margin: 0px!important;
+    margin: 0px !important;
     padding: 12px 4px;
 }
 
@@ -411,4 +411,79 @@
     display: flex;
     width: 100%;
     justify-content: center;
+}
+
+.product-tables .MuiToolbar-root {
+    padding: 0px;
+}
+
+.product-tables thead tr th {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+    background: #F0F2F5;
+    font-size: 14px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+.product-tables thead tr th .MuiButton-text {
+    font-weight: 500;
+    color: #000000;
+}
+
+.product-tables .MuiTableCell-root {
+    border-bottom: 4px solid #ffffff !important;
+}
+
+.product-tables tbody tr td {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+    background: #FAFBFD;
+    font-size: 12px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    color: #000000;
+}
+
+.product-tables .MuiTable-root {
+    margin-top: 10px;
+}
+
+.product-tables .card-subtitle {
+    margin: 0px !important;
+}
+
+.APPROVED {
+    color: #EF882C;
+    background-color: rgba(239, 136, 44, 0.15);
+}
+
+.PROCESSING {
+    color: #2F80ED;
+    ;
+    background-color: rgba(47, 128, 237, 0.15);
+}
+
+.CANCELLED {
+    color: #EB5757;
+    background-color: rgba(234, 95, 95, 0.15);
+}
+
+.PRODUCT {
+    padding: 5px 8px;
+    width: fit-content;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500px;
+}
+
+.SEO {
+    display: flex;
+    color: rgb(7, 162, 7);
+    justify-content: center;
+    align-items: center;
+}
+
+.SEO svg {
+    font-size: 12px;
 }
