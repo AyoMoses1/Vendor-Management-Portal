@@ -10,8 +10,11 @@ import { Link } from 'react-router-dom'
 import CircleIcon from '@mui/icons-material/Circle';
 import "./shared.css";
 import { capitalize } from 'utils'
+import { useDialog } from 'muibox'
+import http from '../../../services/api';
 
-const CategoryProducts = ({ categoryProducts = [] }) => {
+const CategoryProducts = ({ categoryProducts, categoryId, tableRefresh }) => {
+    const dialog = useDialog()
     useEffect(() => {
         console.log(categoryProducts);
     }, [categoryProducts])
@@ -259,7 +262,36 @@ const CategoryProducts = ({ categoryProducts = [] }) => {
                     );
                 },
             },
-        }
+        },
+        {
+            name: 'Deassociate',
+            label: '',
+            options: {
+                filter: false,
+                customBodyRenderLite: (dataIndex) => {
+                    let product = categoryProducts[dataIndex];
+                    return (
+                        <div className='flex items-center'>
+                            <Link
+                                onClick={() => {
+                                    let tempState = [{ id: categoryId }];
+                                    dialog
+                                        .confirm('Are you sure you want to deassociate product from this Category?')
+                                        .then(() =>
+                                            http.patch(`/afrimash/products/${product?.id}/dissociate-categories`, tempState).then((response) => {
+                                                tableRefresh();
+                                            }).catch(err => { })
+                                        )
+                                        .catch((error) => console.error(error))
+                                }}
+                            >
+                                <img style={{ height: '20px' }} src='/assets/icon/delete-basket.svg' />
+                            </Link>
+                        </div >
+                    );
+                },
+            },
+        },
     ];
 
     return (

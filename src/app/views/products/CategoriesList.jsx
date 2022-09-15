@@ -27,7 +27,7 @@ const CategoriesList = () => {
   useEffect(() => {
     http.get(`/afrimash/product-categories/search?`).then((response) => {
       let { data } = response;
-      setCategories(data.object);
+      setCategories(data?.object);
     });
   }, []);
 
