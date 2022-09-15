@@ -5,11 +5,11 @@ import { Grow, Icon, IconButton, TextField, Button } from '@material-ui/core'
 import { Link, useHistory } from 'react-router-dom'
 import http from '../../../services/api'
 import { useDialog } from 'muibox'
-
 import Loading from 'matx/components/MatxLoadable/Loading'
 import Notification from 'app/components/Notification'
 import { getShippingOptionGroup } from 'app/redux/actions/shippingActions'
 import { useDispatch, useSelector } from 'react-redux'
+import '../styles.css';
 
 const GetAllShippingClass = () => {
 
@@ -180,7 +180,7 @@ const dispatch = useDispatch()
         )}
       </div>
       <div className='overflow-auto'>
-        <div className='min-w-750'>
+        <div className='min-w-750 shipping-tables'>
           {loading ? (
             <Loading />
           ) : (
@@ -195,6 +195,7 @@ const dispatch = useDispatch()
                 filterType: 'dropdown',
                 responsive: 'standard',
                 elevation: 0,
+                selectableRows: false,
                 rowsPerPageOptions: [10, 20, 40, 80, 100],
                 customSearchRender: (
                   searchText,

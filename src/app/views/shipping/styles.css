@@ -1,0 +1,31 @@
+.shipping-tables thead tr th {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+    background: #F0F2F5;
+    font-size: 14px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+.shipping-tables thead tr th .MuiButton-text {
+    font-weight: 500;
+    color: #000000;
+}
+
+.shipping-tables .MuiTableCell-root {
+    border-bottom: 4px solid #ffffff !important;
+}
+
+.shipping-tables tbody tr td {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+    background: #FAFBFD;
+    font-size: 12px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    color: #000000;
+}
+
+.shipping-tables .MuiTable-root {
+    margin-top: 10px;
+}

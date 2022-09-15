@@ -25,6 +25,7 @@ import Notification from 'app/components/Notification';
 
 import ShippingOptionByGroup from './ShippingOptionsByGroup';
 import { getShippingOptionGroup } from 'app/redux/actions/shippingActions';
+import '../styles.css';
 
 const GetAllShippingOptions = () => {
   const [{ shippinOptions, totalCount, size }, setShippingOptions] = useState({
@@ -164,6 +165,7 @@ const GetAllShippingOptions = () => {
       label: 'Calculation Unit', // column title that will be shown in table
       options: {
         filter: true,
+        setCellHeaderProps: () => { return { width: "175px" } },
         customBodyRenderLite: (dataIndex) => {
           const shippingZone = shippinOptions[dataIndex];
           return (
@@ -307,7 +309,7 @@ const GetAllShippingOptions = () => {
       </Box>
 
       <div className='overflow-auto'>
-        <div className='min-w-750'>
+        <div className='min-w-750 shipping-tables'>
           {loading ? (
             <Loading />
           ) : group && group !== 'All'? (
@@ -334,6 +336,7 @@ const GetAllShippingOptions = () => {
                 filterType: 'dropdown',
                 responsive: 'standard',
                 elevation: 0,
+                selectableRows: false,
                 rowsPerPageOptions: [10, 20, 40, 80, 100],
                 customSearchRender: (
                   searchText,
