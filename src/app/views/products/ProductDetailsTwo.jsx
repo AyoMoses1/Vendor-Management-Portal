@@ -4,6 +4,8 @@ import { Breadcrumb, SimpleCard } from 'matx'
 import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
 import http from '../../services/api'
+import { Button } from '@material-ui/core';
+import { Link } from 'react-router-dom'
 
 const usestyles = makeStyles(({ palette, ...theme }) => ({
   imageBorder: {
@@ -62,7 +64,7 @@ const ProductDetailsTwo = ({ location }) => {
       </div>
       <SimpleCard>
         <Grid container spacing={3}>
-          <Grid item md={6} xs={12}>
+          <Grid item md={4} xs={12}>
             <div className='flex-column justify-center items-center'>
               <img
                 className='max-w-full mb-4 max-h-400'
@@ -129,6 +131,19 @@ const ProductDetailsTwo = ({ location }) => {
 
             <h4 className='mt-0 mb-4'>Description</h4>
             <p>{product.description}</p>
+          </Grid>
+          <Grid item md={2}>
+            <Link
+              to={{
+                pathname: '/product/edit',
+                state: {
+                  id: product.id,
+                  product,
+                },
+              }}
+            >
+              <Button variant='contained' color='primary'>Edit</Button>
+            </Link>
           </Grid>
         </Grid>
       </SimpleCard>
