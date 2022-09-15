@@ -8,7 +8,7 @@ class Reset {
   }
 
   async userChangePassword(data){
-    return await http.put_new(`${route.passwordChange}`, data);
+    return await http.put_new(`${route.passwordConfirm}`, data);
   }
 
 }
