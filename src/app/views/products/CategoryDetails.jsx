@@ -64,7 +64,14 @@ const CategoryDetails = ({ location }) => {
   }
 
   const refresh = () => {
-    setAlertData({ success: true, text: "Product added to category successfully", title: 'Product Added' })
+    setAlertData({ success: true, text: "Product added to category successfully", title: 'Product Associated' })
+    handleAlertModal();
+    getCategory();
+    getCategoryProducts();
+  }
+
+  const tableRefresh = () => {
+    setAlertData({ success: true, text: "Product removed from category successfully", title: 'Product Deassociated' })
     handleAlertModal();
     getCategory();
     getCategoryProducts();
@@ -157,7 +164,7 @@ const CategoryDetails = ({ location }) => {
             <ProductSubcategories subCategories={subCategories} />
           </Box>
           <Box mt={5}>
-            <CategoryProducts categoryProducts={categoryProducts} />
+            <CategoryProducts categoryProducts={categoryProducts} categoryId={id} tableRefresh={tableRefresh} />
           </Box>
         </>
       )}
