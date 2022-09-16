@@ -158,7 +158,6 @@ function NewProduct({ isNewProduct, id, Product }) {
       getProductById(id).then(({ data }) => {
         setState(data.object);
         setValues(data.object);
-        console.log(data.object, "test shipping class")
         setShippingC(data.object.status)
       });
     }
@@ -166,13 +165,21 @@ function NewProduct({ isNewProduct, id, Product }) {
   }, [acceptedFiles, id, isNewProduct, shippingC]);
 
   const handleSelect = (newValue, fieldName) => {
-    const { id } = newValue;
-    setState({ ...state, [fieldName]: id });
+    console.log({ newValue, fieldName })
+    if(Object.keys(state).some(key => key === fieldName)){
+      setState({ ...state, [fieldName]: newValue });
+    }
+
+    if(Object.keys(values).some(key => key === fieldName)){
+      setValues({ ...values, [fieldName]: newValue });
+    }
+
   };
 
 
   const handleSubmit = (values, { setSubmitting }) => {
     const payload = { ...state, ...values };
+    console.log(payload, "************TEST PAYLOAD**************")
     const data = new FormData();
     const updateData = {
       id: state.id,
@@ -189,7 +196,8 @@ function NewProduct({ isNewProduct, id, Product }) {
       tags: values?.tags || state.tags,
       shippingClass: state.shippingClass,
       brandId: values?.brandId || state.brandId,
-      storeId: values?.storeId || state.storeId
+      storeId: values?.storeId || state.storeId,
+      productCategories: values?.productCategories
     };
     // delete payload.shippingClass;
     data.append('product', JSON.stringify(payload));
@@ -234,6 +242,7 @@ function NewProduct({ isNewProduct, id, Product }) {
 
   
   console.log(state, "state test")
+ /*  console.log({storeId: values.storeId, class: state.shippingClass}) */
 
   return (
     <div className='m-sm-30'>
@@ -439,6 +448,7 @@ function NewProduct({ isNewProduct, id, Product }) {
                 <Autocomplete
                   multiple
                   id='tags'
+                  name='tags'
                   options={tags}
                   value={values.tags}
                   getOptionLabel={(option) => option.name}
@@ -471,10 +481,16 @@ function NewProduct({ isNewProduct, id, Product }) {
 
                 <Autocomplete
                   id='brands'
-                  options={brands}
+                  options={brands.filter(item => item?.name)}
+                  name = 'brands'
                   value={values.brandId}
-                  getOptionLabel={(option) => option.name || ''}
-                  getOptionSelected={(option, value) => option.id === value.id}
+                  getOptionLabel={(option) => {
+                    return option?.name
+                  }}
+                  getOptionSelected={(option, value) =>{
+                    console.log({option, value })
+                     return option.id === value
+                    }}
                   onChange={(event, newValue) =>
                     handleSelect(newValue, 'brandId')
                   }
@@ -490,12 +506,17 @@ function NewProduct({ isNewProduct, id, Product }) {
                 <Autocomplete
                   multiple
                   id='categories'
+                  name='categories'
                   options={categories}
                   value={values.productCategories}
                   onChange={(event, newValue) => {
                     setValues({...values, productCategories:newValue})
                   }}
-                  getOptionLabel={(option) => option.name}
+                  getOptionLabel={
+                    (option) => {
+                    return option?.name
+                    }
+                  }
                   getOptionSelected={(option, value) => option.id === value.id}
                   renderOption={(option, { selected }) => (
                     <React.Fragment>
