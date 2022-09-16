@@ -310,6 +310,7 @@ function NewProduct({ isNewProduct, id, Product }) {
                   })}
                   {...getRootProps()}
                 >
+                  {/* Comment */}
                   <input {...getInputProps()} />
                   <div
                     className='flex-column items-center'
