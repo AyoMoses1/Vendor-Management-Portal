@@ -80,6 +80,7 @@ const Products = () => {
                 }}
                 className="ml-3 mr-4"
               >
+                {/* Comment */}
                 <span className='my-0 text-15'>{product?.name.slice(0, 8) + "..."}</span>
               </Link>
             </div>
