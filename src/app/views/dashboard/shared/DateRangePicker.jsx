@@ -1,7 +1,9 @@
 import React, { Component, useEffect, useState } from "react";
-import { Grid, Card, Icon, Button, Tooltip, Popover, Typography, } from "@material-ui/core";
+import { Grid, Card, Icon, Box, Button, Tooltip, Popover, Typography, } from "@material-ui/core";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import "./shared.css";
+import { formatFullDate } from "utils";
 
 
 
@@ -13,6 +15,8 @@ const DateRangePickerComponent = ({ setSelectedDate }) => {
 
   useEffect(() => {
     if (startDate && endDate) {
+      console.log(startDate);
+      console.log(endDate);
       setSelectedDate({ startDate, endDate });
       setLocal({ startDate, endDate });
       handleClose();
@@ -22,15 +26,19 @@ const DateRangePickerComponent = ({ setSelectedDate }) => {
 
   const [anchorEl, setAnchorEl] = useState(null);
 
+  // const handleClick = (event) => {
+  //   if (local.startDate && local.endDate) {
+  //     setStartDate(null);
+  //     setEndDate(null);
+  //     setLocal({ startDate: null, endDate: null })
+  //     setSelectedDate({ startDate: null, endDate: null })
+  //   } else {
+  //     setAnchorEl(event.currentTarget);
+  //   }
+  // };
+
   const handleClick = (event) => {
-    if (local.startDate && local.endDate) {
-      setStartDate(null);
-      setEndDate(null);
-      setLocal({ startDate: null, endDate: null })
-      setSelectedDate({ startDate: null, endDate: null })
-    } else {
-      setAnchorEl(event.currentTarget);
-    }
+    setAnchorEl(event.currentTarget);
   };
 
   const handleClose = () => {
@@ -45,15 +53,33 @@ const DateRangePickerComponent = ({ setSelectedDate }) => {
     setExpand(false)
   }
 
+  const reset = () => {
+    setStartDate(null);
+    setEndDate(null);
+    setLocal({ startDate: null, endDate: null })
+    setSelectedDate({ startDate: null, endDate: null })
+  }
+
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
 
   return (
-    <div>
-      <Button onClick={handleClick} variant="outlined" className="date-toggler">
+    <div className="text-right">
+      {/* <Button onClick={handleClick} variant="outlined" className="date-toggler">
         {local.startDate && local.endDate ? 'Reset' : 'Date Range'}
         {!local.startDate && !local.endDate ? <img className="caret" src="/assets/icon/caret.svg" alt="company-logo" /> : <></>}
+      </Button> */}
+      <Button onClick={handleClick} variant="outlined" className="date-toggler">
+        {'Select Date'}
+        {<img className="caret" src="/assets/icon/caret.svg" alt="company-logo" />}
       </Button>
+
+      {startDate && endDate ? <div className="flex items-center date-range">
+        <div className="dates">{formatFullDate(startDate)}</div>
+        <div className="spacer">to</div>
+        <div className="dates">{formatFullDate(endDate)}</div>
+        <img onClick={reset} className="clear-icon" src="/assets/icon/clear.svg" alt="clear" />
+      </div> : <></>}
 
       <Popover
         id={id}
@@ -74,6 +100,7 @@ const DateRangePickerComponent = ({ setSelectedDate }) => {
                 return new Date() > d;
               }}
               placeholderText="Select Start Date"
+              size="xsmall"
               dateFormat="MMMM d, yyyy h:mmaa"
               selected={startDate}
               selectsStart
@@ -84,6 +111,7 @@ const DateRangePickerComponent = ({ setSelectedDate }) => {
               onCalendarClose={handleCalendarClose}
             />
           </div>
+          <Box sx={{ mx: 1 }}> to </Box>
           <div>
             <DatePicker
               isClearable
@@ -91,6 +119,7 @@ const DateRangePickerComponent = ({ setSelectedDate }) => {
                 return new Date() > d;
               }}
               placeholderText="Select End Date"
+              size="xsmall"
               dateFormat="MMMM d, yyyy h:mmaa"
               selected={endDate}
               selectsEnd

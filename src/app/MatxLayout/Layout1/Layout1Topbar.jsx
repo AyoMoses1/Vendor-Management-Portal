@@ -100,7 +100,7 @@ class Layout1Topbar extends Component {
               </div>
               <div className="flex flex-middle">
                 <div className="username" style={{ color: "#fff" }}>
-                  {`${greeting} ${username?.username}`}
+                  {`${greeting} ${username?.firstName}`}
                 </div>
                 <MatxMenu
                   menuButton={

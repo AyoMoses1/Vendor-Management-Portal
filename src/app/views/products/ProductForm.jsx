@@ -61,7 +61,7 @@ function NewProduct({ isNewProduct, id, Product }) {
     rating: null,
     translatedName: null,
     productCode: null,
-    shippingClass: null
+    shippingClass: {}
   };
   const initialValues = {
     productType: '',
@@ -72,6 +72,9 @@ function NewProduct({ isNewProduct, id, Product }) {
     sku: '',
     name: '',
     description: '',
+    brandId:{},
+    storeId:{}
+
   };
 
   const history = useHistory();
@@ -105,7 +108,7 @@ function NewProduct({ isNewProduct, id, Product }) {
   const getAllShippingClasses = () => {
     setLoading(true);
     http.get('/afrimash/shipping-class').then((res) => {
-      setShippingClasses(res?.data.object);
+      setShippingClasses(res?.data?.object);
       setLoading(false);
     });
   };
@@ -178,13 +181,17 @@ function NewProduct({ isNewProduct, id, Product }) {
       sku: values?.sku || state.sku,
       translatedName: state.translatedName,
       productCode: state.productCode,
-      brandId: state.brandId,
+      // brandId: state.brandId,
       buyPrice: state.buyPrice,
       rating: state.rating,
       price: values?.price || state.price,
       discountRate: values?.discountRate || state.discountRate,
-      shippingClass: state.shippingClass
+      tags: values?.tags || state.tags,
+      shippingClass: state.shippingClass,
+      brandId: values?.brandId || state.brandId,
+      storeId: values?.storeId || state.storeId
     };
+    // delete payload.shippingClass;
     data.append('product', JSON.stringify(payload));
 
     imageList.forEach((file, imageFile) => {
@@ -224,6 +231,9 @@ function NewProduct({ isNewProduct, id, Product }) {
     }
    
   };
+
+  
+  console.log(state, "state test")
 
   return (
     <div className='m-sm-30'>
@@ -300,6 +310,7 @@ function NewProduct({ isNewProduct, id, Product }) {
                   })}
                   {...getRootProps()}
                 >
+                  {/* Comment */}
                   <input {...getInputProps()} />
                   <div
                     className='flex-column items-center'
@@ -369,6 +380,7 @@ function NewProduct({ isNewProduct, id, Product }) {
                 <Autocomplete
                   id='storeId'
                   name='storeId'
+                  value={values.storeId}
                   options={stores}
                   getOptionLabel={(option) => option.name}
                   getOptionSelected={(option, value) => option.id === value.id}
@@ -384,7 +396,7 @@ function NewProduct({ isNewProduct, id, Product }) {
                     />
                   )}
                 />
-                <TextField
+                {/* <TextField
                   className='mb-4'
                   name='shippingClass'
                   label='Select Shipping Class'
@@ -403,12 +415,12 @@ function NewProduct({ isNewProduct, id, Product }) {
                       {productType}
                     </MenuItem>
                   ))}
-                </TextField>
+                </TextField> */}
                 <Autocomplete
                   id='shippingClass'
                   name='shippingClass'
                   options={shippinClasses}
-                  value={values.shippingClass?.name}
+                  value={state.shippingClass}
                   getOptionLabel={(option) => option.name}
                   getOptionSelected={(option, value) => option.id === value.id}
                   onChange={(event, newValue) =>
@@ -428,6 +440,7 @@ function NewProduct({ isNewProduct, id, Product }) {
                   multiple
                   id='tags'
                   options={tags}
+                  value={values.tags}
                   getOptionLabel={(option) => option.name}
                   getOptionSelected={(option, value) => option.id === value.id}
                   onChange={(event, newValue) => {
@@ -459,6 +472,7 @@ function NewProduct({ isNewProduct, id, Product }) {
                 <Autocomplete
                   id='brands'
                   options={brands}
+                  value={values.brandId}
                   getOptionLabel={(option) => option.name || ''}
                   getOptionSelected={(option, value) => option.id === value.id}
                   onChange={(event, newValue) =>
@@ -477,6 +491,7 @@ function NewProduct({ isNewProduct, id, Product }) {
                   multiple
                   id='categories'
                   options={categories}
+                  value={values.productCategories}
                   onChange={(event, newValue) => {
                     setValues({...values, productCategories:newValue})
                   }}

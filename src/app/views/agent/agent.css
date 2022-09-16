@@ -1,30 +1,124 @@
+.PENDING {
+    color: #EF882C;
+    background-color: rgba(239, 136, 44, 0.15);
+  }
+  
+  .VERIFIED {
+    color: #27AE60;
+    background-color: rgba(39, 174, 96, 0.1);
+  }
+  
+  .SUSPENDED {
+    color: #926202;
+    background-color: #f8dda7;
+  }
+
+  agent-table {
+    font-size: 14px!important;
+}
+
+  .agent-table tbody tr td .MuiTableCell-root{
+    font-size: 12px;
+  }
+
 .agent-table thead tr th {
-    padding-left: 24px !important;
-    padding-right: 24px !important;
+    padding-left: 48px;
+    background: #F0F2F5;
+    justify-content: center;
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+.agent-table .MuiTableCell-root {
+  border-bottom: 4px solid #ffffff!important;
+}
+
+.agent-table thead tr th .MuiButton-text {
+    font-weight: 800;
+    color: #000000;
+  }
+
+  .agent-table .MuiTableCell-root {
+    margin-top: 10px;
+    padding: 15px;
 }
 
 .agent-table tbody tr td {
+  text-align: left;
+}
+
+.agent-table tbody{
+    padding: 0 20px;
+  }
+  
+.agent-table tbody tr td {
     padding-left: 24px !important;
     padding-right: 24px !important;
-}
+    background: #FAFBFD;
+    font-size: 12px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    color: #000000;
+  }
+  
+.agent-table .MuiTable-root {
+    margin-top: 50px;
+  }
+
+.agent-table tbody tr td{
+    text-align: left;
+  }
 
 .w-full {
     width: 100%;
 }
 
-.agent-table thead tr th:first-child {
-    width: 100px !important;
-}
-
 .text-muted {
-    font-size: 14px;
+  font-size: 14px;
+  color:#4A466DDE; 
 }
 
 .text-control {
-    font-size: 14px;
+  font-size: 14px;
+  color:#4A466DDE;
+  
+}
+
+.agent-table thead th{
+  font-size: 8px !important;
 }
 
 .sources .MuiSelect-root {
     padding: 12px;
     font-size: 12px;
+}
+
+.date {
+  font-size: 11px;
+  padding-left: 6px;
+}
+
+.agent__name{
+  width: 150px;
+  overflow: hidden;
+  
+}
+
+.agent__email{
+  width: 150px;
+  overflow: hidden;
+}
+
+.date__registered {
+  width: 150px;
+  overflow: hidden;
+  text-align: left;
+}
+
+.menu__item {
+  text-decoration: underline;
+}
+
+.agent__status {
+  font-size: 10px;
 }

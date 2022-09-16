@@ -21,13 +21,9 @@ const Products = () => {
   const [count, setCount] = useState(0)
   const dialog = useDialog();
   const dispatcher = useDispatch();
-  const [statistics, setStatistics] = useState([]);
-  const [severity, setSeverity] = useState("");
-  const [userList, setUserList] = useState([]);
-  const [alert, setAlert] = useState("");
-  const [source, setSource] = useState("ALL");
   const [query, setQuery] = useState("");
 
+  
   useEffect(() => {
     const fetchAllProducts = async () => {
       const response = await getAllResults(page, size, query)
@@ -111,7 +107,7 @@ const Products = () => {
                   }}
                   className="ml-3 mr-4"
                 >
-                  <span className='my-0 text-15'>{product && n.join(',').slice(0, 8)+"..."}</span>
+                  <span className='my-0 text-15'>{product && n.join(',').slice(0, 8) + "..."}</span>
                 </Link>
               </div>
             </div>
@@ -139,7 +135,7 @@ const Products = () => {
                   className="ml-3 mr-4"
                 >
                   <span className='my-0 text-15'> {product?.status || '-----'}</span>
-                  </Link>
+                </Link>
               </div>
             </div>
           );
@@ -194,7 +190,7 @@ const Products = () => {
                   className="ml-3 mr-4"
                 >
                   <span className='my-0 text-15'> {product?.sku || '-----'}</span>
-                  </Link>
+                </Link>
               </div>
             </div>
           );
@@ -224,9 +220,9 @@ const Products = () => {
                   className="ml-3 mr-4"
                 >
                   <span className='my-0 text-15'>
-                    {n.length > 0 ? n.join(',').slice(0, 8)+"..." : ' ----'}
+                    {n.length > 0 ? n.join(',').slice(0, 8) + "..." : ' ----'}
                   </span>
-                  </Link>
+                </Link>
               </div>
             </div>
           );
@@ -253,7 +249,7 @@ const Products = () => {
                   className="ml-3 mr-4"
                 >
                   <span className='my-0 text-15'> {product?.dateAdded || '-----'}</span>
-                  </Link>
+                </Link>
               </div>
             </div>
           );
@@ -279,9 +275,9 @@ const Products = () => {
                   }}
                   className="ml-3 mr-4 seo__flex"
                 >
-                  <CircleIcon/>
+                  <CircleIcon />
                   <span className='my-0 text-15'> {product?.seo || '70%'}</span>
-                  </Link>
+                </Link>
               </div>
             </div>
           );

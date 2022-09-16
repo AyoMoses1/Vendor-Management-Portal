@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import './shared.css'
 import Box from '@mui/material/Box';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import FormControl from '@mui/material/FormControl';
-import { Grid, MenuItem, TextField } from '@material-ui/core';
+import { Checkbox, Grid, InputAdornment, MenuItem, TextField } from '@material-ui/core';
 
 const productTypes = [
     {
@@ -18,16 +16,11 @@ const productTypes = [
 
 const ProductType = () => {
     const [productType, setProductType] = useState('SIMPLE')
-    const [values, setValues] = React.useState({
-        name: '',
-        coupons: '',
-        longDescription: '',
-        weightRange: '',
-        showPassword: false,
-    });
+    const [state, setState] = React.useState({ gilad: false });
+    const { gilad } = state;
 
-    const handleChange = (event) => {
-        // setValue(event.target.value);
+    const handleCheck = name => event => {
+        setState({ ...state, [name]: event.target.checked });
     };
 
     return <Box
@@ -76,13 +69,20 @@ const ProductType = () => {
                     <Grid item lg={9} md={9} sm={12} xs={12}>
                         <div className='product-types'>
                             <TextField
+                                InputProps={{
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                            <img src="/assets/icon/naira.svg" alt="naira" style={{ height: '32px' }} />
+                                        </InputAdornment>
+                                    )
+                                }}
                                 onChange={(e, newValues) => { }}
                                 // value={values.regularPrice}
                                 name='regularPrice'
                                 id='regularPrice'
                                 defaultValue=''
                                 margin='normal'
-                                type='text'
+                                type='number'
                                 variant='outlined'
                                 placeholder='Enter Price'
                             />
@@ -94,23 +94,28 @@ const ProductType = () => {
                     <Grid item lg={3} md={3} sm={12} xs={12}>
                         <div className='product-type-input-label'>Sale Price</div>
                     </Grid>
-                    <Grid item lg={9} md={9} sm={12} xs={12}>
-                        <div className='product-types'>
+                    <Grid item lg={9} md={9} sm={12} xs={12} className={"salesPrice"}>
+                        <div className='product-types mb-4'>
                             <TextField
+                                InputProps={{
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                            <img src="/assets/icon/naira.svg" alt="naira" style={{ height: '32px' }} />
+                                        </InputAdornment>
+                                    )
+                                }}
                                 onChange={(e, newValues) => { }}
                                 // value={values.salesPrice}
                                 name='salesPrice'
                                 id='salesPrice'
                                 defaultValue=''
                                 margin='normal'
-                                type='text'
+                                type='number'
                                 variant='outlined'
                                 placeholder='Enter Price'
                             />
                         </div>
-                        <div className='flex flex-end mb-2'>
-                            <small style={{fontSize: '10px'}}>Schedule</small>
-                        </div>
+                        <div className='schedule'>Schedule</div>
                     </Grid>
                 </Grid>
 
@@ -137,12 +142,19 @@ const ProductType = () => {
             </Grid>
 
             <Grid item lg={3} md={3} sm={12} xs={12}>
-                <Grid container spacing={1} className='mt-4'>
-                    <Grid item lg={12} md={12} sm={12} xs={12} className="product-type-input-end">
+                <Grid container spacing={1} className='mt-2'>
+                    <Grid item lg={12} md={12} sm={12} xs={12} className="product-type-input-end child-action">
+                        <Checkbox
+                            checked={gilad}
+                            onChange={handleCheck('gilad')}
+                            value="gilad"
+                        />
                         <label>Virtual Product</label>
                     </Grid>
-                    <Grid item lg={12} md={12} sm={12} xs={12} className="product-type-input-end mt-4">
-                        <label>Add Download</label>
+                    <Grid item lg={12} md={12} sm={12} xs={12} className="product-type-input-end product-type-download child-action">
+                        <img src="/assets/icon/attachment.svg" alt="attachment" />
+                        <label className='cursor-pointer'>Add Download</label>
+                        <div>Name of Attached file.pdf</div>
                     </Grid>
                 </Grid>
             </Grid>

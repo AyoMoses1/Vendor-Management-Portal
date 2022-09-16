@@ -75,6 +75,10 @@ scrolling-wrapper-flexbox::-webkit-scrollbar {
     text-align: center;
 }
 
+.overview-top-content > p {
+   font-size: 12px;
+}
+
 .overview-amount {
     margin-top: 28px;
 }
@@ -309,4 +313,27 @@ scrolling-wrapper-flexbox::-webkit-scrollbar {
 
 .card-subtitle {
     color: #000000;
+}
+
+.date-range {
+    font-size: 8px;
+    margin-top: 4px;
+}
+
+.spacer {
+    padding: 0px 4px;
+}
+
+.dates {
+    color: var(--text-body);
+    font-weight: 300;
+    border: .5px solid var(--text-body);
+    border-radius: 6px;
+    padding: 1px 6px;
+}
+
+.clear-icon {
+    height: 8px;
+    cursor: pointer;
+    margin-left: 4px;
 }
