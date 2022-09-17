@@ -36,8 +36,8 @@ steps:
     path: /var/run/docker.sock
   when:
     event:
-  - tag
-  - deploy
+      - tag
+      - deploy
 
 - name: deploy_prod
   image: docker
