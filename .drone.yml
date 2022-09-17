@@ -37,7 +37,6 @@ steps:
   when:
     event:
       - tag
-      - deploy
 
 - name: deploy_prod
   image: docker
