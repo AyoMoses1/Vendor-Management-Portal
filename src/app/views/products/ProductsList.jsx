@@ -53,7 +53,8 @@ const Products = () => {
         );
       })
       .then(() => {
-        getAllResults(setProducts, setLoading, '/afrimash/products/'); /* Please remember to work on this line and turn it to an async function*/
+        getAllResults(setProducts, setLoading, '/afrimash/products/');
+        refresh() /* Please remember to work on this line and turn it to an async function*/
       })
       .catch((error) => console.error(error));
   };
@@ -80,6 +81,7 @@ const Products = () => {
                 }}
                 className="ml-3 mr-4"
               >
+                {/* Comment */}
                 <span className='my-0 text-15'>{product?.name.slice(0, 8) + "..."}</span>
               </Link>
             </div>
@@ -311,24 +313,24 @@ const Products = () => {
         },
       },
     },
-    // {
-    //   name: 'action',
-    //   label: ' ',
-    //   options: {
-    //     filter: false,
-    //     customBodyRenderLite: (dataIndex) => {
-    //       let product = products[dataIndex];
-    //       return (
-    //         <Button
-    //           onClick={() => handleFeaturedOnUSSD(product)}
-    //           variant='text'
-    //         >
-    //           {product.isFeaturedOnUssd ? 'Remove from USSD' : 'Add to USSD'}
-    //         </Button>
-    //       );
-    //     },
-    //   },
-    // },
+    {
+      name: 'action',
+      label: ' ',
+      options: {
+        filter: false,
+        customBodyRenderLite: (dataIndex) => {
+          let product = products[dataIndex];
+          return (
+            <Button
+              onClick={() => handleFeaturedOnUSSD(product)}
+              variant='text'
+            >
+              {product.isFeaturedOnUssd ? 'Remove from USSD' : 'Add to USSD'}
+            </Button>
+          );
+        },
+      },
+    },
     {
       name: 'action',
       label: ' ',
