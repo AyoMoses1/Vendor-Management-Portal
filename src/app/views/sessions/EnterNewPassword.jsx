@@ -21,6 +21,7 @@ class EnterNewPassword extends Component {
     this.state = {
       password: "",
       repeatPassword: "",
+      otp: "",
     };
    
   }
@@ -49,10 +50,11 @@ class EnterNewPassword extends Component {
   handleFormSubmit = async () => {
     console.log('HERE')
     try{
-      await service.userChangePassword({ password: this.state.password, repeatPassword:this.state.repeatPassword});
+      if(this.state.password !== this.state.repeatPassword){ throw new Error('invalid password')}
+      await service.userChangePassword({ data:{password: this.state.password}, otp:this.state.otp});
       alert("Password Reset")
     }catch(e){
-      console.log(e)
+      alert("error")
     }
   };
 
@@ -60,8 +62,7 @@ class EnterNewPassword extends Component {
     const { password } = this.state;
     const { repeatPassword } = this.state;
     const params = queryString.parse(this.props.location.search);
-    console.log(params)
-   
+    
 
 
     return (
