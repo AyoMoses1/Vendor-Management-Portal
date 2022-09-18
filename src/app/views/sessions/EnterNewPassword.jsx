@@ -8,12 +8,11 @@ import {
 import { TextValidator, ValidatorForm } from "react-material-ui-form-validator";
 import { connect } from "react-redux";
 import { PropTypes } from "prop-types";
-import { withRouter } from "react-router-dom";
 import { resetPassword } from "../../redux/actions/LoginActions";
 import afrimash2 from "./assets/svg/afrimash2.0.svg";
 import "./Forgotpassword.scss";
-import {Link} from "react-router-dom"
 import service from "./reset";
+import queryString from 'query-string'
 
 
 class EnterNewPassword extends Component {
@@ -21,28 +20,49 @@ class EnterNewPassword extends Component {
     super();
     this.state = {
       password: "",
+      repeatPassword: "",
+      otp: "",
     };
+   
+  }
+
+  componentDidMount() {
+    // custom rule will have name 'isPasswordMatch'
+    ValidatorForm.addValidationRule('isPasswordMatch', (value) => {
+        if (value !== this.state.password) {
+            return false;
+        }
+        return true;
+    });
+  }
+
+  componentWillUnmount() {
+      // remove rule when it is not needed
+      ValidatorForm.removeValidationRule('isPasswordMatch');
   }
 
   handleChange = (event) => {
-    this.setState({
-      [event.target.name]: event.target.value,
+    this.setState({ 
+    [event.target.name] : event.target.value,
     });
-  };
+  }
 
   handleFormSubmit = async () => {
     console.log('HERE')
     try{
-      await service.resetUserPassword({ password: this.state.password });
+      if(this.state.password !== this.state.repeatPassword){ throw new Error('invalid password')}
+      await service.userChangePassword({ data:{password: this.state.password}, otp:this.state.otp});
       alert("Password Reset")
     }catch(e){
-      console.log(e)
+      alert("error")
     }
   };
 
   render() {
-    let { password } = this.state;
-    let { passwordVerify } = this.state;
+    const { password } = this.state;
+    const { repeatPassword } = this.state;
+    const params = queryString.parse(this.props.location.search);
+    
 
 
     return (
@@ -56,6 +76,7 @@ class EnterNewPassword extends Component {
             <h3 className="reset"> Reset your Password </h3>
             <p className="reword">Enter your new password below.</p>
             <h6 className="new-password">Enter new password</h6>
+            
             <ValidatorForm ref="form" onSubmit={this.handleFormSubmit}>
               <TextValidator
                 className="mb-24 w-100 input"
@@ -66,7 +87,7 @@ class EnterNewPassword extends Component {
                 placeholder="********"
                 size="small"
                 value={password}
-                validators={["required", "isPassword"]}
+                validators={["required"]}
                 errorMessages={["this field is required", "password is not valid"]}
               />
               <p className="new-password">Re-enter new password </p>
@@ -75,15 +96,27 @@ class EnterNewPassword extends Component {
                 variant="outlined"
                 onChange={this.handleChange}
                 type="password"
-                name="password"
+                name="repeatPassword"
                 placeholder="********"
                 size="small"
-                value={passwordVerify}
-                validators={["required", "isPassword"]}
-                errorMessages={["this field is required", "password does not match"]}
+                value={repeatPassword}
+                validators={["required", "isPasswordMatch"]}
+                errorMessages={[ "this field is required", "password mismatch",]}
               />
+
+             <p className="new-password">One Time Password (OTP) </p>
+              <TextValidator
+                className="mb-24 w-100"
+                variant="outlined"
+                onChange={this.handleChange}
+                type="password"
+                name="number"
+                size="small"
+                value= "params"
+                validators={["required"]}
+              />
+
               <div className="flex flex-middle">
-                <Link to="/password-created">
                   <Button
                     variant="outlined"
                     disabled
@@ -92,10 +125,8 @@ class EnterNewPassword extends Component {
                   >
                     Reset Password
                   </Button>
-                </Link>
               </div>
             </ValidatorForm>
-            ;
           </div>
         </Container>
       </div>
@@ -107,7 +138,7 @@ const mapStateToProps = (state) => ({
   resetPassword: PropTypes.func.isRequired,
   login: state.login,
 });
-export default withRouter(
+export default (
   connect(mapStateToProps, { resetPassword })(EnterNewPassword)
 );
 

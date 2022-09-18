@@ -7,13 +7,10 @@ class Reset {
     return await http.post(route.passwordReset, data);
   }
 
-  async userChangePassword(data){
-    return await http.put_new(`${route.passwordReset}`, data);
+  async userChangePassword(payload){
+    return await http.put_new(`${route.passwordConfirm(payload.otp)}`, payload.data);
   }
 
-   async confirmPasswordReset(data){
-    return await http.put_new(`${route.passwordReset}`, data);
-  }
 }
 
 export default new Reset();
