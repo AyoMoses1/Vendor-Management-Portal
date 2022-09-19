@@ -8,7 +8,8 @@ class Reset {
   }
 
   async userChangePassword(payload){
-    return await http.put_new(`${route.passwordConfirm(payload.otp)}`, payload.data);
+    console.log(payload);
+    return await http.put_new(`${route.passwordConfirm(payload?.otp)}`, payload.data);
   }
 
 }
