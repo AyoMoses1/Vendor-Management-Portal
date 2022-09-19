@@ -29,6 +29,7 @@ import Modal from '../../components/Modal';
 import './agent.css';
 import { debounce } from 'lodash';
 import { states } from '../../../utils/states';
+import { capitalize } from 'utils';
 states.unshift('All');
 
 const Agents = () => {
@@ -141,7 +142,7 @@ const Agents = () => {
           let user = agentList[dataIndex];
           setId(user.id);
           return (
-            <div className='flex items-center agent__name'>
+            <div className='flex items-center'>
               <Link
                 to={{
                   pathname: '/agent/details',
@@ -151,8 +152,8 @@ const Agents = () => {
                   },
                 }}
                 className='ml-3'
-              >   
-                  <h5 className='my-0 text-1 text-control'>{`${user?.fullName} `}</h5>
+              >
+                <span className='my-0 text-15'>{`${user?.fullName} `}</span>
               </Link>
             </div>
           );
@@ -162,14 +163,14 @@ const Agents = () => {
 
     {
       name: 'mobileNo', // field name in the row object
-      label: 'Contact', // column title that will be shown in table
+      label: 'Phone', // column title that will be shown in table
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
           let user = agentList[dataIndex];
           setId(user.id);
           return (
-            <div className='flex items-center agent__phone'>
+            <div className='flex items-center'>
               <Link
                 to={{
                   pathname: '/agent/details',
@@ -179,8 +180,8 @@ const Agents = () => {
                   },
                 }}
                 className='ml-3'
-              >      
-                  <h5 className='my-0 text-control'>{user?.mobileNo}</h5>
+              >
+                <span className='my-0 text-15'>{user?.mobileNo}</span>
               </Link>
             </div>
           );
@@ -197,7 +198,7 @@ const Agents = () => {
           let user = agentList[dataIndex];
           setId(user.id);
           return (
-            <div className='flex items-center agent__email'>
+            <div className='flex items-center'>
               <Link
                 to={{
                   pathname: '/agent/details',
@@ -207,8 +208,8 @@ const Agents = () => {
                   },
                 }}
                 className='ml-3'
-              >      
-                  <h5 className='my-0 text-control'> {user?.email}</h5>
+              >
+                <span className='my-0 text-15'> {user?.email}</span>
               </Link>
             </div>
           );
@@ -225,7 +226,7 @@ const Agents = () => {
           let user = agentList[dataIndex];
           setId(user.id);
           return (
-            <div className='flex items-center date__registered'>
+            <div className='flex items-center'>
               <Link
                 to={{
                   pathname: '/agent/details',
@@ -236,12 +237,12 @@ const Agents = () => {
                 }}
                 className='ml-3'
               >
-                <h5 className='my-0 text-muted'>
+                <span className='my-0 text-15'>
                   {' '}
                   {user.dateRegistered.split(" ")[0] || '-----'}
-                </h5>
+                </span><br />
                 <span className='date'>
-                {user.dateRegistered.split(" ")[1] || '-----'}
+                  {user.dateRegistered.split(" ")[1] || '-----'}
                 </span>
               </Link>
             </div>
@@ -268,7 +269,7 @@ const Agents = () => {
                 }}
                 className='ml-3'
               >
-                  <h5 className='my-0 text-muted'> {user.state || '-----'}</h5>
+                <span className='my-0 text-15'> {user.state || '-----'}</span>
               </Link>
             </div>
           );
@@ -281,26 +282,25 @@ const Agents = () => {
       label: 'Status', // column title that will be shown in table
       options: {
         filter: false,
+        setCellHeaderProps: () => { return { width: "75px" } },
         customBodyRenderLite: (dataIndex) => {
           let user = agentList[dataIndex];
           setId(user.id);
           return (
-            <div className={`flex items-center`}>
-            <div className={`ml-3  agent__status  ${user?.status}`}>
-            <Link
-              to={{
-                pathname: "/agent/details",
-                state: {
-                  id: user.id,
-                  agentCode: user.agentCode,
-                },
-              }}
-              className="ml-3 mr-4"
-            >
-              <span className='text'>{user?.status || '------'}</span>
-            </Link>
-          </div>
-        </div>
+            <div className={`items-center AGENT ${user?.status}`}>
+              <Link
+                to={{
+                  pathname: "/agent/details",
+                  state: {
+                    id: user.id,
+                    agentCode: user.agentCode,
+                  },
+                }}
+                className="ml-3"
+              >
+                <span className='my-0 text-15'>{capitalize(user?.status || '------')}</span>
+              </Link>
+            </div>
           );
         },
       },
@@ -323,10 +323,13 @@ const Agents = () => {
                   },
                 }}
               >
-                <MenuItem className='menu__item'>Activate</MenuItem>
-                
+                <span className='my-0 text-15'>
+                  <MenuItem className='menu__item'>
+                    Activate
+                  </MenuItem>
+                </span>
               </Link>
-              
+
             </>
           );
         },
@@ -370,14 +373,13 @@ const Agents = () => {
         )}
       </div>
       <div className='overflow-auto'>
-        <div className='min-w-750'>
+        <div className='min-w-750 agent-table'>
           {false ? (
             <Loading />
           ) : (
             <MUIDataTable
               title={<div>
                 <h4 className='mt-4 mb-0'>{title}</h4>
-                
               </div>}
               data={[...agentList]}
               columns={columns}
@@ -386,7 +388,6 @@ const Agents = () => {
                 selectableRows: "none",
                 count: total,
                 page: page,
-                setTableProps: () => ({ className: "agent-table" }),
                 onChangePage: (value) => handleChangePage(value),
                 filter: true,
                 sort: true,
