@@ -11,6 +11,7 @@ import { updateProductFeature } from '../../redux/actions/ussd-action';
 import CircleIcon from '@mui/icons-material/Circle';
 import './products-view.css'
 import { debounce } from "lodash";
+import NewProduct from './NewProduct';
 
 const Products = () => {
   const [isAlive, setIsAlive] = useState(true);
@@ -22,6 +23,7 @@ const Products = () => {
   const dialog = useDialog();
   const dispatcher = useDispatch();
   const [query, setQuery] = useState("");
+  const [open, setOpen] = useState(false)
 
   useEffect(() => {
     const fetchAllProducts = async () => {
@@ -61,6 +63,11 @@ const Products = () => {
   const onChangePage = async (page) => {
     setPage(page)
   }
+
+  const handleModal = () => {
+    setOpen(!open)
+  }
+
   const columns = [
     {
       name: "name", // field name in the row object
@@ -493,16 +500,33 @@ const Products = () => {
                   },
                   customToolbar: () => {
                     return (
-                      <Link
-                        to={{
-                          pathname: "/product/new",
-                          state: {},
-                        }}
-                      >
-                        <Button variant="contained" color="primary">
-                          Add New
-                        </Button>
-                      </Link>
+                      <>
+                        {/* <Link
+                          to={{
+                            pathname: "/product/new",
+                            state: {},
+                          }}
+                        > */}
+                          <Button 
+                          variant="contained" 
+                          color="primary"
+                          onClick = {()=>handleModal()}
+                          >
+                            Add New
+                          </Button>
+                        {/* </Link> */}
+                        {/* <NewPickupCenter
+                      name={pickupCenter ? "Edit Pickup Center" : "Add New Pickup Center"}
+                      isOpen={open}
+                      pickupCenter={pickupCenter}
+                      handleClose={handleModal}
+                      refresh={() => refresh()} /> */}
+
+                      <NewProduct
+                        isOpen={open}
+                        handleClose={handleModal}
+                      />
+                      </>
                     );
                   },
                 }}

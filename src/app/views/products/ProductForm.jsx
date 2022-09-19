@@ -179,7 +179,6 @@ function NewProduct({ isNewProduct, id, Product }) {
 
   const handleSubmit = (values, { setSubmitting }) => {
     const payload = { ...state, ...values };
-    console.log(payload, "************TEST PAYLOAD**************")
     const data = new FormData();
     const updateData = {
       id: state.id,
@@ -188,7 +187,6 @@ function NewProduct({ isNewProduct, id, Product }) {
       sku: values?.sku || state.sku,
       translatedName: state.translatedName,
       productCode: state.productCode,
-      // brandId: state.brandId,
       buyPrice: state.buyPrice,
       rating: state.rating,
       price: values?.price || state.price,
@@ -199,7 +197,6 @@ function NewProduct({ isNewProduct, id, Product }) {
       storeId: values?.storeId || state.storeId,
       productCategories: values?.productCategories
     };
-    // delete payload.shippingClass;
     data.append('product', JSON.stringify(payload));
 
     imageList.forEach((file, imageFile) => {
@@ -240,13 +237,11 @@ function NewProduct({ isNewProduct, id, Product }) {
    
   };
 
-  
-  console.log(state, "state test")
- /*  console.log({storeId: values.storeId, class: state.shippingClass}) */
 
   return (
     <div className='m-sm-30'>
       <Notification alert={alert} severity={severity || ''} />
+      <h3>Add Product</h3>
       <Formik
         initialValues={values}
         onSubmit={handleSubmit}
@@ -262,9 +257,7 @@ function NewProduct({ isNewProduct, id, Product }) {
           handleSubmit,
           setFieldValue,
         }) => (
-          <form className='px-4' onSubmit={handleSubmit}>
-            <Grid container spacing={3}>
-              <Grid item sm={6} xs={12}>
+          <form onSubmit={handleSubmit}>
                 <TextField
                   className='mb-4'
                   name='productType'
@@ -342,8 +335,8 @@ function NewProduct({ isNewProduct, id, Product }) {
                     )}
                   </div>
                 </div>
-              </Grid>
-              <Grid item sm={6} xs={12}>
+              
+          
                 <TextField
                   className='mb-4'
                   name='name'
@@ -405,26 +398,6 @@ function NewProduct({ isNewProduct, id, Product }) {
                     />
                   )}
                 />
-                {/* <TextField
-                  className='mb-4'
-                  name='shippingClass'
-                  label='Select Shipping Class'
-                  variant='outlined'
-                  value = {values.status}
-                  fullWidth
-                  select
-                  margin='normal'
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  error={Boolean(touched.productType && errors.productType)}
-                  helperText={touched.productType && errors.productType}
-                >
-                  {productTypes.sort().map((productType) => (
-                    <MenuItem value={productType} key={productType}>
-                      {productType}
-                    </MenuItem>
-                  ))}
-                </TextField> */}
                 <Autocomplete
                   id='shippingClass'
                   name='shippingClass'
@@ -540,8 +513,6 @@ function NewProduct({ isNewProduct, id, Product }) {
                     />
                   )}
                 />
-              </Grid>
-            </Grid>
             <Button
               className='mb-4 px-12'
               variant='contained'
@@ -558,7 +529,7 @@ function NewProduct({ isNewProduct, id, Product }) {
         handleModal={handleDisplayModal}
         alertData={alertData}
         handleOK={() => {
-          history.push('/products')
+          history.push('/products/details')
         }}
       />
     </div>
