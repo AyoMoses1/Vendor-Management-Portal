@@ -11,7 +11,7 @@ const usestyles = makeStyles(({ palette, ...theme }) => ({
   },
 }))
 
-const ProductDetails = ({ location }) => {
+const ProductDetailsTwo = ({ location }) => {
   const State = location.state
   const { id } = State
   const [selectedImage, setSelectedImage] = useState('')
@@ -123,4 +123,4 @@ const ProductDetails = ({ location }) => {
   )
 }
 
-export default ProductDetails
+export default ProductDetailsTwo

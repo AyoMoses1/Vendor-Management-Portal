@@ -13,12 +13,19 @@
     font-weight: 300;
 }
 
+.product-details-subs-bold {
+    color: #000000;
+    font-weight: 500;
+    font-size: 14px;
+}
+
 .product-type-box {
     padding: 4px 6px;
 }
 
 .product-types,
-.product-shipping-weight {
+.product-shipping-weight,
+.product-status {
     width: 100%;
 }
 
@@ -50,7 +57,7 @@
     justify-content: flex-end;
     font-weight: 300;
     color: #000000;
-    font-size: 13px;
+    font-size: 12px;
 }
 
 .product-type-input-end label {
@@ -100,6 +107,38 @@
     border-radius: 0;
     padding: 2px 20px;
     font-size: 12px;
+}
+
+.product-outline-save-btn {
+    background: #ffffff;
+    border: 0.451948px solid #0F4E08;
+    border-radius: 1.50649px;
+    color: #5E8C0F;
+    padding: 2px 20px;
+    font-size: 12px;
+    font-weight: 300;
+}
+
+.product-outline-save-btn:hover {
+    background: #5E8C0F;
+    color: #ffffff;
+    font-weight: 400;
+}
+
+.product-small-btn {
+    background: #ffffff;
+    border: 0.451948px solid #0F4E08;
+    border-radius: 1.50649px;
+    color: #5E8C0F;
+    padding: 2px 5px;
+    font-size: 8px;
+    font-weight: 300;
+}
+
+.product-small-btn:hover {
+    background: #5E8C0F;
+    color: #ffffff;
+    font-weight: 400;
 }
 
 .product-gallery-images-frame {
@@ -171,21 +210,30 @@
     border-radius: 5.12px;
 }
 
-.product-shipping-weight .MuiInputBase-input {
+.product-shipping-weight .MuiInputBase-input,
+.product-status .MuiInputBase-input {
     padding: 14px;
 }
 
-.product-shipping-weight .MuiSelect-root {
+.product-shipping-weight .MuiSelect-root,
+.product-status .MuiSelect-root {
     padding: 14px;
 }
 
-.product-shipping-weight fieldset {
+.attribute-case .MuiTextField-root {
+    margin: 0px !important;
+}
+
+.product-shipping-weight fieldset,
+.product-status fieldset {
     border-color: #B3DAB9;
 }
 
 /* Chrome, Safari, Edge, Opera */
 .product-shipping-weight input::-webkit-outer-spin-button,
 .product-shipping-weight input::-webkit-inner-spin-button,
+.product-status input::-webkit-outer-spin-button,
+.product-status input::-webkit-inner-spin-button,
 .product-types input::-webkit-outer-spin-button,
 .product-types input::-webkit-inner-spin-button {
     -webkit-appearance: none;
@@ -203,18 +251,243 @@
 }
 
 .product-color-section {
-    border: 1px solid rgb(227, 227, 227);
-    padding: 10px 20px !important;
+    border: 0.768px solid #E3E3E3;
+    border-radius: 7.68px;
+    padding: 10px !important;
 }
 
-.title-divider{
+.title-divider {
     border: 0;
     border-top: 1px solid rgb(227, 227, 227);
-    margin: 10px 0;
+    margin-top: 2px;
+    margin-bottom: 12px;
 }
-.product-checkbox{
+
+.product-checkbox .MuiFormControlLabel-label {
+    font-size: 12px !important;
+}
+
+.product-type-input-end .MuiSvgIcon-root {
+    font-size: 18px;
+}
+
+.product-checkbox .MuiSvgIcon-root {
+    font-size: 18px;
+}
+
+.MuiCheckbox-colorSecondary.Mui-checked {
+    color: black;
+}
+
+.section-title {
+    display: inline-block;
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+.button-flex {
+    margin-top: 10px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.product-status {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.product-status .MuiFormControl-root {
+    width: 90% !important;
+}
+
+/* .MuiOutlinedInput-root {
+    max-width: 90%;
+} */
+
+.product-status-save-btn {
+    background: #fff;
+    border: 1px solid #06b01f;
+    font-size: 10px;
+    color: #06b01f;
+    height: 20px;
+    border-radius: 0;
+}
+
+.status-flex {
+    display: flex;
+    justify-content: space-between;
+    padding: 0px !important;
+    border-bottom: .5px solid #C4C4C4;
+    margin: 8px 8px 0px 8px;
+}
+
+.no-border {
+    border: none !important;
+}
+
+.status-flex div {
+    font-size: 10px;
+    font-weight: 400;
+}
+
+.del-icon {
+    color: #EB6464;
+    text-decoration: underline;
+    font-size: 12px;
+    margin-top: 32px;
+    display: flex;
+    padding: 0;
+    font-weight: 300;
+}
+
+.del-icon:hover {
+    background: transparent;
+    text-decoration: underline;
+}
+
+.del-icon img {
+    height: 20px;
+}
+
+.product-attribute {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.product-attribute .MuiFormControl-root {
+    width: 90% !important;
+}
+
+.product-attribute button {
+    height: fit-content;
+}
+
+.attributes-container {
+    position: relative;
+}
+
+.create-attribute {
+    position: absolute;
+    font-size: 10px;
+    right: 10%;
+    bottom: 0;
+    cursor: pointer;
+    text-decoration: underline;
+    color: #5E8C0F;
+    font-weight: 300;
+}
+
+.add-new-item {
+    font-size: 8px;
+    cursor: pointer;
+    text-decoration: underline;
+    color: #5E8C0F;
+    font-weight: 300;
+}
+
+.items-extras {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.no-shadow {
+    box-shadow: none !important;
+}
+
+.category-input-container .MuiTextField-root {
+    margin: 0px !important;
+    padding: 12px 4px;
+}
+
+.category-area {
+    display: flex;
+    align-items: center;
+}
+
+.category-checkbox {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+
+.product-tables .MuiToolbar-root {
+    padding: 0px;
+}
+
+.product-tables thead tr th {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+    background: #F0F2F5;
+    font-size: 14px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+.product-tables thead tr th .MuiButton-text {
+    font-weight: 500;
+    color: #000000;
+}
+
+.product-tables .MuiTableCell-root {
+    border-bottom: 4px solid #ffffff !important;
+}
+
+.product-tables tbody tr td {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+    background: #FAFBFD;
+    font-size: 12px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    color: #000000;
+}
+
+.product-tables .MuiTable-root {
+    margin-top: 10px;
+}
+
+.product-tables .card-subtitle {
+    margin: 0px !important;
+}
+
+.product-tables .undefined {
+    box-shadow: none !important;
+}
+
+.APPROVED {
+    color: #EF882C;
+    background-color: rgba(239, 136, 44, 0.15);
+}
+
+.PROCESSING {
+    color: #2F80ED;
+    ;
+    background-color: rgba(47, 128, 237, 0.15);
+}
+
+.CANCELLED {
+    color: #EB5757;
+    background-color: rgba(234, 95, 95, 0.15);
+}
+
+.PRODUCT {
+    padding: 5px 8px;
+    width: fit-content;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500px;
+}
+
+.SEO {
+    display: flex;
+    color: rgb(7, 162, 7);
+    justify-content: center;
+    align-items: center;
+}
+
+.SEO svg {
     font-size: 12px;
 }
-/* .product-color-section .product-details-title{
-    padd
-} */

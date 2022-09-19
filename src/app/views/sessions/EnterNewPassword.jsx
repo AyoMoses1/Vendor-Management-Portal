@@ -23,36 +23,36 @@ class EnterNewPassword extends Component {
       repeatPassword: "",
       otp: "",
     };
-   
+
   }
 
   componentDidMount() {
     // custom rule will have name 'isPasswordMatch'
     ValidatorForm.addValidationRule('isPasswordMatch', (value) => {
-        if (value !== this.state.password) {
-            return false;
-        }
-        return true;
+      if (value !== this.state.password) {
+        return false;
+      }
+      return true;
     });
   }
 
   componentWillUnmount() {
-      // remove rule when it is not needed
-      ValidatorForm.removeValidationRule('isPasswordMatch');
+    // remove rule when it is not needed
+    ValidatorForm.removeValidationRule('isPasswordMatch');
   }
 
   handleChange = (event) => {
-    this.setState({ 
-    [event.target.name] : event.target.value,
+    this.setState({
+      [event.target.name]: event.target.value,
     });
   }
 
   handleFormSubmit = async () => {
-    try{
-      if(this.state.password !== this.state.repeatPassword){ throw new Error('invalid password')}
-      await service.userChangePassword({ data:{password: this.state.password}, otp:this.state.otp});
+    try {
+      if (this.state.password !== this.state.repeatPassword) { throw new Error('invalid password') }
+      await service.userChangePassword({ data: { password: this.state.password }, otp: this.state.otp });
       this.props.history.push("/password-created")
-    }catch(e){
+    } catch (e) {
       alert("error")
     }
   };
@@ -61,8 +61,7 @@ class EnterNewPassword extends Component {
     const { password } = this.state;
     const { repeatPassword } = this.state;
     const params = queryString.parse(this.props.location.search);
-    
-
+    this.state.otp = params?.otp;
 
     return (
       <div>
@@ -75,7 +74,7 @@ class EnterNewPassword extends Component {
             <h3 className="reset"> Reset your Password </h3>
             <p className="reword">Enter your new password below.</p>
             <h6 className="new-password">Enter new password</h6>
-            
+
             <ValidatorForm ref="form" onSubmit={this.handleFormSubmit}>
               <TextValidator
                 className="mb-24 w-100 input"
@@ -100,10 +99,10 @@ class EnterNewPassword extends Component {
                 size="small"
                 value={repeatPassword}
                 validators={["required", "isPasswordMatch"]}
-                errorMessages={[ "this field is required", "password mismatch",]}
+                errorMessages={["this field is required", "password mismatch",]}
               />
 
-             <p className="new-password">One Time Password (OTP) </p>
+              <p className="new-password">One Time Password (OTP) </p>
               <TextValidator
                 className="mb-24 w-100"
                 variant="outlined"
@@ -111,18 +110,18 @@ class EnterNewPassword extends Component {
                 type="password"
                 name="number"
                 size="small"
-                value= "params"
+                value="params"
                 validators={["required"]}
               />
 
               <div className="flex flex-middle">
-                  <Button
-                    variant="outlined"
-                    className="button"
-                    type="submit"
-                  >
-                    Reset Password
-                  </Button>
+                <Button
+                  variant="outlined"
+                  className="button"
+                  type="submit"
+                >
+                  Reset Password
+                </Button>
               </div>
             </ValidatorForm>
           </div>
