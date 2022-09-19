@@ -48,11 +48,10 @@ class EnterNewPassword extends Component {
   }
 
   handleFormSubmit = async () => {
-    console.log('HERE')
     try{
       if(this.state.password !== this.state.repeatPassword){ throw new Error('invalid password')}
       await service.userChangePassword({ data:{password: this.state.password}, otp:this.state.otp});
-      alert("Password Reset")
+      this.props.history.push("/password-created")
     }catch(e){
       alert("error")
     }
@@ -119,7 +118,6 @@ class EnterNewPassword extends Component {
               <div className="flex flex-middle">
                   <Button
                     variant="outlined"
-                    disabled
                     className="button"
                     type="submit"
                   >
