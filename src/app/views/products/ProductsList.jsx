@@ -11,6 +11,7 @@ import { updateProductFeature } from '../../redux/actions/ussd-action';
 import CircleIcon from '@mui/icons-material/Circle';
 import './products-view.css'
 import { debounce } from "lodash";
+import NewProduct from './NewProduct';
 
 const Products = () => {
   const [isAlive, setIsAlive] = useState(true);
@@ -22,6 +23,7 @@ const Products = () => {
   const dialog = useDialog();
   const dispatcher = useDispatch();
   const [query, setQuery] = useState("");
+  const [open, setOpen] = useState(false)
 
   
   useEffect(() => {
@@ -53,7 +55,8 @@ const Products = () => {
         );
       })
       .then(() => {
-        getAllResults(setProducts, setLoading, '/afrimash/products/'); /* Please remember to work on this line and turn it to an async function*/
+        getAllResults(setProducts, setLoading, '/afrimash/products/');
+        refresh() /* Please remember to work on this line and turn it to an async function*/
       })
       .catch((error) => console.error(error));
   };
@@ -61,6 +64,11 @@ const Products = () => {
   const onChangePage = async (page) => {
     setPage(page)
   }
+
+  const handleModal = () => {
+    setOpen(!open)
+  }
+
   const columns = [
     {
       name: "name", // field name in the row object
@@ -80,6 +88,7 @@ const Products = () => {
                 }}
                 className="ml-3 mr-4"
               >
+                {/* Comment */}
                 <span className='my-0 text-15'>{product?.name.slice(0, 8) + "..."}</span>
               </Link>
             </div>
@@ -311,24 +320,24 @@ const Products = () => {
         },
       },
     },
-    // {
-    //   name: 'action',
-    //   label: ' ',
-    //   options: {
-    //     filter: false,
-    //     customBodyRenderLite: (dataIndex) => {
-    //       let product = products[dataIndex];
-    //       return (
-    //         <Button
-    //           onClick={() => handleFeaturedOnUSSD(product)}
-    //           variant='text'
-    //         >
-    //           {product.isFeaturedOnUssd ? 'Remove from USSD' : 'Add to USSD'}
-    //         </Button>
-    //       );
-    //     },
-    //   },
-    // },
+    {
+      name: 'action',
+      label: ' ',
+      options: {
+        filter: false,
+        customBodyRenderLite: (dataIndex) => {
+          let product = products[dataIndex];
+          return (
+            <Button
+              onClick={() => handleFeaturedOnUSSD(product)}
+              variant='text'
+            >
+              {product.isFeaturedOnUssd ? 'Remove from USSD' : 'Add to USSD'}
+            </Button>
+          );
+        },
+      },
+    },
     {
       name: 'action',
       label: ' ',
@@ -492,16 +501,33 @@ const Products = () => {
                   },
                   customToolbar: () => {
                     return (
-                      <Link
-                        to={{
-                          pathname: "/product/new",
-                          state: {},
-                        }}
-                      >
-                        <Button variant="contained" color="primary">
-                          Add New
-                        </Button>
-                      </Link>
+                      <>
+                        {/* <Link
+                          to={{
+                            pathname: "/product/new",
+                            state: {},
+                          }}
+                        > */}
+                          <Button 
+                          variant="contained" 
+                          color="primary"
+                          onClick = {()=>handleModal()}
+                          >
+                            Add New
+                          </Button>
+                        {/* </Link> */}
+                        {/* <NewPickupCenter
+                      name={pickupCenter ? "Edit Pickup Center" : "Add New Pickup Center"}
+                      isOpen={open}
+                      pickupCenter={pickupCenter}
+                      handleClose={handleModal}
+                      refresh={() => refresh()} /> */}
+
+                      <NewProduct
+                        isOpen={open}
+                        handleClose={handleModal}
+                      />
+                      </>
                     );
                   },
                 }}

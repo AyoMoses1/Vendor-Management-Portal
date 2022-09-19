@@ -61,7 +61,7 @@ function NewProduct({ isNewProduct, id, Product }) {
     rating: null,
     translatedName: null,
     productCode: null,
-    shippingClass: null
+    shippingClass: {}
   };
   const initialValues = {
     productType: '',
@@ -72,6 +72,9 @@ function NewProduct({ isNewProduct, id, Product }) {
     sku: '',
     name: '',
     description: '',
+    brandId:{},
+    storeId:{}
+
   };
 
   const history = useHistory();
@@ -105,7 +108,7 @@ function NewProduct({ isNewProduct, id, Product }) {
   const getAllShippingClasses = () => {
     setLoading(true);
     http.get('/afrimash/shipping-class').then((res) => {
-      setShippingClasses(res?.data.object);
+      setShippingClasses(res?.data?.object);
       setLoading(false);
     });
   };
@@ -155,7 +158,6 @@ function NewProduct({ isNewProduct, id, Product }) {
       getProductById(id).then(({ data }) => {
         setState(data.object);
         setValues(data.object);
-        console.log(data.object, "test shipping class")
         setShippingC(data.object.status)
       });
     }
@@ -163,8 +165,15 @@ function NewProduct({ isNewProduct, id, Product }) {
   }, [acceptedFiles, id, isNewProduct, shippingC]);
 
   const handleSelect = (newValue, fieldName) => {
-    const { id } = newValue;
-    setState({ ...state, [fieldName]: id });
+    console.log({ newValue, fieldName })
+    if(Object.keys(state).some(key => key === fieldName)){
+      setState({ ...state, [fieldName]: newValue });
+    }
+
+    if(Object.keys(values).some(key => key === fieldName)){
+      setValues({ ...values, [fieldName]: newValue });
+    }
+
   };
 
 
@@ -178,14 +187,16 @@ function NewProduct({ isNewProduct, id, Product }) {
       sku: values?.sku || state.sku,
       translatedName: state.translatedName,
       productCode: state.productCode,
-      brandId: state.brandId,
       buyPrice: state.buyPrice,
       rating: state.rating,
       price: values?.price || state.price,
       discountRate: values?.discountRate || state.discountRate,
-      shippingClass: state.shippingClass
+      tags: values?.tags || state.tags,
+      shippingClass: state.shippingClass,
+      brandId: values?.brandId || state.brandId,
+      storeId: values?.storeId || state.storeId,
+      productCategories: values?.productCategories
     };
-    delete payload.shippingClass;
     data.append('product', JSON.stringify(payload));
 
     imageList.forEach((file, imageFile) => {
@@ -226,9 +237,11 @@ function NewProduct({ isNewProduct, id, Product }) {
    
   };
 
+
   return (
     <div className='m-sm-30'>
       <Notification alert={alert} severity={severity || ''} />
+      <h3>Add Product</h3>
       <Formik
         initialValues={values}
         onSubmit={handleSubmit}
@@ -244,9 +257,7 @@ function NewProduct({ isNewProduct, id, Product }) {
           handleSubmit,
           setFieldValue,
         }) => (
-          <form className='px-4' onSubmit={handleSubmit}>
-            <Grid container spacing={3}>
-              <Grid item sm={6} xs={12}>
+          <form onSubmit={handleSubmit}>
                 <TextField
                   className='mb-4'
                   name='productType'
@@ -301,6 +312,7 @@ function NewProduct({ isNewProduct, id, Product }) {
                   })}
                   {...getRootProps()}
                 >
+                  {/* Comment */}
                   <input {...getInputProps()} />
                   <div
                     className='flex-column items-center'
@@ -323,8 +335,8 @@ function NewProduct({ isNewProduct, id, Product }) {
                     )}
                   </div>
                 </div>
-              </Grid>
-              <Grid item sm={6} xs={12}>
+              
+          
                 <TextField
                   className='mb-4'
                   name='name'
@@ -370,6 +382,7 @@ function NewProduct({ isNewProduct, id, Product }) {
                 <Autocomplete
                   id='storeId'
                   name='storeId'
+                  value={values.storeId}
                   options={stores}
                   getOptionLabel={(option) => option.name}
                   getOptionSelected={(option, value) => option.id === value.id}
@@ -385,31 +398,11 @@ function NewProduct({ isNewProduct, id, Product }) {
                     />
                   )}
                 />
-                <TextField
-                  className='mb-4'
-                  name='shippingClass'
-                  label='Select Shipping Class'
-                  variant='outlined'
-                  value = {values.status}
-                  fullWidth
-                  select
-                  margin='normal'
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  error={Boolean(touched.productType && errors.productType)}
-                  helperText={touched.productType && errors.productType}
-                >
-                  {productTypes.sort().map((productType) => (
-                    <MenuItem value={productType} key={productType}>
-                      {productType}
-                    </MenuItem>
-                  ))}
-                </TextField>
                 <Autocomplete
                   id='shippingClass'
                   name='shippingClass'
                   options={shippinClasses}
-                  value={values.shippingClass?.name}
+                  value={state.shippingClass}
                   getOptionLabel={(option) => option.name}
                   getOptionSelected={(option, value) => option.id === value.id}
                   onChange={(event, newValue) =>
@@ -428,7 +421,9 @@ function NewProduct({ isNewProduct, id, Product }) {
                 <Autocomplete
                   multiple
                   id='tags'
+                  name='tags'
                   options={tags}
+                  value={values.tags}
                   getOptionLabel={(option) => option.name}
                   getOptionSelected={(option, value) => option.id === value.id}
                   onChange={(event, newValue) => {
@@ -459,9 +454,16 @@ function NewProduct({ isNewProduct, id, Product }) {
 
                 <Autocomplete
                   id='brands'
-                  options={brands}
-                  getOptionLabel={(option) => option.name || ''}
-                  getOptionSelected={(option, value) => option.id === value.id}
+                  options={brands.filter(item => item?.name)}
+                  name = 'brands'
+                  value={values.brandId}
+                  getOptionLabel={(option) => {
+                    return option?.name
+                  }}
+                  getOptionSelected={(option, value) =>{
+                    console.log({option, value })
+                     return option.id === value
+                    }}
                   onChange={(event, newValue) =>
                     handleSelect(newValue, 'brandId')
                   }
@@ -477,11 +479,17 @@ function NewProduct({ isNewProduct, id, Product }) {
                 <Autocomplete
                   multiple
                   id='categories'
+                  name='categories'
                   options={categories}
+                  value={values.productCategories}
                   onChange={(event, newValue) => {
                     setValues({...values, productCategories:newValue})
                   }}
-                  getOptionLabel={(option) => option.name}
+                  getOptionLabel={
+                    (option) => {
+                    return option?.name
+                    }
+                  }
                   getOptionSelected={(option, value) => option.id === value.id}
                   renderOption={(option, { selected }) => (
                     <React.Fragment>
@@ -505,8 +513,6 @@ function NewProduct({ isNewProduct, id, Product }) {
                     />
                   )}
                 />
-              </Grid>
-            </Grid>
             <Button
               className='mb-4 px-12'
               variant='contained'
@@ -523,7 +529,7 @@ function NewProduct({ isNewProduct, id, Product }) {
         handleModal={handleDisplayModal}
         alertData={alertData}
         handleOK={() => {
-          history.push('/products')
+          history.push('/products/details')
         }}
       />
     </div>
