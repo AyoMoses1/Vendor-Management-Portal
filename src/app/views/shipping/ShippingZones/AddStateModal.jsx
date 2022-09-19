@@ -37,18 +37,28 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-function StatesModal({ isOpen, handleClose, id }) {
+function StatesModal({ isOpen, handleClose, id , getShippingZone}) {
   const classes = useStyles()
   const [modalStyle] = React.useState(getModalStyle)
   const [values, setValues] = React.useState({})
 
   const handleSubmit = (value, { setSubmitting }) => {
-    const payload = value.states.toString()
+    /* `/afrimash/shipping-zone/${id}/states?ids=${payload}` */
+
+    /* `/shipping-zone/${id}/associate-states`, payload */
+    const payload = value.states.map(id => {
+      return {id : parseInt(id)}
+    })
+
+   /*  const payload = value.states.toString(); */
+
+    console.log({ payload })
     http
-      .patch(`/afrimash/shipping-zone/${id}/states?ids=${payload}`)
+      .patch(`/afrimash/shipping-zone/${id}/associate-states`, payload)
       .then((res) => {
         if (res.status === 200) {
-          handleClose()
+          getShippingZone()
+          handleClose();
         }
       })
   }
