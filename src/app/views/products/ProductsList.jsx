@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Breadcrumb } from 'matx';
 import MUIDataTable from 'mui-datatables';
 import { Grow, Icon, IconButton, TextField, Button } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useDialog } from 'muibox';
 import { deleteProduct, getAllResults } from './ProductService';
 import Loading from 'matx/components/MatxLoadable/Loading';
@@ -12,6 +12,7 @@ import CircleIcon from '@mui/icons-material/Circle';
 import './products-view.css'
 import { debounce } from "lodash";
 import NewProduct from './NewProduct';
+import Alert from 'app/components/Alert';
 
 const Products = () => {
   const [isAlive, setIsAlive] = useState(true);
@@ -24,6 +25,30 @@ const Products = () => {
   const dispatcher = useDispatch();
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false)
+  const history = useHistory();
+  const [alertData, setAlertData] = React.useState({ success: false, text: '', title: '' });
+  const [alertOpen, setAlertOpen] = React.useState(false)
+  const [createdId, setCreatedId] = React.useState(null);
+
+  const handleDisplayModal = () => {
+    setAlertOpen(!alertOpen)
+  }
+
+  const created = (id) => {
+    console.log(id);
+    setCreatedId(id);
+    setAlertData({ success: true, text: "Product created sucessfully", title: 'Product Created' })
+    handleDisplayModal();
+  }
+
+  const handleOK = () => {
+    console.log(createdId);
+    handleDisplayModal();
+    history.push({
+      pathname: '/product/details',
+      state: { id: createdId }
+    })
+  }
 
   useEffect(() => {
     const fetchAllProducts = async () => {
@@ -507,13 +532,13 @@ const Products = () => {
                             state: {},
                           }}
                         > */}
-                          <Button 
-                          variant="contained" 
+                        <Button
+                          variant="contained"
                           color="primary"
-                          onClick = {()=>handleModal()}
-                          >
-                            Add New
-                          </Button>
+                          onClick={() => handleModal()}
+                        >
+                          Add New
+                        </Button>
                         {/* </Link> */}
                         {/* <NewPickupCenter
                       name={pickupCenter ? "Edit Pickup Center" : "Add New Pickup Center"}
@@ -522,10 +547,17 @@ const Products = () => {
                       handleClose={handleModal}
                       refresh={() => refresh()} /> */}
 
-                      <NewProduct
-                        isOpen={open}
-                        handleClose={handleModal}
-                      />
+                        <NewProduct
+                          isOpen={open}
+                          handleClose={handleModal}
+                          created={created}
+                        />
+                        <Alert
+                          isOpen={alertOpen}
+                          handleModal={handleDisplayModal}
+                          alertData={alertData}
+                          handleOK={handleOK}
+                        />
                       </>
                     );
                   },

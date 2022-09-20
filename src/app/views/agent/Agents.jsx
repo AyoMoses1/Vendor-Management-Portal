@@ -29,6 +29,7 @@ import Modal from '../../components/Modal';
 import './agent.css';
 import { debounce } from 'lodash';
 import { states } from '../../../utils/states';
+import { capitalize } from 'utils';
 states.unshift('All');
 
 const Agents = () => {
@@ -133,7 +134,7 @@ const Agents = () => {
 
   const columns = [
     {
-      name: 'firstName', // field name in the row object
+      name: 'fullName', // field name in the row object
       label: 'Name', // column title that will be shown in table
       options: {
         filter: true,
@@ -141,80 +142,110 @@ const Agents = () => {
           let user = agentList[dataIndex];
           setId(user.id);
           return (
-            <Link
-              to={{
-                pathname: `/agent/details/${user.id}`,
-                state: {
-                  id: user.id,
-                  agentCode: user.agentCode,
-                },
-              }}
-              className='flex items-center'
-            >
-              <div className='ml-3'>
-                <h5 className='my-0 text-1 text-control'>{`${user?.firstName} ${user?.lastName}`}</h5>
-              </div>
-            </Link>
+            <div className='flex items-center'>
+              <Link
+                to={{
+                  pathname: '/agent/details',
+                  state: {
+                    id: user.id,
+                    agentCode: user.agentCode,
+                  },
+                }}
+                className='ml-3'
+              >
+                <span className='my-0 text-15'>{`${user?.fullName} `}</span>
+              </Link>
+            </div>
           );
         },
       },
     },
+
     {
       name: 'mobileNo', // field name in the row object
-      label: 'Contact', // column title that will be shown in table
+      label: 'Phone', // column title that will be shown in table
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
           let user = agentList[dataIndex];
           setId(user.id);
           return (
-            <Link
-              to={{
-                pathname: `/agent/details/${user.id}`,
-                state: {
-                  id: user.id,
-                  agentCode: user.agentCode,
-                },
-              }}
-              className='flex items-center'
-            >
-              <div className='w-220 text-control'>
-                <h6>
-                  <strong>Email:</strong> {user?.email}
-                </h6>
-                <br />
-                <h5 className='my-0 text-control'>Phone: {user?.mobileNo}</h5>
-              </div>
-            </Link>
+            <div className='flex items-center'>
+              <Link
+                to={{
+                  pathname: '/agent/details',
+                  state: {
+                    id: user.id,
+                    agentCode: user.agentCode,
+                  },
+                }}
+                className='ml-3'
+              >
+                <span className='my-0 text-15'>{user?.mobileNo}</span>
+              </Link>
+            </div>
           );
         },
       },
     },
+
     {
-      name: 'agentType', // field name in the row object
-      label: 'Agent Type', // column title that will be shown in table
+      name: 'email', // field name in the row object
+      label: 'Email', // column title that will be shown in table
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
           let user = agentList[dataIndex];
           setId(user.id);
           return (
-            <Link
-              to={{
-                pathname: `/agent/details/${user.id}`,
-                state: {
-                  id: user.id,
-                  agentCode: user.agentCode,
-                },
-              }}
-              className='flex items-center'
-            >
-              <div className='ml-10'>
-                <h5 className='my-0'>
-                  {user?.agentType === 'BD_AGENT' ? 'BDA AGENT' : 'LEAD AGENT'}
-                </h5>
-              </div>
-            </Link>
+            <div className='flex items-center'>
+              <Link
+                to={{
+                  pathname: '/agent/details',
+                  state: {
+                    id: user.id,
+                    agentCode: user.agentCode,
+                  },
+                }}
+                className='ml-3'
+              >
+                <span className='my-0 text-15'> {user?.email}</span>
+              </Link>
+            </div>
+          );
+        },
+      },
+    },
+
+    {
+      name: 'dateRegistered', // field name in the row object
+      label: 'Date Registered', // column title that will be shown in table
+      options: {
+        filter: true,
+        customBodyRenderLite: (dataIndex) => {
+          let user = agentList[dataIndex];
+          setId(user.id);
+          return (
+            <div className='flex items-center'>
+              <Link
+                to={{
+                  pathname: '/agent/details',
+                  state: {
+                    id: user.id,
+                    agentCode: user.agentCode,
+                  },
+                }}
+                className='ml-3'
+              >
+                <span className='my-0 text-15'>
+                  {' '}
+                  {user.dateRegistered.split(" ")[0] || '-----'}
+                </span><br />
+                <span className='date'>
+                  {user.dateRegistered.split(" ")[1] || '-----'}
+                </span>
+              </Link>
+            </div>
           );
         },
       },
@@ -227,51 +258,56 @@ const Agents = () => {
         customBodyRenderLite: (dataIndex) => {
           let user = agentList[dataIndex];
           return (
-            <Link
-              to={{
-                pathname: `/agent/details/${user.id}`,
-                state: {
-                  id: user.id,
-                  agentCode: user.agentCode,
-                },
-              }}
-              className='flex items-center'
-            >
-              <div className='ml-3'>
-                <h5 className='my-0 text-muted'> {user.state || '-----'}</h5>
-              </div>
-            </Link>
+            <div className='flex items-center'>
+              <Link
+                to={{
+                  pathname: '/agent/details',
+                  state: {
+                    id: user.id,
+                    agentCode: user.agentCode,
+                  },
+                }}
+                className='ml-3'
+              >
+                <span className='my-0 text-15'> {user.state || '-----'}</span>
+              </Link>
+            </div>
           );
         },
       },
     },
+
     {
       name: 'status', // field name in the row object
-      label: 'Application status', // column title that will be shown in table
+      label: 'Status', // column title that will be shown in table
       options: {
         filter: false,
+        setCellHeaderProps: () => { return { width: "75px" } },
         customBodyRenderLite: (dataIndex) => {
           let user = agentList[dataIndex];
           setId(user.id);
           return (
-            <Link
-              to={{
-                pathname: `/agent/details/${user.id}`,
-                state: {
-                  id: user.id,
-                  agentCode: user.agentCode,
-                },
-              }}
-            >
-              <div>{user.status}</div>
-            </Link>
+            <div className={`items-center AGENT ${user?.status}`}>
+              <Link
+                to={{
+                  pathname: "/agent/details",
+                  state: {
+                    id: user.id,
+                    agentCode: user.agentCode,
+                  },
+                }}
+                className="ml-3"
+              >
+                <span className='my-0 text-15'>{capitalize(user?.status || '------')}</span>
+              </Link>
+            </div>
           );
         },
       },
     },
     {
       name: 'actions',
-      label: 'Actions',
+      label: 'Quick Actions',
       options: {
         filter: false,
         customBodyRenderLite: (dataIndex, another) => {
@@ -280,29 +316,20 @@ const Agents = () => {
             <>
               <Link
                 to={{
-                  pathname: '/agent/edit',
+                  pathname: '',
                   state: {
                     id: user.id,
                     user,
                   },
                 }}
               >
-                <MenuItem>Edit Agent</MenuItem>
+                <span className='my-0 text-15'>
+                  <MenuItem className='menu__item'>
+                    Activate
+                  </MenuItem>
+                </span>
               </Link>
-              <Link
-                to={{
-                  pathname: `/agent/details/${user.id}`,
-                  state: {
-                    id: user.id,
-                    agentCode: user.agentCode,
-                  },
-                }}
-              >
-                <MenuItem>View Details</MenuItem>
-              </Link>
-              <MenuItem onClick={() => handleMenu('Delete Agent', user)}>
-                Delete Agent
-              </MenuItem>
+
             </>
           );
         },
@@ -346,53 +373,13 @@ const Agents = () => {
         )}
       </div>
       <div className='overflow-auto'>
-        <div className='min-w-750'>
+        <div className='min-w-750 agent-table'>
           {false ? (
             <Loading />
           ) : (
             <MUIDataTable
               title={<div>
                 <h4 className='mt-4 mb-0'>{title}</h4>
-                <div className='w-full flex'>
-                  <div className='w-220 flex-end sources'>
-                    <TextField
-                      className='mb-4'
-                      name='mobileNo'
-                      label='Filter by Agent Type'
-                      variant='outlined'
-                      margin='normal'
-                      select
-                      fullWidth
-                      value={agentType}
-                      onChange={(e) => { setAgentType(e.target.value); handleTitle(e.target.value) }}
-                    >
-                      {types.map((t, idx) => (
-                        <MenuItem key={idx} value={t.value}>
-                          {t.name}
-                        </MenuItem>
-                      ))}
-                    </TextField>
-                  </div>
-                  <div className='w-220 flex-end sources ml-4'>
-                    <TextField
-                      className='mb-4'
-                      name='mobileNo'
-                      label='Filter by location'
-                      variant='outlined'
-                      margin='normal'
-                      select
-                      fullWidth
-                      value={state}
-                      onChange={(e) => { setState(e.target.value) }}
-                    >
-                      {states.map((s, idx) => (
-                        <MenuItem key={idx} value={s}>
-                          {s}
-                        </MenuItem>
-                      ))}
-                    </TextField>
-                  </div>
-                </div>
               </div>}
               data={[...agentList]}
               columns={columns}
@@ -401,7 +388,6 @@ const Agents = () => {
                 selectableRows: "none",
                 count: total,
                 page: page,
-                setTableProps: () => ({ className: "agent-table" }),
                 onChangePage: (value) => handleChangePage(value),
                 filter: true,
                 sort: true,

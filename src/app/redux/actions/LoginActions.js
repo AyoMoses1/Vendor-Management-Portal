@@ -10,6 +10,7 @@ export const LOGIN_LOADING = "LOGIN_LOADING";
 export const RESET_PASSWORD = "RESET_PASSWORD";
 export const USER_LOADED = 'USER_LOADED'
 export const AUTH_ERROR = 'AUTH_ERROR'
+export const ENTER_PASSWORD = "ENTER_PASSWORD";
 
 
 export const loadUser = () => dispatch => {
@@ -101,6 +102,24 @@ export function resetPassword({ email }) {
     });
   };
 }
+
+
+export function enterPassword({ otp, password }) {
+  axios.put_new(`/afrimash/users/password/confirm/${otp}`).then(
+    (response) => {
+      if (response.status === 200) {
+        console.log(response.data.object);
+        
+      }
+    }
+  )
+};
+
+
+
+
+
+
 
 export function firebaseLoginEmailPassword({ email, password }) {
   return dispatch => {

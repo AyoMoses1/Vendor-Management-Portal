@@ -15,7 +15,6 @@ states.unshift('All');
 const CustomerList = () => {
   const [isAlive, setIsAlive] = useState(true)
   const [userList, setUserList] = useState([])
-
   const [loading, isLoading] = useState(false)
   const [alert, setAlert] = useState('')
   const [severity, setSeverity] = useState('')
@@ -45,7 +44,7 @@ const CustomerList = () => {
     {
       type: 'ADMIN',
       value: 'ADMIN',
-      name: 'Admin'
+      name: 'Admin' 
     },
     {
       type: 'AGENT APP',
@@ -118,7 +117,7 @@ const CustomerList = () => {
         customBodyRenderLite: (dataIndex) => {
           let user = userList[dataIndex]
           return (
-            <div className='flex items-center'>
+            <div className='flex items-center customer__name'>
               <Link
                 to={{
                   pathname: '/customer/details',
@@ -144,7 +143,7 @@ const CustomerList = () => {
         customBodyRenderLite: (dataIndex) => {
           let user = userList[dataIndex]
           return (
-            <div className='flex items-center'>
+            <div className='flex items-center customer__email'>
               <Link
                 to={{
                   pathname: '/customer/details',
@@ -196,7 +195,7 @@ const CustomerList = () => {
         customBodyRenderLite: (dataIndex) => {
           let user = userList[dataIndex]
           return (
-            <div className='flex items-center'>
+            <div className='flex items-center date__registered'>
               <Link
                 to={{
                   pathname: '/customer/details',
@@ -208,8 +207,11 @@ const CustomerList = () => {
               >
                 <h5 className='my-0 text-muted'>
                   {' '}
-                  {user.dateRegistered || '-----'}
+                  {user.dateRegistered.split(" ")[0] || '-----'}
                 </h5>
+                <span className='date'>
+                {user.dateRegistered.split(" ")[1] || '-----'}
+                </span>
               </Link>
             </div>
           )
@@ -237,7 +239,7 @@ const CustomerList = () => {
               >
                 <h5 className='my-0 text-muted'>
                   {' '}
-                  {user.lastActivity || '-----'}
+                  {user.lastActivity|| '------'}
                 </h5>
               </Link>
             </div>
@@ -264,7 +266,7 @@ const CustomerList = () => {
                 }}
                 className='ml-3'
               >
-                <h6 className='my-0 text-muted'>{user.creditSpent || '-----'}</h6>
+                <h6 className='my-0 text-muted'>{user.creditSpent || '----------'}</h6>
               </Link>
             </div>
           )
@@ -290,7 +292,7 @@ const CustomerList = () => {
                 }}
                 className='ml-3'
               >
-                <h6 className='my-0 text-muted'>{user.creditLimit || '-----'}</h6>
+                <h6 className='my-0 text-muted'>{user.creditLimit || '#5,023,500.00'}</h6>
               </Link>
             </div>
           )
@@ -358,16 +360,16 @@ const CustomerList = () => {
             //id: user.id,
             //user,
             //},
-            //  }}
+              //}}
              //>
-              //  <IconButton>
-                // <Icon fontSize='small'>edit</Icon>
-          // </IconButton>
-            //  </Link>
+                //<IconButton>
+                 //<Icon fontSize='small'>edit</Icon>
+           //</IconButton>
+              //</Link>
             //</div>
-         // )
-       // },
-     // },
+          //)
+        //},
+      //},
     //},
 
     
@@ -437,44 +439,7 @@ const CustomerList = () => {
               title={<div>
                 <h4 className='mt-4 mb-0'>{title}</h4>
                 <div className='w-full flex'>
-                  <div className='w-220 flex-end sources'>
-                    <TextField
-                      className='mb-4'
-                      name='mobileNo'
-                      label='Filter by source'
-                      variant='outlined'
-                      margin='normal'
-                      select
-                      fullWidth
-                      value={source}
-                      onChange={(e) => { setSource(e.target.value); handleTitle(e.target.value) }}
-                    >
-                      {sourceTypes.map((sourceType, idx) => (
-                        <MenuItem key={idx} value={sourceType.value}>
-                          {sourceType.type}
-                        </MenuItem>
-                      ))}
-                    </TextField>
-                  </div>
-                  <div className='w-220 flex-end sources ml-4'>
-                    <TextField
-                      className='mb-4'
-                      name='mobileNo'
-                      label='Filter by location'
-                      variant='outlined'
-                      margin='normal'
-                      select
-                      fullWidth
-                      value={state}
-                      onChange={(e) => { setState(e.target.value) }}
-                    >
-                      {states.map((s, idx) => (
-                        <MenuItem key={idx} value={s}>
-                          {s}
-                        </MenuItem>
-                      ))}
-                    </TextField>
-                  </div>
+                  
                 </div>
               </div>}
               data={userList}
@@ -556,10 +521,6 @@ const CustomerList = () => {
                             Add New
                           </Button>
                         </IconButton>
-                        <div className='w-full pr-20 flex justify-end items-center'>
-                          <p className='pr-10'>Total: </p>
-                          <h6 className='mb-0'>{total}</h6>
-                        </div>
                       </Link>
                     </>
                   )

@@ -1,30 +1,83 @@
-.agent-table thead tr th {
-    padding-left: 24px !important;
-    padding-right: 24px !important;
+.PENDING {
+  color: #EF882C;
+  background-color: rgba(239, 136, 44, 0.15);
 }
 
-.agent-table tbody tr td {
-    padding-left: 24px !important;
-    padding-right: 24px !important;
+.VERIFIED {
+  color: #27AE60;
+  background-color: rgba(39, 174, 96, 0.1);
+}
+
+.SUSPENDED {
+  color: #926202;
+  background-color: #f8dda7;
+}
+
+.AGENT {
+  padding: 5px 8px;
+  width: fit-content;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500px;
 }
 
 .w-full {
-    width: 100%;
-}
-
-.agent-table thead tr th:first-child {
-    width: 100px !important;
+  width: 100%;
 }
 
 .text-muted {
-    font-size: 14px;
+  font-size: 14px;
+  color: #4A466DDE;
 }
 
 .text-control {
-    font-size: 14px;
+  font-size: 14px;
+  color: #4A466DDE;
+
+}
+
+.agent-table thead tr th {
+  padding-left: 24px !important;
+  padding-right: 24px !important;
+  background: #F0F2F5;
+  font-size: 14px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.agent-table thead tr th .MuiButton-text {
+  font-weight: 500;
+  color: #000000;
+}
+
+.agent-table .MuiTableCell-root {
+  border-bottom: 4px solid #ffffff !important;
+}
+
+.agent-table tbody tr td {
+  padding-left: 24px !important;
+  padding-right: 24px !important;
+  background: #FAFBFD;
+  font-size: 12px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  color: #000000;
+}
+
+.agent-table .MuiTable-root {
+  margin-top: 10px;
 }
 
 .sources .MuiSelect-root {
-    padding: 12px;
-    font-size: 12px;
+  padding: 12px;
+  font-size: 12px;
+}
+
+.date {
+  font-size: 8px;
+  padding-left: 4px;
+}
+
+.menu__item {
+  text-decoration: underline;
 }
