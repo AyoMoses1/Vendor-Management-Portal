@@ -382,9 +382,14 @@ function NewProduct({ isNewProduct, id, Product }) {
                 <Autocomplete
                   id='storeId'
                   name='storeId'
-                  value={values.storeId}
+                  value={values.storeId.id}
                   options={stores}
-                  getOptionLabel={(option) => option.name}
+                  getOptionLabel={(option) => 
+                   {
+                    console.log(option, "*******************TEST*****************OPTION")
+                    return option.name
+                  }
+                  }
                   getOptionSelected={(option, value) => option.id === value.id}
                   onChange={(event, newValue) =>
                     handleSelect(newValue, 'storeId')

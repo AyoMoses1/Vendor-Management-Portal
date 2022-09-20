@@ -16,3 +16,59 @@
   width: 100px !important; 
 }
 
+
+
+.all-centres-table thead tr th{
+  padding-left: 48px;
+  background: #F0F2F5;
+  font-size: 14px;
+  justify-content: center;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  font-weight: bolder !important;
+}
+
+.all-centres-table thead tr th .MuiButton-text {
+  font-weight: 800;
+  color: #000000;
+}
+
+.all-centres-table tbody tr td .MuiTableCell-root{
+
+  font-size: 12px;
+}
+
+.all-centres-table .MuiTableCell-root {
+  border-bottom: 4px solid #ffffff!important;
+}
+
+.all-centres-table tbody{
+  padding: 0 20px;
+  overflow-x: hidden;
+}
+.all-centres-table tbody tr td {
+  padding-left: 24px !important;
+  padding-right: 24px !important;
+  background: #FAFBFD;
+  font-size: 12px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  color: #000000;
+}
+
+.all-centres-table .MuiTable-root {
+  margin-top: 10px;
+}
+
+.all-centres-table tbody tr td{
+  text-align: center;
+  font-size: 12px !important;
+}
+
+.all-centres-table h5{
+  font-size: 12px !important;
+}
+
+.all-centres-table .material-icons{
+  font-size: 12px !important;
+}
