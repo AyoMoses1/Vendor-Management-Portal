@@ -15,11 +15,9 @@ import {
   getProductCategories,
   updateCategoryFeature,
 } from '../../../redux/actions/ussd-action';
-
-import Loading from 'matx/components/MatxLoadable/Loading';
-import Notification from 'app/components/Notification';
 import { useSelector, useDispatch } from 'react-redux';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import './style.css';
 
 const USSDProductCategoriesComponent = () => {
   const { loading, productCategories, error } = useSelector(
@@ -59,25 +57,82 @@ const USSDProductCategoriesComponent = () => {
   const columns = [
     {
       name: 'name', // field name in the row object
-      label: 'Name', // column title that will be shown in table
+      label: 'Category', // column title that will be shown in table
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
-          const productCategoty = productCategories[dataIndex];
+          const productCategory = productCategories[dataIndex];
           return (
             <Link
               to={{
-                pathname: `/ussd-products/${productCategoty.id}`,
+                pathname: `/ussd-products/${productCategory.id}`,
                 state: {
-                  id: productCategoty.id,
+                  id: productCategory.id,
                 },
               }}
               className='flex items-center'
             >
               <div className='ml-3'>
-                <p className='my-0 text-10'>{`${productCategoty?.name}`}</p>
+                <p className='my-0 text-10'>{`${productCategory?.name}`}</p>
               </div>
             </Link>
+          );
+        },
+      },
+    },
+    {
+      name: 'subCategories',
+      label: 'Sub-Categories',
+      options: {
+        filter: true,
+        customBodyRenderLite: (dataIndex) => {
+          let productCategory = productCategories[dataIndex];
+          let subCategories = productCategory?.subCategories;
+          return (
+            <div className='flex items-center'>
+              <div className='ml-3'>
+                <Link
+                  to={{
+                    pathname: `/ussd-products/${productCategory.id}`,
+                    state: {
+                      id: productCategory.id,
+                    },
+                  }}
+                  className='flex items-center'
+                >
+                  {subCategories?.length ? subCategories.map((subcategory) => {
+                    return `${subcategory.name}, `;
+                  }) : `---`}
+                </Link>
+              </div>
+            </div>
+          );
+        },
+      },
+    },
+    {
+      name: 'date',
+      label: 'Date Created',
+      options: {
+        filter: true,
+        customBodyRenderLite: (dataIndex) => {
+          let productCategory = productCategories[dataIndex];
+          return (
+            <div className='flex items-center'>
+              <div className='ml-3'>
+                <Link
+                  to={{
+                    pathname: `/ussd-products/${productCategory.id}`,
+                    state: {
+                      id: productCategory.id,
+                    },
+                  }}
+                  className='flex items-center'
+                >
+                  {productCategory?.date ?? '---'}
+                </Link>
+              </div>
+            </div>
           );
         },
       },
@@ -89,18 +144,21 @@ const USSDProductCategoriesComponent = () => {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
           const productCategory = productCategories[dataIndex];
-
           return productCategory.isFeaturedOnUssd ? (
-            <Chip label='Featured' color='success' />
+            <div className='featured'>
+              <div></div>
+            </div>
           ) : (
-            <Chip label='Not Featured' color='failed' />
+            <div className='not-featured'>
+              <div></div>
+            </div>
           );
         },
       },
     },
     {
       name: 'action',
-      label: ' ',
+      label: 'Action',
       options: {
         filter: false,
         customBodyRenderLite: (dataIndex) => {
@@ -110,9 +168,15 @@ const USSDProductCategoriesComponent = () => {
               onClick={() => handleFeaturedOnUSSD(productCategory)}
               variant='text'
             >
-              {productCategory.isFeaturedOnUssd
-                ? 'Remove from USSD'
-                : 'Add to USSD'}
+              {productCategory.isFeaturedOnUssd ? (
+                <div className={`items-center category isFeatured`}>
+                  <span className="ml-3">Remove from USSD</span>
+                </div>
+              ) : (
+                <div className={`items-center category isNotFeatured`}>
+                  <span className="ml-3">Add to USSD</span>
+                </div>
+              )}
             </Button>
           );
         },
@@ -133,20 +197,20 @@ const USSDProductCategoriesComponent = () => {
         />
       </div>
       <div className='overflow-auto'>
-        <div className='min-w-750'>
+        <div className='min-w-750 ussd-cat-table'>
           {loading && <CircularProgress size={20} />}
           <MUIDataTable
-            title={'USSD Featured Categories'}
+            title={<h5 className='mt-4 mb-0 product-table'>USSD Featured Categories</h5>}
             data={productCategories}
             columns={columns}
             options={{
-              serverSide: true,
               filter: true,
               sort: true,
               sortOrder: { name: 'id', direction: 'desc' },
               filterType: 'dropdown',
               responsive: 'standard',
               elevation: 0,
+              selectableRows: false,
               rowsPerPageOptions: [10, 20, 40, 80, 100],
               customSearchRender: (
                 searchText,
