@@ -122,7 +122,7 @@ const Products = () => {
     },
     {
       name: 'categories',
-      label: 'Categories',
+      label: 'Category',
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
@@ -141,6 +141,34 @@ const Products = () => {
                   className="ml-3 mr-4"
                 >
                   <span className='my-0 text-15'>{product && n.join(',').slice(0, 8) + "..."}</span>
+                </Link>
+              </div>
+            </div>
+          );
+        },
+      },
+    },
+    {
+      name: 'dateAdded',
+      label: 'Date Created',
+      options: {
+        filter: true,
+        customBodyRenderLite: (dataIndex) => {
+          let product = products[dataIndex];
+          return (
+            <div className='flex product__date'>
+              <div className='ml-3'>
+                <Link
+                  to={{
+                    pathname: "/product/details",
+                    state: {
+                      id: product.id,
+                    },
+                  }}
+                  className="ml-3 mr-4"
+                >
+                  <div>27/01/2022</div>
+                  <span className='my-0'> {product?.dateAdded || '10:29:30'}</span>
                 </Link>
               </div>
             </div>
@@ -175,178 +203,152 @@ const Products = () => {
         },
       },
     },
-    {
-      name: "price",
-      label: "Price",
-      options: {
-        filter: true,
-        customBodyRenderLite: (dataIndex) => {
-          let product = products[dataIndex];
-          return (
-            <div className='flex items-center product__price'>
-              <Link
-                to={{
-                  pathname: "/product/details",
-                  state: {
-                    id: product.id,
-                  },
-                }}
-                className="ml-4"
-              >
-                <span className="my-0 text-15">
-                  {" "}
-                  {`₦${product.price}` || "-----"}
-                </span>
-              </Link>
-            </div>
-          );
-        },
-      },
-    },
-    {
-      name: 'sku',
-      label: 'Sku',
-      options: {
-        filter: true,
-        customBodyRenderLite: (dataIndex) => {
-          let product = products[dataIndex];
-          return (
-            <div className='flex items-center product__sku'>
-              <div className='ml-3'>
-                <Link
-                  to={{
-                    pathname: "/product/details",
-                    state: {
-                      id: product.id,
-                    },
-                  }}
-                  className="ml-3 mr-4"
-                >
-                  <span className='my-0 text-15'> {product?.sku || '-----'}</span>
-                </Link>
-              </div>
-            </div>
-          );
-        },
-      },
-    },
+    // {
+    //   name: "price",
+    //   label: "Price",
+    //   options: {
+    //     filter: true,
+    //     customBodyRenderLite: (dataIndex) => {
+    //       let product = products[dataIndex];
+    //       return (
+    //         <div className='flex items-center product__price'>
+    //           <Link
+    //             to={{
+    //               pathname: "/product/details",
+    //               state: {
+    //                 id: product.id,
+    //               },
+    //             }}
+    //             className="ml-4"
+    //           >
+    //             <span className="my-0 text-15">
+    //               {" "}
+    //               {`₦${product.price}` || "-----"}
+    //             </span>
+    //           </Link>
+    //         </div>
+    //       );
+    //     },
+    //   },
+    // },
+    // {
+    //   name: 'sku',
+    //   label: 'Sku',
+    //   options: {
+    //     filter: true,
+    //     customBodyRenderLite: (dataIndex) => {
+    //       let product = products[dataIndex];
+    //       return (
+    //         <div className='flex items-center product__sku'>
+    //           <div className='ml-3'>
+    //             <Link
+    //               to={{
+    //                 pathname: "/product/details",
+    //                 state: {
+    //                   id: product.id,
+    //                 },
+    //               }}
+    //               className="ml-3 mr-4"
+    //             >
+    //               <span className='my-0 text-15'> {product?.sku || '-----'}</span>
+    //             </Link>
+    //           </div>
+    //         </div>
+    //       );
+    //     },
+    //   },
+    // },
 
 
-    {
-      name: "tags",
-      label: "Tags",
-      options: {
-        filter: true,
-        customBodyRenderLite: (dataIndex) => {
-          let product = products[dataIndex];
-          let n = product.tags.map((name) => name.name);
-          return (
-            <div className='flex items-center product__tags'>
-              <div className='ml-4'>
-                <Link
-                  to={{
-                    pathname: "/product/details",
-                    state: {
-                      id: product.id,
-                    },
-                  }}
-                  className="ml-3 mr-4"
-                >
-                  <span className='my-0 text-15'>
-                    {n.length > 0 ? n.join(',').slice(0, 8) + "..." : ' ----'}
-                  </span>
-                </Link>
-              </div>
-            </div>
-          );
-        },
-      },
-    },
-    {
-      name: 'dateAdded',
-      label: 'Date Created',
-      options: {
-        filter: true,
-        customBodyRenderLite: (dataIndex) => {
-          let product = products[dataIndex];
-          return (
-            <div className='flex items-center product__date'>
-              <div className='ml-3'>
-                <Link
-                  to={{
-                    pathname: "/product/details",
-                    state: {
-                      id: product.id,
-                    },
-                  }}
-                  className="ml-3 mr-4"
-                >
-                  <span className='my-0 text-15'> {product?.dateAdded || '-----'}</span>
-                </Link>
-              </div>
-            </div>
-          );
-        },
-      },
-    },
-    {
-      name: 'seo',
-      label: 'SEO',
-      options: {
-        filter: true,
-        customBodyRenderLite: (dataIndex) => {
-          let product = products[dataIndex];
-          return (
-            <div className='flex items-center product__seo'>
-              <div className='ml-3 seo__flex'>
-                <Link
-                  to={{
-                    pathname: "/product/details",
-                    state: {
-                      id: product.id,
-                    },
-                  }}
-                  className="ml-3 mr-4 seo__flex"
-                >
-                  <CircleIcon />
-                  <span className='my-0 text-15'> {product?.seo || '70%'}</span>
-                </Link>
-              </div>
-            </div>
-          );
-        },
-      },
-    },
-    {
-      name: 'seller',
-      label: 'Seller',
-      options: {
-        filter: true,
-        customBodyRenderLite: (dataIndex) => {
-          let product = products[dataIndex];
-          return (
-            <div className='flex items-center product__seller'>
-              <Link
-                to={{
-                  pathname: '/product/details',
-                  state: {
-                    id: product.id,
-                  },
-                }}
-                className='ml-4'
-              >
-                <span className='my-0 text-15'>
-                  {product.storeId.sellerId.name.slice(0, 10) + "..." || '-----'}
-                </span>
-              </Link>
-            </div>
-          );
-        },
-      },
-    },
+    // {
+    //   name: "tags",
+    //   label: "Tags",
+    //   options: {
+    //     filter: true,
+    //     customBodyRenderLite: (dataIndex) => {
+    //       let product = products[dataIndex];
+    //       let n = product.tags.map((name) => name.name);
+    //       return (
+    //         <div className='flex items-center product__tags'>
+    //           <div className='ml-4'>
+    //             <Link
+    //               to={{
+    //                 pathname: "/product/details",
+    //                 state: {
+    //                   id: product.id,
+    //                 },
+    //               }}
+    //               className="ml-3 mr-4"
+    //             >
+    //               <span className='my-0 text-15'>
+    //                 {n.length > 0 ? n.join(',').slice(0, 8) + "..." : ' ----'}
+    //               </span>
+    //             </Link>
+    //           </div>
+    //         </div>
+    //       );
+    //     },
+    //   },
+    // },
+  
+    // {
+    //   name: 'seo',
+    //   label: 'SEO',
+    //   options: {
+    //     filter: true,
+    //     customBodyRenderLite: (dataIndex) => {
+    //       let product = products[dataIndex];
+    //       return (
+    //         <div className='flex items-center product__seo'>
+    //           <div className='ml-3 seo__flex'>
+    //             <Link
+    //               to={{
+    //                 pathname: "/product/details",
+    //                 state: {
+    //                   id: product.id,
+    //                 },
+    //               }}
+    //               className="ml-3 mr-4 seo__flex"
+    //             >
+    //               <CircleIcon />
+    //               <span className='my-0 text-15'> {product?.seo || '70%'}</span>
+    //             </Link>
+    //           </div>
+    //         </div>
+    //       );
+    //     },
+    //   },
+    // },
+    // {
+    //   name: 'seller',
+    //   label: 'Seller',
+    //   options: {
+    //     filter: true,
+    //     customBodyRenderLite: (dataIndex) => {
+    //       let product = products[dataIndex];
+    //       return (
+    //         <div className='flex items-center product__seller'>
+    //           <Link
+    //             to={{
+    //               pathname: '/product/details',
+    //               state: {
+    //                 id: product.id,
+    //               },
+    //             }}
+    //             className='ml-4'
+    //           >
+    //             <span className='my-0 text-15'>
+    //               {product.storeId.sellerId.name.slice(0, 10) + "..." || '-----'}
+    //             </span>
+    //           </Link>
+    //         </div>
+    //       );
+    //     },
+    //   },
+    // },
     {
       name: 'action',
-      label: ' ',
+      label: 'Action',
       options: {
         filter: false,
         customBodyRenderLite: (dataIndex) => {
@@ -362,34 +364,34 @@ const Products = () => {
         },
       },
     },
-    {
-      name: 'action',
-      label: ' ',
-      options: {
-        filter: false,
-        customBodyRenderLite: (dataIndex) => {
-          let product = products[dataIndex];
-          return (
-            <div className='flex items-center'>
-              <div className='flex-grow'></div>
-              <Link
-                to={{
-                  pathname: '/product/edit',
-                  state: {
-                    id: product.id,
-                    product,
-                  },
-                }}
-              >
-                <IconButton>
-                  <Icon>edit</Icon>
-                </IconButton>
-              </Link>
-            </div>
-          );
-        },
-      },
-    },
+    // {
+    //   name: 'action',
+    //   label: ' ',
+    //   options: {
+    //     filter: false,
+    //     customBodyRenderLite: (dataIndex) => {
+    //       let product = products[dataIndex];
+    //       return (
+    //         <div className='flex items-center'>
+    //           <div className='flex-grow'></div>
+    //           <Link
+    //             to={{
+    //               pathname: '/product/edit',
+    //               state: {
+    //                 id: product.id,
+    //                 product,
+    //               },
+    //             }}
+    //           >
+    //             <IconButton>
+    //               <Icon>edit</Icon>
+    //             </IconButton>
+    //           </Link>
+    //         </div>
+    //       );
+    //     },
+    //   },
+    // },
     // {
     //   name: 'id', // field name in the row object
     //   label: '', // column title that will be shown in table
