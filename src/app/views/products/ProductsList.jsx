@@ -13,6 +13,7 @@ import './products-view.css'
 import { debounce } from "lodash";
 import NewProduct from './NewProduct';
 import Alert from 'app/components/Alert';
+import { capitalize } from 'utils';
 
 const Products = () => {
   const [isAlive, setIsAlive] = useState(true);
@@ -102,19 +103,20 @@ const Products = () => {
         customBodyRenderLite: (dataIndex) => {
           let product = products[dataIndex];
           return (
-            <div className='flex items-center product__name'>
-              <Link
-                to={{
-                  pathname: "/product/details",
-                  state: {
-                    id: product.id,
-                  },
-                }}
-                className="ml-3 mr-4"
-              >
-                {/* Comment */}
-                <span className='my-0 text-15'>{product?.name.slice(0, 8) + "..."}</span>
-              </Link>
+            <div className='flex'>
+              <div className='ml-3'>
+                <Link
+                  to={{
+                    pathname: "/product/details",
+                    state: {
+                      id: product?.id,
+                    },
+                  }}
+                  className="ml-3 mr-4"
+                >
+                  {product?.name.slice(0, 10) + "..."}
+                </Link>
+              </div>
             </div>
           );
         },
@@ -127,20 +129,19 @@ const Products = () => {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
           let product = products[dataIndex];
-          let n = product.productCategories.map((name) => name.name);
+          let n = product?.productCategories?.map((name) => name.name);
           return (
-            <div className='flex items-center product__categories'>
+            <div className='flex'>
               <div className='ml-3'>
                 <Link
                   to={{
                     pathname: "/product/details",
                     state: {
-                      id: product.id,
+                      id: product?.id,
                     },
                   }}
-                  className="ml-3 mr-4"
                 >
-                  <span className='my-0 text-15'>{product && n.join(',').slice(0, 8) + "..."}</span>
+                  {product && n.join(',').slice(0, 8) + "..."}
                 </Link>
               </div>
             </div>
@@ -156,18 +157,17 @@ const Products = () => {
         customBodyRenderLite: (dataIndex) => {
           let product = products[dataIndex];
           return (
-            <div className={`flex items-center`}>
-              <div className={`ml-3  product__status  ${product?.status}`}>
+            <div className={`flex`}>
+              <div className={`ml-3 PRODUCT ${product?.status}`}>
                 <Link
                   to={{
                     pathname: "/product/details",
                     state: {
-                      id: product.id,
+                      id: product?.id,
                     },
                   }}
-                  className="ml-3 mr-4"
                 >
-                  <span className='my-0 text-15'> {product?.status || '-----'}</span>
+                  {capitalize(product?.status ?? "---")}
                 </Link>
               </div>
             </div>
@@ -183,21 +183,22 @@ const Products = () => {
         customBodyRenderLite: (dataIndex) => {
           let product = products[dataIndex];
           return (
-            <div className='flex items-center product__price'>
-              <Link
-                to={{
-                  pathname: "/product/details",
-                  state: {
-                    id: product.id,
-                  },
-                }}
-                className="ml-4"
-              >
-                <span className="my-0 text-15">
+            <div className='flex'>
+              <div className='ml-3'>
+                <Link
+                  to={{
+                    pathname: "/product/details",
+                    state: {
+                      id: product?.id,
+                    },
+                  }}
+
+                >
+
                   {" "}
-                  {`₦${product.price}` || "-----"}
-                </span>
-              </Link>
+                  {`₦${product?.price}` || "---"}
+                </Link>
+              </div>
             </div>
           );
         },
@@ -211,18 +212,17 @@ const Products = () => {
         customBodyRenderLite: (dataIndex) => {
           let product = products[dataIndex];
           return (
-            <div className='flex items-center product__sku'>
+            <div className='flex'>
               <div className='ml-3'>
                 <Link
                   to={{
                     pathname: "/product/details",
                     state: {
-                      id: product.id,
+                      id: product?.id,
                     },
                   }}
-                  className="ml-3 mr-4"
                 >
-                  <span className='my-0 text-15'> {product?.sku || '-----'}</span>
+                  {product?.sku || '---'}
                 </Link>
               </div>
             </div>
@@ -230,8 +230,6 @@ const Products = () => {
         },
       },
     },
-
-
     {
       name: "tags",
       label: "Tags",
@@ -239,22 +237,19 @@ const Products = () => {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
           let product = products[dataIndex];
-          let n = product.tags.map((name) => name.name);
+          let n = product?.tags?.map((name) => name?.name);
           return (
-            <div className='flex items-center product__tags'>
-              <div className='ml-4'>
+            <div className='flex'>
+              <div className='ml-3'>
                 <Link
                   to={{
                     pathname: "/product/details",
                     state: {
-                      id: product.id,
+                      id: product?.id,
                     },
                   }}
-                  className="ml-3 mr-4"
                 >
-                  <span className='my-0 text-15'>
-                    {n.length > 0 ? n.join(',').slice(0, 8) + "..." : ' ----'}
-                  </span>
+                  {n.length > 0 ? n.join(',').slice(0, 8) + "..." : ' ---'}
                 </Link>
               </div>
             </div>
@@ -267,21 +262,21 @@ const Products = () => {
       label: 'Date Created',
       options: {
         filter: true,
+        setCellHeaderProps: () => { return { width: "130px" } },
         customBodyRenderLite: (dataIndex) => {
           let product = products[dataIndex];
           return (
-            <div className='flex items-center product__date'>
+            <div className='flex'>
               <div className='ml-3'>
                 <Link
                   to={{
                     pathname: "/product/details",
                     state: {
-                      id: product.id,
+                      id: product?.id,
                     },
                   }}
-                  className="ml-3 mr-4"
                 >
-                  <span className='my-0 text-15'> {product?.dateAdded || '-----'}</span>
+                  {product?.dateAdded || '---'}
                 </Link>
               </div>
             </div>
@@ -298,18 +293,18 @@ const Products = () => {
           let product = products[dataIndex];
           return (
             <div className='flex items-center product__seo'>
-              <div className='ml-3 seo__flex'>
+              <div className='ml-3'>
                 <Link
                   to={{
                     pathname: "/product/details",
                     state: {
-                      id: product.id,
+                      id: product?.id,
                     },
                   }}
-                  className="ml-3 mr-4 seo__flex"
+                  className="SEO"
                 >
                   <CircleIcon />
-                  <span className='my-0 text-15'> {product?.seo || '70%'}</span>
+                  <div className='my-0 text-15'> {product?.seo || '70%'}</div>
                 </Link>
               </div>
             </div>
@@ -325,20 +320,19 @@ const Products = () => {
         customBodyRenderLite: (dataIndex) => {
           let product = products[dataIndex];
           return (
-            <div className='flex items-center product__seller'>
-              <Link
-                to={{
-                  pathname: '/product/details',
-                  state: {
-                    id: product.id,
-                  },
-                }}
-                className='ml-4'
-              >
-                <span className='my-0 text-15'>
-                  {product.storeId.sellerId.name.slice(0, 10) + "..." || '-----'}
-                </span>
-              </Link>
+            <div className='flex'>
+              <div className='ml-3'>
+                <Link
+                  to={{
+                    pathname: '/product/details',
+                    state: {
+                      id: product?.id,
+                    },
+                  }}
+                >
+                  {product?.storeId?.sellerId?.name?.slice(0, 10) + "..." || '---'}
+                </Link>
+              </div>
             </div>
           );
         },
