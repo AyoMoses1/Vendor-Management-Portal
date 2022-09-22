@@ -45,7 +45,7 @@ const SellerList = () => {
               className='flex items-center'
             >
               <div className='ml-3'>
-                <h5 className='my-0 text-15'>{`${user?.name}`}</h5>
+                <h5 className='my-0 text-muted'>{`${user?.name || '-------'}`}</h5>
               </div>
             </Link>
           )
@@ -113,20 +113,21 @@ const SellerList = () => {
         customBodyRenderLite: (dataIndex) => {
           let user = userList[dataIndex]
           return (
-            <Link
-              to={{
-                pathname: '/vendor/details',
-                state: {
-                  id: user.id,
-                },
-              }}
-              className='flex items-center'
-            >
-              <div className='ml-3'>
-                <h5 className='my-0 text-muted'> {user.name || '-----'}</h5>
-              </div>
-            </Link>
-          )
+            <div className='flex items-center'>
+              <Link
+                to={{
+                  pathname: '/vendor/details',
+                  state: {
+                    id: user.id,
+                  },
+                }}
+                className='ml-3'
+              >
+                  <span className='my-0 text-15'> {user.name || '-----'}</span>
+                
+              </Link>
+            </div>
+          );
         },
       },
     },
@@ -156,33 +157,34 @@ const SellerList = () => {
         },
       },
     },
-    {
-      name: 'action',
-      label: ' ',
-      options: {
-        filter: false,
-        customBodyRenderLite: (dataIndex) => {
-          let user = userList[dataIndex]
-          return (
-            <div className='flex items-center'>
-              <Link
-                to={{
-                  pathname: '/vendor/edit',
-                  state: {
-                    id: user.id,
-                    user,
-                  },
-                }}
-              >
-                <IconButton>
-                  <Icon>edit</Icon>
-                </IconButton>
-              </Link>
-            </div>
-          )
-        },
-      },
-    },
+
+    // {
+    //   name: 'action',
+    //   label: ' ',
+    //   options: {
+    //     filter: false,
+    //     customBodyRenderLite: (dataIndex) => {
+    //       let user = userList[dataIndex]
+    //       return (
+    //         <div className='flex items-center'>
+    //           <Link
+    //             to={{
+    //               pathname: '/vendor/edit',
+    //               state: {
+    //                 id: user.id,
+    //                 user,
+    //               },
+    //             }}
+    //           >
+    //             <IconButton>
+    //               <Icon>edit</Icon>
+    //             </IconButton>
+    //           </Link>
+    //         </div>
+    //       )
+    //     },
+    //   },
+    // },
   ]
   const notification = () => {
     return <Notification alert={alert} severity={severity && severity} />

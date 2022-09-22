@@ -4,6 +4,8 @@ import MUIDataTable from 'mui-datatables'
 import { Grow, Icon, IconButton, TextField, Button } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 import http from '../../services/api'
+import './order-view.css'
+import { capitalize } from 'lodash'
 
 const AbadonedOrders = () => {
   const [isAlive, setIsAlive] = useState(true)
@@ -62,14 +64,14 @@ const AbadonedOrders = () => {
       label: 'Status',
       options: {
         filter: true,
+        setCellHeaderProps: () => { return { width: "75px" } },
         customBodyRenderLite: (dataIndex) => {
           let order = orders[dataIndex]
           return (
-            <div className='flex items-center'>
+            <div className={`items-center ABADONED ${order.status}`}>
               <div className='ml-3'>
                 <span className='my-0 text-15'>
-                  {' '}
-                  {`${order.status}` || '-----'}
+                  {capitalize(order?.status || '-----')}
                 </span>
               </div>
             </div>
@@ -189,7 +191,7 @@ const AbadonedOrders = () => {
         />
       </div>
       <div className='overflow-auto'>
-        <div className='min-w-750'>
+        <div className='min-w-750 abadoned-table'>
           <MUIDataTable
             title={'All Abadoned Orders'}
             data={orders}

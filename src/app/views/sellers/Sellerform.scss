@@ -5,9 +5,6 @@
 
 
 
-
-
-
 .vendor-table thead tr th {
     padding-left: 24px !important;
     padding-right: 24px !important;
@@ -17,16 +14,16 @@
     padding-bottom: 4px;
   }
   
-.vendor-table thead tr th .MuiButton-text {
+  .vendor-table thead tr th .MuiButton-text {
     font-weight: 500;
     color: #000000;
   }
   
-.vendor-table .MuiTableCell-root {
-    border-bottom: 4px solid #ffffff !important;
+  .vendor-table .MuiTableCell-root {
+    border-bottom: 4px solid #ffffff!important;
   }
   
-.vendor-table tbody tr td {
+  .vendor-table tbody tr td {
     padding-left: 24px !important;
     padding-right: 24px !important;
     background: #FAFBFD;
@@ -36,7 +33,23 @@
     color: #000000;
   }
   
-.vendor-table .MuiTable-root {
+  .vendor-table .MuiTable-root {
     margin-top: 10px;
   }
+  
+  
+
+
+
+.text-muted {
+    color: #4A466DDE;
+    font-size: 12px;
+    font-family: Roboto, Arial, Helvetica, sans-serif;
+}
+  
+.text-control {
+    font-size: 14px;
+    color: #4A466DDE;
+  
+}
   
