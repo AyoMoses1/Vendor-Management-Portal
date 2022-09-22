@@ -1,11 +1,19 @@
-import React, { useState, useEffect } from 'react'
-import { Card, TextField, Button } from '@material-ui/core'
+import React, { useState, useEffect } from 'react';
+import { Card, TextField, Button} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles'
-import { getSellerById, addSeller, updateSeller } from './SellerService'
-import { useHistory } from 'react-router-dom'
-
+import { getSellerById, addSeller, updateSeller } from './SellerService';
+import { useHistory } from 'react-router-dom';
+import Checkbox from '@mui/material/Checkbox';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import { Formik } from 'formik'
-import * as yup from 'yup'
+import * as yup from 'yup';
+import Box from '@mui/material/Box';
+import InputLabel from '@mui/material/InputLabel';
+import './Sellerform.scss';
+import { CountryDropdown} from "react-country-region-selector";
+
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,6 +31,8 @@ function NewVendor({ isNewSeller, id, Seller }) {
     firstName: '',
     lastName: '',
     mobileNo: '',
+    userName:'',
+    whatsappNumber: '',
     // storeSlug: "",
     state: '',
     city: '',
@@ -43,16 +53,21 @@ function NewVendor({ isNewSeller, id, Seller }) {
 
   const initialValues = {
     email: '',
-    name: '',
+    userName: '',
+    firstName: '',
+    lastName:'',
     mobileNo: '',
     country: '',
     state: '',
     city: '',
     zipCode: '',
     address: '',
+    whatsappNumber: '',
   }
 
   const history = useHistory()
+
+  const [country, setCountry] = useState(""); 
 
   const classes = useStyles()
   const [state, setState] = useState(initialState)
@@ -68,17 +83,20 @@ function NewVendor({ isNewSeller, id, Seller }) {
 
   const handleSubmit = (values, { setSubmitting }) => {
     let tempState = { ...state, ...values }
-    if (isNewSeller)
-      addSeller(tempState).then(() => {
-        setState({ ...state })
-        history.push(`/vendors`)
-      })
-    else
-      updateSeller(seller).then((res) => {
-        setState({ ...state })
-        history.push(`/vendors`)
-      })
-  }
+    console.log(tempState, "*******************TEST PAYLOAD************")
+  //   if (isNewSeller)
+  //     addSeller(tempState).then(() => {
+  //       setState({ ...state })
+  //       history.push(`/vendors`)
+  //     })
+  //   else
+  //     updateSeller(seller).then((res) => {
+  //       setState({ ...state })
+  //       history.push(`/vendors`)
+  //     })
+  // }
+
+}
 
   useEffect(() => {
     if (!isNewSeller) {
@@ -89,168 +107,361 @@ function NewVendor({ isNewSeller, id, Seller }) {
     }
   }, [id, isNewSeller])
 
-  return (
-    <div className='w-100 overflow-auto'>
-      <Card>
-        <Formik
-          initialValues={values}
-          onSubmit={handleSubmit}
-          enableReinitialize={true}
-          validationSchema={sellerSchema}
-        >
-          {({
-            values,
-            errors,
-            touched,
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            isSubmitting,
-            setSubmitting,
-            setFieldValue,
-          }) => (
-            <form onSubmit={handleSubmit} className={classes.root}>
-              <div>
-                <h6>First Name</h6>
-                <TextField
-                  onChange={handleChange}
-                  value={values.firstName || ''}
-                  onBlur={handleBlur}
-                  name='firstName'
-                  margin='dense'
-                 
-                  type='text'
-                  fullWidth
-                  variant='outlined'
-                  error={Boolean(touched.firstName && errors.firstName)}
-                  helperText={touched.firstName && errors.firstName}
-                />
-                <h6>Last Name</h6>
-                <TextField
-                  onChange={handleChange}
-                  value={values.lastName || ''}
-                  name='lastName'
-                  margin='dense'
-                  type='text'
-                  fullWidth
-                  variant='outlined'
-                  error={Boolean(touched.lastName && errors.lastName)}
-                  helperText={touched.lastName && errors.lastName}
-                />
-              </div>
-              <div>
-              <h6>Email</h6>
+return (
+  <div className='w-100 overflow-auto'>
+    <Card>
+      <Formik
+        initialValues={values}
+        onSubmit={handleSubmit}
+        enableReinitialize={true}
+        validationSchema={sellerSchema}
+      >
+        {({
+          values,
+          errors,
+          touched,
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          isSubmitting,
+          setSubmitting,
+          setFieldValue,
+        }) => (
+          <form onSubmit={handleSubmit} className={classes.root}>
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                
+              }}
+            >
+            <div>  
+            <InputLabel htmlFor="firstname-input" className='title'>
+              First Name
+            </InputLabel>  
+            
+            <TextField
+              onChange={handleChange}
+              value={values.firstName || ''}
+              onBlur={handleBlur}
+              name='firstName'
+              margin='none'
+              style={{width:'30ch'}}
+              type='text'
+              size='small'
+              variant='filled'
+              error={Boolean(touched.firstName && errors.firstName)}
+              helperText={touched.firstName && errors.firstName}
+            />
+            </div>
+            <div>
+            <InputLabel htmlFor="lastname-input" className='title'>
+              Last Name
+            </InputLabel> 
+            <TextField
+              onChange={handleChange}
+              value={values.lastName || ''}
+              name='lastName'
+              margin='none'
+              style={{width:'30ch'}}
+              type='text'
+              size='small'
+              variant='filled'
+              error={Boolean(touched.lastName && errors.lastName)}
+              helperText={touched.lastName && errors.lastName}
+            />  
+            </div>
+            </Box>
+            <div>
+            <InputLabel htmlFor="email-input" className='title'>
+                Email
+              </InputLabel>
               <TextField
-                  onChange={handleChange}
-                  value={values.email || ''}
-                  name='email'
-                  margin='dense'
-                  type='text'
-                  fullWidth
-                  variant='outlined'
-                  error={Boolean(touched.email && errors.email)}
-                  helperText={touched.email && errors.email}
+                onChange={handleChange}
+                value={values.email || ''}
+                name='email'
+                margin='none'
+                type='text'
+                size='small'
+                fullWidth
+                variant='filled'
+                error={Boolean(touched.email && errors.email)}
+                helperText={touched.email && errors.email}
                 />
+            </div>
+
+            <div>
+            <InputLabel htmlFor="username-input" className='title'>
+                Preferred Username
+              </InputLabel>
+              <TextField
+                onChange={handleChange}
+                value={values.userName || ''}
+                name='userName'
+                margin='none'
+                type='name'
+                fullWidth
+                variant='filled'
+                error={Boolean(touched.userName && errors.userName)}
+                helperText={touched.userName && errors.userName}
+              />
+              </div>
+
+              <hr></hr>
+
+              <div>
+                <h4>Corporate Information</h4>
               </div>
               <div>
-                <h6>Preferred Username</h6> 
-                <TextField
-                  onChange={handleChange}
-                  value={values.mobileNo || ''}
-                  name='mobileNo'
-                  margin='dense'
-                  type='text'
-                  fullWidth
-                  variant='outlined'
-                  error={Boolean(touched.mobileNo && errors.mobileNo)}
-                  helperText={touched.mobileNo && errors.mobileNo}
-                />
-                </div>
-                <hr></hr>
-                <h4>Corporate Information</h4>
-                <div>
-                  <h6></h6>
+                <InputLabel htmlFor="productname-input" className='title'>
+                  Product Name
+                </InputLabel>
                 <TextField
                   onChange={handleChange}
                   value={values.address || ''}
                   name='address'
                   margin='dense'
-                  label='Address'
+                  placeholder='Thommy Tomatoes'
                   type='text'
                   fullWidth
-                  variant='outlined'
+                  variant='filled'
                   error={Boolean(touched.address && errors.address)}
                   helperText={touched.address && errors.address}
                 />
-              </div>
-              <div>
-                <TextField
-                  onChange={handleChange}
-                  value={values.city || ''}
-                  name='city'
-                  margin='dense'
-                  label='City/Town'
-                  type='text'
-                  fullWidth
-                  variant='outlined'
-                  error={Boolean(touched.city && errors.city)}
-                  helperText={touched.city && errors.city}
-                />
-                <TextField
-                  onChange={handleChange}
-                  value={values.state || ''}
-                  name='state'
-                  margin='dense'
-                  label='State'
-                  type='text'
-                  fullWidth
-                  variant='outlined'
-                  error={Boolean(touched.state && errors.state)}
-                  helperText={touched.state && errors.state}
-                />
-              </div>
-              <div>
-                <TextField
-                  onChange={handleChange}
-                  value={values.country || ''}
-                  name='country'
-                  margin='dense'
-                  label='Country'
-                  type='text'
-                  fullWidth
-                  variant='outlined'
-                  error={Boolean(touched.country && errors.country)}
-                  helperText={touched.country && errors.country}
-                />
-                <TextField
-                  onChange={handleChange}
-                  value={values.zipCode || ''}
-                  name='zipCode'
-                  margin='dense'
-                  label='Postcode/Zip'
-                  type='text'
-                  fullWidth
-                  variant='outlined'
-                  error={Boolean(touched.zipCode && errors.zipCode)}
-                  helperText={touched.zipCode && errors.zipCode}
-                />
-              </div>
-              <Button
-                type='submit'
-                variant='contained'
-                color='primary'
-                onClick={handleSubmit}
-              >
-                Submit
-              </Button>
-            </form>
-          )}
-        </Formik>
-      </Card>
-    </div>
-  )
-}
+            </div>
 
+            <div>
+            <InputLabel htmlFor="businessname-input" className='title'>
+                Business Name 
+              </InputLabel>
+              <TextField
+                onChange={handleChange}
+                value={values.city || ''}
+                name='city'
+                margin='dense'
+                label='City/Town'
+                type='text'
+                fullWidth
+                variant='filled'
+                error={Boolean(touched.city && errors.city)}
+                helperText={touched.city && errors.city}
+              />
+            </div>
+
+          <div>
+            <InputLabel htmlFor="store-input" className='title'>
+              Type of Store
+            </InputLabel>
+            <FormGroup>
+              <FormControlLabel control={<Checkbox />} label="Self-Managed" />
+              <FormControlLabel control={<Checkbox />} label="Managed" />
+            </FormGroup>
+          </div>
+
+            <div>
+              <InputLabel htmlFor="address-input">
+                Address 1
+              </InputLabel>
+              <TextField
+                onChange={handleChange}
+                value={values.address || ''}
+                name='country'
+                margin='none'
+                type='text'
+                fullWidth
+                variant='filled'
+                error={Boolean(touched.address && errors.address)}
+                helperText={touched.address && errors.address}
+              />
+              </div>
+
+              <div>
+              <InputLabel htmlFor="address-input" className='title'>
+                Address 2
+              </InputLabel> 
+              <TextField
+                onChange={handleChange}
+                value={values.zipCode || ''}
+                name='address'
+                margin='none'
+                type='text'
+                fullWidth
+                variant='filled'
+                error={Boolean(touched.zipCode && errors.zipCode)}
+                helperText={touched.zipCode && errors.zipCode}
+              />
+            </div>
+
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                
+              }}
+            >
+            <div>
+            <InputLabel htmlFor="city-input" className='title'>
+              City / Town
+            </InputLabel> 
+              <TextField
+                onChange={handleChange}
+                value={values.zipCode || ''}
+                name='city'
+                style={{width:'30ch'}}
+                size='small'
+                margin='dense'
+                placeholder='ikeja'
+                type='text'
+                variant='filled'
+                error={Boolean(touched.city && errors.city)}
+                helperText={touched.city && errors.city}
+              />
+            </div>
+
+            <div>
+              <InputLabel htmlFor="state-input" className='title'>
+                State
+              </InputLabel> 
+              <TextField
+                onChange={handleChange}
+                value={values.state || ''}
+                name='state'
+                margin='none'
+                style={{width:'30ch'}}
+                size='small'
+                type='text'
+                placeholder='Lagos'
+                variant='filled'
+                error={Boolean(touched.state && errors.state)}
+                helperText={touched.state && errors.state}
+              />
+            </div>
+            </Box>
+
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                
+              }}
+            >
+            <div>
+            <InputLabel htmlFor="postal-input" className='title'>
+              Postal / Zip Code
+            </InputLabel> 
+            <TextField
+              onChange={handleChange}
+              value={values.zipCode || ''}
+              name='zipCode'
+              margin='none'
+              style={{width:'30ch'}}
+              size='small'
+              type='number'
+              placeholder='1223300'
+              variant='filled'
+              error={Boolean(touched.zipCode && errors.zipCode)}
+              helperText={touched.zipCode && errors.zipCode}
+            />
+            </div>
+
+            <div>
+              <InputLabel htmlFor="country-input" className='title'>
+                Country
+              </InputLabel>
+              <div className="App">  
+              
+              <CountryDropdown
+                value={country}
+                onChange={(val) => setCountry(val)}
+                name='country'
+                style={{width:'34ch', height: '5ch', border: 'none', backgroundColor: 'gray'}}
+                variant='filled'
+                error={Boolean(touched.country && errors.country)}
+                helperText={touched.country && errors.country}
+              />{" "}   
+            </div>
+            </div>
+          </Box>
+
+            <div>
+            <InputLabel htmlFor="storenumber-input" className='title'>
+              Store Phone Number
+            </InputLabel>    
+            <TextField
+              onChange={handleChange}
+              value={values.phone || ''}
+              name='phone'
+              margin='dense'
+              country={"nig"}
+              type='tel'
+              fullWidth
+              variant='filled'
+              error={Boolean(touched.phone && errors.phone)}
+              helperText={touched.phone && errors.phone}
+              />
+          </div>
+
+            <div>
+            <InputLabel htmlFor="whatsapp-input" className='title'>
+             Whatsapp NumberPhone 
+            </InputLabel>
+              <TextField
+                onChange={handleChange}
+                value={values.whatsappNumber || ''}
+                name='whatsappNumber'
+                margin='none'
+                type='tel'
+                fullWidth
+                size='small'
+                variant='filled'
+                error={Boolean(touched.whatsappNumber && errors.whatsappNumber)}
+                helperText={touched.whatsappNumber && errors.whatsappNumber}
+              />
+            </div>
+
+            <div>
+              <h4> Uploads</h4>
+              <p>Preferred Passport Photograph</p>
+              <Button variant="contained" component="label">
+                Choose file
+                <input hidden accept="image/*" multiple type="file" />
+              </Button>
+              <p>Government Approved Means of Identification </p>
+              <InputLabel shrink htmlFor="input">
+               (Voter's catd, National ID Card, International Passport)
+             </InputLabel>
+              <Button variant="contained" component="label">
+                Choose file
+                <input hidden accept="image/*" multiple type="file" />
+              </Button>
+              <InputLabel shrink htmlFor="firstname-input">
+              front page
+            </InputLabel>
+            <Button variant="contained" component="label">
+                Choose file
+                <input hidden accept="image/*" multiple type="file" />
+              </Button>
+              <InputLabel shrink htmlFor="firstname-input">
+              back page
+            </InputLabel>
+            </div>
+
+           
+            <Button
+              type='submit'
+              variant='contained'
+              color='primary'
+              onClick={handleSubmit}
+            >
+              Register
+            </Button>
+          </form>
+        )}
+      </Formik>
+    </Card>
+    
+  </div>
+)}
 const phoneValidation = /^234[0-9]{10}$/
 
 const sellerSchema = yup.object().shape({
@@ -270,4 +481,4 @@ const sellerSchema = yup.object().shape({
   zipCode: yup.string().required('Please enter a valid zip code. i.e 100001'),
 })
 
-export default NewVendor
+export default NewVendor;

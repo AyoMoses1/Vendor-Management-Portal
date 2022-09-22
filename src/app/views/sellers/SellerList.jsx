@@ -5,7 +5,7 @@ import { Grow, Icon, IconButton, TextField, Button } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 import http from '../../services/api'
 import { useDialog } from 'muibox'
-
+import './Sellerform.scss'
 import Notification from '../../components/Notification'
 import { getAllSeller } from './SellerService'
 import Loading from 'matx/components/MatxLoadable/Loading'
@@ -46,15 +46,65 @@ const SellerList = () => {
             >
               <div className='ml-3'>
                 <h5 className='my-0 text-15'>{`${user?.name}`}</h5>
-                <small className='text-muted'>{user?.email}</small>
-                <br />
-                <small className='text-muted'>{user?.mobileNo}</small>
               </div>
             </Link>
           )
         },
       },
     },
+
+    {
+      name: 'email',
+      label: 'Email',
+      options: {
+        filter: true,
+        customBodyRenderLite: (dataIndex) => {
+          let user = userList[dataIndex]
+          return (
+            <Link
+              to={{
+                pathname: '/vendor/details',
+                state: {
+                  id: user.id,
+                },
+              }}
+              className='flex items-center'
+            >
+              <div className='ml-3'>
+                <h5 className='my-0 text-muted'> {user.email || '-----'}</h5>
+              </div>
+            </Link>
+          )
+        },
+      },
+    },
+
+    {
+      name: 'phoneno',
+      label: 'Phone Number',
+      options: {
+        filter: true,
+        customBodyRenderLite: (dataIndex) => {
+          let user = userList[dataIndex]
+          return (
+            <Link
+              to={{
+                pathname: '/vendor/details',
+                state: {
+                  id: user.id,
+                },
+              }}
+              className='flex items-center'
+            >
+              <div className='ml-3'>
+                <h5 className='my-0 text-muted'> {user.mobileNo || '-----'}</h5>
+              </div>
+            </Link>
+          )
+        },
+      },
+    },
+
     {
       name: 'store',
       label: 'Store',
@@ -80,6 +130,7 @@ const SellerList = () => {
         },
       },
     },
+
     {
       name: 'address',
       label: 'Address',
@@ -148,7 +199,7 @@ const SellerList = () => {
       </div>
       {severity === 'error' && notification()}
       <div className='overflow-auto'>
-        <div className='min-w-750'>
+        <div className='min-w-750 vendor-table'>
           {loading ? (
             <Loading />
           ) : (
