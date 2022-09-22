@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react'
-import { Grid } from '@material-ui/core'
+import { Grid, TextField, Checkbox, Icon } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import http from '../../services/api'
 import './product-details.css'
@@ -9,13 +9,25 @@ import Box from '@mui/material/Box';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import FormControl from '@mui/material/FormControl';
 import JoditEditor from 'jodit-react'
+import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import ProductType from './components/ProductType'
 import ProductSpecification from './components/ProductSpecification'
 import ProductGallery from './components/ProductGallery'
 import ProductShipping from './components/ProductShipping'
 import ProductStatus from './components/ProductStatus'
 import ProductCategory from './components/ProductCategory'
+import Autocomplete from '@material-ui/lab/Autocomplete';
 import "./common.css"
+import {
+  getProductById,
+  createProduct,
+  updateProduct,
+  getData,
+  getBrands,
+} from './ProductService';
+const icon = <CheckBoxOutlineBlankIcon fontSize='small' />;
+const checkedIcon = <CheckBoxIcon fontSize='small' />;
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -37,21 +49,56 @@ const ProductDetails = ({ location, placeholder }) => {
   const [selectedImage, setSelectedImage] = useState('')
   const classes = usestyles()
   const [product, setProduct] = useState([])
-  const [brand, setBrand] = useState([])
+  // const [brand, setBrand] = useState([])
   const [imageList, setImageList] = useState([])
-  const [store, setStore] = useState([])
+  // const [store, setStore] = useState([])
+  const [shippinClasses, setShippingClasses] = React.useState([]);
   const [seller, setSeller] = useState([])
+  const [alert, setAlert] = useState('');
+  const [severity, setSeverity] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [brands, setBrands] = useState([]);
+  const [tags, setTags] = useState([]);
+  const [stores, setStores] = useState([]);
+  const [categories, setCategories] = useState([]);
+
+
+
+
   const [values, setValues] = React.useState({
+    brandId: {},
+    rating: null,
+    translatedName: null,
+    productCode: null,
+    shippingClass: {},
+    storeId: {},
+    productType: '',
+    discountRate: '',
+    tags: [],
+    productCategories: [],
+    price: '',
+    sku: '',
     name: '',
-    shortDescription: '',
-    longDescription: '',
-    weightRange: '',
-    showPassword: false,
+    description: '',
   });
 
   const editor = useRef(null)
-  const [shortDesc, setShortDesc] = useState('')
+  const [desc, setDesc] = useState('')
   const [longDesc, setLongDesc] = useState('')
+
+
+  const getAllShippingClasses = () => {
+    setLoading(true);
+    http.get('/afrimash/shipping-class').then((res) => {
+      setShippingClasses(res?.data?.object);
+      setLoading(false);
+    });
+  };
+
+  useEffect(() => {
+    getAllShippingClasses();
+  }, []);
+
 
 
   const config = useMemo(() => ({
@@ -60,40 +107,83 @@ const ProductDetails = ({ location, placeholder }) => {
     placeholder: placeholder || 'Start typings...'
   }), [placeholder])
 
+  const urls = [
+    {
+      url: `afrimash/stores?page=1&size=100&search=search`,
+      set: setStores,
+    },
+    {
+      url: `/afrimash/product-categories/search?`,
+      set: setCategories,
+    },
+    {
+      url: `/afrimash/product-categories/search?`,
+      set: setCategories,
+    },
+    {
+      url: `/afrimash/tags/`,
+      set: setTags,
+    },
+  ];
 
 
+  const getResult = () => {
+    urls.map((val) => getData(val.url, val.set, setAlert, setSeverity));
+  };
+
+  useEffect(() => {
+    getBrands(setAlert, setSeverity, setBrands);
+    getResult();
+    getProductById(id).then(({ data }) => {
+      setValues(data?.object);
+      setValues(data.object);
+      // setShippingC(data.object.status)
+    });
+  }, [ id]);
   const handleChange = (event) => {
     // setValue(event.target.value);
   };
 
+  const handleSelect = (newValue, fieldName) => {
+    console.log({ newValue, fieldName })
+    if (Object.keys(values).some(key => key === fieldName)) {
+      console.log(fieldName);
+      console.log(newValue);
+      setValues({ ...values, [fieldName]: newValue });
+    }
+    console.log(values);
 
-  const getProduct = () => {
-    http
-      .get(`/afrimash/products/${id}`)
-      .then((response) => {
-        if (response.data) {
-          const { brandId, storeId, productImages } = response.data.object
-          setProduct(response.data?.object)
-          setBrand(brandId)
-          setStore(storeId)
-          setSeller(storeId.sellerId)
-          if (productImages.length === 0) {
-            setImageList([])
-            setSelectedImage('')
-            return
-          } else {
-            setImageList(productImages)
-            setSelectedImage(productImages[0].imageUrl)
-          }
-        }
-      })
-      .catch((err) => alert(err.response.data))
-  }
+  };
 
-  useEffect(() => {
-    getProduct()
-  }, [])
 
+
+  // const getProduct = () => {
+  //   http
+  //     .get(`/afrimash/products/${id}`)
+  //     .then((response) => {
+  //       if (response.data) {
+  //         const { brandId, storeId, productImages } = response.data.object
+  //         setProduct(response.data?.object)
+  //         setBrands(brandId)
+  //         setStores(storeId)
+  //         setSeller(storeId.sellerId)
+  //         if (productImages.length === 0) {
+  //           setImageList([])
+  //           setSelectedImage('')
+  //           return
+  //         } else {
+  //           setImageList(productImages)
+  //           setSelectedImage(productImages[0].imageUrl)
+  //         }
+  //       }
+  //     })
+  //     .catch((err) => alert(err.response.data))
+  // }
+
+  // useEffect(() => {
+  //   getProduct()
+  // }, [])
+  console.log(values, "******TEST VALUES**********")
   return (
     <div className='m-sm-30'>
       <div className='mb-sm-30'>
@@ -116,41 +206,130 @@ const ProductDetails = ({ location, placeholder }) => {
                     noValidate
                     autoComplete="off"
                   >
-                    <FormControl sx={{ width: '100%' }} variant="outlined">
-                      <label className='section-title'>Product Name</label>
-                      <OutlinedInput
-                        id="outlined-adornment-weight"
-                        value={values.weight}
-                        className="form-border"
-                        onChange={() => handleChange()}
-                        aria-describedby="outlined-weight-helper-text"
-                        inputProps={{
-                          'aria-label': 'weight',
-                        }}
+                    <FormControl sx={{ width: '50%' }} variant="outlined">
+                      <TextField
+                        className='mb-4'
+                        name='name'
+                        label='Product Name'
+                        variant='outlined'
+                        margin='normal'
+                        fullWidth
+                        // onBlur={handleBlur}
+                        // onChange={handleChange}
+                        value={values.name || ''}
+                        // error={Boolean(touched.name && errors.name)}
+                        // helperText={touched.name && errors.name}
                       />
                     </FormControl>
                     <FormControl sx={{ width: '100%' }} variant="outlined">
-                      <label className='section-title'>Short Description</label>
+                      <label className='section-title'>Description</label>
                       <JoditEditor
                         ref={editor}
-                        value={shortDesc}
+                        value={values.description}
                         config={config}
                         tabIndex={1} // tabIndex of textarea
-                        onBlur={newContent => setShortDesc(newContent)} // preferred to use only this option to update the content for performance reasons
+                        onBlur={newContent => setDesc(newContent)} // preferred to use only this option to update the content for performance reasons
                         onChange={newContent => { }}
                       />
                     </FormControl>
-                    <FormControl sx={{ width: '100%' }} variant="outlined">
-                      <label className='section-title'>Long Description</label>
-                      <JoditEditor
-                        ref={editor}
-                        value={longDesc}
-                        config={config}
-                        tabIndex={0} // tabIndex of textarea
-                        onBlur={newContent => setLongDesc(newContent)} // preferred to use only this option to update the content for performance reasons
-                        onChange={newContent => { }}
+                    <div className='form-flex'>
+                      <FormControl sx={{ width: '48%' }} variant="outlined">
+                        <TextField
+                          className='mb-4'
+                          name='sku'
+                          label='SKU'
+                          variant='outlined'
+                          margin='normal'
+                          fullWidth
+                          // onBlur={handleBlur}
+                          // onChange={handleChange}
+                          value={values.sku || ''}
+                          // error={Boolean(touched.sku && errors.sku)}
+                          // helperText={touched.sku && errors.sku}
+                        />
+                      </FormControl>
+                      <FormControl sx={{ width: '48%' }} variant="outlined">
+                      <Autocomplete
+                        multiple
+                        id='tags'
+                        name='tags'
+                        options={tags}
+                        value={values.tags}
+                        getOptionLabel={(option) => option?.name ?? ""}
+                        getOptionSelected={(option, value) => option.id === value.id}
+                        onChange={(event, newValue) => {
+                          setValues({ ...values, tags: newValue });
+                        }}
+                        renderOption={(option, { selected }) => (
+                          <React.Fragment>
+                            <Checkbox
+                              icon={icon}
+                              checkedIcon={checkedIcon}
+                              style={{ marginRight: 8 }}
+                              checked={selected}
+                            />
+                            {option.name}
+                          </React.Fragment>
+                        )}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            variant='outlined'
+                            label='Select Tags'
+                            placeholder='Tag'
+                            fullWidth
+                            margin='normal'
+                          />
+                        )}
                       />
-                    </FormControl>
+                      </FormControl>
+                      <FormControl sx={{ width: '48%' }} variant="outlined">
+                        <Autocomplete
+                          id='storeId'
+                          name='storeId'
+                          value={values.storeId}
+                          options={stores}
+                          getOptionLabel={(option) => option?.name ?? ""}
+                          getOptionSelected={(option, value) => option.id === value.id}
+                          onChange={(event, newValue) =>
+                            handleSelect(newValue, 'storeId')
+                          }
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              label='Select Store'
+                              variant='outlined'
+                              margin='normal'
+                            />
+                          )}
+                        />
+                      </FormControl>
+                      <FormControl sx={{ width: '48%' }} variant="outlined">
+                        <Autocomplete
+                          id='brands'
+                          options={brands.filter(item => item?.name)}
+                          name='brands'
+                          value={values.brandId}
+                          getOptionLabel={(option) => {
+                            return option?.name ?? ""
+                          }}
+                          getOptionSelected={(option, value) => {
+                            return option.id === value
+                          }}
+                          onChange={(event, newValue) =>
+                            handleSelect(newValue, 'brandId')
+                          }
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              variant='outlined'
+                              label='Select Brand'
+                              margin='normal'
+                            />
+                          )}
+                        />
+                      </FormControl>
+                    </div>
                   </Box>
                 </Item>
               </Grid>

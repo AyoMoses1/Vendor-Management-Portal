@@ -16,7 +16,7 @@ const files = [
 
 const ProductGallery = () => {
     const [displayImage, setDisplayImage] = useState(0);
-    const [displayVideo, setDisplayVideo] = useState(0);
+    // const [displayVideo, setDisplayVideo] = useState(0);
     const [images, setImages] = useState(files)
     const [videos, setVideos] = useState(files)
 
@@ -66,7 +66,7 @@ const ProductGallery = () => {
                     </Grid>
                 </div>
             </Grid>
-            <Grid item lg={12} md={12} sm={12} xs={12} className="mt-4 mb-4">
+            {/* <Grid item lg={12} md={12} sm={12} xs={12} className="mt-4 mb-4">
                 <div className='product-details-subs'>Videos</div>
                 <div className='product-gallery-images-frame'>
                     <Grid container spacing={3} style={{ marginTop: '2px' }}>
@@ -97,7 +97,7 @@ const ProductGallery = () => {
                         </Grid>
                     </Grid>
                 </div>
-            </Grid>
+            </Grid> */}
         </Grid>
     </Box>
 }

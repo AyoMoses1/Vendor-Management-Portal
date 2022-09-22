@@ -118,8 +118,36 @@ const ProductType = () => {
                         <div className='schedule'>Schedule</div>
                     </Grid>
                 </Grid>
-
                 <Grid container spacing={1} className="product-type-input-container">
+                    <Grid item lg={3} md={3} sm={12} xs={12}>
+                        <div className='product-type-input-label'>Discount</div>
+                    </Grid>
+                    <Grid item lg={9} md={9} sm={12} xs={12} className={""}>
+                        <div className='product-types mb-4'>
+                            <TextField
+                                InputProps={{
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                            <img src="/assets/icon/naira.svg" alt="naira" style={{ height: '32px' }} />
+                                        </InputAdornment>
+                                    )
+                                }}
+                                onChange={(e, newValues) => { }}
+                                // value={values.salesPrice}
+                                name='discount'
+                                id='discount'
+                                defaultValue=''
+                                margin='normal'
+                                type='number'
+                                variant='outlined'
+                                placeholder='Enter Discount Price'
+                            />
+                        </div>
+                        <div className='schedule'>Schedule</div>
+                    </Grid>
+                </Grid>
+
+                {/* <Grid container spacing={1} className="product-type-input-container">
                     <Grid item lg={3} md={3} sm={12} xs={12}>
                         <div className='product-type-input-label'>Coupons</div>
                     </Grid>
@@ -138,7 +166,7 @@ const ProductType = () => {
                             />
                         </div>
                     </Grid>
-                </Grid>
+                </Grid> */}
             </Grid>
 
             <Grid item lg={3} md={3} sm={12} xs={12}>
