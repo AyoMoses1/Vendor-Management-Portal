@@ -105,7 +105,7 @@ const Users = () => {
               }}
               className='flex items-center'
             >
-              <div className='ml-3'>
+              <div className='ml-3 users__name'>
                 <h5 className='my-0 text-15'>{`${user?.firstName || 'N/A'} ${user?.lastName || 'N/A'
                   }`}</h5>
                 <small className='text-muted'>{user?.email}</small>
@@ -301,7 +301,7 @@ const Users = () => {
         />
       </div>
       <div className='overflow-auto'>
-        <div className='min-w-750'>
+        <div className='min-w-750 all-users-table'>
           {loading ? (
             <Loading />
           ) : (

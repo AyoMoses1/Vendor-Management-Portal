@@ -73,9 +73,13 @@ export default new (class Http {
       const response = await this.AxiosSetup().patch(urlpath, data)
       return response
     } catch (error) {
-      let err
-      err = error.response.data
-      return err
+      console.log({ error })
+      if(error.response){
+        return error.response.data
+      }else{
+        return error;
+      }
+      
     }
   }
 

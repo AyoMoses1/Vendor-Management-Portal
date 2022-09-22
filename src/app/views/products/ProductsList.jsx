@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Breadcrumb } from 'matx';
 import MUIDataTable from 'mui-datatables';
 import { Grow, Icon, IconButton, TextField, Button } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useDialog } from 'muibox';
 import { deleteProduct, getAllResults } from './ProductService';
 import Loading from 'matx/components/MatxLoadable/Loading';
@@ -11,6 +11,8 @@ import { updateProductFeature } from '../../redux/actions/ussd-action';
 import CircleIcon from '@mui/icons-material/Circle';
 import './products-view.css'
 import { debounce } from "lodash";
+import NewProduct from './NewProduct';
+import Alert from 'app/components/Alert';
 
 const Products = () => {
   const [isAlive, setIsAlive] = useState(true);
@@ -22,8 +24,32 @@ const Products = () => {
   const dialog = useDialog();
   const dispatcher = useDispatch();
   const [query, setQuery] = useState("");
+  const [open, setOpen] = useState(false)
+  const history = useHistory();
+  const [alertData, setAlertData] = React.useState({ success: false, text: '', title: '' });
+  const [alertOpen, setAlertOpen] = React.useState(false)
+  const [createdId, setCreatedId] = React.useState(null);
 
-  
+  const handleDisplayModal = () => {
+    setAlertOpen(!alertOpen)
+  }
+
+  const created = (id) => {
+    console.log(id);
+    setCreatedId(id);
+    setAlertData({ success: true, text: "Product created sucessfully", title: 'Product Created' })
+    handleDisplayModal();
+  }
+
+  const handleOK = () => {
+    console.log(createdId);
+    handleDisplayModal();
+    history.push({
+      pathname: '/product/details',
+      state: { id: createdId }
+    })
+  }
+
   useEffect(() => {
     const fetchAllProducts = async () => {
       const response = await getAllResults(page, size, query)
@@ -62,6 +88,11 @@ const Products = () => {
   const onChangePage = async (page) => {
     setPage(page)
   }
+
+  const handleModal = () => {
+    setOpen(!open)
+  }
+
   const columns = [
     {
       name: "name", // field name in the row object
@@ -91,7 +122,7 @@ const Products = () => {
     },
     {
       name: 'categories',
-      label: 'Categories',
+      label: 'Category',
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
@@ -110,6 +141,34 @@ const Products = () => {
                   className="ml-3 mr-4"
                 >
                   <span className='my-0 text-15'>{product && n.join(',').slice(0, 8) + "..."}</span>
+                </Link>
+              </div>
+            </div>
+          );
+        },
+      },
+    },
+    {
+      name: 'dateAdded',
+      label: 'Date Created',
+      options: {
+        filter: true,
+        customBodyRenderLite: (dataIndex) => {
+          let product = products[dataIndex];
+          return (
+            <div className='flex product__date'>
+              <div className='ml-3'>
+                <Link
+                  to={{
+                    pathname: "/product/details",
+                    state: {
+                      id: product.id,
+                    },
+                  }}
+                  className="ml-3 mr-4"
+                >
+                  <div>27/01/2022</div>
+                  <span className='my-0'> {product?.dateAdded || '10:29:30'}</span>
                 </Link>
               </div>
             </div>
@@ -144,178 +203,152 @@ const Products = () => {
         },
       },
     },
-    {
-      name: "price",
-      label: "Price",
-      options: {
-        filter: true,
-        customBodyRenderLite: (dataIndex) => {
-          let product = products[dataIndex];
-          return (
-            <div className='flex items-center product__price'>
-              <Link
-                to={{
-                  pathname: "/product/details",
-                  state: {
-                    id: product.id,
-                  },
-                }}
-                className="ml-4"
-              >
-                <span className="my-0 text-15">
-                  {" "}
-                  {`₦${product.price}` || "-----"}
-                </span>
-              </Link>
-            </div>
-          );
-        },
-      },
-    },
-    {
-      name: 'sku',
-      label: 'Sku',
-      options: {
-        filter: true,
-        customBodyRenderLite: (dataIndex) => {
-          let product = products[dataIndex];
-          return (
-            <div className='flex items-center product__sku'>
-              <div className='ml-3'>
-                <Link
-                  to={{
-                    pathname: "/product/details",
-                    state: {
-                      id: product.id,
-                    },
-                  }}
-                  className="ml-3 mr-4"
-                >
-                  <span className='my-0 text-15'> {product?.sku || '-----'}</span>
-                </Link>
-              </div>
-            </div>
-          );
-        },
-      },
-    },
+    // {
+    //   name: "price",
+    //   label: "Price",
+    //   options: {
+    //     filter: true,
+    //     customBodyRenderLite: (dataIndex) => {
+    //       let product = products[dataIndex];
+    //       return (
+    //         <div className='flex items-center product__price'>
+    //           <Link
+    //             to={{
+    //               pathname: "/product/details",
+    //               state: {
+    //                 id: product.id,
+    //               },
+    //             }}
+    //             className="ml-4"
+    //           >
+    //             <span className="my-0 text-15">
+    //               {" "}
+    //               {`₦${product.price}` || "-----"}
+    //             </span>
+    //           </Link>
+    //         </div>
+    //       );
+    //     },
+    //   },
+    // },
+    // {
+    //   name: 'sku',
+    //   label: 'Sku',
+    //   options: {
+    //     filter: true,
+    //     customBodyRenderLite: (dataIndex) => {
+    //       let product = products[dataIndex];
+    //       return (
+    //         <div className='flex items-center product__sku'>
+    //           <div className='ml-3'>
+    //             <Link
+    //               to={{
+    //                 pathname: "/product/details",
+    //                 state: {
+    //                   id: product.id,
+    //                 },
+    //               }}
+    //               className="ml-3 mr-4"
+    //             >
+    //               <span className='my-0 text-15'> {product?.sku || '-----'}</span>
+    //             </Link>
+    //           </div>
+    //         </div>
+    //       );
+    //     },
+    //   },
+    // },
 
 
-    {
-      name: "tags",
-      label: "Tags",
-      options: {
-        filter: true,
-        customBodyRenderLite: (dataIndex) => {
-          let product = products[dataIndex];
-          let n = product.tags.map((name) => name.name);
-          return (
-            <div className='flex items-center product__tags'>
-              <div className='ml-4'>
-                <Link
-                  to={{
-                    pathname: "/product/details",
-                    state: {
-                      id: product.id,
-                    },
-                  }}
-                  className="ml-3 mr-4"
-                >
-                  <span className='my-0 text-15'>
-                    {n.length > 0 ? n.join(',').slice(0, 8) + "..." : ' ----'}
-                  </span>
-                </Link>
-              </div>
-            </div>
-          );
-        },
-      },
-    },
-    {
-      name: 'dateAdded',
-      label: 'Date Created',
-      options: {
-        filter: true,
-        customBodyRenderLite: (dataIndex) => {
-          let product = products[dataIndex];
-          return (
-            <div className='flex items-center product__date'>
-              <div className='ml-3'>
-                <Link
-                  to={{
-                    pathname: "/product/details",
-                    state: {
-                      id: product.id,
-                    },
-                  }}
-                  className="ml-3 mr-4"
-                >
-                  <span className='my-0 text-15'> {product?.dateAdded || '-----'}</span>
-                </Link>
-              </div>
-            </div>
-          );
-        },
-      },
-    },
-    {
-      name: 'seo',
-      label: 'SEO',
-      options: {
-        filter: true,
-        customBodyRenderLite: (dataIndex) => {
-          let product = products[dataIndex];
-          return (
-            <div className='flex items-center product__seo'>
-              <div className='ml-3 seo__flex'>
-                <Link
-                  to={{
-                    pathname: "/product/details",
-                    state: {
-                      id: product.id,
-                    },
-                  }}
-                  className="ml-3 mr-4 seo__flex"
-                >
-                  <CircleIcon />
-                  <span className='my-0 text-15'> {product?.seo || '70%'}</span>
-                </Link>
-              </div>
-            </div>
-          );
-        },
-      },
-    },
-    {
-      name: 'seller',
-      label: 'Seller',
-      options: {
-        filter: true,
-        customBodyRenderLite: (dataIndex) => {
-          let product = products[dataIndex];
-          return (
-            <div className='flex items-center product__seller'>
-              <Link
-                to={{
-                  pathname: '/product/details',
-                  state: {
-                    id: product.id,
-                  },
-                }}
-                className='ml-4'
-              >
-                <span className='my-0 text-15'>
-                  {product.storeId.sellerId.name.slice(0, 10) + "..." || '-----'}
-                </span>
-              </Link>
-            </div>
-          );
-        },
-      },
-    },
+    // {
+    //   name: "tags",
+    //   label: "Tags",
+    //   options: {
+    //     filter: true,
+    //     customBodyRenderLite: (dataIndex) => {
+    //       let product = products[dataIndex];
+    //       let n = product.tags.map((name) => name.name);
+    //       return (
+    //         <div className='flex items-center product__tags'>
+    //           <div className='ml-4'>
+    //             <Link
+    //               to={{
+    //                 pathname: "/product/details",
+    //                 state: {
+    //                   id: product.id,
+    //                 },
+    //               }}
+    //               className="ml-3 mr-4"
+    //             >
+    //               <span className='my-0 text-15'>
+    //                 {n.length > 0 ? n.join(',').slice(0, 8) + "..." : ' ----'}
+    //               </span>
+    //             </Link>
+    //           </div>
+    //         </div>
+    //       );
+    //     },
+    //   },
+    // },
+  
+    // {
+    //   name: 'seo',
+    //   label: 'SEO',
+    //   options: {
+    //     filter: true,
+    //     customBodyRenderLite: (dataIndex) => {
+    //       let product = products[dataIndex];
+    //       return (
+    //         <div className='flex items-center product__seo'>
+    //           <div className='ml-3 seo__flex'>
+    //             <Link
+    //               to={{
+    //                 pathname: "/product/details",
+    //                 state: {
+    //                   id: product.id,
+    //                 },
+    //               }}
+    //               className="ml-3 mr-4 seo__flex"
+    //             >
+    //               <CircleIcon />
+    //               <span className='my-0 text-15'> {product?.seo || '70%'}</span>
+    //             </Link>
+    //           </div>
+    //         </div>
+    //       );
+    //     },
+    //   },
+    // },
+    // {
+    //   name: 'seller',
+    //   label: 'Seller',
+    //   options: {
+    //     filter: true,
+    //     customBodyRenderLite: (dataIndex) => {
+    //       let product = products[dataIndex];
+    //       return (
+    //         <div className='flex items-center product__seller'>
+    //           <Link
+    //             to={{
+    //               pathname: '/product/details',
+    //               state: {
+    //                 id: product.id,
+    //               },
+    //             }}
+    //             className='ml-4'
+    //           >
+    //             <span className='my-0 text-15'>
+    //               {product.storeId.sellerId.name.slice(0, 10) + "..." || '-----'}
+    //             </span>
+    //           </Link>
+    //         </div>
+    //       );
+    //     },
+    //   },
+    // },
     {
       name: 'action',
-      label: ' ',
+      label: 'Action',
       options: {
         filter: false,
         customBodyRenderLite: (dataIndex) => {
@@ -331,34 +364,34 @@ const Products = () => {
         },
       },
     },
-    {
-      name: 'action',
-      label: ' ',
-      options: {
-        filter: false,
-        customBodyRenderLite: (dataIndex) => {
-          let product = products[dataIndex];
-          return (
-            <div className='flex items-center'>
-              <div className='flex-grow'></div>
-              <Link
-                to={{
-                  pathname: '/product/edit',
-                  state: {
-                    id: product.id,
-                    product,
-                  },
-                }}
-              >
-                <IconButton>
-                  <Icon>edit</Icon>
-                </IconButton>
-              </Link>
-            </div>
-          );
-        },
-      },
-    },
+    // {
+    //   name: 'action',
+    //   label: ' ',
+    //   options: {
+    //     filter: false,
+    //     customBodyRenderLite: (dataIndex) => {
+    //       let product = products[dataIndex];
+    //       return (
+    //         <div className='flex items-center'>
+    //           <div className='flex-grow'></div>
+    //           <Link
+    //             to={{
+    //               pathname: '/product/edit',
+    //               state: {
+    //                 id: product.id,
+    //                 product,
+    //               },
+    //             }}
+    //           >
+    //             <IconButton>
+    //               <Icon>edit</Icon>
+    //             </IconButton>
+    //           </Link>
+    //         </div>
+    //       );
+    //     },
+    //   },
+    // },
     // {
     //   name: 'id', // field name in the row object
     //   label: '', // column title that will be shown in table
@@ -494,16 +527,40 @@ const Products = () => {
                   },
                   customToolbar: () => {
                     return (
-                      <Link
-                        to={{
-                          pathname: "/product/new",
-                          state: {},
-                        }}
-                      >
-                        <Button variant="contained" color="primary">
+                      <>
+                        {/* <Link
+                          to={{
+                            pathname: "/product/new",
+                            state: {},
+                          }}
+                        > */}
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={() => handleModal()}
+                        >
                           Add New
                         </Button>
-                      </Link>
+                        {/* </Link> */}
+                        {/* <NewPickupCenter
+                      name={pickupCenter ? "Edit Pickup Center" : "Add New Pickup Center"}
+                      isOpen={open}
+                      pickupCenter={pickupCenter}
+                      handleClose={handleModal}
+                      refresh={() => refresh()} /> */}
+
+                        <NewProduct
+                          isOpen={open}
+                          handleClose={handleModal}
+                          created={created}
+                        />
+                        <Alert
+                          isOpen={alertOpen}
+                          handleModal={handleDisplayModal}
+                          alertData={alertData}
+                          handleOK={handleOK}
+                        />
+                      </>
                     );
                   },
                 }}
