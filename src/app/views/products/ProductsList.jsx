@@ -24,7 +24,7 @@ const Products = () => {
   const dialog = useDialog();
   const dispatcher = useDispatch();
   const [query, setQuery] = useState("");
-  const [open, setOpen] = useState(false)
+  // const [open, setOpen] = useState(false)
   const history = useHistory();
   const [alertData, setAlertData] = React.useState({ success: false, text: '', title: '' });
   const [alertOpen, setAlertOpen] = React.useState(false)
@@ -89,9 +89,9 @@ const Products = () => {
     setPage(page)
   }
 
-  const handleModal = () => {
-    setOpen(!open)
-  }
+  // const handleModal = () => {
+  //   setOpen(!open)
+  // }
 
   const columns = [
     {
@@ -528,20 +528,20 @@ const Products = () => {
                   customToolbar: () => {
                     return (
                       <>
-                        {/* <Link
+                        <Link
                           to={{
                             pathname: "/product/new",
                             state: {},
                           }}
-                        > */}
+                        >
                         <Button
                           variant="contained"
                           color="primary"
-                          onClick={() => handleModal()}
+                          // onClick={() => handleModal()}
                         >
                           Add New
                         </Button>
-                        {/* </Link> */}
+                        </Link>
                         {/* <NewPickupCenter
                       name={pickupCenter ? "Edit Pickup Center" : "Add New Pickup Center"}
                       isOpen={open}
@@ -549,17 +549,17 @@ const Products = () => {
                       handleClose={handleModal}
                       refresh={() => refresh()} /> */}
 
-                        <NewProduct
+                        {/* <NewProduct
                           isOpen={open}
                           handleClose={handleModal}
                           created={created}
-                        />
-                        <Alert
+                        /> */}
+                        {/* <Alert
                           isOpen={alertOpen}
                           handleModal={handleDisplayModal}
                           alertData={alertData}
                           handleOK={handleOK}
-                        />
+                        /> */}
                       </>
                     );
                   },
