@@ -13,7 +13,7 @@ function NewSeller() {
           ]}
         />
       </div>
-      <SimpleCard title="Create New Seller">
+      <SimpleCard title="Vendor Registration">
         <SellerForm isNewSeller={true} />
       </SimpleCard>
     </div>

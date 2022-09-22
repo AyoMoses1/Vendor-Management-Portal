@@ -20,7 +20,8 @@ function NewVendor({ isNewSeller, id, Seller }) {
   const initialState = {
     email: '',
     country: '',
-    name: '',
+    firstName: '',
+    lastName: '',
     mobileNo: '',
     // storeSlug: "",
     state: '',
@@ -110,25 +111,40 @@ function NewVendor({ isNewSeller, id, Seller }) {
           }) => (
             <form onSubmit={handleSubmit} className={classes.root}>
               <div>
+                <h6>First Name</h6>
                 <TextField
                   onChange={handleChange}
-                  value={values.name || ''}
+                  value={values.firstName || ''}
                   onBlur={handleBlur}
-                  name='name'
+                  name='firstName'
                   margin='dense'
-                  label='Name'
+                 
                   type='text'
                   fullWidth
                   variant='outlined'
-                  error={Boolean(touched.name && errors.name)}
-                  helperText={touched.name && errors.name}
+                  error={Boolean(touched.firstName && errors.firstName)}
+                  helperText={touched.firstName && errors.firstName}
                 />
+                <h6>Last Name</h6>
                 <TextField
+                  onChange={handleChange}
+                  value={values.lastName || ''}
+                  name='lastName'
+                  margin='dense'
+                  type='text'
+                  fullWidth
+                  variant='outlined'
+                  error={Boolean(touched.lastName && errors.lastName)}
+                  helperText={touched.lastName && errors.lastName}
+                />
+              </div>
+              <div>
+              <h6>Email</h6>
+              <TextField
                   onChange={handleChange}
                   value={values.email || ''}
                   name='email'
                   margin='dense'
-                  label='Email'
                   type='text'
                   fullWidth
                   variant='outlined'
@@ -137,19 +153,23 @@ function NewVendor({ isNewSeller, id, Seller }) {
                 />
               </div>
               <div>
+                <h6>Preferred Username</h6> 
                 <TextField
                   onChange={handleChange}
                   value={values.mobileNo || ''}
                   name='mobileNo'
                   margin='dense'
-                  label='Phone Number'
                   type='text'
                   fullWidth
                   variant='outlined'
                   error={Boolean(touched.mobileNo && errors.mobileNo)}
                   helperText={touched.mobileNo && errors.mobileNo}
                 />
-
+                </div>
+                <hr></hr>
+                <h4>Corporate Information</h4>
+                <div>
+                  <h6></h6>
                 <TextField
                   onChange={handleChange}
                   value={values.address || ''}
