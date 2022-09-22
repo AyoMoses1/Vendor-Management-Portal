@@ -84,6 +84,7 @@ function NewProduct({ isNewProduct, id, Product, created, closeModal }) {
   const [stores, setStores] = useState([]);
   const [categories, setCategories] = useState([]);
   const [imageList, setImageList] = useState([]);
+
   const [alert, setAlert] = useState('');
   const [severity, setSeverity] = useState('');
   const [shippinClasses, setShippingClasses] = React.useState([]);
