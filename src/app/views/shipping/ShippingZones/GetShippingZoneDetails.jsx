@@ -9,7 +9,10 @@ import {
   Box,
   TextField,
   Grow,
+  Icon,
+  IconButton
 } from '@material-ui/core'
+import { useDialog } from 'muibox';
 
 import http from '../../../services/api'
 import MUIDataTable from 'mui-datatables'
@@ -23,10 +26,10 @@ const ShippingZoneDetails = ({ location, match }) => {
   const [loading, setLoading] = React.useState(false)
   const [shippingZone, setShippingZone] = React.useState([])
   const [open, setOpen] = React.useState(false)
+  const dialog = useDialog();
 
   const { id } = location.state
 
-  console.log({id})
 
   const getShippingZoneDetails = (zoneId) => {
     setLoading(true)
@@ -65,6 +68,41 @@ const ShippingZoneDetails = ({ location, match }) => {
         },
       },
     },
+    {
+      name: 'action',
+      label: ' ',
+      options: {
+        filter: false,
+        customBodyRenderLite: (dataIndex) => {
+          let state = shippingZone?.stateList[dataIndex]
+          console.log({ state });
+          return (
+            <div className='flex items-center'>
+              <div>
+                <IconButton
+                  onClick={() => 
+                    dialog
+                      .confirm('Are you sure you want to delete?')
+                      .then((value) => {
+                        http
+                          .patch(`/afrimash/shipping-zone/${id}/dissociate-states`, [{id: state.id}])
+                          .then(() => {
+                            getShippingZoneDetails(id)
+                          });
+                      })
+                      .catch(() => {
+                        return false;
+                      })
+                  }
+                >
+                  <Icon>delete</Icon>
+                </IconButton>
+              </div>
+            </div>
+          );
+        },
+      },
+    },
   ]
 
   return (
@@ -97,6 +135,7 @@ const ShippingZoneDetails = ({ location, match }) => {
             <StatesModal
               isOpen={open}
               handleClose={handleModal}
+              getShippingZone={() => { getShippingZoneDetails(id) }}
               id={id}
               name='Create Tag'
             />
