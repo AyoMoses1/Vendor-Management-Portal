@@ -205,19 +205,19 @@ function NewProduct({ isNewProduct, id, Product, created, closeModal }) {
     });
 
     if (!isNewProduct) {
-      updateProduct({...Product, ...updateData})
       console.log(updateData, "Test update data")
-        // .then((res) => {
-        //   if (res.status === 200) {
-        //     setAlertData({ success: true, text: "Product Edited sucessfully", title: 'Product Edited' })
-        //     handleDisplayModal();
-        //   }
-        //   else {
-        //     setAlertData({ success: false, text: 'Invalid details provided', title: 'Unable to create product' })
-        //     handleDisplayModal();
-        //   };
-        // })
-        // .catch((err) => console.error(err));
+      updateProduct({...Product, ...updateData})
+        .then((res) => {
+          if (res.status === 200) {
+            setAlertData({ success: true, text: "Product Edited sucessfully", title: 'Product Edited' })
+            handleDisplayModal();
+          }
+          else {
+            setAlertData({ success: false, text: 'Invalid details provided', title: 'Unable to create product' })
+            handleDisplayModal();
+          };
+        })
+        .catch((err) => console.error(err));
     } else {
       createProduct(data)
         .then((res) => {
