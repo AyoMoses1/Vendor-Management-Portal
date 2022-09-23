@@ -491,3 +491,7 @@
 .SEO svg {
     font-size: 12px;
 }
+
+.__react_modal_image__medium_img {
+    height: 70%;
+}

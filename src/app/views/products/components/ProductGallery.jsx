@@ -1,24 +1,31 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './shared.css'
 import Box from '@mui/material/Box';
 import { Button, Grid } from '@material-ui/core';
-
-const files = [
-    {
-        id: 1,
-        file: '/assets/images/gallery1.png'
-    },
-    {
-        id: 2,
-        file: '/assets/images/gallery2.png'
-    },
-]
+import { Lightbox } from "react-modal-image";
 
 const ProductGallery = ({ product }) => {
     const [displayImage, setDisplayImage] = useState(0);
-    // const [displayVideo, setDisplayVideo] = useState(0);
-    const [images, setImages] = useState(files)
-    const [videos, setVideos] = useState(files)
+    const [images, setImages] = useState([])
+    const [image, setImage] = useState(null)
+    const [preview, setPreview] = useState(null)
+    const [boxState, setBoxState] = useState(false);
+
+    useEffect(() => {
+        if (product) {
+            setImages(product?.productImages)
+        }
+    })
+
+    const handleBoxState = () => {
+        setBoxState(!boxState);
+    }
+
+    const handleSetImage = (file) => {
+        setImage(file.imageUrl);
+        setPreview(file.id);
+        handleBoxState();
+    }
 
     return <Box
         component="form"
@@ -38,10 +45,10 @@ const ProductGallery = ({ product }) => {
                 <div className='product-details-subs'>Product Images</div>
                 <div className='product-gallery-images-frame'>
                     <Grid container spacing={3} style={{ marginTop: '2px' }}>
-                        {images.map((_image, i) => <Grid key={i + 'image'} item lg={4} md={4} sm={4} xs={4}>
+                        {images?.map((_image, i) => <Grid key={i + 'image'} item lg={4} md={4} sm={4} xs={4}>
                             <div className='product-gallery-image-frame'>
                                 <div className='product-gallery-image-container'>
-                                    <img src={_image.file} />
+                                    <img src={_image.imageUrl} />
                                 </div>
                                 <div className='gallery-base'>
                                     <div onClick={() => {
@@ -51,8 +58,15 @@ const ProductGallery = ({ product }) => {
                                     <img src='/assets/icon/delete-basket.svg' />
                                 </div>
                                 <div className='gallery-base'>
-                                    <div className='action-item'>View</div>
+                                    <div className='action-item' onClick={() => handleSetImage(_image)}>View</div>
                                 </div>
+                                {
+                                    boxState && preview === _image?.id && <Lightbox
+                                        large={image}
+                                        alt="Product Image"
+                                        onClose={handleBoxState}
+                                    />
+                                }
                             </div>
                         </Grid>)}
                         <Grid item lg={4} md={4} sm={4} xs={4}>
