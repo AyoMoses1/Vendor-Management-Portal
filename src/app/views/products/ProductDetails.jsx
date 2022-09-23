@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react'
-import { Grid, TextField, Checkbox, Icon } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
+import { Grid, TextField, Checkbox, Button, CircularProgress } from '@material-ui/core'
 import http from '../../services/api'
 import './product-details.css'
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
-import OutlinedInput from '@mui/material/OutlinedInput';
+import * as yup from 'yup';
 import FormControl from '@mui/material/FormControl';
 import JoditEditor from 'jodit-react'
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
@@ -21,11 +20,12 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import "./common.css"
 import {
   getProductById,
-  createProduct,
   updateProduct,
   getData,
   getBrands,
 } from './ProductService';
+import { Formik } from 'formik'
+import Alert from 'app/components/Alert'
 const icon = <CheckBoxOutlineBlankIcon fontSize='small' />;
 const checkedIcon = <CheckBoxIcon fontSize='small' />;
 
@@ -37,34 +37,21 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const usestyles = makeStyles(({ palette, ...theme }) => ({
-  imageBorder: {
-    border: '2px solid rgba(var(--primary), 0.67)',
-  },
-}))
-
 const ProductDetails = ({ location, placeholder }) => {
   const State = location.state
   const { id } = State;
-  const [selectedImage, setSelectedImage] = useState('')
-  const classes = usestyles()
-  const [product, setProduct] = useState([])
-  // const [brand, setBrand] = useState([])
-  const [imageList, setImageList] = useState([])
-  // const [store, setStore] = useState([])
+  const [alertData, setAlertData] = useState({ success: false, text: '', title: '' });
   const [shippinClasses, setShippingClasses] = React.useState([]);
-  const [seller, setSeller] = useState([])
+  const [description, setDescription] = useState()
+  const [planeDesc, setPlaneDesc] = useState('')
   const [alert, setAlert] = useState('');
   const [severity, setSeverity] = useState('');
   const [loading, setLoading] = useState(false);
+  const [updating, setUpdating] = useState(false);
   const [brands, setBrands] = useState([]);
   const [tags, setTags] = useState([]);
   const [stores, setStores] = useState([]);
   const [categories, setCategories] = useState([]);
-
-
-
-
   const [values, setValues] = React.useState({
     brandId: {},
     rating: null,
@@ -81,10 +68,13 @@ const ProductDetails = ({ location, placeholder }) => {
     name: '',
     description: '',
   });
-
   const editor = useRef(null)
   const [desc, setDesc] = useState('')
-  const [longDesc, setLongDesc] = useState('')
+  const [isOpen, setIsOpen] = React.useState(false)
+
+  const handleDisplayModal = () => {
+    setIsOpen(!isOpen)
+  }
 
 
   const getAllShippingClasses = () => {
@@ -98,8 +88,6 @@ const ProductDetails = ({ location, placeholder }) => {
   useEffect(() => {
     getAllShippingClasses();
   }, []);
-
-
 
   const config = useMemo(() => ({
     readonly: false,
@@ -137,12 +125,8 @@ const ProductDetails = ({ location, placeholder }) => {
     getProductById(id).then(({ data }) => {
       setValues(data?.object);
       setValues(data.object);
-      // setShippingC(data.object.status)
     });
-  }, [ id]);
-  const handleChange = (event) => {
-    // setValue(event.target.value);
-  };
+  }, [id]);
 
   const handleSelect = (newValue, fieldName) => {
     console.log({ newValue, fieldName })
@@ -155,35 +139,36 @@ const ProductDetails = ({ location, placeholder }) => {
 
   };
 
+  const handleSubmit = (items, { setSubmitting }) => {
+    if (planeDesc.length >= 10) {
+      const payload = { ...values, ...items, description };
+      setUpdating(true)
+      updateProduct({ ...payload })
+        .then((res) => {
+          if (res.status === 200) {
+            setUpdating(false)
+            setAlertData({ success: true, text: "Product updated sucessfully", title: 'Product Updated' })
+            handleDisplayModal();
+          }
+          else {
+            setUpdating(false)
+            setAlertData({ success: false, text: 'Invalid details provided', title: 'Unable to update product' })
+            handleDisplayModal();
+          };
+        })
+        .catch((err) => console.error(err));
+    }
+  };
 
-
-  // const getProduct = () => {
-  //   http
-  //     .get(`/afrimash/products/${id}`)
-  //     .then((response) => {
-  //       if (response.data) {
-  //         const { brandId, storeId, productImages } = response.data.object
-  //         setProduct(response.data?.object)
-  //         setBrands(brandId)
-  //         setStores(storeId)
-  //         setSeller(storeId.sellerId)
-  //         if (productImages.length === 0) {
-  //           setImageList([])
-  //           setSelectedImage('')
-  //           return
-  //         } else {
-  //           setImageList(productImages)
-  //           setSelectedImage(productImages[0].imageUrl)
-  //         }
-  //       }
-  //     })
-  //     .catch((err) => alert(err.response.data))
-  // }
-
-  // useEffect(() => {
-  //   getProduct()
-  // }, [])
-  console.log(values, "******TEST VALUES**********")
+  const descOnChange = (value) => {
+    setDescription(value);
+    console.log(value);
+    var html = value;
+    var div = document.createElement("div");
+    div.innerHTML = html;
+    console.log(div.innerText);
+    setPlaneDesc(div.innerText)
+  }
   return (
     <div className='m-sm-30'>
       <div className='mb-sm-30'>
@@ -206,130 +191,173 @@ const ProductDetails = ({ location, placeholder }) => {
                     noValidate
                     autoComplete="off"
                   >
-                    <FormControl sx={{ width: '50%' }} variant="outlined">
-                      <TextField
-                        className='mb-4'
-                        name='name'
-                        label='Product Name'
-                        variant='outlined'
-                        margin='normal'
-                        fullWidth
-                        // onBlur={handleBlur}
-                        // onChange={handleChange}
-                        value={values.name || ''}
-                        // error={Boolean(touched.name && errors.name)}
-                        // helperText={touched.name && errors.name}
-                      />
-                    </FormControl>
-                    <FormControl sx={{ width: '100%' }} variant="outlined">
-                      <label className='section-title'>Description</label>
-                      <JoditEditor
-                        ref={editor}
-                        value={values.description}
-                        config={config}
-                        tabIndex={1} // tabIndex of textarea
-                        onBlur={newContent => setDesc(newContent)} // preferred to use only this option to update the content for performance reasons
-                        onChange={newContent => { }}
-                      />
-                    </FormControl>
-                    <div className='form-flex'>
-                      <FormControl sx={{ width: '48%' }} variant="outlined">
-                        <TextField
-                          className='mb-4'
-                          name='sku'
-                          label='SKU'
-                          variant='outlined'
-                          margin='normal'
-                          fullWidth
-                          // onBlur={handleBlur}
-                          // onChange={handleChange}
-                          value={values.sku || ''}
-                          // error={Boolean(touched.sku && errors.sku)}
-                          // helperText={touched.sku && errors.sku}
-                        />
-                      </FormControl>
-                      <FormControl sx={{ width: '48%' }} variant="outlined">
-                      <Autocomplete
-                        multiple
-                        id='tags'
-                        name='tags'
-                        options={tags}
-                        value={values.tags}
-                        getOptionLabel={(option) => option?.name ?? ""}
-                        getOptionSelected={(option, value) => option.id === value.id}
-                        onChange={(event, newValue) => {
-                          setValues({ ...values, tags: newValue });
-                        }}
-                        renderOption={(option, { selected }) => (
-                          <React.Fragment>
-                            <Checkbox
-                              icon={icon}
-                              checkedIcon={checkedIcon}
-                              style={{ marginRight: 8 }}
-                              checked={selected}
-                            />
-                            {option.name}
-                          </React.Fragment>
-                        )}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            variant='outlined'
-                            label='Select Tags'
-                            placeholder='Tag'
-                            fullWidth
-                            margin='normal'
-                          />
-                        )}
-                      />
-                      </FormControl>
-                      <FormControl sx={{ width: '48%' }} variant="outlined">
-                        <Autocomplete
-                          id='storeId'
-                          name='storeId'
-                          value={values.storeId}
-                          options={stores}
-                          getOptionLabel={(option) => option?.name ?? ""}
-                          getOptionSelected={(option, value) => option.id === value.id}
-                          onChange={(event, newValue) =>
-                            handleSelect(newValue, 'storeId')
-                          }
-                          renderInput={(params) => (
+                    <div className="product-details-title">Product Details</div>
+                    <Formik
+                      initialValues={values}
+                      onSubmit={handleSubmit}
+                      enableReinitialize={true}
+                      validationSchema={productSchema}
+                    >
+                      {({
+                        values,
+                        errors,
+                        touched,
+                        handleChange,
+                        handleBlur,
+                        handleSubmit,
+                        setFieldValue,
+                      }) => (
+                        <form onSubmit={handleSubmit}>
+                          <FormControl variant="outlined" className='w-100'>
                             <TextField
-                              {...params}
-                              label='Select Store'
+                              className='mb-4 mx-0'
+                              name='name'
+                              label='Product Name'
                               variant='outlined'
                               margin='normal'
+                              fullWidth
+                              onBlur={handleBlur}
+                              onChange={handleChange}
+                              value={values.name || ''}
+                              error={Boolean(touched.name && errors.name)}
+                              helperText={touched.name && errors.name}
                             />
-                          )}
-                        />
-                      </FormControl>
-                      <FormControl sx={{ width: '48%' }} variant="outlined">
-                        <Autocomplete
-                          id='brands'
-                          options={brands.filter(item => item?.name)}
-                          name='brands'
-                          value={values.brandId}
-                          getOptionLabel={(option) => {
-                            return option?.name ?? ""
-                          }}
-                          getOptionSelected={(option, value) => {
-                            return option.id === value
-                          }}
-                          onChange={(event, newValue) =>
-                            handleSelect(newValue, 'brandId')
-                          }
-                          renderInput={(params) => (
-                            <TextField
-                              {...params}
-                              variant='outlined'
-                              label='Select Brand'
-                              margin='normal'
+                          </FormControl>
+                          <FormControl sx={{ width: '100%' }} variant="outlined">
+                            <label className='section-title'>Description</label>
+                            <JoditEditor
+                              ref={editor}
+                              value={values.description}
+                              config={config}
+                              tabIndex={1} // tabIndex of textarea
+                              onBlur={newContent => setDesc(newContent)} // preferred to use only this option to update the content for performance reasons
+                              onChange={descOnChange}
                             />
-                          )}
-                        />
-                      </FormControl>
-                    </div>
+                            {!loading && planeDesc.length < 10 ? <div style={{ color: '#EB6464', fontSize: '12px' }}>Please enter a description of at least 10 chars long</div> : <></>}
+                          </FormControl>
+                          <div className='form-flex'>
+                            <FormControl sx={{ width: '48%' }} variant="outlined" className='mt-4'>
+                              <TextField
+                                className='mb-4 mx-0'
+                                name='sku'
+                                label='SKU'
+                                variant='outlined'
+                                margin='normal'
+                                fullWidth
+                                onBlur={handleBlur}
+                                onChange={handleChange}
+                                value={values.sku || ''}
+                                error={Boolean(touched.sku && errors.sku)}
+                                helperText={touched.sku && errors.sku}
+                              />
+                            </FormControl>
+                            <FormControl sx={{ width: '48%' }} variant="outlined" className='mt-4'>
+                              <Autocomplete
+                                className='mx-0'
+                                multiple
+                                id='tags'
+                                name='tags'
+                                options={tags}
+                                value={values.tags}
+                                getOptionLabel={(option) => option?.name ?? ""}
+                                getOptionSelected={(option, value) => option.id === value.id}
+                                onChange={(event, newValue) => {
+                                  setValues({ ...values, tags: newValue });
+                                }}
+                                renderOption={(option, { selected }) => (
+                                  <React.Fragment>
+                                    <Checkbox
+                                      icon={icon}
+                                      checkedIcon={checkedIcon}
+                                      style={{ marginRight: 8 }}
+                                      checked={selected}
+                                    />
+                                    {option.name}
+                                  </React.Fragment>
+                                )}
+                                renderInput={(params) => (
+                                  <TextField
+                                    {...params}
+                                    className='mx-0'
+                                    variant='outlined'
+                                    label='Select Tags'
+                                    placeholder='Tag'
+                                    fullWidth
+                                    margin='normal'
+                                  />
+                                )}
+                              />
+                            </FormControl>
+                            <FormControl sx={{ width: '48%' }} variant="outlined">
+                              <Autocomplete
+                                id='storeId'
+                                name='storeId'
+                                value={values.storeId}
+                                options={stores}
+                                getOptionLabel={(option) => option?.name ?? ""}
+                                getOptionSelected={(option, value) => option.id === value.id}
+                                onChange={(event, newValue) =>
+                                  handleSelect(newValue, 'storeId')
+                                }
+                                renderInput={(params) => (
+                                  <TextField
+                                    {...params}
+                                    className='mx-0'
+                                    label='Select Store'
+                                    variant='outlined'
+                                    margin='normal'
+                                  />
+                                )}
+                              />
+                            </FormControl>
+                            <FormControl sx={{ width: '48%' }} variant="outlined">
+                              <Autocomplete
+                                id='brands'
+                                options={brands.filter(item => item?.name)}
+                                name='brands'
+                                value={values.brandId}
+                                getOptionLabel={(option) => {
+                                  return option?.name ?? ""
+                                }}
+                                getOptionSelected={(option, value) => {
+                                  return option.id === value
+                                }}
+                                onChange={(event, newValue) =>
+                                  handleSelect(newValue, 'brandId')
+                                }
+                                renderInput={(params) => (
+                                  <TextField
+                                    {...params}
+                                    className='mx-0'
+                                    variant='outlined'
+                                    label='Select Brand'
+                                    margin='normal'
+                                  />
+                                )}
+                              />
+                            </FormControl>
+                          </div>
+                          <div className='button-flex'>
+                            <Button
+                              variant='contained'
+                              color='primary'
+                              className='product-gallery-save-btn'
+                              type='submit'
+                              disabled={updating}
+                            >
+                              {updating ? <CircularProgress size={14} className='mr-10' /> : ''}
+                              {updating ? "Please wait..." : "Save"}
+                            </Button>
+                          </div>
+                        </form>
+                      )}
+                    </Formik>
+                    <Alert
+                      isOpen={isOpen}
+                      handleModal={handleDisplayModal}
+                      alertData={alertData}
+                      handleOK={handleDisplayModal}
+                    />
                   </Box>
                 </Item>
               </Grid>
@@ -372,5 +400,10 @@ const ProductDetails = ({ location, placeholder }) => {
     </div>
   )
 }
+
+const productSchema = yup.object().shape({
+  name: yup.string().required('Product Name is required'),
+  sku: yup.string().required('SKU is required'),
+});
 
 export default ProductDetails
