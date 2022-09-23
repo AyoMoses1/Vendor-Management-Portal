@@ -55,3 +55,122 @@
 /* .form-group button span{
     text-decoration: underline;
 } */
+
+
+
+
+
+
+
+
+
+
+.features-table thead tr th {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+    background: #F0F2F5;
+    font-size: 14px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+  }
+  
+  .features-table thead tr th .MuiButton-text {
+    font-weight: 500;
+    color: #000000;
+  }
+  
+  .features-table .MuiTableCell-root {
+    border-bottom: 4px solid #ffffff!important;
+  }
+  
+  .features-table tbody tr td {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+    background: #FAFBFD;
+    font-size: 12px ;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    color: #000000;
+  }
+  
+  .features-table .MuiTable-root {
+    margin-top: 10px;
+  }
+  
+  
+  
+
+
+
+
+  .tag-table thead tr th {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+    background: #F0F2F5;
+    font-size: 14px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+  }
+  
+  .tag-table thead tr th .MuiButton-text {
+    font-weight: 500;
+    color: #000000;
+  }
+  
+  .features-table .MuiTableCell-root {
+    border-bottom: 4px solid #ffffff!important;
+  }
+  
+  .tag-table tbody tr td {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+    background: #FAFBFD;
+    font-size: 12px ;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    color: #000000;
+  }
+  
+  .tag-table .MuiTable-root {
+    margin-top: 10px;
+  }
+
+
+
+
+
+
+
+
+
+  .brand-table thead tr th {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+    background: #F0F2F5;
+    font-size: 14px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+  }
+  
+  .brand-table thead tr th .MuiButton-text {
+    font-weight: 500;
+    color: #000000;
+  }
+  
+  .brand-table .MuiTableCell-root {
+    border-bottom: 4px solid #ffffff!important;
+  }
+  
+  .brand-table tbody tr td {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+    background: #FAFBFD;
+    font-size: 12px ;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    color: #000000;
+  }
+  
+  .brand-table .MuiTable-root {
+    margin-top: 10px;
+  }

@@ -1,11 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import { Breadcrumb } from 'matx'
 import MUIDataTable from 'mui-datatables'
-import { Grow, Icon, IconButton, TextField, Button } from '@material-ui/core'
+import { 
+  Grow, 
+  Icon, 
+  IconButton, 
+  TextField, 
+  Button 
+} from '@material-ui/core'
 import { Link } from 'react-router-dom'
 import http from '../../services/api'
 import './order-view.css'
-import { capitalize } from 'lodash'
+import { capitalize, formatDate } from 'utils'
+import { debounce } from "lodash";
 
 const AbadonedOrders = () => {
   const [isAlive, setIsAlive] = useState(true)
@@ -64,7 +71,7 @@ const AbadonedOrders = () => {
       label: 'Status',
       options: {
         filter: true,
-        setCellHeaderProps: () => { return { width: "75px" } },
+       
         customBodyRenderLite: (dataIndex) => {
           let order = orders[dataIndex]
           return (
@@ -125,7 +132,12 @@ const AbadonedOrders = () => {
           return (
             <div className='flex items-center'>
               <div className='ml-3'>
-                <span className='my-0 text-15'>{order?.createDate}</span>
+                <span className='my-0 text-15'>
+                  {formatDate(order?.createDate)?.dates}</span>
+                <br />
+                <small className="text-muted">
+                  {formatDate(order?.createDate)?.time}
+                </small>
               </div>
             </div>
           )

@@ -386,3 +386,10 @@ select.status-box{
   margin-top: 10px;
 }
 
+.ABADONED {
+  padding: 5px 8px;
+  width: fit-content;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500px;
+}

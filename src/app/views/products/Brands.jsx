@@ -5,6 +5,8 @@ import { Grow, Icon, IconButton, TextField, Button } from '@material-ui/core'
 import http from '../../services/api'
 import CreateNew from './CreateNew'
 import Loading from 'matx/components/MatxLoadable/Loading'
+import './common.css'
+import { capitalize } from 'lodash'
 
 const fields = ['name', 'description']
 
@@ -46,7 +48,8 @@ const Brands = () => {
           return (
             <div className='flex items-center'>
               <div className='ml-3'>
-                <h5 className='my-0 text-15'>{`${brand?.name}`}</h5>
+                <span className='my-0 text-15'>
+                  {capitalize(brand?.name)}</span>
               </div>
             </div>
           )
@@ -63,10 +66,10 @@ const Brands = () => {
           return (
             <div className='flex items-center'>
               <div className='ml-3'>
-                <h5 className='my-0 text-15'>
+                <span className='my-0 text-15'>
                   {' '}
                   {brand.description || '-----'}
-                </h5>
+                </span>
               </div>
             </div>
           )
@@ -81,8 +84,12 @@ const Brands = () => {
         customBodyRenderLite: (dataIndex) => {
           return (
             <div className='flex items-center'>
-              <div className='flex-grow'></div>
-              {/* <IconButton
+              <div className='flex-grow'>
+              <IconButton>
+                <Icon>delete</Icon>
+              </IconButton>
+              </div>
+              {/* { <IconButton
                 variant="contained"
                 color="primary"
                 onClick={() => {
@@ -90,11 +97,9 @@ const Brands = () => {
                 }}
               >
                 <Icon>edit</Icon>
-              </IconButton> */}
+              </IconButton> } */}
 
-              <IconButton>
-                <Icon>delete</Icon>
-              </IconButton>
+
             </div>
           )
         },
@@ -108,7 +113,7 @@ const Brands = () => {
         <Breadcrumb routeSegments={[{ name: 'Brands', path: '/brands' }]} />
       </div>
       <div className='overflow-auto'>
-        <div className='min-w-750'>
+        <div className='min-w-750 brand-table'>
           {loading ? (
             <Loading />
           ) : (
