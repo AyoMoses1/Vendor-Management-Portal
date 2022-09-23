@@ -381,7 +381,7 @@ const ProductDetails = ({ location, placeholder }) => {
             </Grid>
             <Grid item xs={12}>
               <Item className='no-shadow'>
-                <ProductShipping />
+                <ProductShipping product={values} />
               </Item>
             </Grid>
             <Grid item xs={12}>

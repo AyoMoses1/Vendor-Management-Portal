@@ -252,12 +252,8 @@ const ProductType = ({ product }) => {
 }
 
 const productSchema = yup.object().shape({
-    name: yup.string().required('Name is required'),
-    price: yup.number().required('Price is required'),
-    description: yup
-        .string()
-        .min(10)
-        .required('Please enter a description of atleast 10 chars long'),
+    productType: yup.string().required('Product type is required'),
+    price: yup.number().min(1).required('Sale Price is required'),
 });
 
 export default ProductType;
