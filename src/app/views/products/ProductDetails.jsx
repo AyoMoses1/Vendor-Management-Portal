@@ -376,7 +376,7 @@ const ProductDetails = ({ location, placeholder }) => {
           <Grid container spacing={2} item xs={4} style={{ display: 'initial' }}>
             <Grid item xs={12}>
               <Item className='no-shadow'>
-                <ProductStatus />
+                <ProductStatus product={values} />
               </Item>
             </Grid>
             <Grid item xs={12}>
@@ -386,12 +386,12 @@ const ProductDetails = ({ location, placeholder }) => {
             </Grid>
             <Grid item xs={12}>
               <Item className='no-shadow'>
-                <ProductGallery />
+                <ProductGallery product={values} />
               </Item>
             </Grid>
             <Grid item xs={12}>
               <Item className='no-shadow'>
-                <ProductCategory />
+                <ProductCategory product={values} />
               </Item>
             </Grid>
           </Grid>

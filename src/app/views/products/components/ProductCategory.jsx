@@ -5,7 +5,7 @@ import { Checkbox, Button, Grid } from '@material-ui/core';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
-const ProductCategory = () => {
+const ProductCategory = ({ product }) => {
     return <Box
         component="form"
         className='product-type-box'

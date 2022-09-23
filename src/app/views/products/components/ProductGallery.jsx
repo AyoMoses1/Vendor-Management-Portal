@@ -14,7 +14,7 @@ const files = [
     },
 ]
 
-const ProductGallery = () => {
+const ProductGallery = ({ product }) => {
     const [displayImage, setDisplayImage] = useState(0);
     // const [displayVideo, setDisplayVideo] = useState(0);
     const [images, setImages] = useState(files)
