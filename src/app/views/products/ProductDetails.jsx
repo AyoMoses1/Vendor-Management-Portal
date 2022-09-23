@@ -124,7 +124,6 @@ const ProductDetails = ({ location, placeholder }) => {
     getResult();
     getProductById(id).then(({ data }) => {
       setValues(data?.object);
-      setValues(data.object);
     });
   }, [id]);
 
@@ -146,6 +145,7 @@ const ProductDetails = ({ location, placeholder }) => {
       updateProduct({ ...payload })
         .then((res) => {
           if (res.status === 200) {
+            setValues(res?.data?.object);
             setUpdating(false)
             setAlertData({ success: true, text: "Product updated sucessfully", title: 'Product Updated' })
             handleDisplayModal();
@@ -364,7 +364,7 @@ const ProductDetails = ({ location, placeholder }) => {
             </Grid>
             <Grid item xs={12}>
               <Item className='no-shadow'>
-                <ProductType />
+                <ProductType product={values} />
               </Item>
             </Grid>
             <Grid item xs={12}>
