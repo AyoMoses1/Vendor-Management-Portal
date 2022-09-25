@@ -78,7 +78,6 @@ const ProductGallery = ({ product, invoke }) => {
                 handleDisplayModal();
             };
         }).catch(err => {
-            console.log(err);
             setLoading(false);
             setAlertData({ success: false, text: 'Unable to delete image', title: 'Failed' })
             handleDisplayModal();
@@ -116,7 +115,6 @@ const ProductGallery = ({ product, invoke }) => {
                 setLoading(false);
             };
         }).catch(err => {
-            console.log(err);
             setLoading(false);
         })
     };

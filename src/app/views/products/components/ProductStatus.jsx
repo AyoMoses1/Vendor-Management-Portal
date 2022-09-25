@@ -37,7 +37,6 @@ const ProductStatus = ({ product }) => {
     }
 
     useEffect(() => {
-        console.log(product)
         if (product) {
             setValues(product);
         }

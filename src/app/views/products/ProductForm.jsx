@@ -157,17 +157,13 @@ function NewProduct({ isNewProduct, id, Product, created, closeModal }) {
   }, [acceptedFiles, id, isNewProduct, shippingC]);
 
   const handleSelect = (newValue, fieldName) => {
-    console.log({ newValue, fieldName })
     if (Object.keys(state).some(key => key === fieldName)) {
       setState({ ...state, [fieldName]: newValue });
     }
 
     if (Object.keys(values).some(key => key === fieldName)) {
-      console.log(fieldName);
-      console.log(newValue);
       setValues({ ...values, [fieldName]: newValue });
     }
-    console.log(values);
 
   };
 
@@ -193,7 +189,7 @@ function NewProduct({ isNewProduct, id, Product, created, closeModal }) {
       tags: getIdsFromArray(values?.tags) || getIdsFromArray(state.tags),
       shippingClass: state.shippingClass,
       brandId: values?.brandId || state.brandId,
-      storeId: values?.storeId.id || state.storeId.id,
+      storeId: values?.storeId?.id || state.storeId?.id,
       productCategories: values?.productCategories,
       productType: values?.productType
     };

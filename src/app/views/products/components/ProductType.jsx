@@ -42,7 +42,6 @@ const ProductType = ({ product }) => {
     };
 
     useEffect(() => {
-        console.log(product)
         if (product) {
             setValues(product);
         }
@@ -204,7 +203,6 @@ const ProductType = ({ product }) => {
                                             helperText={touched.discountRate && errors.discountRate}
                                         />
                                     </div>
-                                    <div className='schedule'>Schedule</div>
                                 </Grid>
                             </Grid>
                         </Grid>

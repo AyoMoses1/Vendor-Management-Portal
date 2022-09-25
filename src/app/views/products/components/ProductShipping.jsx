@@ -50,13 +50,11 @@ const ProductShipping = ({ product }) => {
         setLoading(true);
         http.get('/afrimash/shipping-class').then((res) => {
             setShippingClasses(res?.data?.object);
-            console.log(res?.data?.object)
             setLoading(false);
         });
     };
 
     useEffect(() => {
-        console.log(product)
         if (product) {
             setValues({ ...product, shippingClass: product?.shippingClass?.id ?? '' });
             getAllShippingClasses();
@@ -66,7 +64,6 @@ const ProductShipping = ({ product }) => {
     const handleSubmit = (items, { setSubmitting }) => {
         const _shippingClass = shippingClasses.find(s => s?.id === items?.shippingClass)
         const payload = { ...values, ...items, shippingClass: _shippingClass };
-        console.log(payload);
         setUpdating(true)
         updateProduct({ ...payload })
             .then((res) => {

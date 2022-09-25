@@ -105,10 +105,6 @@ const ProductDetails = ({ location, placeholder }) => {
       set: setCategories,
     },
     {
-      url: `/afrimash/product-categories/search?`,
-      set: setCategories,
-    },
-    {
       url: `/afrimash/tags/`,
       set: setTags,
     },
@@ -128,13 +124,9 @@ const ProductDetails = ({ location, placeholder }) => {
   }, [id]);
 
   const handleSelect = (newValue, fieldName) => {
-    console.log({ newValue, fieldName })
     if (Object.keys(values).some(key => key === fieldName)) {
-      console.log(fieldName);
-      console.log(newValue);
       setValues({ ...values, [fieldName]: newValue });
     }
-    console.log(values);
 
   };
 
@@ -162,11 +154,9 @@ const ProductDetails = ({ location, placeholder }) => {
 
   const descOnChange = (value) => {
     setDescription(value);
-    console.log(value);
     var html = value;
     var div = document.createElement("div");
     div.innerHTML = html;
-    console.log(div.innerText);
     setPlaneDesc(div.innerText)
   }
 
@@ -175,7 +165,7 @@ const ProductDetails = ({ location, placeholder }) => {
       setValues(data?.object);
     });
   }
-  
+
   return (
     <div className='m-sm-30'>
       <div className='mb-sm-30'>
@@ -185,7 +175,7 @@ const ProductDetails = ({ location, placeholder }) => {
               <div className='page-title'>Edit Product</div>
             </Grid>
           </Grid>
-          <Grid container spacing={2} item xs={8}>
+          <Grid container spacing={2} item xs={8} style={{ height: '100%' }}>
             <Grid item xs={12}>
               <Grid item xs={12}>
                 <Item className='no-shadow'>
@@ -398,7 +388,7 @@ const ProductDetails = ({ location, placeholder }) => {
             </Grid>
             <Grid item xs={12}>
               <Item className='no-shadow'>
-                <ProductCategory product={values} />
+                <ProductCategory product={values} categories={categories} invoke={invoke} />
               </Item>
             </Grid>
           </Grid>

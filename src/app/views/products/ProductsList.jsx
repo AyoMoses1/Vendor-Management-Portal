@@ -36,14 +36,12 @@ const Products = () => {
   }
 
   const created = (id) => {
-    console.log(id);
     setCreatedId(id);
     setAlertData({ success: true, text: "Product created sucessfully", title: 'Product Created' })
     handleDisplayModal();
   }
 
   const handleOK = () => {
-    console.log(createdId);
     handleDisplayModal();
     history.push({
       pathname: '/product/details',
@@ -56,7 +54,6 @@ const Products = () => {
       const response = await getAllResults(page, size, query)
       setProducts(response?.content)
       setCount(response?.totalElements)
-      console.log(response, "tested unit")
     }
 
     fetchAllProducts()
