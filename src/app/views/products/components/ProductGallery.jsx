@@ -5,17 +5,20 @@ import { Button, CircularProgress, Grid } from '@material-ui/core';
 import { Lightbox } from "react-modal-image";
 import { updateProduct } from '../ProductService';
 import Alert from 'app/components/Alert';
+import http from '../../../services/api';
 
-const ProductGallery = ({ product }) => {
+const ProductGallery = ({ product, invoke }) => {
     const [displayImage, setDisplayImage] = useState(0);
     const [images, setImages] = useState([])
     const [image, setImage] = useState(null)
     const [preview, setPreview] = useState(null)
     const [boxState, setBoxState] = useState(false);
+    const [loading, setLoading] = React.useState(false);
     const [updating, setUpdating] = useState(false);
     const [alertData, setAlertData] = useState({ success: false, text: '', title: '' });
     const [isOpen, setIsOpen] = React.useState(false)
     const [values, setValues] = React.useState();
+    const hiddenFileInput = React.useRef(null);
 
     const handleDisplayModal = () => {
         setIsOpen(!isOpen)
@@ -58,11 +61,65 @@ const ProductGallery = ({ product }) => {
             .catch((err) => console.error(err));
     };
 
-    const deleteImage = (id) => {
+    const deleteImage = async (id) => {
         const newList = images?.filter(p => p?.id !== id)
         setImages(newList);
         setValues({ ...values, productImages: newList })
+        await http.delete_new(`/afrimash/products/image/${id}/remove`).then(res => {
+            if (res.status === 200) {
+                setLoading(false);
+                setAlertData({ success: true, text: "Product image removed sucessfully", title: 'Product Updated' })
+                handleDisplayModal();
+                invoke();
+            }
+            else {
+                setLoading(false);
+                setAlertData({ success: false, text: 'Unable to delete image', title: 'Failed' })
+                handleDisplayModal();
+            };
+        }).catch(err => {
+            console.log(err);
+            setLoading(false);
+            setAlertData({ success: false, text: 'Unable to delete image', title: 'Failed' })
+            handleDisplayModal();
+        })
     }
+
+    // const deleteImage = (id) => {
+    //     const newList = images?.filter(p => p?.id !== id)
+    //     setImages(newList);
+    //     setValues({ ...values, productImages: newList })
+    // }
+
+    const handleClick = event => {
+        if (!loading) {
+            hiddenFileInput.current.click();
+        }
+    };
+
+    const handleChange = async (event) => {
+        const fileUploaded = event.target.files[0];
+        setLoading(true);
+        const formData = new FormData();
+        formData.append('image-file', fileUploaded);
+        const config = {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        };
+        await http.post_new(`/afrimash/products/image?productId=${product?.id}`, formData, config).then(res => {
+            if (res.status === 200) {
+                setLoading(false);
+                invoke();
+            }
+            else {
+                setLoading(false);
+            };
+        }).catch(err => {
+            console.log(err);
+            setLoading(false);
+        })
+    };
 
     return <Box
         component="form"
@@ -115,14 +172,19 @@ const ProductGallery = ({ product }) => {
                                 }
                             </div>
                         </Grid>)}
-                        <Grid item lg={4} md={4} sm={4} xs={4}>
+                        <Grid item lg={4} md={4} sm={4} xs={4} onClick={handleClick}>
                             <div className='product-gallery-image-blank'>
                                 <div className='gallery-add'>
-                                    <img src='/assets/icon/gallery-add.svg' />
-                                    <div>Add Image</div>
+                                    {loading ? <CircularProgress size={24} /> : <><img src='/assets/icon/gallery-add.svg' /> <div>Add Image</div></>}
                                 </div>
                             </div>
                         </Grid>
+                        <input
+                            type="file"
+                            ref={hiddenFileInput}
+                            onChange={handleChange}
+                            style={{ display: 'none' }}
+                        />
                     </Grid>
                 </div>
             </Grid>

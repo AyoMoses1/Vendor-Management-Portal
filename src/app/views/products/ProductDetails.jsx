@@ -169,6 +169,13 @@ const ProductDetails = ({ location, placeholder }) => {
     console.log(div.innerText);
     setPlaneDesc(div.innerText)
   }
+
+  const invoke = () => {
+    getProductById(id).then(({ data }) => {
+      setValues(data?.object);
+    });
+  }
+  
   return (
     <div className='m-sm-30'>
       <div className='mb-sm-30'>
@@ -386,7 +393,7 @@ const ProductDetails = ({ location, placeholder }) => {
             </Grid>
             <Grid item xs={12}>
               <Item className='no-shadow'>
-                <ProductGallery product={values} />
+                <ProductGallery product={values} invoke={invoke} />
               </Item>
             </Grid>
             <Grid item xs={12}>
