@@ -62,9 +62,9 @@ const ProductGallery = ({ product, invoke }) => {
     };
 
     const deleteImage = async (id) => {
-        const newList = images?.filter(p => p?.id !== id)
-        setImages(newList);
-        setValues({ ...values, productImages: newList })
+        // const newList = images?.filter(p => p?.id !== id)
+        // setImages(newList);
+        // setValues({ ...values, productImages: newList })
         await http.delete_new(`/afrimash/products/image/${id}/remove`).then(res => {
             if (res.status === 200) {
                 setLoading(false);

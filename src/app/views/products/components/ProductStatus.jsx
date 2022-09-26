@@ -7,7 +7,7 @@ import * as yup from 'yup';
 import { updateProduct } from '../ProductService';
 import Alert from 'app/components/Alert';
 
-const statuses = ['APPROVED'];
+const statuses = ['APPROVED', 'DRAFT', 'PUBLISHED', 'ASSIGNED', 'PRIVATE', 'PENDING'];
 
 const ProductStatus = ({ product }) => {
     const [updating, setUpdating] = useState(false);
