@@ -4,7 +4,7 @@ const Products = MatxLoadable({
   loader: () => import("./ProductsList"),
 });
 const ProductDetails = MatxLoadable({
-  loader: () => import("./ProductDetailsTwo"),
+  loader: () => import("./ProductDetails"),
 });
 const NewProduct = MatxLoadable({
   loader: () => import("./NewProduct"),
