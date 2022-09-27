@@ -65,6 +65,9 @@ export const addProductCategory = (product) => {
 export const updateProductCategory = (product) => {
   return http.put(`/afrimash/product-catergories/`, product)
 }
+export const patchProductCategory = (product) => {
+  return http.patch(`/afrimash/product-categories/`, product)
+}
 
 export const getData = (url, setData, setAlert, setSeverity) => {
   http.get(url).then(({ data }) => {

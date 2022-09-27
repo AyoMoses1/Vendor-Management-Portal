@@ -9,6 +9,7 @@ import CategoryImage from './components/CategoryImage'
 import CategorySelect from './components/CategorySelect';
 import http from '../../services/api';
 import "./common.css"
+import { getData } from './ProductService';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -22,15 +23,16 @@ const CategoryUpdate = ({ location, placeholder }) => {
   const [loading, setLoading] = React.useState(false)
   const [category, setCategory] = React.useState(null);
   const [subCategories, setSubCategories] = React.useState(null);
+  const [categories, setCategories] = React.useState([]);
+  const [alert, setAlert] = React.useState('');
+  const [severity, setSeverity] = React.useState('');
   const State = location.state
   const { id } = State
-  console.log(id);
   const getCategory = () => {
     setLoading(true);
     http.get(`/afrimash/product-categories/${id}`).then((response) => {
       setLoading(false);
       let { data } = response;
-      console.log(data);
       setCategory(data?.object);
       setSubCategories(data?.object?.subCategories);
     }).catch(err => {
@@ -38,9 +40,23 @@ const CategoryUpdate = ({ location, placeholder }) => {
     });
   }
 
+  const urls = [
+    {
+      url: `/afrimash/product-categories/search?`,
+      set: setCategories,
+    },
+  ];
+
+  const getResult = () => {
+    urls.map((val) => getData(val.url, val.set, setAlert, setSeverity));
+  };
+
   useEffect(() => {
-    getCategory()
-  }, [])
+    if (id) {
+      getCategory()
+      getResult();
+    }
+  }, [id])
 
   return (
     <div className='m-sm-30'>
@@ -52,16 +68,16 @@ const CategoryUpdate = ({ location, placeholder }) => {
             </Grid>
           </Grid>
 
-          <Grid container spacing={2} item xs={8}>
+          <Grid container spacing={2} item xs={8} style={{display: 'block'}}>
             <Grid item xs={12}>
               <Item className='no-shadow'>
-                <CategoryEdit />
+                <CategoryEdit catergory={category} />
               </Item>
             </Grid>
             <Grid item xs={12}>
               <Grid item xs={12}>
                 <Item className='no-shadow'>
-                  <CategorySelect />
+                  <CategorySelect category={category} categories={categories} />
                 </Item>
               </Grid>
             </Grid>
