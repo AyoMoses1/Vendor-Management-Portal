@@ -301,9 +301,7 @@ select.status-box{
 .filter-area{
   margin-bottom: 40px !important;
 }
-.active{
-  color: red;
-}
+
 
 .all-order-table thead tr th {
   padding-left: 24px !important;
@@ -343,6 +341,7 @@ select.status-box{
   font-size: 12px;
 }
 
+<<<<<<< HEAD
 .active{
   color: red !important;
 }
@@ -392,4 +391,36 @@ select.status-box{
   border-radius: 6px;
   font-size: 12px;
   font-weight: 500px;
+=======
+.stats-nav .active{
+  font-size: 12x;
+  font-weight: 600;
+  text-decoration: underline;
+  color: #000 ;
+}
+
+.stats-nav button{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #EA8C8C33;
+  border: none;
+  padding: 2px 10px;
+  border-radius: 3px;
+  color:  rgba(235, 87, 87, 0.4);
+  font-size: 6px;
+  cursor: pointer;
+}
+
+.divider{
+  width: 1px;
+  height: 20px;
+  background: #828282;
+  margin-right: 10px;
+}
+
+.disabled{
+  background: rgba(155, 155, 155, 0.15) !important;
+  color: #BDBDBD !important;
+>>>>>>> 635a4a4d179835d324272c32bb425fafae09fdc3
 }

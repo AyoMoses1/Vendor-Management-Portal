@@ -33,7 +33,7 @@ const usestyles = makeStyles(({ palette, ...theme }) => ({
 
 const ProductDetails = ({ location, placeholder }) => {
   const State = location.state
-  const { id } = State
+  const { id } = State;
   const [selectedImage, setSelectedImage] = useState('')
   const classes = usestyles()
   const [product, setProduct] = useState([])

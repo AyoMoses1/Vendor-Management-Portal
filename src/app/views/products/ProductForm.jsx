@@ -55,13 +55,14 @@ const usestyles = makeStyles(({ palette, ...theme }) => ({
 
 const productTypes = ['EXTERNAL', 'GROUPED', 'SIMPLE', 'VARIANT'];
 
-function NewProduct({ isNewProduct, id, Product }) {
+function NewProduct({ isNewProduct, id, Product, created, closeModal }) {
   const initialState = {
-    brandId: null,
+    brandId: {},
     rating: null,
     translatedName: null,
     productCode: null,
-    shippingClass: null
+    shippingClass: {},
+    storeId: {}
   };
   const initialValues = {
     productType: '',
@@ -75,7 +76,6 @@ function NewProduct({ isNewProduct, id, Product }) {
   };
 
   const history = useHistory();
-
   const classes = usestyles();
   const [state, setState] = useState(initialState);
   const [values, setValues] = useState(initialValues);
@@ -88,24 +88,19 @@ function NewProduct({ isNewProduct, id, Product }) {
   const [severity, setSeverity] = useState('');
   const [shippinClasses, setShippingClasses] = React.useState([]);
   const [loading, setLoading] = useState(false);
-  const [category, setCategory] = useState([])
-  const [shippingC, setShippingC]= useState("")
-
+  const [shippingC, setShippingC] = useState("")
   const [alertData, setAlertData] = useState({ success: false, text: '', title: '' });
   const [isOpen, setIsOpen] = React.useState(false)
-
-
 
   const handleDisplayModal = () => {
     setIsOpen(!isOpen)
   }
-
   // const [product, setProduct] = useState(Product);
 
   const getAllShippingClasses = () => {
     setLoading(true);
     http.get('/afrimash/shipping-class').then((res) => {
-      setShippingClasses(res?.data.object);
+      setShippingClasses(res?.data?.object);
       setLoading(false);
     });
   };
@@ -133,7 +128,7 @@ function NewProduct({ isNewProduct, id, Product }) {
     },
   ];
 
-  const onDrop = useCallback((acceptedFiles) => {}, []);
+  const onDrop = useCallback((acceptedFiles) => { }, []);
 
   const { getRootProps, getInputProps, isDragActive, acceptedFiles } =
     useDropzone({ accept: 'image/*', onDrop });
@@ -155,16 +150,25 @@ function NewProduct({ isNewProduct, id, Product }) {
       getProductById(id).then(({ data }) => {
         setState(data.object);
         setValues(data.object);
-        console.log(data.object, "test shipping class")
         setShippingC(data.object.status)
       });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [acceptedFiles, id, isNewProduct, shippingC]);
 
   const handleSelect = (newValue, fieldName) => {
-    const { id } = newValue;
-    setState({ ...state, [fieldName]: id });
+    console.log({ newValue, fieldName })
+    if (Object.keys(state).some(key => key === fieldName)) {
+      setState({ ...state, [fieldName]: newValue });
+    }
+
+    if (Object.keys(values).some(key => key === fieldName)) {
+      console.log(fieldName);
+      console.log(newValue);
+      setValues({ ...values, [fieldName]: newValue });
+    }
+    console.log(values);
+
   };
 
 
@@ -178,14 +182,16 @@ function NewProduct({ isNewProduct, id, Product }) {
       sku: values?.sku || state.sku,
       translatedName: state.translatedName,
       productCode: state.productCode,
-      brandId: state.brandId,
       buyPrice: state.buyPrice,
       rating: state.rating,
       price: values?.price || state.price,
       discountRate: values?.discountRate || state.discountRate,
-      shippingClass: state.shippingClass
+      tags: values?.tags || state.tags,
+      shippingClass: state.shippingClass,
+      brandId: values?.brandId || state.brandId,
+      storeId: values?.storeId || state.storeId,
+      productCategories: values?.productCategories
     };
-    delete payload.shippingClass;
     data.append('product', JSON.stringify(payload));
 
     imageList.forEach((file, imageFile) => {
@@ -198,37 +204,35 @@ function NewProduct({ isNewProduct, id, Product }) {
           if (res.status === 200) {
             setAlertData({ success: true, text: "Product created sucessfully", title: 'Product Created' })
             handleDisplayModal();
-            // history.push('/products');
           }
-          else{
+          else {
             setAlertData({ success: false, text: 'Invalid details provided', title: 'Unable to create product' })
             handleDisplayModal();
-            // return 
           };
         })
         .catch((err) => console.error(err));
-    }else {
+    } else {
       createProduct(data)
-      .then((res) => {
-        if (res.status === 200) {
-          setAlertData({ success: true, text: "Product created sucessfully", title: 'Product Created' })
-          handleDisplayModal();
-          // history.push('/products')
-        }
-        else {
-          setAlertData({ success: false, text: 'Invalid details provided', title: 'Unable to create product' })
-          handleDisplayModal();
-          // return 
-        };
-      })
-      .then((err) => console.error(err));
+        .then((res) => {
+          if (res.status === 200) {
+            created(res?.data?.object?.id)
+            closeModal();
+          }
+          else {
+            setAlertData({ success: false, text: 'Invalid details provided', title: 'Unable to create product' })
+            handleDisplayModal();
+          };
+        })
+        .then((err) => console.error(err));
     }
-   
+
   };
+
 
   return (
     <div className='m-sm-30'>
       <Notification alert={alert} severity={severity || ''} />
+      <h3>Add Product</h3>
       <Formik
         initialValues={values}
         onSubmit={handleSubmit}
@@ -244,269 +248,261 @@ function NewProduct({ isNewProduct, id, Product }) {
           handleSubmit,
           setFieldValue,
         }) => (
-          <form className='px-4' onSubmit={handleSubmit}>
-            <Grid container spacing={3}>
-              <Grid item sm={6} xs={12}>
-                <TextField
-                  className='mb-4'
-                  name='productType'
-                  label='Select Product Type'
-                  variant='outlined'
-                  fullWidth
-                  select
-                  margin='normal'
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.productType || ''}
-                  error={Boolean(touched.productType && errors.productType)}
-                  helperText={touched.productType && errors.productType}
-                >
-                  {productTypes.sort().map((productType) => (
-                    <MenuItem value={productType} key={productType}>
-                      {productType}
-                    </MenuItem>
-                  ))}
-                </TextField>
-                <TextField
-                  className='mb-4'
-                  name='price'
-                  label='Product Price(₦)'
-                  variant='outlined'
-                  margin='normal'
-                  fullWidth
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.price || ''}
-                  error={Boolean(touched.price && errors.price)}
-                  helperText={touched.price && errors.price}
-                />
-                <TextField
-                  className='mb-4'
-                  name='discountRate'
-                  label='Discount Rate (%)'
-                  variant='outlined'
-                  margin='normal'
-                  fullWidth
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.discountRate || ''}
-                  helperText={touched.discountRate && errors.discountRate}
-                />
+          <form onSubmit={handleSubmit}>
+            <TextField
+              className='mb-4'
+              name='productType'
+              label='Select Product Type'
+              variant='outlined'
+              fullWidth
+              select
+              margin='normal'
+              onBlur={handleBlur}
+              onChange={handleChange}
+              value={values.productType || ''}
+              error={Boolean(touched.productType && errors.productType)}
+              helperText={touched.productType && errors.productType}
+            >
+              {productTypes.sort().map((productType) => (
+                <MenuItem value={productType} key={productType}>
+                  {productType}
+                </MenuItem>
+              ))}
+            </TextField>
+            <TextField
+              className='mb-4'
+              name='price'
+              label='Product Price(₦)'
+              variant='outlined'
+              margin='normal'
+              fullWidth
+              onBlur={handleBlur}
+              onChange={handleChange}
+              value={values.price || ''}
+              error={Boolean(touched.price && errors.price)}
+              helperText={touched.price && errors.price}
+            />
+            <TextField
+              className='mb-4'
+              name='discountRate'
+              label='Discount Rate (%)'
+              variant='outlined'
+              margin='normal'
+              fullWidth
+              onBlur={handleBlur}
+              onChange={handleChange}
+              value={values.discountRate || ''}
+              helperText={touched.discountRate && errors.discountRate}
+            />
 
-                <div
-                  className={clsx({
-                    [classes.dropZone]: true,
-                    'bg-light-gray': !isDragActive,
-                    'bg-gray': isDragActive,
-                  })}
-                  {...getRootProps()}
+            <div
+              className={clsx({
+                [classes.dropZone]: true,
+                'bg-light-gray': !isDragActive,
+                'bg-gray': isDragActive,
+              })}
+              {...getRootProps()}
+            >
+              {/* Comment */}
+              <input {...getInputProps()} />
+              <div
+                className='flex-column items-center'
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                }}
+              >
+                <Icon
+                  className='text-muted text-48'
+                  style={{ fontSize: '48px' }}
                 >
-                  <input {...getInputProps()} />
-                  <div
-                    className='flex-column items-center'
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                    }}
-                  >
-                    <Icon
-                      className='text-muted text-48'
-                      style={{ fontSize: '48px' }}
-                    >
-                      publish
-                    </Icon>
-                    {imageList.length ? (
-                      <span>{imageList.length} images were selected</span>
-                    ) : (
-                      <span>Drop product images</span>
-                    )}
-                  </div>
-                </div>
-              </Grid>
-              <Grid item sm={6} xs={12}>
-                <TextField
-                  className='mb-4'
-                  name='name'
-                  label='Product Name'
-                  variant='outlined'
-                  margin='normal'
-                  fullWidth
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.name || ''}
-                  error={Boolean(touched.name && errors.name)}
-                  helperText={touched.name && errors.name}
-                />
-                <TextField
-                  className='mb-4'
-                  name='sku'
-                  label='SKU'
-                  variant='outlined'
-                  margin='normal'
-                  fullWidth
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.sku || ''}
-                  error={Boolean(touched.sku && errors.sku)}
-                  helperText={touched.sku && errors.sku}
-                />
-                <TextField
-                  className='mb-4'
-                  name='description'
-                  label='Description'
-                  variant='outlined'
-                  margin='normal'
-                  fullWidth
-                  multiline
-                  // rows={8}
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.description || ''}
-                  error={Boolean(touched.description && errors.description)}
-                  helperText={touched.description && errors.description}
-                />
+                  publish
+                </Icon>
+                {imageList.length ? (
+                  <span>{imageList.length} images were selected</span>
+                ) : (
+                  <span>Drop product images</span>
+                )}
+              </div>
+            </div>
 
-                <Autocomplete
-                  id='storeId'
-                  name='storeId'
-                  options={stores}
-                  getOptionLabel={(option) => option.name}
-                  getOptionSelected={(option, value) => option.id === value.id}
-                  onChange={(event, newValue) =>
-                    handleSelect(newValue, 'storeId')
-                  }
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label='Select Store'
-                      variant='outlined'
-                      margin='normal'
-                    />
-                  )}
-                />
+
+            <TextField
+              className='mb-4'
+              name='name'
+              label='Product Name'
+              variant='outlined'
+              margin='normal'
+              fullWidth
+              onBlur={handleBlur}
+              onChange={handleChange}
+              value={values.name || ''}
+              error={Boolean(touched.name && errors.name)}
+              helperText={touched.name && errors.name}
+            />
+            <TextField
+              className='mb-4'
+              name='sku'
+              label='SKU'
+              variant='outlined'
+              margin='normal'
+              fullWidth
+              onBlur={handleBlur}
+              onChange={handleChange}
+              value={values.sku || ''}
+              error={Boolean(touched.sku && errors.sku)}
+              helperText={touched.sku && errors.sku}
+            />
+            <TextField
+              className='mb-4'
+              name='description'
+              label='Description'
+              variant='outlined'
+              margin='normal'
+              fullWidth
+              multiline
+              // rows={8}
+              onBlur={handleBlur}
+              onChange={handleChange}
+              value={values.description || ''}
+              error={Boolean(touched.description && errors.description)}
+              helperText={touched.description && errors.description}
+            />
+
+            <Autocomplete
+              id='storeId'
+              name='storeId'
+              value={state.storeId}
+              options={stores}
+              getOptionLabel={(option) => option?.name ?? ""}
+              getOptionSelected={(option, value) => option.id === value.id}
+              onChange={(event, newValue) =>
+                handleSelect(newValue, 'storeId')
+              }
+              renderInput={(params) => (
                 <TextField
-                  className='mb-4'
-                  name='shippingClass'
+                  {...params}
+                  label='Select Store'
+                  variant='outlined'
+                  margin='normal'
+                />
+              )}
+            />
+            <Autocomplete
+              id='shippingClass'
+              name='shippingClass'
+              options={shippinClasses}
+              value={state.shippingClass}
+              getOptionLabel={(option) => option?.name ?? ""}
+              getOptionSelected={(option, value) => option.id === value.id}
+              onChange={(event, newValue) =>
+                handleSelect(newValue, 'shippingClass')
+              }
+              renderInput={(params) => (
+                <TextField
+                  {...params}
                   label='Select Shipping Class'
                   variant='outlined'
-                  value = {values.status}
-                  fullWidth
-                  select
                   margin='normal'
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  error={Boolean(touched.productType && errors.productType)}
-                  helperText={touched.productType && errors.productType}
-                >
-                  {productTypes.sort().map((productType) => (
-                    <MenuItem value={productType} key={productType}>
-                      {productType}
-                    </MenuItem>
-                  ))}
-                </TextField>
-                <Autocomplete
-                  id='shippingClass'
-                  name='shippingClass'
-                  options={shippinClasses}
-                  value={values.shippingClass?.name}
-                  getOptionLabel={(option) => option.name}
-                  getOptionSelected={(option, value) => option.id === value.id}
-                  onChange={(event, newValue) =>
-                    handleSelect(newValue, 'shippingClass')
-                  }
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label='Select Shipping Class'
-                      variant='outlined'
-                      margin='normal'
-                    />
-                  )}
                 />
+              )}
+            />
 
-                <Autocomplete
-                  multiple
-                  id='tags'
-                  options={tags}
-                  getOptionLabel={(option) => option.name}
-                  getOptionSelected={(option, value) => option.id === value.id}
-                  onChange={(event, newValue) => {
-                    setValues({ ...values, tags: newValue });
-                  }}
-                  renderOption={(option, { selected }) => (
-                    <React.Fragment>
-                      <Checkbox
-                        icon={icon}
-                        checkedIcon={checkedIcon}
-                        style={{ marginRight: 8 }}
-                        checked={selected}
-                      />
-                      {option.name}
-                    </React.Fragment>
-                  )}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      variant='outlined'
-                      label='Select Tags'
-                      placeholder='Tag'
-                      fullWidth
-                      margin='normal'
-                    />
-                  )}
+            <Autocomplete
+              multiple
+              id='tags'
+              name='tags'
+              options={tags}
+              value={values.tags}
+              getOptionLabel={(option) => option?.name ?? ""}
+              getOptionSelected={(option, value) => option.id === value.id}
+              onChange={(event, newValue) => {
+                setValues({ ...values, tags: newValue });
+              }}
+              renderOption={(option, { selected }) => (
+                <React.Fragment>
+                  <Checkbox
+                    icon={icon}
+                    checkedIcon={checkedIcon}
+                    style={{ marginRight: 8 }}
+                    checked={selected}
+                  />
+                  {option.name}
+                </React.Fragment>
+              )}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  variant='outlined'
+                  label='Select Tags'
+                  placeholder='Tag'
+                  fullWidth
+                  margin='normal'
                 />
+              )}
+            />
 
-                <Autocomplete
-                  id='brands'
-                  options={brands}
-                  getOptionLabel={(option) => option.name || ''}
-                  getOptionSelected={(option, value) => option.id === value.id}
-                  onChange={(event, newValue) =>
-                    handleSelect(newValue, 'brandId')
-                  }
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      variant='outlined'
-                      label='Select Brand'
-                      margin='normal'
-                    />
-                  )}
+            <Autocomplete
+              id='brands'
+              options={brands.filter(item => item?.name)}
+              name='brands'
+              value={state.brandId}
+              getOptionLabel={(option) => {
+                return option?.name ?? ""
+              }}
+              getOptionSelected={(option, value) => {
+                return option.id === value
+              }}
+              onChange={(event, newValue) =>
+                handleSelect(newValue, 'brandId')
+              }
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  variant='outlined'
+                  label='Select Brand'
+                  margin='normal'
                 />
-                <Autocomplete
-                  multiple
-                  id='categories'
-                  options={categories}
-                  onChange={(event, newValue) => {
-                    setValues({...values, productCategories:newValue})
-                  }}
-                  getOptionLabel={(option) => option.name}
-                  getOptionSelected={(option, value) => option.id === value.id}
-                  renderOption={(option, { selected }) => (
-                    <React.Fragment>
-                      <Checkbox
-                        icon={icon}
-                        checkedIcon={checkedIcon}
-                        style={{ marginRight: 8 }}
-                        checked={selected}
-                      />
-                      {option.name}
-                    </React.Fragment>
-                  )}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      variant='outlined'
-                      label='Select Categories'
-                      placeholder='Category'
-                      fullWidth
-                      margin='normal'
-                    />
-                  )}
+              )}
+            />
+            <Autocomplete
+              multiple
+              id='categories'
+              name='categories'
+              options={categories}
+              value={values.productCategories}
+              onChange={(event, newValue) => {
+                setValues({ ...values, productCategories: newValue })
+              }}
+              getOptionLabel={
+                (option) => {
+                  return option?.name ?? ""
+                }
+              }
+              getOptionSelected={(option, value) => option.id === value.id}
+              renderOption={(option, { selected }) => (
+                <React.Fragment>
+                  <Checkbox
+                    icon={icon}
+                    checkedIcon={checkedIcon}
+                    style={{ marginRight: 8 }}
+                    checked={selected}
+                  />
+                  {option.name}
+                </React.Fragment>
+              )}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  variant='outlined'
+                  label='Select Categories'
+                  placeholder='Category'
+                  fullWidth
+                  margin='normal'
                 />
-              </Grid>
-            </Grid>
+              )}
+            />
             <Button
               className='mb-4 px-12'
               variant='contained'
@@ -523,7 +519,7 @@ function NewProduct({ isNewProduct, id, Product }) {
         handleModal={handleDisplayModal}
         alertData={alertData}
         handleOK={() => {
-          history.push('/products')
+          history.push('/products/details')
         }}
       />
     </div>

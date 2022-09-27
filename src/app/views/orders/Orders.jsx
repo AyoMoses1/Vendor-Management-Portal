@@ -36,6 +36,8 @@ const Orders = (props) => {
   const [value, setValue] = React.useState(0);
   const [query, setQuery] = useState('');
   const [active, setActive] = useState('')
+  const [disabled, setDisabled] = useState(true)
+
 
   const fetchOrderStatus = async (event, newValue) => {
     setValue(newValue);
@@ -91,6 +93,7 @@ const Orders = (props) => {
 
   const handleActiveLink = async (orderStats, e) => {
     setLoading(true);
+    setDisabled(false)
     const _source = source === "ALL" ? "" : source;
 
     const response = await getAllInvoice(setLoading, page, size, _source, query);
@@ -105,6 +108,13 @@ const Orders = (props) => {
       })
     );
   };
+
+  const handleClear = async() => {
+    console.log("status cleared")
+    setActive('')
+    setDisabled(true)
+    refresh()
+  }
 
   const handleTitle = (string) => {
     string.includes("_")
@@ -389,6 +399,7 @@ const Orders = (props) => {
                         ))}
                       </TextField>
                     </div>
+                    <div>
                     <ul className="stats-nav">
                       <span>STATUS:</span>
                       {orderStatus.map((stats) => {
@@ -405,7 +416,10 @@ const Orders = (props) => {
                           </li>
                         );
                       })}
+                      <div className="divider"></div>
+                      <button disabled={disabled ? true: false} onClick={handleClear} className={disabled ? "disabled": ""}>Clear</button>
                     </ul>
+                    </div>
                   </div>
                 </div>
               }

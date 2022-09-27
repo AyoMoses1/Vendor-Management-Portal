@@ -243,7 +243,7 @@ const DOCPickupCenters = () => {
         />
       </div>
       <div className='overflow-auto'>
-        <div className='min-w-750'>
+        <div className='min-w-750 all-centres-table'>
           {(loading || isLoading) && <CircularProgress size={20} />}
           {severity === 'error' && (
             <Notification alert={alert} severity={severity || ''} />
