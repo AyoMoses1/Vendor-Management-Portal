@@ -70,16 +70,20 @@ const ProductShipping = ({ product }) => {
                 if (res.status === 200) {
                     setValues({ ...res?.data?.object, shippingClass: res?.data?.object?.shippingClass?.id ?? '' });
                     setUpdating(false)
-                    setAlertData({ success: true, text: "Product updated sucessfully", title: 'Product Updated' })
+                    setAlertData({ success: true, text: "Product shipping updated sucessfully", title: 'Product Shipping Updated' })
                     handleDisplayModal();
                 }
                 else {
                     setUpdating(false)
-                    setAlertData({ success: false, text: 'Invalid details provided', title: 'Unable to update product' })
+                    setAlertData({ success: false, text: 'Invalid details provided', title: 'Unable to update product shipping' })
                     handleDisplayModal();
                 };
             })
-            .catch((err) => console.error(err));
+            .catch((err) => {
+                setUpdating(false)
+                setAlertData({ success: false, text: 'Invalid details provided', title: 'Unable to update product shipping' })
+                handleDisplayModal();
+            });
     };
 
     return <Box

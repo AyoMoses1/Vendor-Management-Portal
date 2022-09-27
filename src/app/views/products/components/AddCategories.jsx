@@ -74,65 +74,14 @@ const AddCategories = ({
         setLoading(true);
         http.patch(`/afrimash/products/${id}/associate-categories`, tempState).then((response) => {
             setLoading(false);
+            setValues(initialValues);
             handleClose();
             refresh();
         }).catch(err => {
             setLoading(false);
+            setAlertData({ success: false, text: 'Invalid details provided', title: 'Unable add categories' })
+            handleModal();
         });
-        // const payload = { ...state, ...values };
-        // const data = new FormData();
-        // const updateData = {
-        //     id: state.id,
-        //     name: values?.name || state.name,
-        //     description: values?.description || state.description,
-        //     sku: values?.sku || state.sku,
-        //     translatedName: state.translatedName,
-        //     productCode: state.productCode,
-        //     buyPrice: state.buyPrice,
-        //     rating: state.rating,
-        //     price: values?.price || state.price,
-        //     discountRate: values?.discountRate || state.discountRate,
-        //     tags: getIdsFromArray(values?.tags) || getIdsFromArray(state.tags),
-        //     shippingClass: state.shippingClass,
-        //     brandId: values?.brandId || state.brandId,
-        //     storeId: values?.storeId?.id || state.storeId?.id,
-        //     productCategories: values?.productCategories,
-        //     productType: values?.productType
-        // };
-        // data.append('product', JSON.stringify(payload));
-
-        // imageList.forEach((file, imageFile) => {
-        //     data.append('imageFile', file);
-        // });
-
-        // if (!isNewProduct) {
-        //     updateProduct({ ...Product, ...updateData })
-        //         .then((res) => {
-        //             if (res.status === 200) {
-        //                 setAlertData({ success: true, text: "Product created sucessfully", title: 'Product Created' })
-        //                 handleDisplayModal();
-        //             }
-        //             else {
-        //                 setAlertData({ success: false, text: 'Invalid details provided', title: 'Unable to create product' })
-        //                 handleDisplayModal();
-        //             };
-        //         })
-        //         .catch((err) => console.error(err));
-        // } else {
-        //     createProduct(data)
-        //         .then((res) => {
-        //             if (res.status === 200) {
-        //                 created(res?.data?.object?.id)
-        //                 closeModal();
-        //             }
-        //             else {
-        //                 setAlertData({ success: false, text: 'Invalid details provided', title: 'Unable to create product' })
-        //                 handleDisplayModal();
-        //             };
-        //         })
-        //         .then((err) => console.error(err));
-        // }
-
     };
 
     const body = (

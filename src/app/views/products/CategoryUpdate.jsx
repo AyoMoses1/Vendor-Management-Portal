@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { Grid } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
 import './product-details.css'
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
@@ -8,6 +7,7 @@ import CategoryEdit from './components/CategoryEdit'
 import CategoryStatus from './components/CategoryStatus'
 import CategoryImage from './components/CategoryImage'
 import CategorySelect from './components/CategorySelect';
+import http from '../../services/api';
 import "./common.css"
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -18,10 +18,25 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const CategoryDetails = ({ location, placeholder }) => {
+const CategoryUpdate = ({ location, placeholder }) => {
+  const [loading, setLoading] = React.useState(false)
+  const [category, setCategory] = React.useState(null);
+  const [subCategories, setSubCategories] = React.useState(null);
   const State = location.state
   const { id } = State
-  const getCategory = () => { }
+  console.log(id);
+  const getCategory = () => {
+    setLoading(true);
+    http.get(`/afrimash/product-categories/${id}`).then((response) => {
+      setLoading(false);
+      let { data } = response;
+      console.log(data);
+      setCategory(data?.object);
+      setSubCategories(data?.object?.subCategories);
+    }).catch(err => {
+      setLoading(false);
+    });
+  }
 
   useEffect(() => {
     getCategory()
@@ -69,4 +84,4 @@ const CategoryDetails = ({ location, placeholder }) => {
   )
 }
 
-export default CategoryDetails
+export default CategoryUpdate
