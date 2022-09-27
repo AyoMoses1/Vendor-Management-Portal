@@ -84,6 +84,7 @@ function NewProduct({ isNewProduct, id, Product, created, closeModal }) {
   const [stores, setStores] = useState([]);
   const [categories, setCategories] = useState([]);
   const [imageList, setImageList] = useState([]);
+
   const [alert, setAlert] = useState('');
   const [severity, setSeverity] = useState('');
   const [shippinClasses, setShippingClasses] = React.useState([]);
@@ -148,7 +149,7 @@ function NewProduct({ isNewProduct, id, Product, created, closeModal }) {
     setImageList(acceptedFiles);
     if (!isNewProduct) {
       getProductById(id).then(({ data }) => {
-        setState(data.object);
+        setState(data?.object);
         setValues(data.object);
         setShippingC(data.object.status)
       });
@@ -171,7 +172,11 @@ function NewProduct({ isNewProduct, id, Product, created, closeModal }) {
 
   };
 
-
+  const getIdsFromArray = (arrOfObj) => {
+      return arrOfObj.map(item => {
+        return {id : parseInt(item?.id)}
+      })
+  }
   const handleSubmit = (values, { setSubmitting }) => {
     const payload = { ...state, ...values };
     const data = new FormData();
@@ -186,11 +191,12 @@ function NewProduct({ isNewProduct, id, Product, created, closeModal }) {
       rating: state.rating,
       price: values?.price || state.price,
       discountRate: values?.discountRate || state.discountRate,
-      tags: values?.tags || state.tags,
+      tags: getIdsFromArray(values?.tags) || getIdsFromArray(state.tags),
       shippingClass: state.shippingClass,
-      brandId: values?.brandId || state.brandId,
-      storeId: values?.storeId || state.storeId,
-      productCategories: values?.productCategories
+      brandId: values?.brandId || state?.brandId,
+      storeId: values?.storeId?.id || state.storeId?.id,
+      productCategories: values?.productCategories,
+      productType: values?.productType
     };
     data.append('product', JSON.stringify(payload));
 
@@ -199,24 +205,25 @@ function NewProduct({ isNewProduct, id, Product, created, closeModal }) {
     });
 
     if (!isNewProduct) {
-      updateProduct(updateData)
-        .then((res) => {
-          if (res.status === 200) {
-            setAlertData({ success: true, text: "Product created sucessfully", title: 'Product Created' })
-            handleDisplayModal();
-          }
-          else {
-            setAlertData({ success: false, text: 'Invalid details provided', title: 'Unable to create product' })
-            handleDisplayModal();
-          };
-        })
-        .catch((err) => console.error(err));
+      updateProduct({...Product, ...updateData})
+      console.log(updateData, "Test update data")
+        // .then((res) => {
+        //   if (res.status === 200) {
+        //     setAlertData({ success: true, text: "Product Edited sucessfully", title: 'Product Edited' })
+        //     handleDisplayModal();
+        //   }
+        //   else {
+        //     setAlertData({ success: false, text: 'Invalid details provided', title: 'Unable to create product' })
+        //     handleDisplayModal();
+        //   };
+        // })
+        // .catch((err) => console.error(err));
     } else {
       createProduct(data)
         .then((res) => {
           if (res.status === 200) {
-            created(res?.data?.object?.id)
-            closeModal();
+            setAlertData({ success: true, text: 'Product Created successfully', title: 'Product Created' })
+            handleDisplayModal();
           }
           else {
             setAlertData({ success: false, text: 'Invalid details provided', title: 'Unable to create product' })

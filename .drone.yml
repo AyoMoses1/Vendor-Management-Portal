@@ -13,21 +13,9 @@ steps:
     password:
       from_secret: docker_password
   when:
-    branch:
-    - develop
+    branch: develop
+    event: [ push ]
 
-- name: build-publish-prod
-  image: plugins/docker
-  settings:
-    repo: akinoyedotun/afrimashadmin
-    dockerfile: Dockerfile
-    username:
-      from_secret: docker_username
-    password:
-      from_secret: docker_password
-  when:
-    branch:
-    - main
 
 - name: deploy
   image: docker
@@ -47,8 +35,8 @@ steps:
   - name: docker
     path: /var/run/docker.sock
   when:
-    branch: develop
-    event: [ push, tag, pull_request ]
+    event:
+      - tag
 
 - name: deploy_prod
   image: docker
@@ -69,7 +57,7 @@ steps:
     path: /var/run/docker.sock
   when:
     branch: main
-    event: [ push, tag, pull_request ]
+    event: [ push ]
 
 
 volumes:

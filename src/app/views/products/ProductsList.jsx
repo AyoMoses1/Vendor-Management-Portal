@@ -25,7 +25,7 @@ const Products = () => {
   const dialog = useDialog();
   const dispatcher = useDispatch();
   const [query, setQuery] = useState("");
-  const [open, setOpen] = useState(false)
+  // const [open, setOpen] = useState(false)
   const history = useHistory();
   const [alertData, setAlertData] = React.useState({ success: false, text: '', title: '' });
   const [alertOpen, setAlertOpen] = React.useState(false)
@@ -90,9 +90,9 @@ const Products = () => {
     setPage(page)
   }
 
-  const handleModal = () => {
-    setOpen(!open)
-  }
+  // const handleModal = () => {
+  //   setOpen(!open)
+  // }
 
   const columns = [
     {
@@ -124,7 +124,7 @@ const Products = () => {
     },
     {
       name: 'categories',
-      label: 'Categories',
+      label: 'Category',
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
@@ -276,7 +276,7 @@ const Products = () => {
                     },
                   }}
                 >
-                  {product?.dateAdded || '---'}
+                  {product?.dateAdded || '10:29:30'}
                 </Link>
               </div>
             </div>
@@ -285,8 +285,8 @@ const Products = () => {
       },
     },
     {
-      name: 'seo',
-      label: 'SEO',
+      name: 'status',
+      label: 'Status',
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
@@ -340,7 +340,7 @@ const Products = () => {
     },
     {
       name: 'action',
-      label: ' ',
+      label: 'Action',
       options: {
         filter: false,
         customBodyRenderLite: (dataIndex) => {
@@ -356,34 +356,34 @@ const Products = () => {
         },
       },
     },
-    {
-      name: 'action',
-      label: ' ',
-      options: {
-        filter: false,
-        customBodyRenderLite: (dataIndex) => {
-          let product = products[dataIndex];
-          return (
-            <div className='flex items-center'>
-              <div className='flex-grow'></div>
-              <Link
-                to={{
-                  pathname: '/product/edit',
-                  state: {
-                    id: product.id,
-                    product,
-                  },
-                }}
-              >
-                <IconButton>
-                  <Icon>edit</Icon>
-                </IconButton>
-              </Link>
-            </div>
-          );
-        },
-      },
-    },
+    // {
+    //   name: 'action',
+    //   label: ' ',
+    //   options: {
+    //     filter: false,
+    //     customBodyRenderLite: (dataIndex) => {
+    //       let product = products[dataIndex];
+    //       return (
+    //         <div className='flex items-center'>
+    //           <div className='flex-grow'></div>
+    //           <Link
+    //             to={{
+    //               pathname: '/product/edit',
+    //               state: {
+    //                 id: product.id,
+    //                 product,
+    //               },
+    //             }}
+    //           >
+    //             <IconButton>
+    //               <Icon>edit</Icon>
+    //             </IconButton>
+    //           </Link>
+    //         </div>
+    //       );
+    //     },
+    //   },
+    // },
     // {
     //   name: 'id', // field name in the row object
     //   label: '', // column title that will be shown in table
@@ -520,20 +520,20 @@ const Products = () => {
                   customToolbar: () => {
                     return (
                       <>
-                        {/* <Link
+                        <Link
                           to={{
                             pathname: "/product/new",
                             state: {},
                           }}
-                        > */}
+                        >
                         <Button
                           variant="contained"
                           color="primary"
-                          onClick={() => handleModal()}
+                          // onClick={() => handleModal()}
                         >
                           Add New
                         </Button>
-                        {/* </Link> */}
+                        </Link>
                         {/* <NewPickupCenter
                       name={pickupCenter ? "Edit Pickup Center" : "Add New Pickup Center"}
                       isOpen={open}
@@ -541,17 +541,17 @@ const Products = () => {
                       handleClose={handleModal}
                       refresh={() => refresh()} /> */}
 
-                        <NewProduct
+                        {/* <NewProduct
                           isOpen={open}
                           handleClose={handleModal}
                           created={created}
-                        />
-                        <Alert
+                        /> */}
+                        {/* <Alert
                           isOpen={alertOpen}
                           handleModal={handleDisplayModal}
                           alertData={alertData}
                           handleOK={handleOK}
-                        />
+                        /> */}
                       </>
                     );
                   },
