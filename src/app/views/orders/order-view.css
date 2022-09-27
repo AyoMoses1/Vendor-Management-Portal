@@ -341,17 +341,9 @@ select.status-box{
   font-size: 12px;
 }
 
-<<<<<<< HEAD
 .active{
   color: red !important;
 }
-
-
-
-
-
-
-
 
 .abadoned-table thead tr th {
   padding-left: 24px !important;
@@ -391,7 +383,7 @@ select.status-box{
   border-radius: 6px;
   font-size: 12px;
   font-weight: 500px;
-=======
+}
 .stats-nav .active{
   font-size: 12x;
   font-weight: 600;
@@ -422,5 +414,4 @@ select.status-box{
 .disabled{
   background: rgba(155, 155, 155, 0.15) !important;
   color: #BDBDBD !important;
->>>>>>> 635a4a4d179835d324272c32bb425fafae09fdc3
 }
