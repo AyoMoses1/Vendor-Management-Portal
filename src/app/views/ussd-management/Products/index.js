@@ -206,7 +206,7 @@ const Products = () => {
         customBodyRenderLite: (dataIndex) => {
           let product = products[dataIndex];
           return (
-            // <div className='flex-featured'>
+            <div className='flex-featured'>
             <Button
               onClick={() => handleFeaturedOnUSSD(product)}
               variant='text'
@@ -214,7 +214,7 @@ const Products = () => {
             >
               {product.isFeaturedOnUssd ? 'Remove from USSD' : 'Add to USSD'}
             </Button>
-            // </div>
+            </div>
           );
         },
       },
