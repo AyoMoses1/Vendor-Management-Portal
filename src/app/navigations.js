@@ -54,7 +54,7 @@ export const navigations = [
     ],
   },
   {
-    name: 'Shippment',
+    name: 'Shipping',
     icon: 'card_giftcard',
     children: [
       {

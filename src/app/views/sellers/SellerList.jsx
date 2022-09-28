@@ -5,7 +5,7 @@ import { Grow, Icon, IconButton, TextField, Button } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 import http from '../../services/api'
 import { useDialog } from 'muibox'
-
+import './Sellerform.scss'
 import Notification from '../../components/Notification'
 import { getAllSeller } from './SellerService'
 import Loading from 'matx/components/MatxLoadable/Loading'
@@ -45,19 +45,17 @@ const SellerList = () => {
               className='flex items-center'
             >
               <div className='ml-3'>
-                <h5 className='my-0 text-15'>{`${user?.name}`}</h5>
-                <small className='text-muted'>{user?.email}</small>
-                <br />
-                <small className='text-muted'>{user?.mobileNo}</small>
+                <h5 className='my-0 text-muted'>{`${user?.name || '-------'}`}</h5>
               </div>
             </Link>
           )
         },
       },
     },
+
     {
-      name: 'store',
-      label: 'Store',
+      name: 'email',
+      label: 'Email',
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
@@ -73,13 +71,67 @@ const SellerList = () => {
               className='flex items-center'
             >
               <div className='ml-3'>
-                <h5 className='my-0 text-muted'> {user.name || '-----'}</h5>
+                <h5 className='my-0 text-muted'> {user.email || '-----'}</h5>
               </div>
             </Link>
           )
         },
       },
     },
+
+    {
+      name: 'phoneno',
+      label: 'Phone Number',
+      options: {
+        filter: true,
+        customBodyRenderLite: (dataIndex) => {
+          let user = userList[dataIndex]
+          return (
+            <Link
+              to={{
+                pathname: '/vendor/details',
+                state: {
+                  id: user.id,
+                },
+              }}
+              className='flex items-center'
+            >
+              <div className='ml-3'>
+                <h5 className='my-0 text-muted'> {user.mobileNo || '-----'}</h5>
+              </div>
+            </Link>
+          )
+        },
+      },
+    },
+
+    {
+      name: 'store',
+      label: 'Store',
+      options: {
+        filter: true,
+        customBodyRenderLite: (dataIndex) => {
+          let user = userList[dataIndex]
+          return (
+            <div className='flex items-center'>
+              <Link
+                to={{
+                  pathname: '/vendor/details',
+                  state: {
+                    id: user.id,
+                  },
+                }}
+                className='ml-3'
+              >
+                  <span className='my-0 text-15'> {user.name || '-----'}</span>
+                
+              </Link>
+            </div>
+          );
+        },
+      },
+    },
+
     {
       name: 'address',
       label: 'Address',
@@ -105,33 +157,34 @@ const SellerList = () => {
         },
       },
     },
-    {
-      name: 'action',
-      label: ' ',
-      options: {
-        filter: false,
-        customBodyRenderLite: (dataIndex) => {
-          let user = userList[dataIndex]
-          return (
-            <div className='flex items-center'>
-              <Link
-                to={{
-                  pathname: '/vendor/edit',
-                  state: {
-                    id: user.id,
-                    user,
-                  },
-                }}
-              >
-                <IconButton>
-                  <Icon>edit</Icon>
-                </IconButton>
-              </Link>
-            </div>
-          )
-        },
-      },
-    },
+
+    // {
+    //   name: 'action',
+    //   label: ' ',
+    //   options: {
+    //     filter: false,
+    //     customBodyRenderLite: (dataIndex) => {
+    //       let user = userList[dataIndex]
+    //       return (
+    //         <div className='flex items-center'>
+    //           <Link
+    //             to={{
+    //               pathname: '/vendor/edit',
+    //               state: {
+    //                 id: user.id,
+    //                 user,
+    //               },
+    //             }}
+    //           >
+    //             <IconButton>
+    //               <Icon>edit</Icon>
+    //             </IconButton>
+    //           </Link>
+    //         </div>
+    //       )
+    //     },
+    //   },
+    // },
   ]
   const notification = () => {
     return <Notification alert={alert} severity={severity && severity} />
@@ -148,7 +201,7 @@ const SellerList = () => {
       </div>
       {severity === 'error' && notification()}
       <div className='overflow-auto'>
-        <div className='min-w-750'>
+        <div className='min-w-750 vendor-table'>
           {loading ? (
             <Loading />
           ) : (
