@@ -15,9 +15,6 @@ import http from '../../../services/api';
 
 const CategoryProducts = ({ categoryProducts, categoryId, tableRefresh }) => {
     const dialog = useDialog()
-    useEffect(() => {
-        console.log(categoryProducts);
-    }, [categoryProducts])
 
     const columns = [
         {

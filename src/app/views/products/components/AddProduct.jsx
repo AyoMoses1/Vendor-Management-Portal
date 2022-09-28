@@ -72,7 +72,6 @@ function AddProduct({
         setLoading(true);
         http.patch(`/afrimash/products/${value?.id}/associate-categories`, tempState).then((response) => {
             setLoading(false);
-            console.log(response);
             setValue('');
             handleClose();
             refresh();
@@ -84,7 +83,6 @@ function AddProduct({
     const debouncedProducts = debounce(async (value) => {
         if (value.length > 0) {
             const response = await getAllProducts(value)
-            console.log(response?.content);
             setProducts(formatProducts(response?.content))
         } else {
             const response = await getAllProducts('')

@@ -158,17 +158,13 @@ function NewProduct({ isNewProduct, id, Product, created, closeModal }) {
   }, [acceptedFiles, id, isNewProduct, shippingC]);
 
   const handleSelect = (newValue, fieldName) => {
-    console.log({ newValue, fieldName })
     if (Object.keys(state).some(key => key === fieldName)) {
       setState({ ...state, [fieldName]: newValue });
     }
 
     if (Object.keys(values).some(key => key === fieldName)) {
-      console.log(fieldName);
-      console.log(newValue);
       setValues({ ...values, [fieldName]: newValue });
     }
-    console.log(values);
 
   };
 
@@ -193,7 +189,7 @@ function NewProduct({ isNewProduct, id, Product, created, closeModal }) {
       discountRate: values?.discountRate || state.discountRate,
       tags: getIdsFromArray(values?.tags) || getIdsFromArray(state.tags),
       shippingClass: state.shippingClass,
-      brandId: values?.brandId || state?.brandId,
+      brandId: values?.brandId || state.brandId,
       storeId: values?.storeId?.id || state.storeId?.id,
       productCategories: values?.productCategories,
       productType: values?.productType
@@ -205,19 +201,19 @@ function NewProduct({ isNewProduct, id, Product, created, closeModal }) {
     });
 
     if (!isNewProduct) {
-      updateProduct({...Product, ...updateData})
       console.log(updateData, "Test update data")
-        // .then((res) => {
-        //   if (res.status === 200) {
-        //     setAlertData({ success: true, text: "Product Edited sucessfully", title: 'Product Edited' })
-        //     handleDisplayModal();
-        //   }
-        //   else {
-        //     setAlertData({ success: false, text: 'Invalid details provided', title: 'Unable to create product' })
-        //     handleDisplayModal();
-        //   };
-        // })
-        // .catch((err) => console.error(err));
+      updateProduct({...Product, ...updateData})
+        .then((res) => {
+          if (res.status === 200) {
+            setAlertData({ success: true, text: "Product Edited sucessfully", title: 'Product Edited' })
+            handleDisplayModal();
+          }
+          else {
+            setAlertData({ success: false, text: 'Invalid details provided', title: 'Unable to create product' })
+            handleDisplayModal();
+          };
+        })
+        .catch((err) => console.error(err));
     } else {
       createProduct(data)
         .then((res) => {

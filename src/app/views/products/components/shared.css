@@ -491,3 +491,13 @@
 .SEO svg {
     font-size: 12px;
 }
+
+.__react_modal_image__medium_img {
+    height: 70%;
+}
+
+.scrolling-wrapper-grid {
+    margin-top: 30px;
+    overflow-x: auto;
+    height: 20rem;
+}
