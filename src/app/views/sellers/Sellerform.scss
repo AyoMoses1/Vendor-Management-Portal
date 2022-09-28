@@ -1,0 +1,139 @@
+.overflow-auto {
+  width: 100%;
+ 
+}
+
+.title {
+    font-size: 16px !important;
+    font-weight: 100;
+    color: rgba(0, 0, 0, 0.877) !important;
+    margin: -5px 0px;
+   
+}
+
+.h4{
+  color: #000 !important;
+  font-weight: 500 !important;
+  padding: 20px 0px;
+}
+
+.h2 {
+  color: #000 !important;
+  padding-bottom: 10px;
+}
+
+.passport {
+  font-size: 16px;
+  color: #000 !important;
+  margin-top: -5px;
+}
+
+.country {
+  width: 70%;
+  height: 35px;
+  border-radius: 4px;
+  position: relative;
+  border: none;
+  background-color: rgba(180, 162, 162, 0.3) !important;
+  transition: 0.3s all;
+  margin: 25px 0px 25px 20px;
+  padding: 8px;
+  border-bottom: 1px solid rgb(122, 115, 115);
+}
+
+.upload {
+  margin-bottom: 30px;
+  margin-top: 5px;
+}
+
+.field {
+  margin: -7px 0px;
+}
+
+
+
+Input {
+  width: 30%;
+  height: 35px;
+  border-radius: 4px;
+  position: relative;
+  border: none;
+  background-color: rgba(180, 162, 162, 0.3) !important;
+  transition: 0.3s all;
+  margin: 25px 0px 25px 20px;
+  padding: 5px;
+  border-bottom: 1px solid rgb(105, 101, 101);
+  
+}
+
+.country, .field > Input:hover {
+  background-color: rgba(143, 130, 130, 0.3)!important;;
+}
+
+.country, .field > Input :active {
+  border: none;
+}
+
+.shrink {
+  margin-top: -20px;
+  font-size: 10px;
+}
+
+.register {
+  text-align: center;
+  width: 100%;
+  
+}
+
+.button {
+  width: 10%;
+}
+
+.vendor-table thead tr th {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+    background: #F0F2F5;
+    font-size: 14px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+  }
+  
+  .vendor-table thead tr th .MuiButton-text {
+    font-weight: 500;
+    color: #000000;
+  }
+  
+  .vendor-table .MuiTableCell-root {
+    border-bottom: 4px solid #ffffff!important;
+  }
+  
+  .vendor-table tbody tr td {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+    background: #FAFBFD;
+    font-size: 12px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    color: #000000;
+  }
+  
+  .vendor-table .MuiTable-root {
+    margin-top: 10px;
+  }
+  
+  
+
+
+
+.text-muted {
+    color: #4A466DDE;
+    font-size: 12px;
+    font-family: Roboto, Arial, Helvetica, sans-serif;
+}
+  
+.text-control {
+    font-size: 14px;
+    color: #4A466DDE;
+  
+}
+  

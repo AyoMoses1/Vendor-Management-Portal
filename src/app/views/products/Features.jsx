@@ -5,6 +5,7 @@ import { Grow, Icon, IconButton, TextField, Button } from '@material-ui/core'
 import http from '../../services/api'
 import CreateNew from './CreateNew'
 import { useDialog } from 'muibox'
+import './product-details.css'
 
 const fields = ['name', 'featureType']
 
@@ -46,7 +47,7 @@ const Features = () => {
           return (
             <div className='flex items-center'>
               <div className='ml-3'>
-                <h5 className='my-0 text-15'>{`${feature?.name}`}</h5>
+                <span className='my-0 text-15'>{`${feature?.name}`}</span>
               </div>
             </div>
           )
@@ -63,10 +64,10 @@ const Features = () => {
           return (
             <div className='flex items-center'>
               <div className='ml-3'>
-                <h5 className='my-0 text-15'>
+                <span className='my-0 text-15'>
                   {' '}
                   {feature.description || '-----'}
-                </h5>
+                </span>
               </div>
             </div>
           )
@@ -83,10 +84,10 @@ const Features = () => {
           return (
             <div className='flex items-center'>
               <div className='ml-3'>
-                <h5 className='my-0 text-15'>
+                <span className='my-0 text-15'>
                   {' '}
                   {feature.featureType || '-----'}
-                </h5>
+                </span>
               </div>
             </div>
           )
@@ -102,7 +103,11 @@ const Features = () => {
           let feature = features[dataIndex]
           return (
             <div className='flex items-center'>
-              <div className='flex-grow'></div>
+              <div className='flex-grow'>
+              <IconButton>
+                <Icon>delete</Icon>
+              </IconButton>
+              </div>
               {/* <IconButton
                 variant="contained"
                 color="primary"
@@ -113,9 +118,7 @@ const Features = () => {
                 <Icon>edit</Icon>
               </IconButton> */}
 
-              <IconButton>
-                <Icon>delete</Icon>
-              </IconButton>
+             
             </div>
           )
         },
@@ -129,7 +132,7 @@ const Features = () => {
         <Breadcrumb routeSegments={[{ name: 'Features', path: '/features' }]} />
       </div>
       <div className='overflow-auto'>
-        <div className='min-w-750'>
+        <div className='min-w-750 features-table'>
           <MUIDataTable
             title={'Features'}
             data={features}

@@ -2,57 +2,42 @@
     width: 100%;
 }
 
-.customer-table {
-    font-size: 14px!important;
-}
 
-.customer-table thead tr th {
-    padding-left: 48px;
+
+  .customer-table thead tr th {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
     background: #F0F2F5;
-    justify-content: center;
+    font-size: 14px;
     padding-top: 4px;
     padding-bottom: 4px;
-}
-
-.customer-table thead tr th .MuiButton-text {
-    font-weight: 800;
-    color: #000000;
-}
-
-.customer-table .MuiTableCell-root {
-    border-bottom: 4px solid #ffffff!important;
-}
-
-.customer-table tbody{
-    padding: 0 20px;
   }
-
-
-.customer-table tbody tr td {
+  
+  .customer-table thead tr th .MuiButton-text {
+    font-weight: 500;
+    color: #000000;
+  }
+  
+  .customer-table .MuiTableCell-root {
+    border-bottom: 4px solid #ffffff!important;
+  }
+  
+  .customer-table tbody tr td {
     padding-left: 24px !important;
     padding-right: 24px !important;
     background: #FAFBFD;
-    padding-top: 12px;
-    padding-bottom: 12px;
+    font-size: 12px;
+    padding-top: 6px;
     padding-bottom: 6px;
     color: #000000;
-  }
-
-  .customer-table tbody tr td .MuiTableCell-root{
-    font-size: 12px;
-  }
-
-  .customer-table thead th{
-    font-size: 8px !important;
   }
   
   .customer-table .MuiTable-root {
     margin-top: 10px;
   }
+  
+  
 
-  .customer-table tbody tr td{
-    text-align: left;    
-  }
 
 .sources .MuiSelect-root {
     padding: 12px;

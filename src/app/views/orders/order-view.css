@@ -341,6 +341,49 @@ select.status-box{
   font-size: 12px;
 }
 
+.active{
+  color: red !important;
+}
+
+.abadoned-table thead tr th {
+  padding-left: 24px !important;
+  padding-right: 24px !important;
+  background: #F0F2F5;
+  font-size: 14px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.abadoned-table thead tr th .MuiButton-text {
+  font-weight: 500;
+  color: #000000;
+}
+
+.abadoned-table .MuiTableCell-root {
+  border-bottom: 4px solid #ffffff!important;
+}
+
+.abadoned-table tbody tr td {
+  padding-left: 24px !important;
+  padding-right: 24px !important;
+  background: #FAFBFD;
+  font-size: 12px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  color: #000000;
+}
+
+.abadoned-table .MuiTable-root {
+  margin-top: 10px;
+}
+
+.ABADONED {
+  padding: 5px 8px;
+  width: fit-content;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500px;
+}
 .stats-nav .active{
   font-size: 12x;
   font-weight: 600;

@@ -7,6 +7,7 @@ import CreateNew from './CreateNew'
 import { useDialog } from 'muibox'
 import { getAllResults } from './ProductService'
 import Loading from 'matx/components/MatxLoadable/Loading'
+import './product-details.css'
 
 const fields = ['name']
 
@@ -42,7 +43,7 @@ const Tags = () => {
           return (
             <div className='flex items-center'>
               <div className='ml-3'>
-                <h5 className='my-0 text-15'>{`${tag?.name}`}</h5>
+                <span className='my-0 text-15'>{`${tag?.name}`}</span>
               </div>
             </div>
           )
@@ -59,7 +60,7 @@ const Tags = () => {
           return (
             <div className='flex items-center'>
               <div className='ml-3'>
-                <h5 className='my-0 text-15'> {tag.description || '-----'}</h5>
+                <span className='my-0 text-15'> {tag.description || '-----'}</span>
               </div>
             </div>
           )
@@ -101,7 +102,7 @@ const Tags = () => {
         <Breadcrumb routeSegments={[{ name: 'Tags', path: '/tags' }]} />
       </div>
       <div className='overflow-auto'>
-        <div className='min-w-750'>
+        <div className='min-w-750 tag-table'>
           {loading ? (
             <Loading />
           ) : (
