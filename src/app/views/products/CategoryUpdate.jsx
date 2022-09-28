@@ -20,23 +20,17 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const CategoryUpdate = ({ location, placeholder }) => {
-  const [loading, setLoading] = React.useState(false)
   const [category, setCategory] = React.useState(null);
-  const [subCategories, setSubCategories] = React.useState(null);
   const [categories, setCategories] = React.useState([]);
   const [alert, setAlert] = React.useState('');
   const [severity, setSeverity] = React.useState('');
   const State = location.state
   const { id } = State
   const getCategory = () => {
-    setLoading(true);
     http.get(`/afrimash/product-categories/${id}`).then((response) => {
-      setLoading(false);
       let { data } = response;
       setCategory(data?.object);
-      setSubCategories(data?.object?.subCategories);
     }).catch(err => {
-      setLoading(false);
     });
   }
 
@@ -50,6 +44,10 @@ const CategoryUpdate = ({ location, placeholder }) => {
   const getResult = () => {
     urls.map((val) => getData(val.url, val.set, setAlert, setSeverity));
   };
+
+  const invoke = () => {
+    getCategory()
+  }
 
   useEffect(() => {
     if (id) {
@@ -68,7 +66,7 @@ const CategoryUpdate = ({ location, placeholder }) => {
             </Grid>
           </Grid>
 
-          <Grid container spacing={2} item xs={8} style={{display: 'block'}}>
+          <Grid container spacing={2} item xs={8} style={{ display: 'block' }}>
             <Grid item xs={12}>
               <Item className='no-shadow'>
                 <CategoryEdit catergory={category} />
@@ -77,7 +75,7 @@ const CategoryUpdate = ({ location, placeholder }) => {
             <Grid item xs={12}>
               <Grid item xs={12}>
                 <Item className='no-shadow'>
-                  <CategorySelect category={category} categories={categories} />
+                  <CategorySelect category={category} categories={categories} invoke={invoke} />
                 </Item>
               </Grid>
             </Grid>
@@ -85,12 +83,12 @@ const CategoryUpdate = ({ location, placeholder }) => {
           <Grid container spacing={2} item xs={4} style={{ display: 'initial' }}>
             <Grid item xs={12}>
               <Item className='no-shadow'>
-                <CategoryStatus />
+                <CategoryStatus category={category} />
               </Item>
             </Grid>
             <Grid item xs={12}>
               <Item className='no-shadow'>
-                <CategoryImage />
+                <CategoryImage category={category} invoke={invoke} />
               </Item>
             </Grid>
           </Grid>

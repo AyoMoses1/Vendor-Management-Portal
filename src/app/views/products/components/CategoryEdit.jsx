@@ -28,14 +28,11 @@ const CategoryEdit = ({ catergory }) => {
         setIsOpen(!isOpen)
     }
 
-    console.log(catergory)
     const handleSubmit = (items, { setSubmitting }) => {
         const payload = { ...values, ...items };
-        console.log(payload)
         setUpdating(true)
         patchProductCategory({ ...payload })
             .then((res) => {
-                console.log(res)
                 if (res.status === 200) {
                     setValues(res?.data?.object);
                     setUpdating(false)
@@ -49,7 +46,6 @@ const CategoryEdit = ({ catergory }) => {
                 };
             })
             .catch((err) => {
-                console.log(err);
                 setUpdating(false)
                 setAlertData({ success: false, text: 'Invalid details provided', title: 'Unable to update category details' })
                 handleDisplayModal();

@@ -167,9 +167,6 @@ const ProductStatus = ({ product }) => {
     </Box>
 }
 
-const productSchema = yup.object().shape({
-    productType: yup.string().required('Product type is required'),
-    price: yup.number().min(1).required('Sale Price is required'),
-});
+const productSchema = yup.object().shape({});
 
 export default ProductStatus;

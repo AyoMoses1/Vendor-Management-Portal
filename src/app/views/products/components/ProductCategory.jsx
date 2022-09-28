@@ -142,7 +142,11 @@ const ProductCategory = ({ product, categories, invoke }) => {
                     handleDisplayModal();
                 };
             })
-            .catch((err) => console.error(err));
+            .catch((err) => {
+                setUpdating(false)
+                setAlertData({ success: false, text: 'Invalid details provided', title: 'Unable to update product category' })
+                handleDisplayModal();
+            });
     }
 
     return <Box

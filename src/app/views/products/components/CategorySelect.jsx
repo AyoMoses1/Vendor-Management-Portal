@@ -8,8 +8,10 @@ import { Formik } from 'formik';
 import FormControl from '@mui/material/FormControl';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import AddSubCategories from './AddSubCategories';
+import Alert from 'app/components/Alert';
 
-const CategorySelect = ({ category, categories }) => {
+const CategorySelect = ({ category, categories, invoke }) => {
     const [updating, setUpdating] = React.useState(false);
     const [values, setValues] = React.useState({
         commission: null,
@@ -24,16 +26,20 @@ const CategorySelect = ({ category, categories }) => {
         visible: null,
     });
     const [isOpen, setIsOpen] = React.useState(false)
+    const [open, setOpen] = React.useState(false)
     const [alertData, setAlertData] = React.useState({ success: false, text: '', title: '' });
     const [subCategories, setSubCategories] = React.useState([])
     const handleDisplayModal = () => {
         setIsOpen(!isOpen)
     }
 
+    const handleModal = () => {
+        setOpen(!open)
+    }
+
     useEffect(() => {
-        console.log(category)
         if (category) {
-            console.log(category)
+            console.log(category);
             setValues(category);
         }
     }, [category])
@@ -46,27 +52,24 @@ const CategorySelect = ({ category, categories }) => {
 
     const handleSubmit = (items, { setSubmitting }) => {
         const payload = { ...values, ...items };
-        console.log(payload)
         setUpdating(true)
         patchProductCategory({ ...payload })
             .then((res) => {
-                console.log(res)
                 if (res.status === 200) {
                     setValues(res?.data?.object);
                     setUpdating(false)
-                    setAlertData({ success: true, text: "Category details updated sucessfully", title: 'Category Details Updated' })
+                    setAlertData({ success: true, text: "Sub-categories updated sucessfully", title: 'Sub-categories Details Updated' })
                     handleDisplayModal();
                 }
                 else {
                     setUpdating(false)
-                    setAlertData({ success: false, text: 'Invalid details provided', title: 'Unable to update category details' })
+                    setAlertData({ success: false, text: 'Invalid details provided', title: 'Unable to update sub-categories' })
                     handleDisplayModal();
                 };
             })
             .catch((err) => {
-                console.log(err);
                 setUpdating(false)
-                setAlertData({ success: false, text: 'Invalid details provided', title: 'Unable to update category details' })
+                setAlertData({ success: false, text: 'Invalid details provided', title: 'Unable to update sub-categories' })
                 handleDisplayModal();
             });
 
@@ -86,9 +89,11 @@ const CategorySelect = ({ category, categories }) => {
         }
     }
 
-    useEffect(() => {
-        console.log(subCategories)
-    }, [subCategories])
+    const refresh = () => {
+        setAlertData({ success: true, text: "Sub-Categories updated sucessfully", title: 'Sub-Categories Updated' })
+        handleDisplayModal();
+        invoke();
+    }
 
     return <Box
         component="form"
@@ -150,8 +155,22 @@ const CategorySelect = ({ category, categories }) => {
                                 <FormControl key={idx + 'scwp'}>
                                     <FormControlLabel control={<Checkbox defaultChecked onChange={(e) => handleSubCategory(e, scwp?.id)} />} label={scwp?.name} className='product-checkbox' />
                                 </FormControl>
-                            ) : <div style={{ marginTop: '30px', marginLeft: '12px', marginBottom: '30px' }}>No sub-categories</div>
+                            ) : <div style={{ marginTop: '12px', marginBottom: '12px' }}>No sub-categories</div>
                     }
+                    <div className='product-category'>
+                        <Button
+                            onClick={() => { handleModal() }}
+                        >
+                            Add New Sub-Category
+                        </Button>
+                    </div>
+                    <AddSubCategories
+                        name={"Add Sub Categories to Category"}
+                        isOpen={open}
+                        handleClose={handleModal}
+                        categories={categories}
+                        refresh={refresh}
+                        category={category} />
                     <div className='button-flex'>
                         <Button
                             variant='contained'
@@ -167,6 +186,12 @@ const CategorySelect = ({ category, categories }) => {
                 </form>
             )}
         </Formik>
+        <Alert
+            isOpen={isOpen}
+            handleModal={handleDisplayModal}
+            alertData={alertData}
+            handleOK={handleDisplayModal}
+        />
     </Box>
 }
 
