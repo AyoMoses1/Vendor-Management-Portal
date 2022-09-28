@@ -180,21 +180,22 @@ const Products = () => {
         customBodyRenderLite: (dataIndex) => {
           let product = products[dataIndex];
           return (
-            <div className='flex items-center product__price'>
-              <Link
-                to={{
-                  pathname: "/product/details",
-                  state: {
-                    id: product.id,
-                  },
-                }}
-                className="ml-4"
-              >
-                <span className="my-0 text-15">
+            <div className='flex'>
+              <div className='ml-3'>
+                <Link
+                  to={{
+                    pathname: "/product/details",
+                    state: {
+                      id: product?.id,
+                    },
+                  }}
+
+                >
+
                   {" "}
-                  {`₦${product.price}` || "-----"}
-                </span>
-              </Link>
+                  {`₦${product?.price}` || "---"}
+                </Link>
+              </div>
             </div>
           );
         },
@@ -208,18 +209,17 @@ const Products = () => {
         customBodyRenderLite: (dataIndex) => {
           let product = products[dataIndex];
           return (
-            <div className='flex items-center product__sku'>
+            <div className='flex'>
               <div className='ml-3'>
                 <Link
                   to={{
                     pathname: "/product/details",
                     state: {
-                      id: product.id,
+                      id: product?.id,
                     },
                   }}
-                  className="ml-3 mr-4"
                 >
-                  <span className='my-0 text-15'> {product?.sku || '-----'}</span>
+                  {product?.sku || '---'}
                 </Link>
               </div>
             </div>
@@ -227,8 +227,6 @@ const Products = () => {
         },
       },
     },
-
-
     {
       name: "tags",
       label: "Tags",
@@ -264,22 +262,21 @@ const Products = () => {
       label: 'Date Created',
       options: {
         filter: true,
+        setCellHeaderProps: () => { return { width: "130px" } },
         customBodyRenderLite: (dataIndex) => {
           let product = products[dataIndex];
           return (
-            <div className='flex product__date'>
+            <div className='flex'>
               <div className='ml-3'>
                 <Link
                   to={{
                     pathname: "/product/details",
                     state: {
-                      id: product.id,
+                      id: product?.id,
                     },
                   }}
-                  className="ml-3 mr-4"
                 >
-                  <div>27/01/2022</div>
-                  <span className='my-0'> {product?.dateAdded || '10:29:30'}</span>
+                  {product?.dateAdded || '10:29:30'}
                 </Link>
               </div>
             </div>
@@ -288,8 +285,8 @@ const Products = () => {
       },
     },
     {
-      name: 'seo',
-      label: 'SEO',
+      name: 'status',
+      label: 'Status',
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
@@ -342,24 +339,24 @@ const Products = () => {
         },
       },
     },
-    // {
-    //   name: 'action',
-    //   label: 'Action',
-    //   options: {
-    //     filter: false,
-    //     customBodyRenderLite: (dataIndex) => {
-    //       let product = products[dataIndex];
-    //       return (
-    //         <Button
-    //           onClick={() => handleFeaturedOnUSSD(product)}
-    //           variant='text'
-    //         >
-    //           {product.isFeaturedOnUssd ? 'Remove from USSD' : 'Add to USSD'}
-    //         </Button>
-    //       );
-    //     },
-    //   },
-    // },
+    {
+      name: 'action',
+      label: 'Action',
+      options: {
+        filter: false,
+        customBodyRenderLite: (dataIndex) => {
+          let product = products[dataIndex];
+          return (
+            <Button
+              onClick={() => handleFeaturedOnUSSD(product)}
+              variant='text'
+            >
+              {product.isFeaturedOnUssd ? 'Remove from USSD' : 'Add to USSD'}
+            </Button>
+          );
+        },
+      },
+    },
     // {
     //   name: 'action',
     //   label: ' ',
