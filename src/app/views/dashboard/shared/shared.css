@@ -205,11 +205,9 @@ scrolling-wrapper-flexbox::-webkit-scrollbar {
 }
 
 .sales-funnel {
-    height: 50px;
-    width: 50px;
-    border-top: 50px solid transparent;
-    border-bottom: 50px solid transparent;
-    border-left: 100px solid #9AC84A;
+    height: 120px;
+    background-color:  #9AC84A;
+    clip-path: polygon(0 1%, 100% 16%, 100% 85%, 0% 100%);
 }
 
 

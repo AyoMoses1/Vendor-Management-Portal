@@ -13,26 +13,31 @@ const salesFunnels = [
   {
     amount: "13,432",
     label: "Total Visits",
+    
   },
 
   {
     amount: "4.2K",
     label: "Product View",
+    
   },
 
   {
     amount: "65",
     label: "Cart Visits",
+   
   },
 
   {
     amount: "354",
     label: "Check Out Visits",
+   
   },
 
   {
     amount: "287",
     label: "Purchase",
+    
   },
 ]
 
