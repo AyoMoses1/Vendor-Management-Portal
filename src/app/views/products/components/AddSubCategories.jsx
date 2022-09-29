@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { TextField, Modal, Button, Checkbox } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import Alert from 'app/components/Alert';
@@ -92,13 +92,13 @@ const AddSubCategories = ({
                 }
                 else {
                     setLoading(false);
-                    setAlertData({ success: false, text: 'Invalid details provided', title: 'Unable add categories' })
+                    setAlertData({ success: false, text: res?.errorMsg ?? 'Invalid details provided', title: 'Unable add categories' })
                     handleModal();
                 };
             })
             .catch((err) => {
                 setLoading(false);
-                setAlertData({ success: false, text: 'Invalid details provided', title: 'Unable add categories' })
+                setAlertData({ success: false, text: err?.errorMsg ?? 'Invalid details provided', title: 'Unable add categories' })
                 handleModal();
             });
     };
