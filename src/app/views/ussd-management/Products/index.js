@@ -11,8 +11,9 @@ import { useDispatch } from 'react-redux';
 import { updateProductFeature } from '../../../redux/actions/ussd-action';
 import CircleIcon from '@mui/icons-material/Circle';
 import '../../products/products-view.css'
+import './styles.css'
 import { debounce } from "lodash";
-
+import { createTheme, ThemeProvider } from '@mui/material/styles'
 
 const Products = () => {
   const [isAlive, setIsAlive] = useState(true);
@@ -190,7 +191,9 @@ const Products = () => {
                     },
                   }}
                 >
-                  <div className={ product?.isFeaturedOnUssd ? "not-featured": "featured"}></div>
+                  <div className={ product?.isFeaturedOnUssd ? "featured": "not-featured"}>
+                    <div></div>
+                  </div>
                 </Link>
               </div>
             </div>
@@ -207,14 +210,29 @@ const Products = () => {
           let product = products[dataIndex];
           return (
             <div className='flex-featured'>
-            <Button
-              onClick={() => handleFeaturedOnUSSD(product)}
-              variant='text'
-              className='flex-featured'
-            >
-              {product.isFeaturedOnUssd ? 'Remove from USSD' : 'Add to USSD'}
-            </Button>
+              <Button
+                onClick={() => handleFeaturedOnUSSD(product)}
+                variant='text'
+                className={`${product.isFeaturedOnUssd ? "isFeatured":"isNotFeatured"} flex-featured`}
+              >
+                {product.isFeaturedOnUssd ? 'Remove from USSD' : 'Add to USSD'}
+              </Button>
             </div>
+            // <Button
+            //   onClick={() => handleFeaturedOnUSSD(product)}
+            //   variant='text'
+            //   className='flex-featured'
+            // >
+            //   {product.isFeaturedOnUssd ? (
+            //     <div className={`items-center category isFeatured`}>
+            //       <span className="ml-3">Remove from USSD</span>
+            //     </div>
+            //   ) : (
+            //     <div className={`items-center category isNotFeatured`}>
+            //       <span className="ml-3">Add to USSD</span>
+            //     </div>
+            //   )}
+            // </Button>
           );
         },
       },
@@ -246,26 +264,48 @@ const Products = () => {
     setQuery('');
   }
 
-  const getMuiTheme = () => createMuiTheme({
-    overrides: {
-      MuiTableCell: {
-        head: {
-            textAlign: "center",
-        },
-        body:{
-          textAlign:"center !important"
-        }
+//   const getMuiTheme = () => createTheme({
+//     overrides: {
+//       MuiTableCell: {
+//         head: {
+//             textAlign: "center",
+//         },
+//         body:{
+//           textAlign:"center !important"
+//         }
         
-    }
-    }
-});
+//     },
+//     MUIDataTableHeadCell: {
+//       toolButton: {
+//         display:"flex !important",
+//         justifyContent: 'center !important',
+//         background:"red",
+//         textAlign: "center"
+//       },
+//     },
+//     }
+// });
+const getMuiTheme = () =>
+createMuiTheme({
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          fontFamily: 'poppins',
+          justifyContent: 'center',
+          fontWeight: 'bold',
+        },
+      },
+    },
+  },
+})
   return (
     <div className="m-sm-30">
       <div className="mb-sm-30">
         <Breadcrumb routeSegments={[{ name: "Products", path: "/products" }]} />
       </div>
       <div className='overflow-auto'>
-        <div className='min-w-750 all-products-table'>
+        <div className='min-w-750 all-products-table  ussd-cat-table'>
           {loading ? (
             <Loading />
           ) : (
