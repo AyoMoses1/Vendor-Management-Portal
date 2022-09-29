@@ -49,12 +49,12 @@ const ProductGallery = ({ product, invoke }) => {
                     setValues(res?.data?.object);
                     setImages(res?.data?.object?.productImages)
                     setUpdating(false)
-                    setAlertData({ success: true, text: "Product updated sucessfully", title: 'Product Updated' })
+                    setAlertData({ success: true, text: "Product gallery updated sucessfully", title: 'Product Gallery Updated' })
                     handleDisplayModal();
                 }
                 else {
                     setUpdating(false)
-                    setAlertData({ success: false, text: 'Invalid details provided', title: 'Unable to update product' })
+                    setAlertData({ success: false, text: 'Invalid details provided', title: 'Unable to update product gallery' })
                     handleDisplayModal();
                 };
             })
@@ -62,13 +62,13 @@ const ProductGallery = ({ product, invoke }) => {
     };
 
     const deleteImage = async (id) => {
-        const newList = images?.filter(p => p?.id !== id)
-        setImages(newList);
-        setValues({ ...values, productImages: newList })
+        // const newList = images?.filter(p => p?.id !== id)
+        // setImages(newList);
+        // setValues({ ...values, productImages: newList })
         await http.delete_new(`/afrimash/products/image/${id}/remove`).then(res => {
             if (res.status === 200) {
                 setLoading(false);
-                setAlertData({ success: true, text: "Product image removed sucessfully", title: 'Product Updated' })
+                setAlertData({ success: true, text: "Product image removed sucessfully", title: 'Product Image Removed' })
                 handleDisplayModal();
                 invoke();
             }

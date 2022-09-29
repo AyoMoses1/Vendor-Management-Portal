@@ -81,7 +81,33 @@ const CategoriesList = () => {
                   }}
                 >
 
-                  {category.parentCategoryId?.name ?? '---'}
+                  {category?.name ?? '---'}
+                </Link>
+              </div>
+            </div>
+          );
+        },
+      },
+    },
+    {
+      name: 'parentCategoryId',
+      label: 'Parent Category',
+      options: {
+        filter: true,
+        customBodyRenderLite: (dataIndex) => {
+          let category = categories[dataIndex];
+          return (
+            <div className='flex items-center'>
+              <div className='ml-3'>
+                <Link
+                  to={{
+                    pathname: "/product-category/details",
+                    state: {
+                      id: category.id,
+                    },
+                  }}
+                >
+                  {category?.parentCategoryId?.name ?? '---'}
                 </Link>
               </div>
             </div>
@@ -148,7 +174,7 @@ const CategoriesList = () => {
           return (
             <div className='flex items-center'>
               <div className='ml-3'>
-                {category.parentCategoryId?.quantity ?? '---'}
+                {category?.quantity ?? '---'}
               </div>
             </div>
           );
@@ -165,7 +191,7 @@ const CategoriesList = () => {
           return (
             <div className='flex items-center'>
               <div className='ml-3'>
-                {category.parentCategoryId?.views ?? '---'}
+                {category?.views ?? '---'}
               </div>
             </div>
           );
@@ -173,41 +199,7 @@ const CategoriesList = () => {
       },
     },
     {
-      name: 'action',
-      label: 'Tag',
-      options: {
-        filter: false,
-        customBodyRenderLite: (dataIndex) => {
-          let category = categories[dataIndex];
-          return (
-            <div className='flex items-center'>
-              <div className='ml-3'>
-                {category.parentCategoryId?.tags ?? '---'}
-              </div>
-            </div>
-          );
-        },
-      },
-    },
-    {
-      name: 'action',
-      label: 'Key Phrase',
-      options: {
-        filter: false,
-        customBodyRenderLite: (dataIndex) => {
-          let category = categories[dataIndex];
-          return (
-            <div className='flex items-center'>
-              <div className='ml-3'>
-                {category.parentCategoryId?.keyPhrase ?? '---'}
-              </div>
-            </div>
-          );
-        },
-      },
-    },
-    {
-      name: 'action',
+      name: 'translatedName',
       label: 'Slug',
       options: {
         filter: false,
@@ -216,7 +208,7 @@ const CategoriesList = () => {
           return (
             <div className='flex items-center'>
               <div className='ml-3'>
-                {category.parentCategoryId?.slug ?? '---'}
+                {category?.translatedName ?? '---'}
               </div>
             </div>
           );
@@ -236,6 +228,30 @@ const CategoriesList = () => {
                 {category.parentCategoryId?.createdAt ?? '---'}
               </div>
             </div>
+          );
+        },
+      },
+    },
+    {
+      name: 'action',
+      label: 'Action',
+      options: {
+        filter: false,
+        customBodyRenderLite: (dataIndex) => {
+          let category = categories[dataIndex];
+          return (
+            <Link
+              to={{
+                pathname: "/product-category/update",
+                state: {
+                  id: category.id,
+                },
+              }}
+            >
+              <div className={`items-center edit-category`}>
+                <span className="ml-3">Edit</span>
+              </div>
+            </Link>
           );
         },
       },

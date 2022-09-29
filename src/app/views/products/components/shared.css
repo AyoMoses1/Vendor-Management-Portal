@@ -496,8 +496,11 @@
     height: 70%;
 }
 
-.scrolling-wrapper-grid {
+.scrolling-wrapper--grid {
     margin-top: 30px;
     overflow-x: auto;
-    height: 20rem;
+    margin-top: 30px;
+    overflow-x: auto;
+    min-height: 20rem;
+    max-height: 30rem;
 }

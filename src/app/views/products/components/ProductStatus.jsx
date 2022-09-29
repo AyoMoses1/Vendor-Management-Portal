@@ -7,7 +7,7 @@ import * as yup from 'yup';
 import { updateProduct } from '../ProductService';
 import Alert from 'app/components/Alert';
 
-const statuses = ['APPROVED'];
+const statuses = ['APPROVED', 'DRAFT', 'PUBLISHED', 'ASSIGNED', 'PRIVATE', 'PENDING'];
 
 const ProductStatus = ({ product }) => {
     const [updating, setUpdating] = useState(false);
@@ -50,16 +50,20 @@ const ProductStatus = ({ product }) => {
                 if (res.status === 200) {
                     setValues(res?.data?.object);
                     setUpdating(false)
-                    setAlertData({ success: true, text: "Product updated sucessfully", title: 'Product Updated' })
+                    setAlertData({ success: true, text: "Product status updated sucessfully", title: 'Product Status Updated' })
                     handleDisplayModal();
                 }
                 else {
                     setUpdating(false)
-                    setAlertData({ success: false, text: 'Invalid details provided', title: 'Unable to update product' })
+                    setAlertData({ success: false, text: 'Invalid details provided', title: 'Unable to update product status' })
                     handleDisplayModal();
                 };
             })
-            .catch((err) => console.error(err));
+            .catch((err) => {
+                setUpdating(false)
+                setAlertData({ success: false, text: 'Invalid details provided', title: 'Unable to update product status' })
+                handleDisplayModal();
+            });
     };
 
     return <Box
@@ -163,9 +167,6 @@ const ProductStatus = ({ product }) => {
     </Box>
 }
 
-const productSchema = yup.object().shape({
-    productType: yup.string().required('Product type is required'),
-    price: yup.number().min(1).required('Sale Price is required'),
-});
+const productSchema = yup.object().shape({});
 
 export default ProductStatus;

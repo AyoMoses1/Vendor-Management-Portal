@@ -139,7 +139,7 @@ const ProductDetails = ({ location, placeholder }) => {
           if (res.status === 200) {
             setValues(res?.data?.object);
             setUpdating(false)
-            setAlertData({ success: true, text: "Product updated sucessfully", title: 'Product Updated' })
+            setAlertData({ success: true, text: "Product details updated sucessfully", title: 'Product Updated' })
             handleDisplayModal();
           }
           else {
@@ -148,7 +148,11 @@ const ProductDetails = ({ location, placeholder }) => {
             handleDisplayModal();
           };
         })
-        .catch((err) => console.error(err));
+        .catch((err) => {
+          setUpdating(false)
+          setAlertData({ success: false, text: 'Invalid details provided', title: 'Unable to update product' })
+          handleDisplayModal();
+        });
     }
   };
 
@@ -310,7 +314,7 @@ const ProductDetails = ({ location, placeholder }) => {
                             <FormControl sx={{ width: '48%' }} variant="outlined">
                               <Autocomplete
                                 id='brands'
-                                options={brands.filter(item => item?.name)}
+                                options={brands?.filter(item => item?.name)}
                                 name='brands'
                                 value={values.brandId}
                                 getOptionLabel={(option) => {

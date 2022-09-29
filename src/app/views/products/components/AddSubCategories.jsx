@@ -3,10 +3,10 @@ import { TextField, Modal, Button, Checkbox } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import Alert from 'app/components/Alert';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import http from '../../../services/api';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import { Formik } from 'formik';
+import { patchProductCategory } from '../ProductService';
 const icon = <CheckBoxOutlineBlankIcon fontSize='small' />;
 const checkedIcon = <CheckBoxIcon fontSize='small' />;
 
@@ -47,13 +47,13 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
-const AddCategories = ({
+const AddSubCategories = ({
     name,
     isOpen,
     handleClose,
     categories,
     refresh,
-    id,
+    category,
 }) => {
     const initialValues = {
         productCategories: [],
@@ -68,25 +68,44 @@ const AddCategories = ({
     const handleModal = () => {
         setOpen(prev => !prev)
     }
-
     const handleSubmit = (values, { setSubmitting }) => {
-        let tempState = values?.productCategories?.map(pc => { return { id: pc?.id } })
+        let tempState = {
+            ...category, subCategories: values?.productCategories?.map(pc => {
+                return {
+                    id: pc?.id,
+                    isFeatured: pc?.isFeatured,
+                    name: pc?.name,
+                    productCategoryImages: pc?.productCategoryImages,
+                    translatedName: pc?.translatedName,
+                    visible: pc?.visible
+                }
+            })
+        };
         setLoading(true);
-        http.patch(`/afrimash/products/${id}/associate-categories`, tempState).then((response) => {
-            setLoading(false);
-            setValues(initialValues);
-            handleClose();
-            refresh();
-        }).catch(err => {
-            setLoading(false);
-            setAlertData({ success: false, text: 'Invalid details provided', title: 'Unable add categories' })
-            handleModal();
-        });
+        patchProductCategory({ ...tempState })
+            .then((res) => {
+                if (res.status === 200) {
+                    setLoading(false);
+                    setValues(initialValues);
+                    handleClose();
+                    refresh();
+                }
+                else {
+                    setLoading(false);
+                    setAlertData({ success: false, text: 'Invalid details provided', title: 'Unable add categories' })
+                    handleModal();
+                };
+            })
+            .catch((err) => {
+                setLoading(false);
+                setAlertData({ success: false, text: 'Invalid details provided', title: 'Unable add categories' })
+                handleModal();
+            });
     };
 
     const body = (
         <div style={modalStyle} className={classes.paper}>
-            <h4 id='simple-modal-title mb-4'>{name}</h4>
+            <h5 id='simple-modal-title mb-4'>{name}</h5>
             <div className="mt-20">
                 <Formik
                     initialValues={values}
@@ -171,4 +190,4 @@ const AddCategories = ({
     )
 }
 
-export default AddCategories;
+export default AddSubCategories;

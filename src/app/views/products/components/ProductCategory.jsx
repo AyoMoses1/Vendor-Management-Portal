@@ -133,16 +133,20 @@ const ProductCategory = ({ product, categories, invoke }) => {
                     prepareCategories(res?.data?.object);
                     setSubCategories([]);
                     setUpdating(false)
-                    setAlertData({ success: true, text: "Product updated sucessfully", title: 'Product Updated' })
+                    setAlertData({ success: true, text: "Product category updated sucessfully", title: 'Product Category Updated' })
                     handleDisplayModal();
                 }
                 else {
                     setUpdating(false)
-                    setAlertData({ success: false, text: 'Invalid details provided', title: 'Unable to update product' })
+                    setAlertData({ success: false, text: 'Invalid details provided', title: 'Unable to update product category' })
                     handleDisplayModal();
                 };
             })
-            .catch((err) => console.error(err));
+            .catch((err) => {
+                setUpdating(false)
+                setAlertData({ success: false, text: 'Invalid details provided', title: 'Unable to update product category' })
+                handleDisplayModal();
+            });
     }
 
     return <Box
@@ -167,7 +171,7 @@ const ProductCategory = ({ product, categories, invoke }) => {
                 {updating ? "Please wait..." : "Save"}
             </Button>
         </div>
-        <div className="scrolling-wrapper-grid">
+        <div className="scrolling-wrapper--grid">
             <Grid container spacing={2} className='mt-4 product-category'>
                 <Grid item lg={12} md={12} sm={12} xs={12}>
                     <FormGroup className='form-group'>
