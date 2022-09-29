@@ -1,49 +1,88 @@
-.contianer__auth {
-  width: 467px;
-  overflow: hidden;
-  position: absolute;
-  top: 5px;
-  left: 50%;
-  @media (max-width: 800px) {
-    top: 2px;
-    left: 12px;
-    right: 12px;
-    width: auto;
-    margin-bottom: 10%;
-  }
+// .contianer__auth {
+//   width: 100%;
+//   overflow: hidden;
+//   position: absolute;
+//   top: 5px;
+//   left: 50%;
+//   @media (max-width: 800px) {
+//     top: 2px;
+//     left: 12px;
+//     right: 12px;
+//     width: auto;
+//     margin-bottom: 10%;
+//   }
 
-  .sub__header {
-    font-family: sans-serif;
-    font-style: normal;
-    font-weight: bold;
-    font-size: 16px;
-    line-height: 24px;
-    color: #979dac !important;
-    margin-top: 10px;
-    @media (max-width: 1200px) {
-      text-align: center;
-    }
-  }
+//   .sub__header {
+//     font-family: sans-serif;
+//     font-style: normal;
+//     font-weight: bold;
+//     font-size: 16px;
+//     line-height: 24px;
+//     color: #979dac !important;
+//     margin-top: 10px;
+//     @media (max-width: 1200px) {
+//       text-align: center;
+//     }
+//   }
+// }
+
+.contains {
+  background: #FFFFFF;
+  box-shadow: -4px 4px 60px rgba(0, 0, 0, 0.16);
+  margin-top: 7em !important;
+  width: 56.3% !important;
+  height: 744px !important;
+  text-align: center;
 }
-.logo__container {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
-}
+
+
+
 .main__header {
-  font-family: sans-serif;
-  font-style: normal;
-  font-weight: bold;
-  text-align: left;
-  font-size: 28px;
   width: 100%;
-  line-height: 48px;
-  color: #000 !important;
+  height: 42px;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 42px;
+  letter-spacing: 0.02em;
+  color: #0F4E08;
+
   @media (max-width: 1200px) {
     text-align: center;
     margin-top: -4px;
   }
+}
+
+.sub__header{
+  width: 100%;
+  height: 30px;
+  margin-top: -10px;
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 30px;
+  text-align: center;
+  color: #000000;
+}
+
+.title {
+  text-align: left;
+  color: #000 !important;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 300;
+  font-size: 20px;
+  line-height: 23px;
+  width: 480px;
+  margin: auto;
+}
+
+.input {
+  background: #F8F8F8 !important;
+  border-radius: 8px;
+  width: 480px;
 }
 
 .button__signin {

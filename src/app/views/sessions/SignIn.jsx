@@ -1,15 +1,14 @@
 import React, { Component } from 'react'
-import { withStyles, CircularProgress } from '@material-ui/core'
+import { withStyles, CircularProgress, Container } from '@material-ui/core'
 import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator'
 import { connect } from 'react-redux'
 import { PropTypes } from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import Notification from 'app/components/Notification'
-
+import InputLabel from '@mui/material/InputLabel';
 import './style.scss'
 import afrimash2 from './assets/svg/afrimash2.0.svg'
 import { loginWithEmailAndPassword } from '../../redux/actions/LoginActions'
-import Sidebar from './sidebar/Sidebar'
 import history from 'history.js'
 
 const styles = (theme) => ({
@@ -47,22 +46,19 @@ class SignIn extends Component {
   render() {
     let { username, password} = this.state
     let { classes } = this.props
-    return (
-      <React.Fragment>
-        <Sidebar />
-          <div className="contianer__auth">
-            <div className="logo__container ">
-              <img
-                height={200}
-                width={120}
-                src={afrimash2}
-                alt="afrimash-logo"
-              />
-            </div>
-            <h3 className="main__header">Sign in to your workspace.</h3>
-            <h4 className="sub__header">
-              Enter your details below to continue
-            </h4>
+    return ( 
+          <div>
+          <Container className="flex flex-middle contains">
+          <div className="flex flex-middle flex-space-between brand-area">
+        <div className="flex flex-middle brand">
+          <img src="/assets/images/Afrimash.svg" alt="company-logo" />
+          <span className="brand__text">Afrimash</span>
+        </div>
+        {this.props.children}
+      </div>
+            <p className="main__header">Sign in to your workspace.</p>
+            <p className='sub__header'>Welcome back </p>
+            <p className='sub__header'>Enter your details below to continue</p>
             {this.props.login.error.errorCode && (
               <Notification
                 alert={"Invalid email or password."}
@@ -72,24 +68,31 @@ class SignIn extends Component {
             <ValidatorForm 
               ref="form" 
               onSubmit={this.handleFormSubmit}>
+              <InputLabel htmlFor="firstname-input" className='title'>
+                Email
+              </InputLabel> 
               <TextValidator
-                className="mt-20 mb-24 w-100"
+                className="mt-20 mb-24 w-100 input"
                 variant="outlined"
-                label="Email"
                 onChange={this.handleChange}
                 type="email"
-                name="username"
+                placeholder='E.g Taiwo4real'
+                name='email'
                 value={username}
                 disabled={this.props.login.loading}
                 validators={["required", "isEmail"]}
                 errorMessages={["this field is required", "User is not valid"]}
               />
+
+              <InputLabel htmlFor="firstname-input" className='title'>
+                Password
+              </InputLabel> 
               <TextValidator
-                className="mb-16 w-100"
-                label="Password"
+                className="mb-16 w-100 input"
                 variant="outlined"
                 onChange={this.handleChange}
                 name="password"
+                placeholder='*********'
                 disabled={this.props.login.loading}
                 type="password"
                 value={password}
@@ -118,9 +121,9 @@ class SignIn extends Component {
                 </button>
               </div>
             </ValidatorForm>
+            </Container>
           </div>
         
-      </React.Fragment>
     );
   }
 }
