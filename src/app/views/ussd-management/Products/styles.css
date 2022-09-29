@@ -1,0 +1,94 @@
+.ussd-cat-table thead tr th {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+    background: #F0F2F5;
+    font-size: 14px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+.ussd-cat-table thead tr th .MuiButton-text {
+    font-weight: 500;
+    color: #000000;
+}
+
+.ussd-cat-table .MuiTableCell-root {
+    border-bottom: 4px solid #ffffff !important;
+}
+
+.ussd-cat-table tbody tr td {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+    background: #FAFBFD;
+    font-size: 12px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    color: #000000;
+}
+
+.ussd-cat-table .MuiTable-root {
+    margin-top: 10px;
+}
+
+.featured {
+    background: #C6F0DC;
+    border-radius: 50%;
+    height: 16px;
+    width: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.featured div {
+    background: #27AE60;
+    border-radius: 50%;
+    height: 12px;
+    width: 12px;
+}
+
+.not-featured {
+    background: #D9D9D9;
+    border-radius: 50%;
+    height: 16px;
+    width: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.not-featured div {
+    background: #636262;
+    border-radius: 50%;
+    height: 12px;
+    width: 12px;
+}
+
+.category {
+    padding: 5px 8px;
+    width: fit-content;
+    border-radius: 6px;
+    font-size: 10px;
+    font-weight: 500px;
+}
+
+.isFeatured {
+    color: #636262;
+    background-color: #D9D9D9;
+    border-radius: 6px;
+    font-size: 12px;
+    text-transform: capitalize;
+}
+
+.isNotFeatured {
+    color: #27AE60;
+    background-color: #C6F0DC;
+    border-radius: 6px;
+    font-size: 12px;
+    text-transform: capitalize;
+}
+
+button.flex-featured{
+    min-width: 150px;
+}
+

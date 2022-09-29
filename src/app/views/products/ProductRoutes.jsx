@@ -4,7 +4,7 @@ const Products = MatxLoadable({
   loader: () => import("./ProductsList"),
 });
 const ProductDetails = MatxLoadable({
-  loader: () => import("./ProductDetailsTwo"),
+  loader: () => import("./ProductDetails"),
 });
 const NewProduct = MatxLoadable({
   loader: () => import("./NewProduct"),
@@ -34,6 +34,10 @@ const Features = MatxLoadable({
 
 const CatergoryDetails = MatxLoadable({
   loader: () => import("./CategoryDetails"),
+});
+
+const CategoryUpdate = MatxLoadable({
+  loader: () => import("./CategoryUpdate"),
 });
 
 const productRoutes = [
@@ -76,6 +80,10 @@ const productRoutes = [
   {
     path: "/product-category/details",
     component: CatergoryDetails,
+  },
+  {
+    path: "/product-category/update",
+    component: CategoryUpdate,
   },
 ];
 

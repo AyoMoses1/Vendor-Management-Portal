@@ -36,14 +36,12 @@ const Products = () => {
   }
 
   const created = (id) => {
-    console.log(id);
     setCreatedId(id);
     setAlertData({ success: true, text: "Product created sucessfully", title: 'Product Created' })
     handleDisplayModal();
   }
 
   const handleOK = () => {
-    console.log(createdId);
     handleDisplayModal();
     history.push({
       pathname: '/product/details',
@@ -56,7 +54,6 @@ const Products = () => {
       const response = await getAllResults(page, size, query)
       setProducts(response?.content)
       setCount(response?.totalElements)
-      console.log(response, "tested unit")
     }
 
     fetchAllProducts()
@@ -237,19 +234,22 @@ const Products = () => {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
           let product = products[dataIndex];
-          let n = product?.tags?.map((name) => name?.name);
+          let n = product.tags.map((name) => name.name);
           return (
-            <div className='flex'>
-              <div className='ml-3'>
+            <div className='flex items-center product__tags'>
+              <div className='ml-4'>
                 <Link
                   to={{
                     pathname: "/product/details",
                     state: {
-                      id: product?.id,
+                      id: product.id,
                     },
                   }}
+                  className="ml-3 mr-4"
                 >
-                  {n.length > 0 ? n.join(',').slice(0, 8) + "..." : ' ---'}
+                  <span className='my-0 text-15'>
+                    {n.length > 0 ? n.join(',').slice(0, 8) + "..." : ' ----'}
+                  </span>
                 </Link>
               </div>
             </div>
@@ -298,13 +298,13 @@ const Products = () => {
                   to={{
                     pathname: "/product/details",
                     state: {
-                      id: product?.id,
+                      id: product.id,
                     },
                   }}
-                  className="SEO"
+                  className="ml-3 mr-4 seo__flex"
                 >
-                  <CircleIcon />
-                  <div className='my-0 text-15'> {product?.seo || '70%'}</div>
+                  <CircleIcon className='seo-icon' />
+                  <span className='my-0 text-15'> {product?.seo || '70%'}</span>
                 </Link>
               </div>
             </div>
@@ -320,19 +320,20 @@ const Products = () => {
         customBodyRenderLite: (dataIndex) => {
           let product = products[dataIndex];
           return (
-            <div className='flex'>
-              <div className='ml-3'>
-                <Link
-                  to={{
-                    pathname: '/product/details',
-                    state: {
-                      id: product?.id,
-                    },
-                  }}
-                >
-                  {product?.storeId?.sellerId?.name?.slice(0, 10) + "..." || '---'}
-                </Link>
-              </div>
+            <div className='flex items-center product__seller'>
+              <Link
+                to={{
+                  pathname: '/product/details',
+                  state: {
+                    id: product.id,
+                  },
+                }}
+                className='ml-4'
+              >
+                <span className='my-0 text-15'>
+                  {product.storeId.sellerId.name.slice(0, 10) + "..." || '-----'}
+                </span>
+              </Link>
             </div>
           );
         },

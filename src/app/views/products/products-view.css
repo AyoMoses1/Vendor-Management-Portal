@@ -90,15 +90,29 @@
   background-color: rgba(239, 136, 44, 0.15);
 }
 
-.PROCESSING {
+.PUBLISHED {
   color: #2F80ED;
-  ;
   background-color: rgba(47, 128, 237, 0.15);
 }
 
-.CANCELLED {
+.PRIVATE {
   color: #EB5757;
   background-color: rgba(234, 95, 95, 0.15);
+}
+
+.DRAFT {
+  color: #828282;
+  background-color: rgba(130, 130, 130, 0.15);
+}
+
+.ASSIGNED {
+  color: #076a70;
+  background-color: #d7fdff;
+}
+
+.PENDING {
+  color: #1f4535;
+  background-color: #e3e3e3;
 }
 
 .PRODUCT {
@@ -118,4 +132,32 @@
 
 .SEO svg {
   font-size: 12px;
+}
+.seo-icon{
+  color: rgb(7, 162, 7);
+}
+.seo__flex{
+  width: 200px !important;
+  display: flex;
+  align-items: center;
+}
+.time-muted{
+  font-size: 8px;
+}
+.featured{
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: grey;
+}
+.not-featured{
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgb(7, 162, 7);
+}
+.flex-featured{
+  display: flex;
+  justify-content: center;
+  font-weight: 400;
 }

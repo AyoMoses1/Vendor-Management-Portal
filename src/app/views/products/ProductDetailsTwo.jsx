@@ -51,7 +51,6 @@ const ProductDetailsTwo = ({ location }) => {
     getProduct()
   }, [])
 
-  console.log(product, "test product data")
   return (
     <div className='m-sm-30'>
       <div className='mb-sm-30'>
