@@ -10,7 +10,10 @@ import "./style.scss";
 import afrimash2 from "./assets/svg/afrimash2.0.svg";
 import { loginWithEmailAndPassword } from "../../redux/actions/LoginActions";
 import history from "history.js";
-import PasswordField from 'material-ui-password-field'
+import PasswordField from 'material-ui-password-field';
+
+
+
 
 
 const styles = (theme) => ({
@@ -48,27 +51,33 @@ class SignIn extends Component {
   render() {
     let { username, password } = this.state;
     let { classes } = this.props;
-    return (
-      <div>
-        <Container className="flex flex-middle contains">
-          <div className="flex flex-middle flex-space-between brand-area">
-            <div className="flex flex-middle brand">
+    return ( 
+      <div className="background">   
+     
+     
+        <Container className="contains">   
+          <div className="float">
+            <div className="flex brand">
               <img src="/assets/images/Afrimash.svg" alt="company-logo" />
-              <img src="/as"/>
+              <img className="image" src="/assets/images/Vector.png" alt= 'logo'/>
             </div>
-            {this.props.children}
-          </div>
+            {/* {this.props.children} */}
+          </div>      
+           
        
             <p className="main__header">Sign in to your workspace.</p>
-            <p className="sub__header">Welcome back </p>
-            <p className="sub__header">Enter your details below to continue</p>
-            {this.props.login.error.errorCode && (
-              <Notification
-                alert={"Invalid email or password."}
-                severity="error"
-              />
-            )}
-            <div className="container">
+            <div>
+              <p className="sub__header">Welcome back </p>
+              <p className="sub__header">Enter your details below to continue</p>
+              {this.props.login.error.errorCode && (
+                <Notification
+                  alert={"Invalid email or password."}
+                  severity="error"
+                />
+              )}
+            </div>
+           
+            <div className="contained">
               <ValidatorForm ref="form" onSubmit={this.handleFormSubmit}>
                 
                 <InputLabel htmlFor="email" className="title space">
@@ -123,8 +132,9 @@ class SignIn extends Component {
               </div>
             </ValidatorForm>
           </div>
-        </Container>
+        </Container> 
       </div>
+       
     );
   }
 }
