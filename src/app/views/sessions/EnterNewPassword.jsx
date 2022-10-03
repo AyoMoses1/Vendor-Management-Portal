@@ -70,7 +70,7 @@ class EnterNewPassword extends Component {
         </div>
         <h2 className="main-header">Afrimash Admin</h2>
         <Container maxWidth="sm" className="flex flex-middle contain">
-          <div className="container">
+          <div className="box">
             <h3 className="reset"> Reset your Password </h3>
             <p className="reword">Enter your new password below.</p>
             <h6 className="new-password">Enter new password</h6>
