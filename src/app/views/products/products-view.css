@@ -133,17 +133,21 @@
 .SEO svg {
   font-size: 12px;
 }
+
 .seo-icon{
   color: rgb(7, 162, 7);
 }
+
 .seo__flex{
   width: 200px !important;
   display: flex;
   align-items: center;
 }
+
 .time-muted{
   font-size: 8px;
 }
+
 .featured{
   width: 20px;
   height: 20px;

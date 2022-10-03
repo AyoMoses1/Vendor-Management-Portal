@@ -127,7 +127,7 @@ const CustomerList = () => {
                 }}
                 className='ml-3'
               >
-                <h5 className='my-0 text-12 text-control'>{`${user?.fullName}`}</h5>
+                <span className='my-0 text-15'>{`${user?.fullName}`}</span>
               </Link>
             </div>
           )
@@ -153,7 +153,7 @@ const CustomerList = () => {
                 }}
                 className='ml-3'
               >
-                <h5 className='my-0 text-muted ellipsis'> {user.mobileNo || '-----'}</h5>
+                <span className='my-0 text-15'> {user.mobileNo || '-----'}</span>
               </Link>
             </div>
           )
@@ -169,7 +169,7 @@ const CustomerList = () => {
         customBodyRenderLite: (dataIndex) => {
           let user = userList[dataIndex]
           return (
-            <div className='flex items-center'>
+            <div className='flex items-center customer__phone'>
               <Link
                 to={{
                   pathname: '/customer/details',
@@ -179,7 +179,7 @@ const CustomerList = () => {
                 }}
                 className='ml-3'
               >
-                <h6 className='my-0 text-muted'>{user.email || '-----'}</h6>
+                <span className='my-0 text-15'>{user.email || '-----'}</span>
               </Link>
             </div>
           )
@@ -205,10 +205,10 @@ const CustomerList = () => {
                 }}
                 className='ml-3'
               >
-                <h5 className='my-0 text-muted'>
+                <span className='my-0 text-15'>
                   {' '}
                   {user.dateRegistered.split(" ")[0] || '-----'}
-                </h5>
+                </span>
                 <span className='date'>
                 {user.dateRegistered.split(" ")[1] || '-----'}
                 </span>
@@ -227,7 +227,7 @@ const CustomerList = () => {
         customBodyRenderLite: (dataIndex) => {
           let user = userList[dataIndex]
           return (
-            <div className='flex items-center'>
+            <div className='flex items-center customer__activity'>
               <Link
                 to={{
                   pathname: '/customer/details',
@@ -237,10 +237,10 @@ const CustomerList = () => {
                 }}
                 className='ml-3'
               >
-                <h5 className='my-0 text-muted'>
+                <span className='my-0 text-15'>
                   {' '}
                   {user.lastActivity|| '------'}
-                </h5>
+                </span>
               </Link>
             </div>
           )
@@ -256,7 +256,7 @@ const CustomerList = () => {
         customBodyRenderLite: (dataIndex) => {
           let user = userList[dataIndex]
           return (
-            <div className='flex items-center'>
+            <div className='flex items-center total__spend'>
               <Link
                 to={{
                   pathname: '/customer/details',
@@ -266,7 +266,7 @@ const CustomerList = () => {
                 }}
                 className='ml-3'
               >
-                <h6 className='my-0 text-muted'>{user.creditSpent || '----------'}</h6>
+                <span className='my-0 text-15'>{user.creditSpent || '----------'}</span>
               </Link>
             </div>
           )
@@ -282,7 +282,7 @@ const CustomerList = () => {
         customBodyRenderLite: (dataIndex) => {
           let user = userList[dataIndex]
           return (
-            <div className='flex items-center'>
+            <div className='flex items-center credit__limit'>
               <Link
                 to={{
                   pathname: '/customer/details',
@@ -292,7 +292,7 @@ const CustomerList = () => {
                 }}
                 className='ml-3'
               >
-                <h6 className='my-0 text-muted'>{user.creditLimit || '#5,023,500.00'}</h6>
+                <span className='my-0 text-15'>{user.creditLimit || '#5,023,500.00'}</span>
               </Link>
             </div>
           )

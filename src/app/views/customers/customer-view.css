@@ -23,13 +23,10 @@
   }
   
   .customer-table tbody tr td {
-    padding-left: 24px !important;
-    padding-right: 24px !important;
     background: #FAFBFD;
     font-size: 12px;
-    padding-top: 6px;
-    padding-bottom: 6px;
-    color: #000000;
+    padding: 10px 20px;
+    align-items: center !important;
   }
   
   .customer-table .MuiTable-root {
@@ -37,28 +34,9 @@
   }
   
   
-
-
 .sources .MuiSelect-root {
     padding: 12px;
     font-size: 12px;
-}
-
-.text-control {
-    font-size: 14px;
-    color:#4A466DDE;
-    
-}
-
-.ellipsis {
-    font-size: 14px;
-    color:#4A466DDE;
-   
-}
-
-.text-muted {
-    font-size: 14px;
-    color:#4A466DDE;    
 }
 
 .date {
@@ -73,12 +51,26 @@
 }
 
 .customer__email{
-    width: 150px;
+    width: 100px;
     overflow: hidden;
 }
 
 .date__registered {
     width: 150px;
     overflow: hidden;
-    text-align: left;
+}
+
+.total__spend {
+  width: 150px;
+  overflow: hidden;
+}
+
+.credit__limit {
+  width: 150px;
+  overflow: hidden;
+}
+
+.customer__phone {
+  width: 150px;
+  overflow: hidden;
 }

@@ -114,29 +114,36 @@ Input {
     font-size: 12px;
     padding-top: 6px;
     padding-bottom: 6px;
-    color: #000000;
+    color: #4A466DDE !important;
   }
   
   .vendor-table .MuiTable-root {
-    margin-top: 10px;
+    margin-top: 10px;   
   }
-  
-  
 
-
-
-.text-muted {
-    color: #4A466DDE;
-    font-size: 12px;
-    font-family: Roboto, Arial, Helvetica, sans-serif;
-}
-  
-.text-control {
-    font-size: 14px;
-    color: #4A466DDE;
-  
-}
  
+.vendor__name{
+  width: 150px;
+  overflow: hidden;
+  text-align: left;
+  
+}
+
+.vendor__email{
+  width: 100px;
+  overflow: hidden;
+  text-align: left;
+}
+
+.vendor__number {
+  width: 150px;
+  overflow: hidden;
+}
+
+.vendor__store {
+  width: 150px;
+  overflow: hidden;
+}
 
 .ACTIVE {
   border-color: #008a16 !important;
