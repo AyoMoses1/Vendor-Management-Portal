@@ -136,4 +136,31 @@ Input {
     color: #4A466DDE;
   
 }
-  
+ 
+
+.ACTIVE {
+  border-color: #008a16 !important;
+}
+
+.PENDING {
+  color: #EF882C;
+  background-color: rgba(239, 136, 44, 0.15);
+}
+
+.VERIFIED {
+  color: #27AE60;
+  background-color: rgba(39, 174, 96, 0.1);
+}
+
+.SUSPENDED {
+  background-color: #ed1515 ;
+  color: #fff;
+}
+
+.VENDOR {
+  padding: 5px 8px;
+  width: fit-content;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500px;
+}

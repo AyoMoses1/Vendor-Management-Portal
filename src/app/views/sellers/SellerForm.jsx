@@ -10,7 +10,7 @@ import { Formik } from 'formik'
 import * as yup from 'yup';
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
-import './Sellerform.scss';
+import './Sellerform.css';
 import { CountryDropdown} from "react-country-region-selector";
 
 import Input from 'react-phone-number-input/input'

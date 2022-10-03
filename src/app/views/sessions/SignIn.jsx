@@ -6,7 +6,7 @@ import { PropTypes } from "prop-types";
 import { withRouter } from "react-router-dom";
 import Notification from "app/components/Notification";
 import InputLabel from "@mui/material/InputLabel";
-import "./style.scss";
+import "./style.css";
 import afrimash2 from "./assets/svg/afrimash2.0.svg";
 import { loginWithEmailAndPassword } from "../../redux/actions/LoginActions";
 import history from "history.js";
@@ -53,7 +53,7 @@ class SignIn extends Component {
     let { classes } = this.props;
     return ( 
       <div className="background">   
-     
+         <div className="block">
      
         <Container className="contains">   
           <div className="float">
@@ -133,6 +133,7 @@ class SignIn extends Component {
             </ValidatorForm>
           </div>
         </Container> 
+        </div>
       </div>
        
     );
