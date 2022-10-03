@@ -39,7 +39,6 @@ const CategorySelect = ({ category, categories, invoke }) => {
 
     useEffect(() => {
         if (category) {
-            console.log(category);
             setValues(category);
         }
     }, [category])
@@ -51,7 +50,16 @@ const CategorySelect = ({ category, categories, invoke }) => {
     };
 
     const handleSubmit = (items, { setSubmitting }) => {
-        const payload = { ...values, ...items };
+        let payload = { ...values, ...items };
+        if (subCategories?.length && payload?.subCategories?.length) {
+            const subs = [];
+            for (let i = 0; i < payload?.subCategories?.length; i++) {
+                if (!subCategories.includes(payload?.subCategories[i]?.id)) {
+                    subs.push(payload?.subCategories[i])
+                }
+            }
+            payload = { ...payload, subCategories: subs }
+        }
         setUpdating(true)
         patchProductCategory({ ...payload })
             .then((res) => {
