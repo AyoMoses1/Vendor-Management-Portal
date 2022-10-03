@@ -41,6 +41,9 @@ const useStyles = makeStyles((theme) => ({
     border: '0.5px solid #0F4E08',
     borderRadius: '8px',
     color: '#ffffff',
+    fontFamily:'Fira Sans Condensed'
+   
+    
   }
 }))
 
