@@ -12,10 +12,6 @@
     color: #000000;
 }
 
-.ussd-cat-table .MuiTableCell-root {
-    border-bottom: 4px solid #ffffff !important;
-}
-
 .ussd-cat-table tbody tr td {
     padding-left: 24px !important;
     padding-right: 24px !important;
@@ -38,6 +34,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-left: 40px !important;
 }
 
 .featured div {
@@ -55,6 +52,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-left: 40px !important;
 }
 
 .not-featured div {
@@ -80,4 +78,8 @@
 .isNotFeatured {
     color: #27AE60;
     background-color: #C6F0DC;
+}
+
+.ussd-cat-table tbody tr td{
+    border: none !important;
 }

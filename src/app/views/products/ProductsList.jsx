@@ -339,24 +339,24 @@ const Products = () => {
         },
       },
     },
-    {
-      name: 'action',
-      label: 'Action',
-      options: {
-        filter: false,
-        customBodyRenderLite: (dataIndex) => {
-          let product = products[dataIndex];
-          return (
-            <Button
-              onClick={() => handleFeaturedOnUSSD(product)}
-              variant='text'
-            >
-              {product.isFeaturedOnUssd ? 'Remove from USSD' : 'Add to USSD'}
-            </Button>
-          );
-        },
-      },
-    },
+    // {
+    //   name: 'action',
+    //   label: 'Action',
+    //   options: {
+    //     filter: false,
+    //     customBodyRenderLite: (dataIndex) => {
+    //       let product = products[dataIndex];
+    //       return (
+    //         <Button
+    //           onClick={() => handleFeaturedOnUSSD(product)}
+    //           variant='text'
+    //         >
+    //           {product.isFeaturedOnUssd ? 'Remove from USSD' : 'Add to USSD'}
+    //         </Button>
+    //       );
+    //     },
+    //   },
+    // },
     // {
     //   name: 'action',
     //   label: ' ',
