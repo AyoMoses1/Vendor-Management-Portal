@@ -158,6 +158,32 @@ const SellerList = () => {
       },
     },
 
+    {
+      name: 'status',
+      label: 'Status',
+      options: {
+        filter: true,
+        customBodyRenderLite: (dataIndex) => {
+          let user = userList[dataIndex]
+          return (
+            <Link
+              to={{
+                pathname: '/vendor/details',
+                state: {
+                  id: user.id,
+                },
+              }}
+              className='flex items-center'
+            >
+              <div className='ml-3'>
+                <h5 className='my-0 text-muted'>{user.status || '-----'}</h5>
+              </div>
+            </Link>
+          )
+        },
+      },
+    },
+
     // {
     //   name: 'action',
     //   label: ' ',
