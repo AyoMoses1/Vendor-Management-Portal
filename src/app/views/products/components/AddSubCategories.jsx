@@ -70,7 +70,7 @@ const AddSubCategories = ({
     }
     const handleSubmit = (values, { setSubmitting }) => {
         let tempState = {
-            ...category, subCategories: values?.productCategories?.map(pc => {
+            ...category, subCategories: [...category?.subCategories, ...values?.productCategories?.map(pc => {
                 return {
                     id: pc?.id,
                     isFeatured: pc?.isFeatured,
@@ -79,7 +79,7 @@ const AddSubCategories = ({
                     translatedName: pc?.translatedName,
                     visible: pc?.visible
                 }
-            })
+            })]
         };
         setLoading(true);
         patchProductCategory({ ...tempState })
