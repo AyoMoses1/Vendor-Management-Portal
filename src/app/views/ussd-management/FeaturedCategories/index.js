@@ -194,6 +194,7 @@ const USSDProductCategoriesComponent = () => {
             <Button
               onClick={() => handleFeaturedOnUSSD(productCategory)}
               variant='text'
+              className='ml-btn'
             >
               {productCategory.isFeaturedOnUssd ? (
                 <div className={`items-center category isFeatured`}>
