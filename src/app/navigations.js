@@ -110,7 +110,12 @@ export const navigations = [
     icon: 'phonelink',
     children: [
       {
-        name: 'Featured Categories',
+        name: 'Feature Products',
+        path: '/ussd-products',
+        iconText: '',
+      },
+      {
+        name: 'Feature Categories',
         path: '/ussd-featured-categories',
         iconText: '',
       },
@@ -120,13 +125,8 @@ export const navigations = [
         iconText: '',
       },
       {
-        name: 'USSD Special Orders',
+        name: 'Special Orders',
         path: '/ussd-special-orders',
-        iconText: '',
-      },
-      {
-        name: 'USSD Products',
-        path: '/ussd-products',
         iconText: '',
       },
     ],

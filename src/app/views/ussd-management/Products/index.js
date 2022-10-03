@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Breadcrumb } from 'matx';
 import MUIDataTable from 'mui-datatables';
-import { Grow, Icon, IconButton, TextField, Button } from '@material-ui/core';
+import { Grow, Icon, IconButton, TextField, Button,  MenuItem } from '@material-ui/core';
 import { Link, useHistory } from 'react-router-dom';
 import { useDialog } from 'muibox';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
@@ -29,6 +29,8 @@ const Products = () => {
   const [alertData, setAlertData] = React.useState({ success: false, text: '', title: '' });
   const [alertOpen, setAlertOpen] = React.useState(false)
   const [createdId, setCreatedId] = React.useState(null);
+  const [title, setTitle] = React.useState('USSD Products Table')
+  const [source, setSource] = useState("ALL");
 
   const handleDisplayModal = () => {
     setAlertOpen(!alertOpen)
@@ -40,6 +42,20 @@ const Products = () => {
     handleDisplayModal();
   }
 
+  const options = [
+    {
+      type: "ALL PRODUCTS",
+      value: "ALL",
+    },
+    {
+      type: "FEATURED",
+      value: true,
+    },
+    {
+      type: "NOT FEATURED",
+      value: false,
+    }
+  ];
   const handleOK = () => {
     handleDisplayModal();
     history.push({
@@ -48,16 +64,22 @@ const Products = () => {
     })
   }
 
+  const handleTitle = (value) => {
+    console.log(value, "source")
+    
+    setSource(value)
+  }
+
   useEffect(() => {
     const fetchAllProducts = async () => {
-      const response = await getAllResults(page, size, query)
+      const response = await getAllResults(page, size, query, source)
       setProducts(response?.content)
       setCount(response?.totalElements)
     }
 
     fetchAllProducts()
     return () => setIsAlive(false);
-  }, [isAlive, page, size]);
+  }, [isAlive, page, size, source]);
 
   const handleFeaturedOnUSSD = (product) => {
     const confirmMessage = product.isFeaturedOnUssd
@@ -99,7 +121,7 @@ const Products = () => {
         customBodyRenderLite: (dataIndex) => {
           let product = products[dataIndex];
           return (
-            <div className='flex-featured'>
+            <div className=''>
               <div className='ml-3'>
                 <Link
                   to={{
@@ -127,7 +149,7 @@ const Products = () => {
           let product = products[dataIndex];
           let n = product?.productCategories?.map((name) => name.name);
           return (
-            <div className='flex-featured'>
+            <div className=''>
               <div className='ml-3'>
                 <Link
                   to={{
@@ -153,7 +175,7 @@ const Products = () => {
         customBodyRenderLite: (dataIndex) => {
           let product = products[dataIndex];
           return (
-            <div className='flex-featured product__date'>
+            <div className='product__date'>
               <div className='ml-3'>
                 <Link
                   to={{
@@ -181,8 +203,8 @@ const Products = () => {
         customBodyRenderLite: (dataIndex) => {
           let product = products[dataIndex];
           return (
-            <div className='flex-featured'>
-              <div className={`ml-3`}>
+            <div className=''>
+              <div className="ml-3 ml-featured">
                 <Link
                   to={{
                     pathname: "/product/details",
@@ -218,21 +240,6 @@ const Products = () => {
                 {product.isFeaturedOnUssd ? 'Remove from USSD' : 'Add to USSD'}
               </Button>
             </div>
-            // <Button
-            //   onClick={() => handleFeaturedOnUSSD(product)}
-            //   variant='text'
-            //   className='flex-featured'
-            // >
-            //   {product.isFeaturedOnUssd ? (
-            //     <div className={`items-center category isFeatured`}>
-            //       <span className="ml-3">Remove from USSD</span>
-            //     </div>
-            //   ) : (
-            //     <div className={`items-center category isNotFeatured`}>
-            //       <span className="ml-3">Add to USSD</span>
-            //     </div>
-            //   )}
-            // </Button>
           );
         },
       },
@@ -266,39 +273,32 @@ const Products = () => {
 
 //   const getMuiTheme = () => createTheme({
 //     overrides: {
-//       MuiTableCell: {
-//         head: {
-//             textAlign: "center",
-//         },
-//         body:{
-//           textAlign:"center !important"
+//       MUIDataTableHeadCell: {
+//         root: {
+//           'div': {
+//              display:'flex',
+//              justifyContent:'start',
+//              alignItems: 'center',
+//              borderBottom: '4px solid #ffffff !important',
+
+//            },
+//            '&:nth-child(5)': {
+//             paddingLeft:"70px !important",
+//          }
 //         }
-        
-//     },
-//     MUIDataTableHeadCell: {
-//       toolButton: {
-//         display:"flex !important",
-//         justifyContent: 'center !important',
-//         background:"red",
-//         textAlign: "center"
 //       },
-//     },
+//       MUIDataTableBodyCell: {
+//         root: {
+//           borderBottom: '4px solid #ffffff !important',
+//           '&:nth-child(4)': {
+//              textAlign: 'center',
+//              marginLeft:"30px",
+//           }
+//         }
+//       }
 //     }
 // });
-const getMuiTheme = () =>
-createMuiTheme({
-  components: {
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          fontFamily: 'poppins',
-          justifyContent: 'center',
-          fontWeight: 'bold',
-        },
-      },
-    },
-  },
-})
+
   return (
     <div className="m-sm-30">
       <div className="mb-sm-30">
@@ -310,9 +310,37 @@ createMuiTheme({
             <Loading />
           ) : (
             <div>
-              <MuiThemeProvider theme={getMuiTheme()}>   
               <MUIDataTable
-                title={<h5 className='mt-4 mb-0 product-table'>All Products</h5>}
+                title={
+                  <div>
+                    <h5 className="mt-4 mb-0">{title}</h5>
+                    <div className="w-full flex">
+                      <div className="w-220 flex-end order-sources">
+                        <TextField
+                          className="mb-4 filter-area"
+                          name="mobileNo"
+                          label="Filter by source"
+                          variant="outlined"
+                          margin="normal"
+                          select
+                          value={source}
+                          onChange={(e) => {
+                            setSource(e.target.value)
+                            handleTitle(e.target.value)
+                          }}
+                        >
+                          {options.map((option, idx) => (
+                            <MenuItem key={idx} value={option.value}>
+                              {option.type}
+                            </MenuItem>
+                          ))}
+                        </TextField>
+                      </div>
+                      <div>
+                      </div>
+                    </div>
+                  </div>
+                }
                 data={products}
                 columns={columns}
                 options={{
@@ -381,29 +409,8 @@ createMuiTheme({
                       </Grow>
                     );
                   },
-                  customToolbar: () => {
-                    return (
-                      <>
-                        <Link
-                          to={{
-                            pathname: "/product/new",
-                            state: {},
-                          }}
-                        >
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          // onClick={() => handleModal()}
-                        >
-                          Add New
-                        </Button>
-                        </Link>
-                      </>
-                    );
-                  },
                 }}
               />
-              </MuiThemeProvider>
             </div>
           )}
         </div>

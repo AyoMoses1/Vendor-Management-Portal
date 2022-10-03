@@ -149,12 +149,14 @@
   height: 20px;
   border-radius: 50%;
   background: grey;
+  margin-left: 30%;
 }
 .not-featured{
   width: 20px;
   height: 20px;
   border-radius: 50%;
   background: rgb(7, 162, 7);
+  margin-left: 30%;
 }
 .flex-featured{
   display: flex;

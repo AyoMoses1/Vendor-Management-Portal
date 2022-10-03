@@ -8,6 +8,7 @@ import {
   TextField,
   Button,
   Chip,
+  MenuItem
 } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { useDialog } from 'muibox';
@@ -20,12 +21,31 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import './style.css';
 
 const USSDProductCategoriesComponent = () => {
+
+  const [title, setTitle] = React.useState('ALL Categories')
+  const [source, setSource] = React.useState("ALL");
+
   const { loading, productCategories, error } = useSelector(
     (state) => state.getFeaturedUssdCat,
   );
   const dialog = useDialog();
   const dispatcher = useDispatch();
 
+
+  const options = [
+    {
+      type: "ALL CATEGORIES",
+      value: "ALL",
+    },
+    {
+      type: "FEATURED",
+      value: true,
+    },
+    {
+      type: "NOT FEATURED",
+      value: false,
+    }
+  ];
   const featureCat = async (productCat) => {
     dispatcher(
       updateCategoryFeature({
@@ -49,6 +69,13 @@ const USSDProductCategoriesComponent = () => {
     } catch (error) {
     }
   };
+
+  const handleTitle = (value) => {
+    console.log(value, "source")
+    
+    setSource(value)
+  }
+
 
   useEffect(() => {
     dispatcher(getProductCategories({}));
@@ -167,6 +194,7 @@ const USSDProductCategoriesComponent = () => {
             <Button
               onClick={() => handleFeaturedOnUSSD(productCategory)}
               variant='text'
+              className='ml-btn'
             >
               {productCategory.isFeaturedOnUssd ? (
                 <div className={`items-center category isFeatured`}>
@@ -200,7 +228,38 @@ const USSDProductCategoriesComponent = () => {
         <div className='min-w-750 ussd-cat-table'>
           {loading && <CircularProgress size={20} />}
           <MUIDataTable
-            title={<h5 className='mt-4 mb-0 product-table'>USSD Featured Categories</h5>}
+            // title={<h5 className='mt-4 mb-0 product-table'>USSD Featured Categories</h5>}
+            title={
+              <div>
+                <h5 className="mt-4 mb-0">{title}</h5>
+                <div className="w-full flex">
+                  <div className="w-220 flex-end order-sources">
+                    <TextField
+                      className="mb-4 filter-area"
+                      name="mobileNo"
+                      label="Filter by source"
+                      variant="outlined"
+                      margin="normal"
+                      select
+                      value={source}
+                      onChange={(e) => {
+                        setSource(e.target.value)
+                        e.target.value ? setTitle("FEATURED CATEGORIES"): setTitle("NON-FEATURED CATEGORIES")
+                        handleTitle(e.target.value)
+                      }}
+                    >
+                      {options.map((option, idx) => (
+                        <MenuItem key={idx} value={option.value}>
+                          {option.type}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </div>
+                  <div>
+                  </div>
+                </div>
+              </div>
+            }
             data={productCategories}
             columns={columns}
             options={{
