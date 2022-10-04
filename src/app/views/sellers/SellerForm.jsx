@@ -14,6 +14,7 @@ import './Sellerform.css';
 import { CountryDropdown} from "react-country-region-selector";
 
 import Input from 'react-phone-number-input/input'
+import { height } from '@mui/system';
 
 
 // Push to test
@@ -163,6 +164,7 @@ return (
             onBlur={handleBlur}
             name='firstName'
             margin='none'
+            className='textfield'
             style={{width:'30ch'}}
             type='text'
             size='small'
@@ -183,6 +185,7 @@ return (
             style={{width:'30ch'}}
             type='text'
             size='small'
+            className='textfield'
             variant='filled'
             error={Boolean(touched.lastName && errors.lastName)}
             helperText={touched.lastName && errors.lastName}
@@ -199,6 +202,7 @@ return (
               name='email'
               margin='none'
               type='text'
+              className='textfield'
               size='small'
               fullWidth
               variant='filled'
@@ -218,6 +222,7 @@ return (
               margin='none'
               size='small'
               type='name'
+              className='textfield'
               fullWidth
               variant='filled'
               error={Boolean(touched.userName && errors.userName)}
@@ -242,6 +247,7 @@ return (
               placeholder='Thommy Tomatoes'
               type='text'
               size='small'
+              className='textfield'
               fullWidth
               variant='filled'
               error={Boolean(touched.address && errors.address)}
@@ -260,6 +266,7 @@ return (
             margin='dense'
             label='City/Town'
             size='small'
+            className='textfield'
             type='text'
             fullWidth
             variant='filled'
@@ -273,15 +280,15 @@ return (
           Type of Store
         </InputLabel>
   
-        <FormGroup>
-          <FormControlLabel control={<Checkbox />} label="Self-Managed" />
-          <FormControlLabel control={<Checkbox />} label="Managed" />
+        <FormGroup >
+          <FormControlLabel className='radio' control={<Checkbox />} label="Self-Managed" />
+          <FormControlLabel  control={<Checkbox />} label="Managed" />
         </FormGroup>
       
       </div>
 
         <div>
-          <InputLabel htmlFor="address-input">
+          <InputLabel htmlFor="address-input " className='title'>
             Address 1
           </InputLabel>
           <TextField
@@ -290,6 +297,7 @@ return (
             name='country'
             margin='none'
             size='small'
+            className='textfield'
             type='text'
             fullWidth
             variant='filled'
@@ -306,6 +314,7 @@ return (
             onChange={handleChange}
             value={values.zipCode || ''}
             name='address'
+            className='textfield'
             margin='none'
             type='text'
             fullWidth
@@ -335,6 +344,7 @@ return (
             margin='dense'
             placeholder='ikeja'
             type='text'
+            className='textfield'
             variant='filled'
             error={Boolean(touched.city && errors.city)}
             helperText={touched.city && errors.city}
@@ -350,6 +360,7 @@ return (
             value={values.state || ''}
             name='state'
             margin='none'
+            className='textfield'
             style={{width:'30ch'}}
             size='small'
             type='text'
@@ -377,6 +388,7 @@ return (
           value={values.zipCode || ''}
           name='zipCode'
           margin='none'
+          className='textfield'
           style={{width:'30ch'}}
           size='small'
           type='number'
@@ -450,7 +462,7 @@ return (
             <p className='shrink'>
             (Voter's catd, National ID Card, International Passport)
           </p>
-            <Button variant="contained" component="label" className='uploads'>
+            <Button variant="contained" component="label" className='upload'>
               Choose file
               <input hidden accept="image/*" multiple type="file" />
             </Button>
@@ -458,7 +470,7 @@ return (
           <InputLabel shrink htmlFor="firstname-input">
           front page
         </InputLabel>
-        <Button variant="contained" component="label" className='uploads'>
+        <Button variant="contained" component="label" className='upload'>
             Choose file
             <input hidden accept="image/*" multiple type="file" />
           </Button>

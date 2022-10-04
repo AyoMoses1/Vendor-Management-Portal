@@ -1,16 +1,22 @@
 .PENDING {
   color: #EF882C;
   background-color: rgba(239, 136, 44, 0.15);
+  font-family:'Overpass', sans-serif;
+  font-weight: 600;
 }
 
 .VERIFIED {
   color: #27AE60;
   background-color: rgba(39, 174, 96, 0.1);
+  font-family:'Overpass', sans-serif;
+  font-weight: 600;
 }
 
 .SUSPENDED {
   background-color: #ed1515 ;
   color: #fff;
+  font-family:'Overpass', sans-serif;
+  font-weight: 600;
 }
 
 .AGENT {
@@ -18,7 +24,7 @@
   width: fit-content;
   border-radius: 6px;
   font-size: 12px;
-  font-weight: 500px;
+  
 }
 
 .w-full {

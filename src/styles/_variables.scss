@@ -30,9 +30,9 @@ $sidenav-compact-width: 80px;
 $contained-layout-width: 1200px;
 
 // Typography
-$font-weight-base: 400;
+$font-weight-base: 400 600 700;
 $font-size-base: 0.875rem;
-$font-family-base: Roboto, 'Helvetica Neue', sans-serif !default;
+$font-family-base: 'Fira Sans Condensed','Hind', 'Overpass', sans-serif;
 
 $font-caption: var(--font-caption);
 $font-body-1: var(--font-body-1);

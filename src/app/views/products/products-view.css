@@ -1,42 +1,63 @@
+body {
+  font-family:'Overpass', sans-serif;
+  font-weight: 600 !important;
+}
+
 .COMPLETED {
   color: #27AE60;
   background-color: rgba(39, 174, 96, 0.1);
+  font-family:'Overpass', sans-serif;
+  font-weight: 600;
 }
 
 .CONVERTED {
   color: black;
   background-color: yellow;
+  font-family:'Overpass', sans-serif;
+  font-weight: 600;
 }
 
 .DELIVERED {
   background-color: #5589ed;
   color: #ffffff;
+  font-family:'Overpass', sans-serif;
+  font-weight: 600;
 }
 
 .ON_HOLD {
   color: #926202;
   background-color: #f8dda7;
+  font-family:'Overpass', sans-serif;
+  font-weight: 600;
 }
 
 .DISPUTED {
   color: #900404;
   background-color: #f9b1b1;
+  font-family:'Overpass', sans-serif;
+  font-weight: 600;
 }
 
 .AWAITING_PAYMENT {
   color: #828282;
   background-color: rgba(130, 130, 130, 0.15);
   display: flex;
+  font-family:'Overpass', sans-serif;
+  font-weight: 600;
 }
 
 .AWAITING_FULFILMENT {
   color: #076a70;
   background-color: #d7fdff;
+  font-family:'Overpass', sans-serif;
+  font-weight: 600;
 }
 
 .MANUAL_VERIFICATION_REQUIRED {
   color: #1f4535;
   background-color: #e3e3e3;
+  font-family:'Overpass', sans-serif;
+  font-weight: 600;
 }
 
 .ORDER {
@@ -51,6 +72,8 @@
   color: #008a16;
   font-weight: 800 !important;
   background-color: #fcfcfc;
+  font-family: 'Overpass', sans-serif;
+  font-weight: 600;
 }
 
 .all-products-table thead tr th {
@@ -60,11 +83,13 @@
   font-size: 14px;
   padding-top: 4px;
   padding-bottom: 4px;
+  
 }
 
 .all-products-table thead tr th .MuiButton-text {
-  font-weight: 500;
   color: #000000;
+  font-family: 'Hind', sans-serif !important;
+  font-weight: 600;
 }
 
 .all-products-table .MuiTableCell-root {
@@ -88,31 +113,43 @@
 .APPROVED {
   color: #EF882C;
   background-color: rgba(239, 136, 44, 0.15);
+  font-family:'Overpass', sans-serif;
+  font-weight: 600;
 }
 
 .PUBLISHED {
   color: #2F80ED;
   background-color: rgba(47, 128, 237, 0.15);
+  font-family:'Overpass', sans-serif;
+  font-weight: 600;
 }
 
 .PRIVATE {
   color: #EB5757;
   background-color: rgba(234, 95, 95, 0.15);
+  font-family:'Overpass', sans-serif;
+  font-weight: 600;
 }
 
 .DRAFT {
   color: #828282;
   background-color: rgba(130, 130, 130, 0.15);
+  font-family:'Overpass', sans-serif;
+  font-weight: 600;
 }
 
 .ASSIGNED {
   color: #076a70;
   background-color: #d7fdff;
+  font-family:'Overpass', sans-serif;
+  font-weight: 600;
 }
 
 .PENDING {
   color: #1f4535;
   background-color: #e3e3e3;
+  font-family:'Overpass', sans-serif;
+  font-weight: 600;
 }
 
 .PRODUCT {
@@ -121,6 +158,8 @@
   border-radius: 6px;
   font-size: 12px;
   font-weight: 500px;
+  font-family:'Overpass', sans-serif;
+  font-weight: 600;
 }
 
 .SEO {

@@ -296,7 +296,7 @@ const SellerList = () => {
                       }}
                     >
                       <IconButton>
-                        <Button variant='contained' color='primary'>
+                        <Button variant='contained' color='primary' className='icon'>
                           <Icon>add</Icon>Add New
                         </Button>
                       </IconButton>

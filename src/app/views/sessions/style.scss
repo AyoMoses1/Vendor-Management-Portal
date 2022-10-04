@@ -18,7 +18,7 @@
 
 .main__header {
   width: 100%;
-  font-family: 'Roboto';
+  font-family:'Hind', sans-serif;
   font-style: normal;
   font-weight: 700;
   font-size: 36px;
@@ -42,9 +42,9 @@
 .sub__header{
   width: 100%;
   height: 30px;
-  font-family: 'Poppins';
+  font-family:  'Overpass', sans-serif;
   font-style: normal;
-  font-weight: 400;
+  font-weight: 600;
   font-size: 20px;
   line-height: 30px;
   text-align: center;
@@ -55,15 +55,15 @@
 .title {
   text-align: left;
   color: #000 !important;
-  font-family: 'Roboto';
-  font-style: normal;
-  font-weight: 300;
+  font-family:  'Overpass', sans-serif !important;
+  font-weight: 400;
   font-size: 20px;
   line-height: 23px;
 }
 
 .space {
   margin-bottom: -15px !important;
+  
 }
 
 .input {
@@ -79,6 +79,7 @@
   color: white;
   background-color: #204e09;
   height: 50px;
+  font-family: 'Fira Sans Condensed', sans-serif;
   font-size: 18px;
   box-shadow: 0px 5px 3px rgba(0, 0, 0, 0.108696);
   width: 100%;
@@ -97,6 +98,8 @@
   background-color: transparent;
   border-width: 2px;
   font-size: 12px;
+  font-family:  'Overpass', sans-serif !important;
+  font-weight: 400;
   cursor: pointer;
   border-width: 0px;
   &:hover {

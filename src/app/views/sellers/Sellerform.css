@@ -5,21 +5,25 @@
 
 .title {
     font-size: 16px !important;
-    font-weight: 100;
     color: rgba(0, 0, 0, 0.877) !important;
     margin: -5px 0px;
+    font-family: 'Overpass', sans-serif;
+    font-weight: 400;
    
 }
 
 .h4{
   color: #000 !important;
-  font-weight: 500 !important;
+  font-weight: 600 ;
   padding: 20px 0px;
+  font-family: 'Hind', sans-serif;
 }
 
 .h2 {
   color: #000 !important;
   padding-bottom: 10px;
+  font-family: 'Hind', sans-serif;
+  font-weight: 700;
 }
 
 .passport {
@@ -39,18 +43,24 @@
   margin: 25px 0px 25px 20px;
   padding: 8px;
   border-bottom: 1px solid rgb(122, 115, 115);
+  font-family:'Overpass', sans-serif ;
+  font-weight: 400;
+}
+
+.css-ahj2mt-MuiTypography-root {
+  font-family:'Overpass', sans-serif !important ;
+  font-weight: 400;
 }
 
 .upload {
   margin-bottom: 30px;
   margin-top: 5px;
+  font-family: 'Fira Sans Condensed', sans-serif;
 }
 
 .field {
   margin: -7px 0px;
 }
-
-
 
 Input {
   width: 30%;
@@ -77,6 +87,8 @@ Input {
 .shrink {
   margin-top: -20px;
   font-size: 10px;
+  font-family:'Overpass', sans-serif ;
+  font-weight: 400;
 }
 
 .register {
@@ -93,14 +105,17 @@ Input {
     padding-left: 24px !important;
     padding-right: 24px !important;
     background: #F0F2F5;
-    font-size: 14px;
     padding-top: 4px;
     padding-bottom: 4px;
+    
+    
   }
   
   .vendor-table thead tr th .MuiButton-text {
-    font-weight: 500;
     color: #000000;
+    font-family: 'Hind', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
   }
   
   .vendor-table .MuiTableCell-root {
@@ -126,6 +141,9 @@ Input {
   width: 150px;
   overflow: hidden;
   text-align: left;
+  font-family: 'Overpass', sans-serif;
+  font-weight: 400;
+
   
 }
 
@@ -133,35 +151,56 @@ Input {
   width: 100px;
   overflow: hidden;
   text-align: left;
+  font-family: 'Overpass', sans-serif;
+  font-weight: 400;
+
 }
 
 .vendor__number {
   width: 150px;
   overflow: hidden;
+  font-family: 'Overpass', sans-serif;
+  font-weight: 400;
+
 }
 
 .vendor__store {
   width: 150px;
   overflow: hidden;
+  font-family: 'Overpass', sans-serif;
+  font-weight: 400;
+}
+
+.vendor__address {
+  font-family: 'Overpass', sans-serif;
+  font-weight: 400;
 }
 
 .ACTIVE {
   border-color: #008a16 !important;
+  font-family:'Overpass', sans-serif;
+  font-weight: 600;
 }
 
 .PENDING {
   color: #EF882C;
   background-color: rgba(239, 136, 44, 0.15);
+  font-family:'Overpass', sans-serif;
+  font-weight: 600;
 }
 
 .VERIFIED {
   color: #27AE60;
   background-color: rgba(39, 174, 96, 0.1);
+  font-family:'Overpass', sans-serif;
+  font-weight: 600;
 }
 
 .SUSPENDED {
   background-color: #ed1515 ;
   color: #fff;
+  font-family:'Overpass', sans-serif;
+  font-weight: 600;
 }
 
 .VENDOR {
@@ -171,3 +210,28 @@ Input {
   font-size: 12px;
   font-weight: 500px;
 }
+
+.icon {
+  font-family: 'Fira Sans Condensed', sans-serif;
+}
+
+.pl-4  {
+  font-family:'Overpass', sans-serif ;
+  font-weight: 400;
+}
+
+.result {
+  font-family:'Overpass', sans-serif ;
+  font-weight: 400;
+}
+
+h5 {
+  font-family:'Overpass', sans-serif ;
+  font-weight: 600;
+}
+
+.textfield {
+  font-family:'Overpass', sans-serif ;
+  font-weight: 400;
+}
+
