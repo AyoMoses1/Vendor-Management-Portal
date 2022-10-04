@@ -1,60 +1,35 @@
-/* // .contianer__auth {
-//   width: 100%;
-//   overflow: hidden;
-//   position: absolute;
-//   top: 5px;
-//   left: 50%;
-//   @media (max-width: 800px) {
-//     top: 2px;
-//     left: 12px;
-//     right: 12px;
-//     width: auto;
-//     margin-bottom: 10%;
-//   }
 
-//   .sub__header {
-//     font-family: sans-serif;
-//     font-style: normal;
-//     font-weight: bold;
-//     font-size: 16px;
-//     line-height: 24px;
-//     color: #979dac !important;
-//     margin-top: 10px;
-//     @media (max-width: 1200px) {
-//       text-align: center;
-//     }
-//   }
-// } */
 
 .contains {
   background: #FFFFFF;
   box-shadow: -4px 4px 60px rgba(0, 0, 0, 0.16);
   width: 60% !important;
-  height: 100vh!important;
+  height: 80vh;
   text-align: center;
-  /* padding-top: 1rem; */
-  margin: auto;
-  margin-right: 25rem ;
+  margin: 0 auto;
+
+  @media (max-width: 1200px) {
+    text-align: center;
+    height: 80vh;
+  } 
 }
 
 
 
 .main__header {
   width: 100%;
-  height: 42px;
   font-family: 'Roboto';
   font-style: normal;
   font-weight: 700;
   font-size: 36px;
-  line-height: 42px;
   letter-spacing: 0.02em;
   color: #0F4E08;
   text-align: center;
+  margin-top: -5px;
 
-  /* // @media (max-width: 1200px) {
-  //   text-align: center;
-  //   margin-top: -4px;
-  // } */
+  @media (max-width: 1200px) {
+    text-align: center;
+  } 
 }
 
 .contained {
@@ -74,6 +49,7 @@
   line-height: 30px;
   text-align: center;
   color: #000000;
+  margin-top: -5px;
 }
 
 .title {
@@ -156,14 +132,15 @@
   background-image: url("/assets/images/Rectangle 3.png"), url("/assets/images/Rectangle 1.png"), url("/assets/images/Rectangle 2.png");
   background-repeat: no-repeat;
   background-position: right top, left bottom, left top;
-  background-origin: padding-box, content-box, padding-box;
-  padding-left: 7rem;
-  height: 120vh;
+  background-origin: padding-box, content-box , padding-box;
+  padding-left: 17em;
+  height: 100vh;
   width: 100%;
   margin: 0 auto;
  
 }
 
 .block {
-  padding-top: 6rem;
+  padding-top: 6em;
+  margin-left: -7rem;
 }
