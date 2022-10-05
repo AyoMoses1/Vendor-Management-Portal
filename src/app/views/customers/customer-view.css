@@ -1,84 +1,109 @@
 .w-full {
-    width: 100%;
+  width: 100%;
 }
 
 
 
-  .customer-table thead tr th {
-    padding-left: 24px !important;
-    padding-right: 24px !important;
-    background: #F0F2F5;
-    font-size: 14px;
-    padding-top: 4px;
-    padding-bottom: 4px;
-  }
-  
-  .customer-table thead tr th .MuiButton-text {
-    font-weight: 500;
-    color: #000000;
-  }
-  
-  .customer-table .MuiTableCell-root {
-    border-bottom: 4px solid #ffffff!important;
-  }
-  
-  .customer-table tbody tr td {
-    padding-left: 24px !important;
-    padding-right: 24px !important;
-    background: #FAFBFD;
-    font-size: 12px;
-    padding-top: 6px;
-    padding-bottom: 6px;
-    color: #000000;
-  }
-  
-  .customer-table .MuiTable-root {
-    margin-top: 10px;
-  }
-  
-  
+.customer-table thead tr th {
+  padding-left: 24px !important;
+  padding-right: 24px !important;
+  background: #F0F2F5;
+  font-size: 14px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
 
+.customer-table thead tr th .MuiButton-text {
+  font-weight: 500;
+  color: #000000;
+}
+
+.customer-table .MuiTableCell-root {
+  border-bottom: 4px solid #ffffff !important;
+}
+
+.customer-table tbody tr td {
+  padding-left: 24px !important;
+  padding-right: 24px !important;
+  background: #FAFBFD;
+  font-size: 12px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  color: #000000;
+}
+
+.customer-table .MuiTable-root {
+  margin-top: 10px;
+}
+
+
+
+.sources {
+  position: relative;
+}
+
+.sources .close-icon {
+  background: #888888;
+  color: #222222;
+  font-size: 14px;
+  border-radius: 50%;
+  position: absolute;
+  z-index: 1;
+  cursor: pointer;
+  right: -3%;
+  top: 16%;
+}
 
 .sources .MuiSelect-root {
-    padding: 12px;
-    font-size: 12px;
+  padding: 12px;
+  font-size: 12px;
+}
+
+.filters {
+  display: flex;
+  align-items: center;
 }
 
 .text-control {
-    font-size: 14px;
-    color:#4A466DDE;
-    
+  font-size: 14px;
+  color: #4A466DDE;
+
 }
 
 .ellipsis {
-    font-size: 14px;
-    color:#4A466DDE;
-   
+  font-size: 14px;
+  color: #4A466DDE;
+
 }
 
 .text-muted {
-    font-size: 14px;
-    color:#4A466DDE;    
+  font-size: 14px;
+  color: #4A466DDE;
 }
 
 .date {
-    font-size: 11px;
-    padding-left: 6px;
+  font-size: 11px;
+  padding-left: 6px;
 }
 
-.customer__name{
-    width: 150px;
-    overflow: hidden;
-    
+.customer__name {
+  width: 150px;
+  overflow: hidden;
+
 }
 
-.customer__email{
-    width: 150px;
-    overflow: hidden;
+.customer__email {
+  width: 150px;
+  overflow: hidden;
 }
 
 .date__registered {
-    width: 150px;
-    overflow: hidden;
-    text-align: left;
+  width: 150px;
+  overflow: hidden;
+  text-align: left;
+}
+
+.filter-condition {
+  display: flex;
+  align-items: center;
 }

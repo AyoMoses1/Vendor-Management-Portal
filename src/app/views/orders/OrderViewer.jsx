@@ -20,6 +20,7 @@ import { useDialog } from 'muibox';
 import Alert from 'app/components/Alert';
 import { CircularProgress } from '@material-ui/core';
 import { sendCustomerNote } from '../customers/CustomerService';
+import { SimpleCard, Breadcrumb } from 'matx'
 
 const useStyles = makeStyles(({ palette, ...theme }) => ({
   '@global': {
@@ -263,6 +264,15 @@ const OrderViewer = ({ id, order }) => {
         handleOK={handleAlertOK}
       />
       <Box sx={{ flexGrow: 1 }}>
+        <div className='mb-sm-30'>
+          <Breadcrumb
+            routeSegments={[
+              { name: 'Orders', path: '/orders' },
+              { name: 'Order Details' },
+            ]}
+          />
+        </div>
+      
         <Grid container spacing={2}>
           <Grid item xs={8} className={"no-border"}>
             <Grid container spacing={2}>
