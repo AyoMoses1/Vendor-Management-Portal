@@ -260,7 +260,7 @@ const AbadonedOrders = () => {
                       state: {},
                     }}
                   >
-                    <Button variant='contained' color='primary'>
+                    <Button variant='contained' color='primary' className='addnew'>
                       <Icon>add</Icon>Add New
                     </Button>
                   </Link>

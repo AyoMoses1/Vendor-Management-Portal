@@ -104,10 +104,25 @@ body {
   padding-top: 6px;
   padding-bottom: 6px;
   color: #000000;
+  font-family:'Overpass', sans-serif ;
+  font-weight: 400;
+}
+
+.product-table {
+  font-family: 'Hind', sans-serif;
+  font-weight: 600;
+  font-size: 20px;
 }
 
 .all-products-table .MuiTable-root {
   margin-top: 10px;
+}
+.actions {
+  font-family: 'Fira Sans Condensed', sans-serif;
+}
+
+.addnew {
+  font-family: 'Fira Sans Condensed', sans-serif; 
 }
 
 .APPROVED {

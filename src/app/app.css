@@ -2,3 +2,8 @@
   padding-left: 50px;
   background: red !important;
 }
+
+.navigation .nav-item .item-text {
+  font-family: 'Hind', sans-serif;
+  font-weight: 600;
+}

@@ -4,11 +4,11 @@
 }
 
 .title {
-    font-size: 16px !important;
-    color: rgba(0, 0, 0, 0.877) !important;
-    margin: -5px 0px;
-    font-family: 'Overpass', sans-serif;
-    font-weight: 400;
+  font-size: 16px !important;
+  color: rgba(0, 0, 0, 0.877) !important;
+  margin: -5px 0px;
+  font-family: 'Overpass', sans-serif;
+  font-weight: 400;
    
 }
 
@@ -106,9 +106,7 @@ Input {
     padding-right: 24px !important;
     background: #F0F2F5;
     padding-top: 4px;
-    padding-bottom: 4px;
-    
-    
+    padding-bottom: 4px;   
   }
   
   .vendor-table thead tr th .MuiButton-text {
@@ -136,15 +134,12 @@ Input {
     margin-top: 10px;   
   }
 
- 
 .vendor__name{
   width: 150px;
   overflow: hidden;
   text-align: left;
   font-family: 'Overpass', sans-serif;
   font-weight: 400;
-
-  
 }
 
 .vendor__email{

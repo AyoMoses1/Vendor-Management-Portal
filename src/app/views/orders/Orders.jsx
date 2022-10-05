@@ -503,7 +503,7 @@ const Orders = (props) => {
                           state: {},
                         }}
                       >
-                        <Button variant="contained" color="primary">
+                        <Button variant="contained" color="primary" className="addnew">
                           Add New
                         </Button>
                       </Link>

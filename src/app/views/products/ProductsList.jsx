@@ -350,6 +350,7 @@ const Products = () => {
             <Button
               onClick={() => handleFeaturedOnUSSD(product)}
               variant='text'
+              className='actions'
             >
               {product.isFeaturedOnUssd ? 'Remove from USSD' : 'Add to USSD'}
             </Button>
@@ -530,6 +531,7 @@ const Products = () => {
                         <Button
                           variant="contained"
                           color="primary"
+                          className='addnew'
                           // onClick={() => handleModal()}
                         >
                           Add New
