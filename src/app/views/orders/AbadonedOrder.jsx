@@ -205,7 +205,7 @@ const AbadonedOrders = () => {
       <div className='overflow-auto'>
         <div className='min-w-750 abadoned-table'>
           <MUIDataTable
-            title={'All Abadoned Orders'}
+            title={<h5 className='mt-4 mb-0 abandon-table'>All Abandoned Orders</h5>}
             data={orders}
             columns={columns}
             options={{
