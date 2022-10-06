@@ -40,20 +40,20 @@
 }
 
 .all-users-table thead tr th .MuiButton-text {
-    font-weight: 800;
+    font-weight: 600;
     color: #000000;
+    font-size: 16px;
+    font-family: 'Hind', sans-serif;
 }
 
 .all-users-table tbody tr td .MuiTableCell-root{
-    font-size: 12px;
+    text-align: left;
 }
 
 .all-users-table .MuiTableCell-root {
     border-bottom: 4px solid #ffffff!important;
 }
-.all-users-table thead th{
-    font-size: 8px !important;
-}
+
 .all-users-table tbody{
     padding: 0 20px;
     overflow-x: hidden;
@@ -62,10 +62,12 @@
     padding-left: 24px !important;
     padding-right: 24px !important;
     background: #FAFBFD;
-    font-size: 12px;
     padding-top: 6px;
     padding-bottom: 6px;
     color: #000000;
+    font-size: 14px;
+    font-family: 'Overpass' sans-serif;
+    font-weight: 400;
 }
 
 .all-users-table .MuiTable-root {
@@ -73,14 +75,14 @@
 }
 
 .all-users-table tbody tr td{
-    text-align: center;
+    text-align: left;
     font-size: 12px !important;
 }
 
 .all-users-table h5{
-    font-size: 12px !important;
+    font-size: 14px !important;
 }
 
 .all-users-table .material-icons{
-    font-size: 12px !important;
+    font-size: 14px !important;
 }
