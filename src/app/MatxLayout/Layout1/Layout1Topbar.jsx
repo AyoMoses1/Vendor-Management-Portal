@@ -17,6 +17,7 @@ import { isMdScreen } from 'utils'
 import NotificationBar from '../SharedCompoents/NotificationBar'
 import { Link } from 'react-router-dom'
 import ShoppingCart from '../SharedCompoents/ShoppingCart'
+import './topbar.css'
 
 const IconButtonWhite = withStyles((theme) => ({
   root: {
@@ -118,10 +119,10 @@ class Layout1Topbar extends Component {
                     // />
                   }
                 >
-                  <MenuItem style={{ minWidth: 185 }}>
+                  <MenuItem style={{ minWidth: 185}}>
                     <Link className="flex flex-middle" to="/">
                       <Icon> home </Icon>
-                      <span className="pl-16"> Home </span>
+                      <span className="pl-16 "> Home </span>
                     </Link>
                   </MenuItem>
                   <MenuItem style={{ minWidth: 185 }}>

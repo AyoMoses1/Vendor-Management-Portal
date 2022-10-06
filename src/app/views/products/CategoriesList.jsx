@@ -271,7 +271,7 @@ const CategoriesList = () => {
       <div className='overflow-auto'>
         <div className='min-w-750 all-product-categories'>
           <MUIDataTable
-            title={'Product Categories'}
+            title={<h5 className='mt-4 mb-0 category-table'>Product Categories</h5>}
             data={categories}
             columns={columns}
             options={{
@@ -328,7 +328,7 @@ const CategoriesList = () => {
                       state: {},
                     }}
                   >
-                    <Button variant='contained' color='primary'>
+                    <Button variant='contained' color='primary' className='addnew'>
                       <Icon>add</Icon>Add New
                     </Button>
                   </Link>

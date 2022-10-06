@@ -26,6 +26,8 @@ import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import http from '../../services/api';
 import Alert from 'app/components/Alert';
+import './common.css'
+
 const icon = <CheckBoxOutlineBlankIcon fontSize='small' />;
 const checkedIcon = <CheckBoxIcon fontSize='small' />;
 
@@ -235,7 +237,7 @@ function NewProduct({ isNewProduct, id, Product, created, closeModal }) {
   return (
     <div className='m-sm-30'>
       <Notification alert={alert} severity={severity || ''} />
-      <h3>Add Product</h3>
+      <h3 className='add'>Add Product</h3>
       <Formik
         initialValues={values}
         onSubmit={handleSubmit}
@@ -345,7 +347,7 @@ function NewProduct({ isNewProduct, id, Product, created, closeModal }) {
               helperText={touched.name && errors.name}
             />
             <TextField
-              className='mb-4'
+              className='mb-4 textfield'
               name='sku'
               label='SKU'
               variant='outlined'

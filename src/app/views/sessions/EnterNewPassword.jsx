@@ -10,7 +10,7 @@ import { connect } from "react-redux";
 import { PropTypes } from "prop-types";
 import { resetPassword } from "../../redux/actions/LoginActions";
 import afrimash2 from "./assets/svg/afrimash2.0.svg";
-import "./Forgotpassword.scss";
+import "./Forgotpassword.css";
 import service from "./reset";
 import queryString from 'query-string'
 

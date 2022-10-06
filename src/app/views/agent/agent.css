@@ -1,16 +1,22 @@
 .PENDING {
   color: #EF882C;
   background-color: rgba(239, 136, 44, 0.15);
+  font-family:'Overpass', sans-serif;
+  font-weight: 600;
 }
 
 .VERIFIED {
   color: #27AE60;
   background-color: rgba(39, 174, 96, 0.1);
+  font-family:'Overpass', sans-serif;
+  font-weight: 600;
 }
 
 .SUSPENDED {
-  color: #926202;
-  background-color: #f8dda7;
+  background-color: #ed1515 ;
+  color: #fff;
+  font-family:'Overpass', sans-serif;
+  font-weight: 600;
 }
 
 .AGENT {
@@ -18,7 +24,7 @@
   width: fit-content;
   border-radius: 6px;
   font-size: 12px;
-  font-weight: 500px;
+  
 }
 
 .w-full {
@@ -40,14 +46,17 @@
   padding-left: 24px !important;
   padding-right: 24px !important;
   background: #F0F2F5;
-  font-size: 14px;
+  font-size: 16px;
   padding-top: 4px;
   padding-bottom: 4px;
+  
+ 
 }
 
 .agent-table thead tr th .MuiButton-text {
-  font-weight: 500;
+  font-weight: 600;
   color: #000000;
+  font-family: 'Overpass', sans-serif;
 }
 
 .agent-table .MuiTableCell-root {
@@ -58,10 +67,12 @@
   padding-left: 24px !important;
   padding-right: 24px !important;
   background: #FAFBFD;
-  font-size: 12px;
+  font-size: 13.3px;
   padding-top: 6px;
   padding-bottom: 6px;
   color: #000000;
+  font-family: 'Overpass', sans-serif;
+  font-weight: 400;
 }
 
 .agent-table .MuiTable-root {

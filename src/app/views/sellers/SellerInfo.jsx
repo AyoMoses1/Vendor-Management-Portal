@@ -8,6 +8,7 @@ import {
 } from '@material-ui/core'
 import { SimpleCard } from 'matx'
 import { getSellerById } from './SellerService'
+import "./Sellerform.css"
 
 const SellerInfo = ({ id }) => {
   const [state, setState] = useState([])
@@ -29,7 +30,7 @@ const SellerInfo = ({ id }) => {
         <TableBody>
           <TableRow>
             <TableCell className='pl-4'>Email</TableCell>
-            <TableCell>
+            <TableCell  className='result'>
               <div>{state.email}</div>
             </TableCell>
           </TableRow>
@@ -37,33 +38,33 @@ const SellerInfo = ({ id }) => {
           <TableRow>
             <TableCell className='pl-4'>Phone Number</TableCell>
             <TableCell>
-              <div>{state.mobileNo}</div>
+              <div className='result'>{state.mobileNo}</div>
             </TableCell>
           </TableRow>
 
           <TableRow>
             <TableCell className='pl-4'>City</TableCell>
             <TableCell>
-              <div>{state.city}</div>
+              <div className='result'>{state.city}</div>
             </TableCell>
           </TableRow>
 
           <TableRow>
             <TableCell className='pl-4'>State</TableCell>
             <TableCell>
-              <div>{state.state}</div>
+              <div className='result'>{state.state}</div>
             </TableCell>
           </TableRow>
           <TableRow>
             <TableCell className='pl-4'>Address</TableCell>
             <TableCell>
-              <div>{state.address || '-----'}</div>
+              <div className='result'>{state.address || '-----'}</div>
             </TableCell>
           </TableRow>
           <TableRow>
             <TableCell className='pl-4'>Country</TableCell>
             <TableCell>
-              <div>{state.country}</div>
+              <div className='result'>{state.country}</div>
             </TableCell>
           </TableRow>
         </TableBody>

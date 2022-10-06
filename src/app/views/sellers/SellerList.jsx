@@ -5,10 +5,11 @@ import { Grow, Icon, IconButton, TextField, Button } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 import http from '../../services/api'
 import { useDialog } from 'muibox'
-import './Sellerform.scss'
+import './Sellerform.css'
 import Notification from '../../components/Notification'
 import { getAllSeller } from './SellerService'
 import Loading from 'matx/components/MatxLoadable/Loading'
+import { capitalize } from 'utils';
 
 const SellerList = () => {
   const [isAlive, setIsAlive] = useState(true)
@@ -35,6 +36,7 @@ const SellerList = () => {
           let user = userList[dataIndex]
 
           return (
+            <div  className='flex items-center vendor__name'>
             <Link
               to={{
                 pathname: '/vendor/details',
@@ -42,12 +44,11 @@ const SellerList = () => {
                   id: user.id,
                 },
               }}
-              className='flex items-center'
+              className='ml-3'
             >
-              <div className='ml-3'>
-                <h5 className='my-0 text-muted'>{`${user?.name || '-------'}`}</h5>
-              </div>
+                <span className='my-0 text-15'>{`${user?.name || '-------'}`}</span>
             </Link>
+            </div>
           )
         },
       },
@@ -61,6 +62,7 @@ const SellerList = () => {
         customBodyRenderLite: (dataIndex) => {
           let user = userList[dataIndex]
           return (
+            <div  className='flex items-center vendor__email'>
             <Link
               to={{
                 pathname: '/vendor/details',
@@ -68,12 +70,13 @@ const SellerList = () => {
                   id: user.id,
                 },
               }}
-              className='flex items-center'
+              className='ml-3'
             >
-              <div className='ml-3'>
-                <h5 className='my-0 text-muted'> {user.email || '-----'}</h5>
-              </div>
+              
+                <span className='my-0 text-15'> {user.email || '-----'}</span>
+             
             </Link>
+            </div>
           )
         },
       },
@@ -87,6 +90,7 @@ const SellerList = () => {
         customBodyRenderLite: (dataIndex) => {
           let user = userList[dataIndex]
           return (
+            <div className='flex items-center vendor__number'>
             <Link
               to={{
                 pathname: '/vendor/details',
@@ -94,12 +98,13 @@ const SellerList = () => {
                   id: user.id,
                 },
               }}
-              className='flex items-center'
+              className='ml-3'
             >
-              <div className='ml-3'>
-                <h5 className='my-0 text-muted'> {user.mobileNo || '-----'}</h5>
-              </div>
+              
+                <span className='my-0 text-15'> {user.mobileNo || '-----'}</span>
+             
             </Link>
+          </div>
           )
         },
       },
@@ -113,7 +118,7 @@ const SellerList = () => {
         customBodyRenderLite: (dataIndex) => {
           let user = userList[dataIndex]
           return (
-            <div className='flex items-center'>
+            <div className='flex items-center vendor__store'>
               <Link
                 to={{
                   pathname: '/vendor/details',
@@ -140,6 +145,7 @@ const SellerList = () => {
         customBodyRenderLite: (dataIndex) => {
           let user = userList[dataIndex]
           return (
+            <div  className='flex items-center vendor__address'>
             <Link
               to={{
                 pathname: '/vendor/details',
@@ -147,12 +153,11 @@ const SellerList = () => {
                   id: user.id,
                 },
               }}
-              className='flex items-center'
-            >
-              <div className='ml-3'>
-                <h5 className='my-0 text-muted'>{user.state || '-----'}</h5>
-              </div>
+              className='ml-3'
+            >     
+                <span className='my-0 text-15'>{user.state || '-----'}</span> 
             </Link>
+            </div>
           )
         },
       },
@@ -163,9 +168,11 @@ const SellerList = () => {
       label: 'Status',
       options: {
         filter: true,
+        setCellHeaderProps: () => { return { width: "75px" } },
         customBodyRenderLite: (dataIndex) => {
           let user = userList[dataIndex]
           return (
+            <div className={`items-center VENDOR ${user?.status}`}>
             <Link
               to={{
                 pathname: '/vendor/details',
@@ -173,12 +180,11 @@ const SellerList = () => {
                   id: user.id,
                 },
               }}
-              className='flex items-center'
+              className='ml-3'
             >
-              <div className='ml-3'>
-                <h5 className='my-0 text-muted'>{user.status || '-----'}</h5>
-              </div>
+                <span className='my-0 text-15'>{capitalize(user.status || '-----')}</span>
             </Link>
+            </div>
           )
         },
       },
@@ -290,7 +296,7 @@ const SellerList = () => {
                       }}
                     >
                       <IconButton>
-                        <Button variant='contained' color='primary'>
+                        <Button variant='contained' color='primary' className='icon'>
                           <Icon>add</Icon>Add New
                         </Button>
                       </IconButton>

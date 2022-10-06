@@ -1,63 +1,39 @@
-// .contianer__auth {
-//   width: 100%;
-//   overflow: hidden;
-//   position: absolute;
-//   top: 5px;
-//   left: 50%;
-//   @media (max-width: 800px) {
-//     top: 2px;
-//     left: 12px;
-//     right: 12px;
-//     width: auto;
-//     margin-bottom: 10%;
-//   }
 
-//   .sub__header {
-//     font-family: sans-serif;
-//     font-style: normal;
-//     font-weight: bold;
-//     font-size: 16px;
-//     line-height: 24px;
-//     color: #979dac !important;
-//     margin-top: 10px;
-//     @media (max-width: 1200px) {
-//       text-align: center;
-//     }
-//   }
-// }
 
 .contains {
   background: #FFFFFF;
   box-shadow: -4px 4px 60px rgba(0, 0, 0, 0.16);
-  width: 67.3% !important;
-  height: 744px !important;
+  width: 60% !important;
+  height: 80vh;
   text-align: center;
-  padding-top: 2rem;
-  margin: auto;
+  margin: 0 auto;
+
+  @media (max-width: 1200px) {
+    text-align: center;
+    height: 80vh;
+  } 
 }
 
 
 
 .main__header {
   width: 100%;
-  height: 42px;
-  font-family: 'Roboto';
+  font-family:'Hind', sans-serif;
   font-style: normal;
   font-weight: 700;
   font-size: 36px;
-  line-height: 42px;
   letter-spacing: 0.02em;
   color: #0F4E08;
   text-align: center;
+  margin-top: -5px;
 
-  // @media (max-width: 1200px) {
-  //   text-align: center;
-  //   margin-top: -4px;
-  // }
+  @media (max-width: 1200px) {
+    text-align: center;
+  } 
 }
 
 .contained {
-  width: 60%;
+  width: 50%;
   margin: auto;
 }
 
@@ -66,27 +42,28 @@
 .sub__header{
   width: 100%;
   height: 30px;
-  font-family: 'Poppins';
+  font-family:  'Overpass', sans-serif;
   font-style: normal;
-  font-weight: 400;
+  font-weight: 600;
   font-size: 20px;
   line-height: 30px;
   text-align: center;
   color: #000000;
+  margin-top: -5px;
 }
 
 .title {
   text-align: left;
   color: #000 !important;
-  font-family: 'Roboto';
-  font-style: normal;
-  font-weight: 300;
+  font-family:  'Overpass', sans-serif !important;
+  font-weight: 400;
   font-size: 20px;
   line-height: 23px;
 }
 
 .space {
   margin-bottom: -15px !important;
+  
 }
 
 .input {
@@ -102,6 +79,7 @@
   color: white;
   background-color: #204e09;
   height: 50px;
+  font-family: 'Fira Sans Condensed', sans-serif;
   font-size: 18px;
   box-shadow: 0px 5px 3px rgba(0, 0, 0, 0.108696);
   width: 100%;
@@ -120,6 +98,8 @@
   background-color: transparent;
   border-width: 2px;
   font-size: 12px;
+  font-family:  'Overpass', sans-serif !important;
+  font-weight: 400;
   cursor: pointer;
   border-width: 0px;
   &:hover {
@@ -155,11 +135,15 @@
   background-image: url("/assets/images/Rectangle 3.png"), url("/assets/images/Rectangle 1.png"), url("/assets/images/Rectangle 2.png");
   background-repeat: no-repeat;
   background-position: right top, left bottom, left top;
-  background-origin: padding-box, content-box, padding-box;
-  padding-left: 8rem;
-
-  height: 1000px;
+  background-origin: padding-box, content-box , padding-box;
+  padding-left: 17em;
+  height: 100vh;
   width: 100%;
   margin: 0 auto;
-  padding-top: 5rem;
+ 
+}
+
+.block {
+  padding-top: 6em;
+  margin-left: -7rem;
 }

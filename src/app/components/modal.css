@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:wght@600&family=Hind:wght@400;600;700&family=Overpass:wght@400;600;700&display=swap");
 
 
 .check--icon {
@@ -14,7 +14,7 @@
 }
 
 .modal--header {
-    font-family: 'Montserrat';
+    font-family:'Hind', sans-serif;
     font-style: normal;
     font-weight: 600;
     font-size: 20px;
@@ -23,9 +23,9 @@
 }
 
 .modal-content {
-    font-family: 'Roboto';
+    font-family:  'Overpass', sans-serif;
     font-style: normal;
-    font-weight: 300;
+    font-weight: 400;
     font-size: 16px;
     line-height: 19px;
 }

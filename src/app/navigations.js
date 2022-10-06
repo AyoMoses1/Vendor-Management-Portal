@@ -1,4 +1,5 @@
 import { MdOutlinePhonelink } from 'react-icons/md';
+import './app.css'
 
 export const navigations = [
   {
