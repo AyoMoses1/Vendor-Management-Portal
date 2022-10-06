@@ -3,7 +3,6 @@
 }
 
 
-
   .customer-table thead tr th {
     padding-left: 24px !important;
     padding-right: 24px !important;
@@ -16,7 +15,7 @@
   .customer-table thead tr th .MuiButton-text {
     font-weight: 600;
     color: #000000;
-    font-family: 'Hind', sans-serif;
+    font-family: 'Hind', sans-serif !important;
     font-size: 16px;
   }
   
@@ -28,7 +27,7 @@
     background: #FAFBFD;
     font-size: 14px;
     padding: 10px 20px;
-    align-items: center !important;
+    align-items: center;
     font-family: 'Overpass', sans-serif;
   }
   
