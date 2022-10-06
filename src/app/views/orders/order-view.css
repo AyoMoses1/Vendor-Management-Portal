@@ -80,8 +80,7 @@
   padding: 5px 8px;
   width: fit-content;
   border-radius: 6px;
-  font-size: 12px;
-  font-weight: 500px;
+  font-size: 14px;
 }
 
 .PAID {
@@ -194,7 +193,7 @@ h5 {
 .invoice-btn {
   background: #d9d6d6 !important;
   color: #000 !important;
-  font-size: 12px !important;
+  font-size: 14px !important;
   width: 180px !important;
 }
 
@@ -229,16 +228,34 @@ h5 {
   height: 100%;
 }
 
+.card-title {
+  font-size: 18px;
+  font-family: 'Hind', sans-serif;
+  font-weight: 600;
+}
+
 .order-header p {
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .order-text-10 {
-  font-size: 10px;
+  font-size: 12px;
+}
+
+.MuiFormLabel-root{
+  font-family: 'Overpass', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.MuiOutlinedInput-input {
+  font-family: 'Overpass', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
 }
 
 .order-text-12 {
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .order-text-14 {
@@ -275,7 +292,7 @@ h5 {
   cursor: pointer;
   font-weight: 700;
   padding: 0;
-  font-size: 8px;
+  font-size: 10px;
 }
 .edit-dropdown{
   padding: 0 !important; 
@@ -285,7 +302,7 @@ select.status-box{
   background: rgb(230, 230, 230);
   outline: 0px;
   border: 0px;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: bold;
   width: 100px !important;
 }
@@ -295,7 +312,7 @@ select.status-box{
   margin-bottom: 20px;
 }
 .del-icon{
-  font-size: 14px !important;
+  font-size: 16px !important;
   cursor: pointer;
 }
 
@@ -331,16 +348,16 @@ select.status-box{
   padding-left: 24px !important;
   padding-right: 24px !important;
   background: #F0F2F5;
-  font-size: 14px;
   padding-top: 4px;
   padding-bottom: 4px;
+  
 }
 
 .all-order-table thead tr th .MuiButton-text {
-  font-weight: 500;
   color: #000000;
-  font-family:'Hind', sans-serif;
+  font-family: 'Hind', sans-serif !important;
   font-weight: 600;
+  font-size: 16px;
 }
 
 .all-order-table .MuiTableCell-root {
@@ -351,7 +368,7 @@ select.status-box{
   padding-left: 24px !important;
   padding-right: 24px !important;
   background: #FAFBFD;
-  font-size: 12px;
+  font-size: 14px;
   padding-top: 6px;
   padding-bottom: 6px;
   color: #000000;
@@ -368,9 +385,9 @@ select.status-box{
 }
 
 .order-sources .MuiSelect-root {
-  padding-top: 12px;
+  padding-top: 14px;
   padding-bottom: 12px;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .active{
@@ -381,7 +398,6 @@ select.status-box{
   padding-left: 24px !important;
   padding-right: 24px !important;
   background: #F0F2F5;
-  font-size: 14px;
   padding-top: 4px;
   padding-bottom: 4px;
 }
@@ -390,6 +406,7 @@ select.status-box{
   color: #000000;
   font-family: 'Hind', sans-serif !important;
   font-weight: 600;
+  font-size: 16px;
 }
 
 .abadoned-table .MuiTableCell-root {
@@ -400,7 +417,7 @@ select.status-box{
   padding-left: 24px !important;
   padding-right: 24px !important;
   background: #FAFBFD;
-  font-size: 12px;
+  font-size: 14px;
   padding-top: 6px;
   padding-bottom: 6px;
   color: #000000;
@@ -426,11 +443,11 @@ select.status-box{
   padding: 5px 8px;
   width: fit-content;
   border-radius: 6px;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 500px;
 }
 .stats-nav .active{
-  font-size: 12x;
+  font-size: 14px;
   font-weight: 600;
   text-decoration: underline;
   color: #000 ;
@@ -445,7 +462,7 @@ select.status-box{
   padding: 2px 10px;
   border-radius: 3px;
   color:  rgba(235, 87, 87, 0.4);
-  font-size: 6px;
+  font-size: 8px;
   cursor: pointer;
 }
 
@@ -459,4 +476,9 @@ select.status-box{
 .disabled{
   background: rgba(155, 155, 155, 0.15) !important;
   color: #BDBDBD !important;
+}
+
+.new {
+  font-size: 14px;
+  font-family: 'Fira Sans Condensed', sans-serif;
 }

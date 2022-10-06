@@ -8,14 +8,16 @@
     padding-left: 24px !important;
     padding-right: 24px !important;
     background: #F0F2F5;
-    font-size: 14px;
+    font-size: 16px;
     padding-top: 4px;
     padding-bottom: 4px;
   }
   
   .customer-table thead tr th .MuiButton-text {
-    font-weight: 500;
+    font-weight: 600;
     color: #000000;
+    font-family: 'Hind', sans-serif;
+    font-size: 16px;
   }
   
   .customer-table .MuiTableCell-root {
@@ -24,9 +26,10 @@
   
   .customer-table tbody tr td {
     background: #FAFBFD;
-    font-size: 12px;
+    font-size: 14px;
     padding: 10px 20px;
     align-items: center !important;
+    font-family: 'Overpass', sans-serif;
   }
   
   .customer-table .MuiTable-root {
