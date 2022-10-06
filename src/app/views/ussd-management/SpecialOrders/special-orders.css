@@ -1,11 +1,17 @@
 .special-order-table thead tr th {
   padding-left: 24px!important;
   padding-right: 24px!important;
+  font-size: 16px;
+  font-family: 'Hind', sans-serif;
+  font-weight: 600;
 }
 
 .special-order-table tbody tr td {
   padding-left: 24px!important;
   padding-right: 24px!important;
+  font-size: 14px;
+  font-family: 'Overpass', sans-serif;
+  font-weight: 400;
 }
 
 .w-full {
@@ -21,7 +27,6 @@
 .all-centres-table thead tr th{
   padding-left: 48px;
   background: #F0F2F5;
-  font-size: 14px;
   justify-content: center;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -29,13 +34,10 @@
 }
 
 .all-centres-table thead tr th .MuiButton-text {
-  font-weight: 800;
+  font-weight: 600;
   color: #000000;
-}
-
-.all-centres-table tbody tr td .MuiTableCell-root{
-
-  font-size: 12px;
+  font-size: 16px;
+  font-family: 'Hind', sans-serif;
 }
 
 .all-centres-table .MuiTableCell-root {
@@ -50,10 +52,12 @@
   padding-left: 24px !important;
   padding-right: 24px !important;
   background: #FAFBFD;
-  font-size: 12px;
+  font-size: 14px;
   padding-top: 6px;
   padding-bottom: 6px;
   color: #000000;
+  font-family: 'Overpass'sans-serif;
+  font-weight: 400;
 }
 
 .all-centres-table .MuiTable-root {
@@ -62,13 +66,12 @@
 
 .all-centres-table tbody tr td{
   text-align: center;
-  font-size: 12px !important;
 }
 
 .all-centres-table h5{
-  font-size: 12px !important;
+  font-size: 14px !important;
 }
 
 .all-centres-table .material-icons{
-  font-size: 12px !important;
+  font-size: 14px !important;
 }
