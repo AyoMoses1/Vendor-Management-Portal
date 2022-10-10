@@ -101,8 +101,8 @@ const ShippingOptionByGroup = ({group}) => {
         },
     
         {
-          name: 'Shipping Group', // field name in the row object
-          label: 'shippingGroup', // column title that will be shown in table
+          name: 'shipping Group', // field name in the row object
+          label: 'ShippingGroup', // column title that will be shown in table
           options: {
             filter: true,
             customBodyRenderLite: (dataIndex) => {
@@ -127,7 +127,7 @@ const ShippingOptionByGroup = ({group}) => {
         },
         {
           name: 'Shipping Zone', // field name in the row object
-          label: 'shippingZone', // column title that will be shown in table
+          label: 'ShippingZone', // column title that will be shown in table
           options: {
             filter: true,
             customBodyRenderLite: (dataIndex) => {

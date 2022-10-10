@@ -170,7 +170,7 @@ const Agents = () => {
           let user = agentList[dataIndex];
           setId(user.id);
           return (
-            <div className='flex items-center'>
+            <div className='flex items-center agent__phone'>
               <Link
                 to={{
                   pathname: '/agent/details',
@@ -198,7 +198,7 @@ const Agents = () => {
           let user = agentList[dataIndex];
           setId(user.id);
           return (
-            <div className='flex items-center'>
+            <div className='flex items-center agent__mail'>
               <Link
                 to={{
                   pathname: '/agent/details',

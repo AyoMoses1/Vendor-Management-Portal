@@ -10,11 +10,32 @@
 .user-table thead tr th {
     padding-left: 24px !important;
     padding-right: 24px !important;
+    background: #F0F2F5;
+    padding-top: 4px;
+    padding-bottom: 4px;
 }
+
+.user-table thead tr th .MuiButton-text {
+    font-weight: 600;
+    color: #000000;
+    font-family: 'Hind', sans-serif !important;
+    font-size: 16px;
+  }
+
+.user-table .MuiTableCell-root {
+    border-bottom: 4px solid #ffffff !important;
+  }
 
 .user-table tbody tr td {
     padding-left: 24px !important;
     padding-right: 24px !important;
+    background: #FAFBFD;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    color: #000000;
+    font-size: 14px;
+    font-family: 'Overpass' sans-serif;
+    font-weight: 400;
 }
 
 .w-full {
@@ -27,7 +48,7 @@
 
 .user-roles .MuiSelect-root {
     padding: 12px;
-    font-size: 12px;
+    font-size: 14px;
 }
 
 .all-users-table thead tr th{
@@ -55,9 +76,9 @@
 }
 
 .all-users-table tbody{
-    padding: 0 20px;
     overflow-x: hidden;
 }
+
 .all-users-table tbody tr td {
     padding-left: 24px !important;
     padding-right: 24px !important;
@@ -74,10 +95,6 @@
     margin-top: 10px;
 }
 
-.all-users-table tbody tr td{
-    text-align: left;
-    font-size: 12px !important;
-}
 
 .all-users-table h5{
     font-size: 14px !important;

@@ -67,7 +67,7 @@
   padding-left: 24px !important;
   padding-right: 24px !important;
   background: #FAFBFD;
-  font-size: 13.3px;
+  font-size: 14px;
   padding-top: 6px;
   padding-bottom: 6px;
   color: #000000;
@@ -81,14 +81,24 @@
 
 .sources .MuiSelect-root {
   padding: 12px;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .date {
-  font-size: 8px;
-  padding-left: 4px;
+  font-size: 11px;
+  padding-left: 6px;
 }
 
 .menu__item {
   text-decoration: underline;
+}
+
+.agent__mail {
+  width: 120px;
+  overflow: hidden;
+}
+
+.agent__phone {
+  width: 120px;
+  overflow: hidden;
 }

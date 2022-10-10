@@ -22,7 +22,6 @@
   padding-left: 24px !important;
   padding-right: 24px !important;
   background: #F0F2F5;
-  font-size: 16px;
   padding-top: 4px;
   padding-bottom: 4px;
 }
@@ -39,11 +38,15 @@
 }
 
 .customer-table tbody tr td {
+  padding-left: 24px !important;
+  padding-right: 24px !important;
   background: #FAFBFD;
   font-size: 14px;
-  padding: 10px 20px;
-  align-items: center;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  color: #4A466DDE !important;
   font-family: 'Overpass', sans-serif;
+  font-weight: 400;
 }
 
 .customer-table .MuiTable-root {
@@ -97,7 +100,7 @@
 .date__registered {
   width: 150px;
   overflow: hidden;
-  text-align: left;
+  
 }
 
 .filter-condition {

@@ -404,7 +404,7 @@ select.status-box{
 
 .abadoned-table thead tr th .MuiButton-text {
   color: #000000;
-  font-family: 'Hind', sans-serif !important;
+  font-family: 'Hind', sans-serif ;
   font-weight: 600;
   font-size: 16px;
 }

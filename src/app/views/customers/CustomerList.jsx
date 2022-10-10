@@ -236,7 +236,7 @@ const CustomerList = () => {
                 <span className='my-0 text-15'>
                   {' '}
                   {user.dateRegistered.split(" ")[0] || '-----'}
-                </span>
+                </span> <br />
                 <span className='date'>
                   {user.dateRegistered.split(" ")[1] || '-----'}
                 </span>

@@ -116,6 +116,8 @@
   padding-top: 6px;
   padding-bottom: 6px;
   color: #4A466DDE !important;
+  font-family: 'Overpass', sans-serif;
+  font-weight: 400;
 }
 
 .vendor-table .MuiTable-root {
@@ -125,39 +127,24 @@
 .vendor__name {
   width: 150px;
   overflow: hidden;
-  text-align: left;
-  font-family: 'Overpass', sans-serif;
-  font-weight: 400;
 }
 
 .vendor__email {
   width: 100px;
   overflow: hidden;
-  text-align: left;
-  font-family: 'Overpass', sans-serif;
-  font-weight: 400;
-
 }
 
 .vendor__number {
   width: 150px;
   overflow: hidden;
-  font-family: 'Overpass', sans-serif;
-  font-weight: 400;
-
 }
 
 .vendor__store {
   width: 150px;
   overflow: hidden;
-  font-family: 'Overpass', sans-serif;
-  font-weight: 400;
 }
 
-.vendor__address {
-  font-family: 'Overpass', sans-serif;
-  font-weight: 400;
-}
+
 
 .ACTIVE {
   border-color: #008a16 !important;
