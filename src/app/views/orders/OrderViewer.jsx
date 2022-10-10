@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { getInvoiceById, updateInvoice, deleteOrderItem, downloadPdfInvoice } from './OrderService'
+import { getInvoiceById, updateInvoice, deleteOrderItem, downloadPdfInvoice, downloadParkingSlip } from './OrderService'
 import { format } from 'date-fns'
 import { makeStyles } from '@material-ui/core/styles'
 import { useHistory } from "react-router-dom";
@@ -230,13 +230,23 @@ const OrderViewer = ({ id, order }) => {
 
   const handleDownload = async (index) => {
     setDownloadIndex(index);
-    await downloadPdfInvoice(
-      state?.id,
-      setDownloading
-    ).then((res) => {
-      setAlertData({ success: true, text: 'Invoice downloaded successfully', title: 'Invoice Downloaded' })
-      handleAlertModal();
-    }).catch((err) => { })
+    if (index === 0) {
+      await downloadPdfInvoice(
+        state?.id,
+        setDownloading
+      ).then((res) => {
+        setAlertData({ success: true, text: 'Invoice downloaded successfully', title: 'Invoice Downloaded' })
+        handleAlertModal();
+      }).catch((err) => { })
+    } else {
+      await downloadParkingSlip(
+        state?.id,
+        setDownloading
+      ).then((res) => {
+        setAlertData({ success: true, text: 'Parking slip downloaded successfully', title: 'Parking Slip Downloaded' })
+        handleAlertModal();
+      }).catch((err) => { })
+    }
   }
 
   const handleSendCustomerNote = async (note) => {
@@ -272,7 +282,7 @@ const OrderViewer = ({ id, order }) => {
             ]}
           />
         </div>
-      
+
         <Grid container spacing={2}>
           <Grid item xs={8} className={"no-border"}>
             <Grid container spacing={2}>
