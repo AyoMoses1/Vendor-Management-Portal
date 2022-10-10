@@ -341,18 +341,15 @@ const OrderViewer = ({ id, order }) => {
                   <div className='order-items'>
                     <div className='header-flex'>
                       <h5>Order Items</h5>
-                      {/* <div className='edit-action'>
-                          <Button color="primary">Edit</Button>
-                      </div> */}
                     </div>
                     <table className='order-table'>
                       <thead className='my-4'>
                         <tr>
-                          <Grid item xs={5} className='order-text-14'><small>Item</small></Grid>
+                          <Grid item xs={5} className='order-text-14'>Item</Grid>
                           <Grid item xs={2} className='text-center order-text-14'><small>Cost</small></Grid>
                           <Grid item xs={2} className='text-center order-text-14'><small>Quantity</small></Grid>
                           <Grid item xs={2} className='text-center order-text-14'><small>Total</small></Grid>
-                          {state?.status === "PENDING" || state?.status === "AWAITING_PAYMENT" ? <Grid item xs={1} className='text-center order-text-14'></Grid> : <></>}
+                          {state?.status === "PENDING" || state?.status === "AWAITING_PAYMENT" ? <Grid item xs={1} className='text-center order-text-14'></Grid> : <Grid item xs={1}></Grid>}
                         </tr>
                       </thead>
                       <tbody className='order-items'>
@@ -381,9 +378,10 @@ const OrderViewer = ({ id, order }) => {
                             <Grid item xs={2} className='text-center order-text-10'>
                               N{item.subTotal?.toLocaleString()}
                             </Grid>
-                            {state?.status === "PENDING" || state?.status === "AWAITING_PAYMENT" ? <Grid item xs={1} className='text-center order-text-10'>
+                            {state?.status === "PENDING" || state?.status === "AWAITING_PAYMENT" ? 
+                            <Grid item xs={1} className='text-center order-text-10'>
                               {loading ? <CircularProgress size={15} /> : <Button color="primary" onClick={() => _deleteOrderItem(item?.id)}><DeleteIcon className='del-icon' /> </Button>}
-                            </Grid> : <></>}
+                            </Grid> : <Grid item xs={1}></Grid>}
                           </tr>
                         )) : ""}
                       </tbody>
@@ -391,26 +389,32 @@ const OrderViewer = ({ id, order }) => {
                   </div>
                 </Item>
               </Grid>
-              <Grid item xs={12} className={"no-border1"}>
+              <Grid item xs={12} className={"no-border"}>
                 <Item>
-                  <div className='shipping-items'>
-                    <h5 className='mb-0'>Shipping for Order Items</h5>
+                  <div className='order-items'>
+                    <div className='header-flex'>
+                      <h5>Shipping for Order Items</h5>
+                    </div>
                     <table className='order-table'>
-                      <thead>
-                        <tr>
-                          <Grid item xs={10} className='order-text-14'></Grid>
-                          <Grid item xs={2} className='order-text-14 text-center'><small>Cost</small></Grid>
-                        </tr>
+                      <thead className='my-4'>
+                        <Grid container>
+                          <Grid item xs={5} className='order-text-14'></Grid>
+                          <Grid item xs={2} className='text-center order-text-14'><small></small></Grid>
+                          <Grid item xs={2} className='text-center order-text-14'><small></small></Grid>
+                          <Grid item xs={2} className='text-center order-text-14'><small>Cost</small></Grid>
+                          {/* <Grid item xs={1} className='text-center order-text-14'><small>Cost</small></Grid> */}
+                          {state?.status === "PENDING" || state?.status === "AWAITING_PAYMENT" ? <Grid item xs={1} className='text-center order-text-14'></Grid> : <></>}
+                        </Grid>
                       </thead>
-                      <tbody>
+                      <tbody className='order-items'>
                         {orderItems ? orderItems.map((item, index) => (
-                          <Grid container key={item.id} className={index != orderItems.length - 1 ? "order-border-bottom my-4" : ""}>
-                            <Grid item xs={10}>
-                              <div className='order-flex'>
+                            <Grid container  key={item.id} className={index != orderItems.length - 1 ? "order-border-bottom my-4" : ""}>
+                            <Grid item xs={5}>
+                               <div className='order-flex'>
                                 <div className='order-image'>
                                   <img style={{ height: "auto" }} src={item.productId.productImages[0]?.imageUrl} />
                                 </div>
-                                <div className='order-text-10' style={{ width: '70%' }}>
+                                <div className='order-text-10'>
                                   <h6>{item.productId.shippingClass?.name}</h6>
                                   <p><span className='desc-width'>Description:</span> {item.productId.shippingClass?.description}</p>
                                   <p><span className='desc-width'>Item:</span> <span className='product-name'>{item.productId.name.slice(0, 20) + "..."}</span></p>
@@ -419,10 +423,13 @@ const OrderViewer = ({ id, order }) => {
                                 </div>
                               </div>
                             </Grid>
+                            <Grid item xs={2} className='text-center order-text-10'></Grid>
+                            <Grid item xs={2} className='text-center order-text-10'></Grid>
                             <Grid item xs={2} className='text-center order-text-10'>
                               N{item.shippingCost?.toLocaleString()}
                             </Grid>
-                          </Grid>
+                            <Grid item xs={1} className='text-center order-text-10'></Grid>
+                            </Grid>
                         )) : ""}
                       </tbody>
                     </table>
@@ -431,19 +438,20 @@ const OrderViewer = ({ id, order }) => {
               </Grid>
               <Grid item xs={12} className={"no-border2"}>
                 <Item>
-                  <div className='order-total'>
-                    <div>
-                      <p><small>Item SubTotal:</small></p>
-                      <p><small>Shipping: </small></p>
-                      <p><strong><small>Total:</small></strong></p>
-                    </div>
-                    <div className='ml-4'>
-                      <p><small><strong>{subTotal?.toLocaleString()}</strong></small></p>
-                      <p><small>{orderItems ? orderItems.length && orderItems.map(item => {
-                        return item.shippingCost ? item.shippingCost?.toLocaleString() : ''
-                      }).reduce(totalShippinCost) : ""}</small></p>
-                      <p><small><strong>{totalPrice?.toLocaleString()}</strong></small></p>
-                    </div>
+                  <div className='order-total' style={{marginRight:"12px"}}>
+                    <Grid container>
+                      <Grid item xs={8}></Grid>
+                      <Grid item xs={2}><small>Item SubTotal:</small></Grid>
+                      <Grid item xs={2}><small><strong>{subTotal?.toLocaleString()}</strong></small></Grid> 
+                      <Grid item xs={8}></Grid>
+                      <Grid item xs={2}>Shipping:</Grid>
+                      <Grid item xs={2}><small><strong>{orderItems ? orderItems.length && orderItems.map(item => {
+                        return item.shippingCost ? item.shippingCost?.toLocaleString() : '0'
+                      }).reduce(totalShippinCost) : ""}</strong></small></Grid>
+                      <Grid item xs ={8}></Grid>
+                      <Grid item xs={2}><strong><small>Total:</small></strong></Grid>
+                      <Grid item xs={2}><small><strong>{totalPrice?.toLocaleString()}</strong></small></Grid>
+                    </Grid>
                   </div>
                 </Item>
               </Grid>

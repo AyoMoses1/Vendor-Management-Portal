@@ -47,9 +47,10 @@ export const AGENT_TYPES = "AGENT_TYPES";
 export const AGENT_TYPES_SUCCESS = "AGENT_TYPES_SUCCESS";
 export const AGENT_TYPES_FAILED = "AGENT_TYPES_FAILED";
 
-export const getAllAgents = ({ page = '', size = '', query = '', agentType = '', state = '' }) => dispatch => {
+export const getAllAgents = ({ page = '', size = '', query = '', agentType = '', state = '', status='' }) => dispatch => {
   dispatch({ type: GET_AGENT_REQUEST })
-  http.get(`/afrimash/agents/search?size=${size}&page=${page}&query=${query}&agentType=${agentType}&state=${state}`).then(({ data }) => {
+
+  http.get( status ==="ALL" ? `/afrimash/agents/search?size=${size}&page=${page}&query=${query}&agentType=${agentType}&state=${state}`:`/afrimash/agents/search?status=${status}&size=${size}&page=${page}&query=${query}&agentType=${agentType}&state=${state}`).then(({ data }) => {
     dispatch({
       type: GET_ALL_AGENTS_SUCCESS,
       payload: data.object,

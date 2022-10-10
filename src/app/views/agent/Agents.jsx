@@ -58,11 +58,42 @@ const Agents = () => {
   const [receipientAgent, setReceipientAgent] = useState('');
   const [page, setPage] = useState(0)
   const [size, setSize] = useState(10);
+  const [status, setStatus] = useState('ALL')
   const [query, setQuery] = useState('');
   const [state, setState] = useState('All')
   const [types, setTypes] = useState([{ name: 'All Agents', value: 'ALL' }]);
   const [agentType, setAgentType] = useState('ALL');
   const [title, setTitle] = useState('All Agents')
+
+
+  const statusList = [
+    {
+      type: 'ALL',
+      value: 'ALL',
+      name: 'All Agents'
+    },
+    {
+      type: 'PENDING',
+      value: 'PENDING',
+      name: 'Pending Agents'
+    },
+    {
+      type: 'ACTIVE',
+      value: 'ACTIVE',
+      name: 'Active Agents'
+    },
+    {
+      type: 'SUSPENDED',
+      value: 'SUSPENDED',
+      name: 'Suspended Agents' 
+    },
+    {
+      type: 'IN ACTIVE',
+      value: 'IN_ACTIVE',
+      name: 'INACTIVE AGENTS' 
+    },
+  ]
+
 
   const handleChangePage = (newPage) => {
     setPage(newPage);
@@ -73,8 +104,9 @@ const Agents = () => {
   useEffect(() => {
     const _agentType = agentType === 'ALL' ? '' : agentType;
     const _state = state === 'All' ? '' : state;
-    dispatch(getAllAgents({ page, size, query, agentType: _agentType, state: _state }));
-  }, [size, page, agentType, state]);
+    dispatch(getAllAgents({ page, size, query, agentType: _agentType, state: _state, status }));
+    
+  }, [size, page, agentType, state, status]);
 
   useEffect(() => {
     dispatch(getAgentTypes());
@@ -239,10 +271,10 @@ const Agents = () => {
               >
                 <span className='my-0 text-15'>
                   {' '}
-                  {user.dateRegistered.split(" ")[0] || '-----'}
+                  {user?.dateRegistered?.split(" ")[0] || '-----'}
                 </span><br />
                 <span className='date'>
-                  {user.dateRegistered.split(" ")[1] || '-----'}
+                  {user?.dateRegistered?.split(" ")[1] || '-----'}
                 </span>
               </Link>
             </div>
@@ -355,7 +387,7 @@ const Agents = () => {
   }
 
   const handleTitle = (value) => {
-    const v = types.find(t => t.value === value).name;
+    const v = statusList.find(s => s.value === value).name;
     setTitle(v);
   }
 
@@ -380,6 +412,46 @@ const Agents = () => {
             <MUIDataTable
               title={<div>
                 <h4 className='mt-4 mb-0'>{title}</h4>
+                <div className='w-full flex'>
+                  <div className='w-220 flex-end sources'>
+                    <TextField
+                      className='mb-4'
+                      name='mobileNo'
+                      label='Filter by status'
+                      variant='outlined'
+                      margin='normal'
+                      select
+                      fullWidth
+                      value={status}
+                      onChange={(e) => { setStatus(e.target.value); handleTitle(e.target.value) }}
+                    >
+                      {statusList.map((status, idx) => (
+                        <MenuItem key={idx} value={status.value}>
+                          {status.type}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </div>
+                  <div className='w-220 flex-end sources ml-4'>
+                    <TextField
+                      className='mb-4'
+                      name='statusFilter'
+                      label='Filter by location'
+                      variant='outlined'
+                      margin='normal'
+                      select
+                      fullWidth
+                      value={state}
+                      onChange={(e) => { setState(e.target.value) }}
+                    >
+                      {states.map((s, idx) => (
+                        <MenuItem key={idx} value={s}>
+                          {s}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </div>
+                </div>
               </div>}
               data={[...agentList]}
               columns={columns}

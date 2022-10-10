@@ -154,6 +154,10 @@ h5 {
   padding: 10px;
 }
 
+tbody.order-items{
+  /* padding-top: 50px !important; */
+  position: relative;
+}
 .order-total {
   display: flex;
   justify-content: flex-end;
@@ -268,11 +272,16 @@ select.status-box{
 .header-flex{
   display: flex;
   justify-content: space-between;
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
 }
 .del-icon{
   font-size: 14px !important;
   cursor: pointer;
+  padding: 0px !important;
+  /* margin-top: -8px; */
+  position: absolute;
+  top: 0;
+  right: 2;
 }
 
 .stats-nav {
