@@ -13,31 +13,35 @@
     background: #F0F2F5;
     padding-top: 4px;
     padding-bottom: 4px;
-}
-
-.user-table thead tr th .MuiButton-text {
+  }
+  
+  .user-table thead tr th .MuiButton-text {
     font-weight: 600;
     color: #000000;
     font-family: 'Hind', sans-serif !important;
     font-size: 16px;
   }
-
-.user-table .MuiTableCell-root {
+  
+  .user-table .MuiTableCell-root {
     border-bottom: 4px solid #ffffff !important;
   }
-
-.user-table tbody tr td {
+  
+  .user-table tbody tr td {
     padding-left: 24px !important;
     padding-right: 24px !important;
     background: #FAFBFD;
+    font-size: 14px;
     padding-top: 6px;
     padding-bottom: 6px;
-    color: #000000;
-    font-size: 14px;
-    font-family: 'Overpass' sans-serif;
+    color: #4A466DDE !important;
+    font-family: 'Overpass', sans-serif;
     font-weight: 400;
-}
-
+  }
+  
+  .user-table .MuiTable-root {
+    margin-top: 10px;
+  }
+  
 .w-full {
     width: 100%;
 }
@@ -51,55 +55,61 @@
     font-size: 14px;
 }
 
-.all-users-table thead tr th{
-    padding-left: 48px;
-    background: #F0F2F5;
-    font-size: 14px;
-    justify-content: center;
-    padding-top: 4px;
-    padding-bottom: 4px;
-}
 
-.all-users-table thead tr th .MuiButton-text {
-    font-weight: 600;
-    color: #000000;
-    font-size: 16px;
-    font-family: 'Hind', sans-serif;
-}
-
-.all-users-table tbody tr td .MuiTableCell-root{
-    text-align: left;
-}
-
-.all-users-table .MuiTableCell-root {
-    border-bottom: 4px solid #ffffff!important;
-}
-
-.all-users-table tbody{
-    overflow-x: hidden;
-}
-
-.all-users-table tbody tr td {
-    padding-left: 24px !important;
-    padding-right: 24px !important;
-    background: #FAFBFD;
-    padding-top: 6px;
-    padding-bottom: 6px;
-    color: #000000;
-    font-size: 14px;
-    font-family: 'Overpass' sans-serif;
-    font-weight: 400;
-}
-
-.all-users-table .MuiTable-root {
-    margin-top: 10px;
-}
 
 
 .all-users-table h5{
     font-size: 14px !important;
+    font-weight: 600;
 }
 
 .all-users-table .material-icons{
     font-size: 14px !important;
 }
+
+
+.user__name {
+    width: 120px;
+    overflow: hidden;
+}
+
+.user__phone {
+    width: 150px;
+    overflow: hidden;
+}
+
+.all-users-table thead tr th {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+    background: #F0F2F5;
+    padding-top: 4px;
+    padding-bottom: 4px;
+  }
+  
+.all-users-table thead tr th .MuiButton-text {
+    font-weight: 600;
+    color: #000000;
+    font-family: 'Hind', sans-serif !important;
+    font-size: 16px;
+  }
+  
+  .all-users-table.MuiTableCell-root {
+    border-bottom: 4px solid #ffffff !important;
+  }
+  
+  .all-users-table tbody tr td {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+    background: #FAFBFD;
+    font-size: 14px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    color: #4A466DDE !important;
+    font-family: 'Overpass', sans-serif;
+    font-weight: 400;
+  }
+  
+  .all-users-table .MuiTable-root {
+    margin-top: 10px;
+  }
+  

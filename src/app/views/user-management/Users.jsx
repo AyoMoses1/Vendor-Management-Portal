@@ -123,19 +123,19 @@ const Users = () => {
         customBodyRenderLite: (dataIndex) => {
           let user = userList[dataIndex]
           return (
-            <Link
-              to={{
-                pathname: '/user/details',
-                state: {
-                  id: user.id,
-                },
-              }}
-              className='flex items-center'
-            >
-              <div className='ml-3'>
-                <h5 className='my-0 text-muted'>{user.phoneNo || '-----'}</h5>
-              </div>
-            </Link>
+            <div className='flex items-center user__phone'>
+              <Link
+                to={{
+                  pathname: '/user/details',
+                  state: {
+                    id: user.id,
+                  },
+                }}
+                className='ml-13'
+              >
+                  <spam className='my-0 text-15'>{user.phoneNo || '-----'}</spam>
+              </Link>
+            </div>
           )
         },
       },

@@ -10,6 +10,7 @@ export const getAllUser = (setData, isLoading, setAlert, setSeverity, setCount, 
     isLoading(true)
     http.get(role ? `/afrimash/users/search?page=${page}&size=${size}&roleId=${role}&query=${query}` : `/afrimash/users/search?page=${page}&size=${size}&query=${query}`).then(({ data }) => {
         setData(data.object.content)
+        console.log(data.object.content, "This is the data for users **********************************************************************************")
         setCount(data.object.totalElements);
         isLoading(false)
     }).catch((err) => {
