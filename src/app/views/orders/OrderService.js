@@ -96,6 +96,18 @@ export const downloadPdfInvoice = (orderId, setDownloading) => {
   })
 }
 
+export const downloadParkingSlip = (orderId, setDownloading) => {
+  setDownloading(true)
+  return http.getDoc(`/afrimash/orders/${orderId}/parking-slip`).then(({ data }) => {
+    download(data);
+    setDownloading(false)
+    return data
+  }).catch((err) => {
+    setDownloading(false)
+    console.log(err)
+  })
+}
+
 export const addDeliveryAddress = (address) => {
   return http.post(`/afrimash/delivery-addresses`, address)
 }

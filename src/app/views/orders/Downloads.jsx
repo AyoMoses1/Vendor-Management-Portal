@@ -5,6 +5,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import { CircularProgress } from '@material-ui/core';
+import "./order-view.css"
 
 export default function MediaCard({ handleDownload, downloadIndex, downloading }) {
   return (
