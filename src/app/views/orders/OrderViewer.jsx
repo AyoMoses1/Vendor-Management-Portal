@@ -200,6 +200,7 @@ const OrderViewer = ({ id, order }) => {
     handleAlertModal();
   }
 
+
   const _deleteOrderItem = (itemId) => {
     if (!loading) {
       dialog
@@ -254,6 +255,8 @@ const OrderViewer = ({ id, order }) => {
   }
 
 
+  console.log(state, "*********************************************")
+
   return (
     <div className='order-container'>
       <Alert
@@ -294,7 +297,7 @@ const OrderViewer = ({ id, order }) => {
                         <p className='py-2'>Order Status: </p>
                         <p>Customer Name: </p>
                         <p>Customer ID: </p>
-                        <p>Email: </p>
+                        {state.orderSource !=="USSD" && <p>Email: </p>}
                         <p>Phone: </p>
                       </div>
                       <div className='ml-4 order-text-12'>
@@ -305,10 +308,10 @@ const OrderViewer = ({ id, order }) => {
                             })}
                           </select>
                         </form>
-                        {/* <p className='py-4'><strong>{status}</strong></p> */}
+                        {/* <p className='py-4'><strong>Abeg I dy here oh</strong></p> */}
                         <p><strong>{customerId ? `${customerId.firstName.toUpperCase()} ${customerId.lastName.toUpperCase()}` : null}</strong></p>
                         <p><strong>{customerId ? customerId.id : null}</strong></p>
-                        <p><strong>{customerId ? customerId.email : null}</strong></p>
+                        {state.orderSource !== "USSD" && <p><strong>{customerId ? customerId.email : null}</strong></p>}
                         <p><strong>{customerId ? customerId.mobileNo : null}</strong></p>
                       </div>
                       <div className='edit-action'>
