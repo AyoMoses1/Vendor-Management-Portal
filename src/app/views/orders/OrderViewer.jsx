@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { getInvoiceById, updateInvoice, deleteOrderItem, downloadPdfInvoice } from './OrderService'
+import { getInvoiceById, updateInvoice, deleteOrderItem, downloadPdfInvoice, downloadParkingSlip } from './OrderService'
 import { format } from 'date-fns'
 import { makeStyles } from '@material-ui/core/styles'
 import { useHistory } from "react-router-dom";
@@ -20,6 +20,7 @@ import { useDialog } from 'muibox';
 import Alert from 'app/components/Alert';
 import { CircularProgress } from '@material-ui/core';
 import { sendCustomerNote } from '../customers/CustomerService';
+import { SimpleCard, Breadcrumb } from 'matx'
 
 const useStyles = makeStyles(({ palette, ...theme }) => ({
   '@global': {
@@ -230,13 +231,23 @@ const OrderViewer = ({ id, order }) => {
 
   const handleDownload = async (index) => {
     setDownloadIndex(index);
-    await downloadPdfInvoice(
-      state?.id,
-      setDownloading
-    ).then((res) => {
-      setAlertData({ success: true, text: 'Invoice downloaded successfully', title: 'Invoice Downloaded' })
-      handleAlertModal();
-    }).catch((err) => { })
+    if (index === 0) {
+      await downloadPdfInvoice(
+        state?.id,
+        setDownloading
+      ).then((res) => {
+        setAlertData({ success: true, text: 'Invoice downloaded successfully', title: 'Invoice Downloaded' })
+        handleAlertModal();
+      }).catch((err) => { })
+    } else {
+      await downloadParkingSlip(
+        state?.id,
+        setDownloading
+      ).then((res) => {
+        setAlertData({ success: true, text: 'Parking slip downloaded successfully', title: 'Parking Slip Downloaded' })
+        handleAlertModal();
+      }).catch((err) => { })
+    }
   }
 
   const handleSendCustomerNote = async (note) => {
@@ -266,6 +277,15 @@ const OrderViewer = ({ id, order }) => {
         handleOK={handleAlertOK}
       />
       <Box sx={{ flexGrow: 1 }}>
+        <div className='mb-sm-30'>
+          <Breadcrumb
+            routeSegments={[
+              { name: 'Orders', path: '/orders' },
+              { name: 'Order Details' },
+            ]}
+          />
+        </div>
+
         <Grid container spacing={2}>
           <Grid item xs={8} className={"no-border"}>
             <Grid container spacing={2}>

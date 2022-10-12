@@ -9,6 +9,7 @@ import { useHistory } from 'react-router-dom/cjs/react-router-dom'
 
 import Notification from '../../../components/Notification'
 import { errorState } from '../../helpers/error-state'
+import './shipping.css'
 
 const initialValues = {
   name: '',
@@ -88,7 +89,7 @@ const CreatesShippingClass = ({ location }) => {
           <form className='px-4' onSubmit={handleSubmit}>
             <Grid container spacing={3}>
               <Grid container item>
-                <h1>Create new Shipping Class</h1>
+                <h1 className='h1'>Create new Shipping Class</h1>
               </Grid>
               <Grid item sm={6} xs={12}>
                 <TextField

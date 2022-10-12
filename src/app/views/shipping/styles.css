@@ -2,14 +2,15 @@
     padding-left: 24px !important;
     padding-right: 24px !important;
     background: #F0F2F5;
-    font-size: 14px;
     padding-top: 4px;
     padding-bottom: 4px;
 }
 
 .shipping-tables thead tr th .MuiButton-text {
-    font-weight: 500;
+    font-weight: 600;
     color: #000000;
+    font-size: 16px;
+    font-family: 'Hind', sans-serif;
 }
 
 .shipping-tables .MuiTableCell-root {
@@ -20,10 +21,12 @@
     padding-left: 24px !important;
     padding-right: 24px !important;
     background: #FAFBFD;
-    font-size: 12px;
+    font-size: 14px;
     padding-top: 6px;
     padding-bottom: 6px;
     color: #000000;
+    font-family: 'Overpass',sans-serif;
+    font-weight: 400;
 }
 
 .shipping-tables .MuiTable-root {

@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import { Formik } from 'formik'
 import * as yup from 'yup'
 import CreateModal from 'app/components/CreateModal'
+import './common.css'
 
 function rand() {
   return Math.round(Math.random() * 20) - 10
@@ -105,7 +106,7 @@ function CreateNew({
                   />
                 )
               })}
-              <Button type='submit' variant='contained' color='primary'>
+              <Button type='submit' variant='contained' color='primary' className='create'>
                 Create
               </Button>
             </div>

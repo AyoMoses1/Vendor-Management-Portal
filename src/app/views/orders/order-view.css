@@ -1,71 +1,94 @@
 .PENDING {
   color: #EF882C;
   background-color: rgba(239, 136, 44, 0.15);
+  font-family:'Overpass', sans-serif;
+  font-weight: 600;
 }
 
 .PROCESSING {
   color: #2F80ED;;
   background-color: rgba(47, 128, 237, 0.15);
+  font-family:'Overpass', sans-serif;
+  font-weight: 600;
 }
 
 .CANCELLED {
   color: #EB5757;
   background-color: rgba(234, 95, 95, 0.15);
+  font-family:'Overpass', sans-serif;
+  font-weight: 600;
 }
 
 .COMPLETED {
   color: #27AE60;
   background-color: rgba(39, 174, 96, 0.1);
+  font-family:'Overpass', sans-serif;
+  font-weight: 600;
 }
 
 .CONVERTED {
   color: black;
   background-color: yellow;
+  font-family:'Overpass', sans-serif;
+  font-weight: 600;
 }
 
 .DELIVERED {
   background-color: #5589ed;
   color: #ffffff;
+  font-family:'Overpass', sans-serif;
+  font-weight: 600;
 }
 
 .ON_HOLD {
   color: #926202;
   background-color: #f8dda7;
+  font-family:'Overpass', sans-serif;
+  font-weight: 600;
 }
 
 .DISPUTED {
   color: #900404;
   background-color: #f9b1b1;
+  font-family:'Overpass', sans-serif;
+  font-weight: 600;
 }
 
 .AWAITING_PAYMENT {
   color: #828282;
   background-color: rgba(130, 130, 130, 0.15);
   display: flex;
+  font-family:'Overpass', sans-serif;
+  font-weight: 600;
 }
 
 .AWAITING_FULFILMENT {
   color: #076a70;
   background-color: #d7fdff;
+  font-family:'Overpass', sans-serif;
+  font-weight: 600;
 }
 
 .MANUAL_VERIFICATION_REQUIRED {
   color: #1f4535;
   background-color: #e3e3e3;
+  font-family:'Overpass', sans-serif;
+  font-weight: 600;
 }
 
 .ORDER {
   padding: 5px 8px;
   width: fit-content;
   border-radius: 6px;
-  font-size: 12px;
-  font-weight: 500px;
+  font-size: 14px;
 }
 
 .PAID {
   color: #008a16;
   font-weight: 800 !important;
   background-color: #fcfcfc;
+  font-family:'Overpass', sans-serif;
+  font-weight: 600;
 }
 
 .qty {
@@ -174,7 +197,7 @@ tbody.order-items{
 .invoice-btn {
   background: #d9d6d6 !important;
   color: #000 !important;
-  font-size: 12px !important;
+  font-size: 10px !important;
   width: 180px !important;
 }
 
@@ -209,16 +232,34 @@ tbody.order-items{
   height: 100%;
 }
 
+.card-title {
+  font-size: 18px;
+  font-family: 'Hind', sans-serif;
+  font-weight: 600;
+}
+
 .order-header p {
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .order-text-10 {
-  font-size: 10px;
+  font-size: 12px;
+}
+
+.MuiFormLabel-root{
+  font-family: 'Overpass', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.MuiOutlinedInput-input {
+  font-family: 'Overpass', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
 }
 
 .order-text-12 {
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .order-text-14 {
@@ -255,7 +296,7 @@ tbody.order-items{
   cursor: pointer;
   font-weight: 700;
   padding: 0;
-  font-size: 8px;
+  font-size: 10px;
 }
 .edit-dropdown{
   padding: 0 !important; 
@@ -265,7 +306,7 @@ select.status-box{
   background: rgb(230, 230, 230);
   outline: 0px;
   border: 0px;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: bold;
   width: 100px !important;
 }
@@ -275,7 +316,7 @@ select.status-box{
   /* margin-bottom: 20px; */
 }
 .del-icon{
-  font-size: 14px !important;
+  font-size: 16px !important;
   cursor: pointer;
   padding: 0px !important;
   /* margin-top: -8px; */
@@ -316,14 +357,16 @@ select.status-box{
   padding-left: 24px !important;
   padding-right: 24px !important;
   background: #F0F2F5;
-  font-size: 14px;
   padding-top: 4px;
   padding-bottom: 4px;
+  
 }
 
 .all-order-table thead tr th .MuiButton-text {
-  font-weight: 500;
   color: #000000;
+  font-family: 'Hind', sans-serif !important;
+  font-weight: 600;
+  font-size: 16px;
 }
 
 .all-order-table .MuiTableCell-root {
@@ -334,20 +377,26 @@ select.status-box{
   padding-left: 24px !important;
   padding-right: 24px !important;
   background: #FAFBFD;
-  font-size: 12px;
+  font-size: 14px;
   padding-top: 6px;
   padding-bottom: 6px;
   color: #000000;
+  font-family:'Overpass', sans-serif;
+  font-weight: 400;
 }
 
 .all-order-table .MuiTable-root {
   margin-top: 10px;
 }
 
+.addnew {
+  font-family: 'Fira Sans Condensed', sans-serif;
+}
+
 .order-sources .MuiSelect-root {
-  padding-top: 12px;
+  padding-top: 14px;
   padding-bottom: 12px;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .active{
@@ -358,14 +407,15 @@ select.status-box{
   padding-left: 24px !important;
   padding-right: 24px !important;
   background: #F0F2F5;
-  font-size: 14px;
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
 .abadoned-table thead tr th .MuiButton-text {
-  font-weight: 500;
   color: #000000;
+  font-family: 'Hind', sans-serif ;
+  font-weight: 600;
+  font-size: 16px;
 }
 
 .abadoned-table .MuiTableCell-root {
@@ -376,25 +426,37 @@ select.status-box{
   padding-left: 24px !important;
   padding-right: 24px !important;
   background: #FAFBFD;
-  font-size: 12px;
+  font-size: 14px;
   padding-top: 6px;
   padding-bottom: 6px;
   color: #000000;
+  font-family:'Overpass', sans-serif ;
+  font-weight: 400;
+}
+
+.MuiTypography-colorInherit {
+  font-family: 'Fira Sans Condensed', sans-serif;
 }
 
 .abadoned-table .MuiTable-root {
   margin-top: 10px;
 }
 
+.abandon-table {
+  font-family: 'Hind', sans-serif;
+  font-weight: 600;
+  font-size: 20px;
+}
+
 .ABADONED {
   padding: 5px 8px;
   width: fit-content;
   border-radius: 6px;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 500px;
 }
 .stats-nav .active{
-  font-size: 12x;
+  font-size: 14px;
   font-weight: 600;
   text-decoration: underline;
   color: #000 ;
@@ -409,7 +471,7 @@ select.status-box{
   padding: 2px 10px;
   border-radius: 3px;
   color:  rgba(235, 87, 87, 0.4);
-  font-size: 6px;
+  font-size: 8px;
   cursor: pointer;
 }
 
@@ -423,4 +485,9 @@ select.status-box{
 .disabled{
   background: rgba(155, 155, 155, 0.15) !important;
   color: #BDBDBD !important;
+}
+
+.new {
+  font-size: 14px;
+  font-family: 'Fira Sans Condensed', sans-serif;
 }

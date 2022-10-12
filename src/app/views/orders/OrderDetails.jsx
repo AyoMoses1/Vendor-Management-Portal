@@ -30,7 +30,7 @@ const OrderDetails = ({ location }) => {
   return (
     <>
       <div className='p-sm-30 order-view'>
-        <div className="py-20 h-100">
+        <div className="pb-20 h-100">
           <OrderViewer toggleOrderEditor={toggleOrderEditor} id={id} order={order}/>
         </div>
       </div>

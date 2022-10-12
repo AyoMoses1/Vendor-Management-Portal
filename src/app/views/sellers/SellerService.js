@@ -11,8 +11,10 @@ export const getAllSeller = (setLoading, setData, setAlert, setSeverity) => {
   http.get('/afrimash/sellers/search/').then(({ data }) => {
     if (data instanceof Object) {
       setData(data.object.content)
+      console.log(data, "This is the data for customers  **********************************************************************************")
       setLoading(false)
     }
+    
   }).catch((err) => {
     setLoading(false)
     setSeverity('error')

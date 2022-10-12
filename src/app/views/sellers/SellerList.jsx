@@ -1,130 +1,59 @@
-import React, { useState, useEffect } from 'react'
-import { Breadcrumb } from 'matx'
-import MUIDataTable from 'mui-datatables'
-import { Grow, Icon, IconButton, TextField, Button } from '@material-ui/core'
-import { Link } from 'react-router-dom'
-import http from '../../services/api'
-import { useDialog } from 'muibox'
-import './Sellerform.scss'
-import Notification from '../../components/Notification'
-import { getAllSeller } from './SellerService'
-import Loading from 'matx/components/MatxLoadable/Loading'
+import React, { useState, useEffect } from "react";
+import { Breadcrumb } from "matx";
+import MUIDataTable from "mui-datatables";
+import { Grow, Icon, IconButton, TextField, Button, MenuItem } from "@material-ui/core";
+import { Link } from "react-router-dom";
+import http from "../../services/api";
+import { useDialog } from "muibox";
+import "./Sellerform.css";
+import Notification from "../../components/Notification";
+import { getAllSeller } from "./SellerService";
+import Loading from "matx/components/MatxLoadable/Loading";
+import { debounce } from "lodash";
+import { states } from "../../../utils/states";
+import { capitalize } from "utils";
+states.unshift("All");
 
 const SellerList = () => {
-  const [isAlive, setIsAlive] = useState(true)
-  const [userList, setUserList] = useState([])
-  const [loading, setLoading] = useState(false)
+  const [isAlive, setIsAlive] = useState(true);
+  const [userList, setUserList] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  const [severity, setSeverity] = useState('')
-  const [alert, setAlert] = useState('')
+  const [severity, setSeverity] = useState("");
+  const [alert, setAlert] = useState("");
 
-  const dialog = useDialog()
+  const dialog = useDialog();
+  const [state, setState] = useState("All");
+  const [status, setStatus] = useState("ALL");
 
   useEffect(() => {
-    getAllSeller(setLoading, setUserList, setAlert, setSeverity)
-    return () => setIsAlive(false)
-  }, [isAlive])
+    getAllSeller(setLoading, setUserList, setAlert, setSeverity);
+    return () => setIsAlive(false);
+  }, [isAlive]);
 
   const columns = [
     {
-      name: 'name', // field name in the row object
-      label: 'Name', // column title that will be shown in table
+      name: "name", // field name in the row object
+      label: "Name", // column title that will be shown in table
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
-          let user = userList[dataIndex]
+          let user = userList[dataIndex];
 
           return (
-            <Link
-              to={{
-                pathname: '/vendor/details',
-                state: {
-                  id: user.id,
-                },
-              }}
-              className='flex items-center'
-            >
-              <div className='ml-3'>
-                <h5 className='my-0 text-muted'>{`${user?.name || '-------'}`}</h5>
-              </div>
-            </Link>
-          )
-        },
-      },
-    },
-
-    {
-      name: 'email',
-      label: 'Email',
-      options: {
-        filter: true,
-        customBodyRenderLite: (dataIndex) => {
-          let user = userList[dataIndex]
-          return (
-            <Link
-              to={{
-                pathname: '/vendor/details',
-                state: {
-                  id: user.id,
-                },
-              }}
-              className='flex items-center'
-            >
-              <div className='ml-3'>
-                <h5 className='my-0 text-muted'> {user.email || '-----'}</h5>
-              </div>
-            </Link>
-          )
-        },
-      },
-    },
-
-    {
-      name: 'phoneno',
-      label: 'Phone Number',
-      options: {
-        filter: true,
-        customBodyRenderLite: (dataIndex) => {
-          let user = userList[dataIndex]
-          return (
-            <Link
-              to={{
-                pathname: '/vendor/details',
-                state: {
-                  id: user.id,
-                },
-              }}
-              className='flex items-center'
-            >
-              <div className='ml-3'>
-                <h5 className='my-0 text-muted'> {user.mobileNo || '-----'}</h5>
-              </div>
-            </Link>
-          )
-        },
-      },
-    },
-
-    {
-      name: 'store',
-      label: 'Store',
-      options: {
-        filter: true,
-        customBodyRenderLite: (dataIndex) => {
-          let user = userList[dataIndex]
-          return (
-            <div className='flex items-center'>
+            <div className="flex items-center vendor__name">
               <Link
                 to={{
-                  pathname: '/vendor/details',
+                  pathname: "/vendor/details",
                   state: {
                     id: user.id,
                   },
                 }}
-                className='ml-3'
+                className="ml-3"
               >
-                  <span className='my-0 text-15'> {user.name || '-----'}</span>
-                
+                <span className="my-0 text-15">{`${
+                  user?.name || "-------"
+                }`}</span>
               </Link>
             </div>
           );
@@ -133,27 +62,139 @@ const SellerList = () => {
     },
 
     {
-      name: 'address',
-      label: 'Address',
+      name: "email",
+      label: "Email",
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
-          let user = userList[dataIndex]
+          let user = userList[dataIndex];
           return (
-            <Link
-              to={{
-                pathname: '/vendor/details',
-                state: {
-                  id: user.id,
-                },
-              }}
-              className='flex items-center'
-            >
-              <div className='ml-3'>
-                <h5 className='my-0 text-muted'>{user.state || '-----'}</h5>
-              </div>
-            </Link>
-          )
+            <div className="flex items-center vendor__email">
+              <Link
+                to={{
+                  pathname: "/vendor/details",
+                  state: {
+                    id: user.id,
+                  },
+                }}
+                className="ml-3"
+              >
+                <span className="my-0 text-15"> {user.email || "-----"}</span>
+              </Link>
+            </div>
+          );
+        },
+      },
+    },
+
+    {
+      name: "phoneno",
+      label: "Phone Number",
+      options: {
+        filter: true,
+        customBodyRenderLite: (dataIndex) => {
+          let user = userList[dataIndex];
+          return (
+            <div className="flex items-center vendor__number">
+              <Link
+                to={{
+                  pathname: "/vendor/details",
+                  state: {
+                    id: user.id,
+                  },
+                }}
+                className="ml-3"
+              >
+                <span className="my-0 text-15">
+                  {" "}
+                  {user.mobileNo || "-----"}
+                </span>
+              </Link>
+            </div>
+          );
+        },
+      },
+    },
+
+    {
+      name: "store",
+      label: "Store",
+      options: {
+        filter: true,
+        customBodyRenderLite: (dataIndex) => {
+          let user = userList[dataIndex];
+          return (
+            <div className="flex items-center vendor__store">
+              <Link
+                to={{
+                  pathname: "/vendor/details",
+                  state: {
+                    id: user.id,
+                  },
+                }}
+                className="ml-3"
+              >
+                <span className="my-0 text-15"> {user.name || "-----"}</span>
+              </Link>
+            </div>
+          );
+        },
+      },
+    },
+
+    {
+      name: "address",
+      label: "Address",
+      options: {
+        filter: true,
+        customBodyRenderLite: (dataIndex) => {
+          let user = userList[dataIndex];
+          return (
+            <div className="flex items-center vendor__address">
+              <Link
+                to={{
+                  pathname: "/vendor/details",
+                  state: {
+                    id: user.id,
+                  },
+                }}
+                className="ml-3"
+              >
+                <span className="my-0 text-15">{user.state || "-----"}</span>
+              </Link>
+            </div>
+          );
+        },
+      },
+    },
+
+    {
+      name: "status",
+      label: "Status",
+      options: {
+        filter: true,
+        setCellHeaderProps: () => {
+          return { width: "75px" };
+        },
+        customBodyRenderLite: (dataIndex) => {
+          let user = userList[dataIndex];
+          return (
+            <div className={`items-center VENDOR ${user?.status}`}>
+              <Link
+                to={{
+                  pathname: "/vendor/details",
+                  state: {
+                    id: user.id,
+                  },
+                }}
+                className="ml-3"
+              >
+                <span className="my-0 text-15">
+                  {capitalize(user.status || "-----")}
+                </span>
+              </Link>
+            </div>
+          );
         },
       },
     },
@@ -185,40 +226,84 @@ const SellerList = () => {
     //     },
     //   },
     // },
-  ]
+  ];
   const notification = () => {
-    return <Notification alert={alert} severity={severity && severity} />
-  }
+    return <Notification alert={alert} severity={severity && severity} />;
+  };
   return (
-    <div className='m-sm-30'>
-      <div className='mb-sm-30'>
+    <div className="m-sm-30">
+      <div className="mb-sm-30">
         <Breadcrumb
           routeSegments={[
-            { name: 'Vendors', path: '/vendors' },
-            { name: 'Vendors' },
+            { name: "Vendors", path: "/vendors" },
+            { name: "Vendors" },
           ]}
         />
       </div>
-      {severity === 'error' && notification()}
-      <div className='overflow-auto'>
-        <div className='min-w-750 vendor-table'>
+      {severity === "error" && notification()}
+      <div className="overflow-auto">
+        <div className="min-w-750 vendor-table">
           {loading ? (
             <Loading />
           ) : (
             <MUIDataTable
-              title={'All Vendors'}
-              data={userList}
+              title={
+                <div>
+                  <h4 className="mt-4 mb-0">All Vendors</h4>    
+                  <div className="w-full flex">
+                    <div className="w-220 flex-end sources">
+                      <TextField
+                        className="mb-4"
+                        name="mobileNo"
+                        label="Filter by status"
+                        variant="outlined"
+                        margin="normal"
+                        select
+                        fullWidth
+                        value={status}
+                        onChange={(e) => {
+                          setStatus(e.target.value);
+                          
+                        }}
+                       >
+                      </TextField>
+                    </div>
+                    <div className="w-220 flex-end sources ml-4">
+                      <TextField
+                        className="mb-4"
+                        name="statusFilter"
+                        label="Filter by location"
+                        variant="outlined"
+                        margin="normal"
+                        select
+                        fullWidth
+                        value={state}
+                        onChange={(e) => {
+                          setState(e.target.value);
+                        }}
+                       >
+                        {states.map((s, idx) => (
+                          <MenuItem key={idx} value={s}>
+                            {s}
+                          </MenuItem>
+                        ))}
+                      </TextField>
+                    </div>
+                  </div>
+                </div>
+            }
+            data={userList}
               columns={columns}
               options={{
                 onRowsDelete: (data) =>
                   dialog
-                    .confirm('Are you sure you want to delete?')
+                    .confirm("Are you sure you want to delete?")
                     .then((value) => value)
                     .catch(() => {
-                      return false
+                      return false;
                     }),
-                filterType: 'textField',
-                responsive: 'standard',
+                filterType: "textField",
+                responsive: "standard",
                 elevation: 0,
                 rowsPerPageOptions: [10, 20, 40, 80, 100],
                 customSearchRender: (
@@ -227,11 +312,12 @@ const SellerList = () => {
                   hideSearch,
                   options
                 ) => {
+                
                   return (
                     <Grow appear in={true} timeout={300}>
                       <TextField
-                        variant='outlined'
-                        size='small'
+                        variant="outlined"
+                        size="small"
                         fullWidth
                         onChange={({ target: { value } }) =>
                           handleSearch(value)
@@ -241,35 +327,39 @@ const SellerList = () => {
                             paddingRight: 0,
                           },
                           startAdornment: (
-                            <Icon className='mr-2' fontSize='small'>
+                            <Icon className="mr-2" fontSize="small">
                               search
                             </Icon>
                           ),
                           endAdornment: (
                             <IconButton onClick={hideSearch}>
-                              <Icon fontSize='small'>clear</Icon>
+                              <Icon fontSize="small">clear</Icon>
                             </IconButton>
                           ),
                         }}
                       />
                     </Grow>
-                  )
+                  );
                 },
                 customToolbar: () => {
                   return (
                     <Link
                       to={{
-                        pathname: '/vendor/new',
+                        pathname: "/vendor/new",
                         state: {},
                       }}
                     >
                       <IconButton>
-                        <Button variant='contained' color='primary'>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          className="icon"
+                        >
                           <Icon>add</Icon>Add New
                         </Button>
                       </IconButton>
                     </Link>
-                  )
+                  );
                 },
               }}
             />
@@ -277,7 +367,7 @@ const SellerList = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default SellerList
+export default SellerList;

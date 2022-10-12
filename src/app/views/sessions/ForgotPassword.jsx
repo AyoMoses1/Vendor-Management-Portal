@@ -10,7 +10,7 @@ import { connect } from "react-redux";
 import { PropTypes } from "prop-types";
 import { resetPassword } from "../../redux/actions/LoginActions";
 import afrimash2 from "./assets/svg/afrimash2.0.svg";
-import "./Forgotpassword.scss";
+import "./Forgotpassword.css";
 import service from "./reset";
 
 
@@ -52,7 +52,7 @@ class ForgotPassword extends Component {
         </div>
         <h2 className="main-header">Afrimash Admin</h2>
         <Container maxWidth="sm" className="flex flex-middle contain">
-          <div className="container">
+          <div className="box">
             <h3 className="reset"> Reset your Password </h3>
             <p className="reset-text">
               Enter the email address associated with your account and we’ll

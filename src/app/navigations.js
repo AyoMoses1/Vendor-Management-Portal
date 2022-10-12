@@ -1,4 +1,5 @@
 import { MdOutlinePhonelink } from 'react-icons/md';
+import './app.css'
 
 export const navigations = [
   {
@@ -95,7 +96,7 @@ export const navigations = [
     path: '/customers',
   },
   {
-    name: 'User Management',
+    name: 'Users',
     icon: 'group_add',
     children: [
       {

@@ -1,10 +1,10 @@
 import http from "../../services/api";
 
-const download = (data) => {
+const download = (data, name) => {
   const url = window.URL.createObjectURL(new Blob([data], { type: "application/pdf" }));
   var link = document.createElement('a');
   link.href = url;
-  link.setAttribute('download', 'invoice.pdf');
+  link.setAttribute('download', name);
   document.body.appendChild(link);
   link.click();
 }
@@ -87,7 +87,19 @@ export const getOrderStatus = (setLoading) => {
 export const downloadPdfInvoice = (orderId, setDownloading) => {
   setDownloading(true)
   return http.getDoc(`/afrimash/orders/${orderId}/pdf-invoice`).then(({ data }) => {
-    download(data);
+    download(data, 'invoice.pdf');
+    setDownloading(false)
+    return data
+  }).catch((err) => {
+    setDownloading(false)
+    console.log(err)
+  })
+}
+
+export const downloadParkingSlip = (orderId, setDownloading) => {
+  setDownloading(true)
+  return http.getDoc(`/afrimash/orders/${orderId}/parking-slip`).then(({ data }) => {
+    download(data, 'parking-slip.pdf');
     setDownloading(false)
     return data
   }).catch((err) => {

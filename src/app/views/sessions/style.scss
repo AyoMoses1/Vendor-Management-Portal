@@ -1,49 +1,77 @@
-.contianer__auth {
-  width: 467px;
-  overflow: hidden;
-  position: absolute;
-  top: 5px;
-  left: 50%;
-  @media (max-width: 800px) {
-    top: 2px;
-    left: 12px;
-    right: 12px;
-    width: auto;
-    margin-bottom: 10%;
-  }
 
-  .sub__header {
-    font-family: sans-serif;
-    font-style: normal;
-    font-weight: bold;
-    font-size: 16px;
-    line-height: 24px;
-    color: #979dac !important;
-    margin-top: 10px;
-    @media (max-width: 1200px) {
-      text-align: center;
-    }
-  }
-}
-.logo__container {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
-}
-.main__header {
-  font-family: sans-serif;
-  font-style: normal;
-  font-weight: bold;
-  text-align: left;
-  font-size: 28px;
-  width: 100%;
-  line-height: 48px;
-  color: #000 !important;
+
+.contains {
+  background: #FFFFFF;
+  box-shadow: -4px 4px 60px rgba(0, 0, 0, 0.16);
+  width: 60% !important;
+  height: 80vh;
+  text-align: center;
+  margin: 0 auto;
+
   @media (max-width: 1200px) {
     text-align: center;
-    margin-top: -4px;
-  }
+    height: 80vh;
+  } 
+}
+
+
+
+.main__header {
+  width: 100%;
+  font-family:'Hind', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 36px;
+  letter-spacing: 0.02em;
+  color: #0F4E08;
+  text-align: center;
+  margin-top: -5px;
+  padding-top: 20px;
+
+  @media (max-width: 1200px) {
+    text-align: center;
+  } 
+}
+
+.contained {
+  width: 50%;
+  margin: auto;
+}
+
+
+
+.sub__header{
+  width: 100%;
+  height: 30px;
+  font-family:  'Overpass', sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 30px;
+  text-align: center;
+  color: #000000;
+  margin-top: -5px;
+}
+
+.title {
+  text-align: left;
+  color: #000 !important;
+  font-family:  'Overpass', sans-serif !important;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 23px;
+}
+
+.space {
+  margin-bottom: -15px !important;
+  
+}
+
+.input {
+  background: #F8F8F8 !important;
+  border-radius: 8px;
+ 
+  
 }
 
 .button__signin {
@@ -52,9 +80,10 @@
   color: white;
   background-color: #204e09;
   height: 50px;
+  font-family: 'Fira Sans Condensed', sans-serif;
   font-size: 18px;
   box-shadow: 0px 5px 3px rgba(0, 0, 0, 0.108696);
-  width: 200px;
+  width: 100%;
   cursor: pointer;
   letter-spacing: 1px;
   &:hover {
@@ -70,6 +99,8 @@
   background-color: transparent;
   border-width: 2px;
   font-size: 12px;
+  font-family:  'Overpass', sans-serif !important;
+  font-weight: 400;
   cursor: pointer;
   border-width: 0px;
   &:hover {
@@ -83,4 +114,37 @@
   justify-content: flex-end;
   align-items: flex-end;
   flex-direction: column;
+}
+
+.inport {
+  background: #F8F8F8 !important;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.image {
+  width: 120px;
+  height: 40px;
+}
+
+.brand {
+  justify-content: right; 
+  align-items: center;
+}
+
+.background {
+  background-image: url("/assets/images/Rectangle 3.png"), url("/assets/images/Rectangle 1.png"), url("/assets/images/Rectangle 2.png");
+  background-repeat: no-repeat;
+  background-position: right top, left bottom, left top;
+  background-origin: padding-box, content-box , padding-box;
+  padding-left: 17em;
+  height: 100vh;
+  width: 100%;
+  margin: 0 auto;
+ 
+}
+
+.block {
+  padding-top: 6em;
+  margin-left: -7rem;
 }

@@ -181,7 +181,7 @@ function NewOrders() {
       {loading ? (
         <Loader />
       ) : (
-        <SimpleCard title='Create New Order'>
+        <SimpleCard title='Create New Order' >
           <div className='w-100 overflow-auto'>
             <Card>
               <form className='px-4' onSubmit={handleSubmit}>
@@ -372,6 +372,7 @@ function NewOrders() {
                     variant='contained'
                     color='primary'
                     onClick={handleSubmit}
+                    className='new'
                   >
                     Create new order
                   </Button>

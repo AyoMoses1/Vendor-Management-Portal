@@ -134,7 +134,7 @@ const Features = () => {
       <div className='overflow-auto'>
         <div className='min-w-750 features-table'>
           <MUIDataTable
-            title={'Features'}
+            title={<h5 className='mt-4 mb-0 feature-table'>Features</h5>}
             data={features}
             columns={columns}
             options={{
@@ -195,6 +195,7 @@ const Features = () => {
                       <Button
                         variant='contained'
                         color='primary'
+                        className='addnew'
                         onClick={() => {
                           handleModal()
                         }}

@@ -11,27 +11,13 @@ import { PropTypes } from "prop-types";
 import { withRouter } from "react-router-dom";
 import { resetPassword } from "../../redux/actions/LoginActions";
 import afrimash2 from "./assets/svg/afrimash2.0.svg";
-import "./Forgotpassword.scss";
+import "./Forgotpassword.css";
 import {Link} from "react-router-dom"
-import { Password } from "@mui/icons-material";
 
 
 
-class PasswordCreated extends Component {
-  state = {
-    password: "Enter password here",
-  };
-  handleChange = (event) => {
-    event.persist();
-    this.setState({
-      [event.target.name]: event.target.value,
-    });
-  };
-  handleFormSubmit = () => {
-    this.props.resetPassword({ ...this.state });
-  };
-  render() {
-    let { password } = this.state;
+
+function PasswordCreated (){
 
     return (
       <div>
@@ -40,7 +26,7 @@ class PasswordCreated extends Component {
         </div>
         <h2 className="main-header">Afrimash Admin</h2>
         <Container maxWidth="sm" className="flex flex-middle contain">
-          <div className="container">
+          <div className="count">
             <h3 className="reset "> Password Created </h3>
             <p className="reset-word">Your password has been reset and you will be redirected to the log in page.</p>
             <p className="word">Follow this <Link className="text-link" to="/SignIn" >Link </Link> to be redirected manually.</p>
@@ -49,7 +35,7 @@ class PasswordCreated extends Component {
         </Container>
       </div>
     );
-  }
+  
 }
 
 const mapStateToProps = (state) => ({

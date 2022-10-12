@@ -107,7 +107,7 @@ const Tags = () => {
             <Loading />
           ) : (
             <MUIDataTable
-              title={'Tags'}
+              title={<h5 className='mt-4 mb-0 tags-table'>Tags</h5>}
               data={tags}
               columns={columns}
               options={{
@@ -167,14 +167,13 @@ const Tags = () => {
                   return (
                     <>
                       <IconButton>
-                        <Button
-                          variant='contained'
-                          color='primary'
-                          onClick={() => {
-                            handleModal()
-                          }}
+                      <Button
+                          variant="contained"
+                          color="primary"
+                          className='addnew'
+                          // onClick={() => handleModal()}
                         >
-                          <Icon>add</Icon>Add New
+                          Add New
                         </Button>
                       </IconButton>
                       <CreateNew

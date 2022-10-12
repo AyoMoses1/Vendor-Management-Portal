@@ -12,8 +12,8 @@
 }
 
 .section-title {
-    font-weight: 500;
-    font-size: 12px;
+    font-weight: 600;
+    font-size: 14px;
     color: black;
     padding-bottom: 5px;
 }
@@ -30,7 +30,6 @@
     border: 1px solid #E3E3E3;
     border-radius: 5px;
     padding: 10px;
-    font-weight: 500;
     color: black;
 }
 
@@ -69,28 +68,38 @@
     padding-left: 24px !important;
     padding-right: 24px !important;
     background: #F0F2F5;
-    font-size: 14px;
     padding-top: 4px;
     padding-bottom: 4px;
   }
   
   .features-table thead tr th .MuiButton-text {
-    font-weight: 500;
+    font-weight: 600;
     color: #000000;
+    font-family: 'Hind', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
   }
   
   .features-table .MuiTableCell-root {
     border-bottom: 4px solid #ffffff!important;
+  }
+
+  .feature-table {
+    font-family: 'Hind', sans-serif;
+    font-weight: 600;
+    font-size: 20px;
   }
   
   .features-table tbody tr td {
     padding-left: 24px !important;
     padding-right: 24px !important;
     background: #FAFBFD;
-    font-size: 12px ;
+    font-size: 14px ;
     padding-top: 6px;
     padding-bottom: 6px;
     color: #000000;
+    font-family:'Overpass', sans-serif !important;
+    font-weight: 400;
   }
   
   .features-table .MuiTable-root {
@@ -98,23 +107,28 @@
   }
   
   
-  
-
-
-
+  .addnew {
+    font-family: 'Fira Sans Condensed', sans-serif;
+  }
 
   .tag-table thead tr th {
     padding-left: 24px !important;
     padding-right: 24px !important;
     background: #F0F2F5;
-    font-size: 14px;
     padding-top: 4px;
     padding-bottom: 4px;
   }
   
+  .tags-table {
+    font-family: 'Hind', sans-serif;
+    font-weight: 600;
+  }
+
   .tag-table thead tr th .MuiButton-text {
-    font-weight: 500;
     color: #000000;
+    font-family: 'Hind', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
   }
   
   .features-table .MuiTableCell-root {
@@ -125,10 +139,12 @@
     padding-left: 24px !important;
     padding-right: 24px !important;
     background: #FAFBFD;
-    font-size: 12px ;
+    font-size: 14px ;
     padding-top: 6px;
     padding-bottom: 6px;
     color: #000000;
+    font-family:'Overpass', sans-serif !important;
+    font-weight: 400;
   }
   
   .tag-table .MuiTable-root {
@@ -136,39 +152,40 @@
   }
 
 
-
-
-
-
-
-
-
   .brand-table thead tr th {
     padding-left: 24px !important;
     padding-right: 24px !important;
     background: #F0F2F5;
-    font-size: 14px;
     padding-top: 4px;
-    padding-bottom: 4px;
+    padding-bottom: 4px; 
   }
   
   .brand-table thead tr th .MuiButton-text {
-    font-weight: 500;
     color: #000000;
+    font-family: 'Hind', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
   }
   
   .brand-table .MuiTableCell-root {
     border-bottom: 4px solid #ffffff!important;
+  }
+
+  .brands-table {
+    font-family: 'Hind', sans-serif;
+    font-weight: 600;
   }
   
   .brand-table tbody tr td {
     padding-left: 24px !important;
     padding-right: 24px !important;
     background: #FAFBFD;
-    font-size: 12px ;
+    font-size: 14px ;
     padding-top: 6px;
     padding-bottom: 6px;
     color: #000000;
+    font-family:'Overpass', sans-serif !important;
+    font-weight: 400;
   }
   
   .brand-table .MuiTable-root {

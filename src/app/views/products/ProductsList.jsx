@@ -530,6 +530,7 @@ const Products = () => {
                         <Button
                           variant="contained"
                           color="primary"
+                          className='addnew'
                           // onClick={() => handleModal()}
                         >
                           Add New

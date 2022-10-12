@@ -6,6 +6,7 @@ import { useDialog } from 'muibox'
 import { getShops } from './shop-service'
 import Loading from 'matx/components/MatxLoadable/Loading'
 import { Link } from 'react-router-dom'
+import '../Sellerform.css'
 
 const SellerShop = ({ id }) => {
   const [isAlive, setIsAlive] = useState(true)
@@ -34,7 +35,7 @@ const SellerShop = ({ id }) => {
           let Shop = shop[dataIndex]
 
           return (
-            <div className='flex items-center'>
+            <div className='flex items-center vendor__name'>
               <div className='ml-3'>
                 <h5 className='my-0 text-15'>{`${Shop?.name}`}</h5>
                 <small className='text-muted'>{Shop?.email}</small>
@@ -54,7 +55,7 @@ const SellerShop = ({ id }) => {
         customBodyRenderLite: (dataIndex) => {
           let Shop = shop[dataIndex]
           return (
-            <div className='flex items-center'>
+            <div className='flex items-center vendor__name'>
               <div className='ml-3'>
                 <h5 className='my-0 text-muted'> {Shop.name || '-----'}</h5>
               </div>
@@ -71,7 +72,7 @@ const SellerShop = ({ id }) => {
         customBodyRenderLite: (dataIndex) => {
           let Shop = shop[dataIndex]
           return (
-            <div className='flex items-center'>
+            <div className='flex items-center vendor__address'>
               <div className='ml-3'>
                 <h5 className='my-0 text-muted'>{Shop.state || '-----'}</h5>
               </div>
@@ -82,7 +83,7 @@ const SellerShop = ({ id }) => {
     },
     {
       name: 'id', // field name in the row object
-      label: '', // column title that will be shown in table
+      label: 'Id', // column title that will be shown in table
       options: {
         filter: false,
         customBodyRenderLite: (dataIndex) => {
