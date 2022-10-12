@@ -66,6 +66,7 @@ const AbadonedOrders = () => {
     //     },
     //   },
     // },
+    
     {
       name: 'status',
       label: 'Status',
@@ -86,6 +87,7 @@ const AbadonedOrders = () => {
         },
       },
     },
+
     {
       name: 'deliveryAddress',
       label: 'Billing Address',

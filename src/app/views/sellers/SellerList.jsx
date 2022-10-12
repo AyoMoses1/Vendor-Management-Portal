@@ -12,24 +12,56 @@ import Loading from "matx/components/MatxLoadable/Loading";
 import { debounce } from "lodash";
 import { states } from "../../../utils/states";
 import { capitalize } from "utils";
+const [title, setTitle] = useState("All Vendors");
 states.unshift("All");
+
 
 const SellerList = () => {
   const [isAlive, setIsAlive] = useState(true);
   const [userList, setUserList] = useState([]);
   const [loading, setLoading] = useState(false);
-
   const [severity, setSeverity] = useState("");
   const [alert, setAlert] = useState("");
-
   const dialog = useDialog();
-  const [state, setState] = useState("All");
+  const [statusOption, setStatusOption] = useState("All");
+  const [state, setState] = useState("ALL")
   const [status, setStatus] = useState("ALL");
+ 
+
+  const statusList = [
+    {
+      type: "ALL",
+      value: "ALL",
+      name: "All Users",
+    },
+    {
+      type: "PENDING",
+      value: "PENDING",
+      name: "Pending Users",
+    },
+    {
+      type: "ACTIVE",
+      value: "ACTIVE",
+      name: "Active Users",
+    },
+    {
+      type: "SUSPENDED",
+      value: "SUSPENDED",
+      name: "Suspended Users",
+    },
+    {
+      type: "IN ACTIVE",
+      value: "IN_ACTIVE",
+      name: "INACTIVE Users",
+    },
+  ];
+  
 
   useEffect(() => {
-    getAllSeller(setLoading, setUserList, setAlert, setSeverity);
+    getAllSeller(setLoading, setUserList, setAlert, setSeverity, state, statusOption);
+    console.log(state, statusOption, "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
     return () => setIsAlive(false);
-  }, [isAlive]);
+  }, [isAlive, state, statusOption]);
 
   const columns = [
     {
@@ -172,14 +204,12 @@ const SellerList = () => {
       name: "status",
       label: "Status",
       options: {
-        filter: true,
-        setCellHeaderProps: () => {
-          return { width: "75px" };
-        },
+      filter: true,
         customBodyRenderLite: (dataIndex) => {
           let user = userList[dataIndex];
           return (
-            <div className={`items-center VENDOR ${user?.status}`}>
+            <div className={`flex`}>
+            <div className={`ml-3 VENDOR ${user?.status}`}>
               <Link
                 to={{
                   pathname: "/vendor/details",
@@ -187,12 +217,10 @@ const SellerList = () => {
                     id: user.id,
                   },
                 }}
-                className="ml-3"
               >
-                <span className="my-0 text-15">
-                  {capitalize(user.status || "-----")}
-                </span>
+                  {capitalize(user?.status || "-----")}
               </Link>
+            </div>
             </div>
           );
         },
@@ -230,6 +258,12 @@ const SellerList = () => {
   const notification = () => {
     return <Notification alert={alert} severity={severity && severity} />;
   };
+
+  const handleTitle = (value) => {
+    const v = statusList.find((s) => s.value === value).name;
+    setTitle(v);
+  };
+
   return (
     <div className="m-sm-30">
       <div className="mb-sm-30">
@@ -249,7 +283,7 @@ const SellerList = () => {
             <MUIDataTable
               title={
                 <div>
-                  <h4 className="mt-4 mb-0">All Vendors</h4>    
+                  <h4 className="mt-4 mb-0">{title}</h4>    
                   <div className="w-full flex">
                     <div className="w-220 flex-end sources">
                       <TextField
@@ -262,10 +296,16 @@ const SellerList = () => {
                         fullWidth
                         value={status}
                         onChange={(e) => {
-                          setStatus(e.target.value);
+                          setStatusOption(e.target.value);
+                          handleTitle(e.target.value);
                           
                         }}
                        >
+                        {statusList.map((s, idx) => (
+                          <MenuItem key={idx} value={s.value}>
+                            {s.name}
+                          </MenuItem>
+                        ))}
                       </TextField>
                     </div>
                     <div className="w-220 flex-end sources ml-4">

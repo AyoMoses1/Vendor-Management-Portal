@@ -147,8 +147,9 @@
 
 
 .ACTIVE {
-  border-color: #008a16 !important;
-  font-family: 'Overpass', sans-serif;
+  color: #27AE60;
+  background-color: rgba(39, 174, 96, 0.1);
+  font-family:'Overpass', sans-serif;
   font-weight: 600;
 }
 
@@ -160,9 +161,9 @@
 }
 
 .VERIFIED {
-  color: #27AE60;
-  background-color: rgba(39, 174, 96, 0.1);
-  font-family: 'Overpass', sans-serif;
+  background-color: #5589ed;
+  color: #ffffff;
+  font-family:'Overpass', sans-serif;
   font-weight: 600;
 }
 
@@ -177,7 +178,7 @@
   padding: 5px 8px;
   width: fit-content;
   border-radius: 6px;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 500px;
 }
 
