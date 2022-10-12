@@ -5,9 +5,10 @@ export const getSellerById = (id) => {
     .get(`/afrimash/sellers/${id}`)
 }
 
-export const getAllSeller = (setLoading, setData, setAlert, setSeverity) => {
+export const getAllSeller = (setLoading, setData, setAlert, setSeverity, state, statusOption) => {
 
   setLoading(true)
+  
   http.get('/afrimash/sellers/search/').then(({ data }) => {
     if (data instanceof Object) {
       setData(data.object.content)

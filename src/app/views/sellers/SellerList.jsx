@@ -25,11 +25,47 @@ const SellerList = () => {
   const dialog = useDialog();
   const [state, setState] = useState("All");
   const [status, setStatus] = useState("ALL");
+  const [statusOption, setStatusOption] = useState("ALL")
+  const [title, setTitle] = useState("All Vendors")
+
+  const statusList = [
+    {
+      type: "ALL",
+      value: "ALL",
+      name: "All Agents",
+    },
+    {
+      type: "PENDING",
+      value: "PENDING",
+      name: "Pending Agents",
+    },
+    {
+      type: "ACTIVE",
+      value: "ACTIVE",
+      name: "Active Agents",
+    },
+    {
+      type: "SUSPENDED",
+      value: "SUSPENDED",
+      name: "Suspended Agents",
+    },
+    {
+      type: "IN ACTIVE",
+      value: "IN_ACTIVE",
+      name: "INACTIVE AGENTS",
+    },
+  ];
 
   useEffect(() => {
-    getAllSeller(setLoading, setUserList, setAlert, setSeverity);
+    getAllSeller(setLoading, setUserList, setAlert, setSeverity, state, statusOption);
     return () => setIsAlive(false);
-  }, [isAlive]);
+
+  }, [isAlive, state, statusOption]);
+
+  const handleTitle = (value) => {
+      const v = statusList.find((s) =>  s.value ===value).name
+      setTitle(v)
+  }
 
   const columns = [
     {
@@ -262,10 +298,15 @@ const SellerList = () => {
                         fullWidth
                         value={status}
                         onChange={(e) => {
-                          setStatus(e.target.value);
-                          
+                          setStatusOption(e.target.value);
+                          handleTitle(e.target.value)
                         }}
                        >
+                         {statusList.map((status, idx) => (
+                          <MenuItem key={idx} value={status.value}>
+                            {status.type}
+                          </MenuItem>
+                        ))}
                       </TextField>
                     </div>
                     <div className="w-220 flex-end sources ml-4">
@@ -292,6 +333,7 @@ const SellerList = () => {
                   </div>
                 </div>
             }
+
             data={userList}
               columns={columns}
               options={{
