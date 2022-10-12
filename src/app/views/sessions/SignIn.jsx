@@ -59,8 +59,8 @@ class SignIn extends Component {
           <Container className="contains">   
             <div className="float">
               <div className="flex brand">
-                <img src="/assets/images/Afrimash.svg" alt="company-logo" />
-                <img className="image" src="/assets/images/Vector.png" alt= 'logo'/>
+                <img className="image-logo" src="/assets/images/Afrimash.svg" alt="company-logo" />
+                <img className="image-logo" src="/assets/images/Vector.png" alt= 'logo'/>
               </div>
               {/* {this.props.children} */}
             </div>      
