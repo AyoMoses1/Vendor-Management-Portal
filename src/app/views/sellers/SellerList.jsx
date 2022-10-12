@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Breadcrumb } from "matx";
 import MUIDataTable from "mui-datatables";
-import { Grow, Icon, IconButton, TextField, Button } from "@material-ui/core";
+import { Grow, Icon, IconButton, TextField, Button, MenuItem } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import http from "../../services/api";
 import { useDialog } from "muibox";
@@ -23,6 +23,8 @@ const SellerList = () => {
   const [alert, setAlert] = useState("");
 
   const dialog = useDialog();
+  const [state, setState] = useState("All");
+  const [status, setStatus] = useState("ALL");
 
   useEffect(() => {
     getAllSeller(setLoading, setUserList, setAlert, setSeverity);
@@ -245,8 +247,52 @@ const SellerList = () => {
             <Loading />
           ) : (
             <MUIDataTable
-              title={"All Vendors"}
-              data={userList}
+              title={
+                <div>
+                  <h4 className="mt-4 mb-0">All Vendors</h4>    
+                  <div className="w-full flex">
+                    <div className="w-220 flex-end sources">
+                      <TextField
+                        className="mb-4"
+                        name="mobileNo"
+                        label="Filter by status"
+                        variant="outlined"
+                        margin="normal"
+                        select
+                        fullWidth
+                        value={status}
+                        onChange={(e) => {
+                          setStatus(e.target.value);
+                          
+                        }}
+                       >
+                      </TextField>
+                    </div>
+                    <div className="w-220 flex-end sources ml-4">
+                      <TextField
+                        className="mb-4"
+                        name="statusFilter"
+                        label="Filter by location"
+                        variant="outlined"
+                        margin="normal"
+                        select
+                        fullWidth
+                        value={state}
+                        onChange={(e) => {
+                          setState(e.target.value);
+                        }}
+                       >
+                        {states.map((s, idx) => (
+                          <MenuItem key={idx} value={s}>
+                            {s}
+                          </MenuItem>
+                        ))}
+                      </TextField>
+                    </div>
+                  </div>
+                </div>
+            }
+            data={userList}
               columns={columns}
               options={{
                 onRowsDelete: (data) =>
@@ -266,6 +312,7 @@ const SellerList = () => {
                   hideSearch,
                   options
                 ) => {
+                
                   return (
                     <Grow appear in={true} timeout={300}>
                       <TextField
