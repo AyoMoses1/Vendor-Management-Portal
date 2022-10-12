@@ -23,45 +23,49 @@ const SellerList = () => {
   const [severity, setSeverity] = useState("");
   const [alert, setAlert] = useState("");
   const dialog = useDialog();
-  const [statusOption, setStatusOption] = useState("All");
   const [state, setState] = useState("ALL")
   const [status, setStatus] = useState("ALL");
- 
+  const [statusOption, setStatusOption] = useState("ALL")
+  const [title, setTitle] = useState("All Vendors")
 
   const statusList = [
     {
       type: "ALL",
       value: "ALL",
-      name: "All Users",
+      name: "All Agents",
     },
     {
       type: "PENDING",
       value: "PENDING",
-      name: "Pending Users",
+      name: "Pending Agents",
     },
     {
       type: "ACTIVE",
       value: "ACTIVE",
-      name: "Active Users",
+      name: "Active Agents",
     },
     {
       type: "SUSPENDED",
       value: "SUSPENDED",
-      name: "Suspended Users",
+      name: "Suspended Agents",
     },
     {
       type: "IN ACTIVE",
       value: "IN_ACTIVE",
-      name: "INACTIVE Users",
+      name: "INACTIVE AGENTS",
     },
   ];
-  
 
   useEffect(() => {
     getAllSeller(setLoading, setUserList, setAlert, setSeverity, state, statusOption);
-    console.log(state, statusOption, "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
     return () => setIsAlive(false);
+
   }, [isAlive, state, statusOption]);
+
+  const handleTitle = (value) => {
+      const v = statusList.find((s) =>  s.value ===value).name
+      setTitle(v)
+  }
 
   const columns = [
     {
@@ -259,11 +263,7 @@ const SellerList = () => {
     return <Notification alert={alert} severity={severity && severity} />;
   };
 
-  const handleTitle = (value) => {
-    const v = statusList.find((s) => s.value === value).name;
-    setTitle(v);
-  };
-
+  
   return (
     <div className="m-sm-30">
       <div className="mb-sm-30">
@@ -297,13 +297,12 @@ const SellerList = () => {
                         value={status}
                         onChange={(e) => {
                           setStatusOption(e.target.value);
-                          handleTitle(e.target.value);
-                          
+                          handleTitle(e.target.value)
                         }}
                        >
-                        {statusList.map((s, idx) => (
-                          <MenuItem key={idx} value={s.value}>
-                            {s.name}
+                         {statusList.map((status, idx) => (
+                          <MenuItem key={idx} value={status.value}>
+                            {status.type}
                           </MenuItem>
                         ))}
                       </TextField>
@@ -332,6 +331,7 @@ const SellerList = () => {
                   </div>
                 </div>
             }
+
             data={userList}
               columns={columns}
               options={{
