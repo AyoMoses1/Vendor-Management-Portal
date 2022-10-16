@@ -16,10 +16,9 @@ const SellerViewer = MatxLoadable({
   loader: () => import("./SellerViewer"),
 });
 
-// const SellerColumn = MatxLoadable({
-//   loader: () => import("./SellerColumn"),
-// });
-
+const SellerStore = MatxLoadable({
+  loader: () =>  import("./shops/SellerStore")
+})
 const sellerRoutes = [
   {
     path: "/vendors",
@@ -37,10 +36,10 @@ const sellerRoutes = [
     path: "/vendor/details",
     component: SellerViewer,
   },
-  // {
-  //   path: "/vendor/details",
-  //   component: SellerColumn,
-  // }
+  {
+    path: "/vendor/store",
+    component: SellerStore,
+  }
 ];
 
 export default sellerRoutes;

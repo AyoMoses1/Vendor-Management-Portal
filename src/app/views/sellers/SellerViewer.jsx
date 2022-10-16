@@ -45,6 +45,6 @@ const SellerViewer = ({location}) => {
     )
 }
 
-const tabList = ['Details', 'Shops']
+const tabList = ['Details', 'Store']
 
 export default SellerViewer
