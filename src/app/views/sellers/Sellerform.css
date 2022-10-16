@@ -210,3 +210,19 @@ h5 {
   margin: 0px!important;
 
 }
+
+.border-line {
+  position: absolute;
+  width: 104.09px;
+  height: 0px;
+  left: 447px;
+  top: 167.09px;
+  border: 1px solid rgba(210, 213, 219, 0.5);
+  transform: rotate(-90deg);
+}
+
+.details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

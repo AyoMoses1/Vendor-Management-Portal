@@ -12,8 +12,7 @@ import Loading from "matx/components/MatxLoadable/Loading";
 import { debounce } from "lodash";
 import { states } from "../../../utils/states";
 import { capitalize } from "utils";
-const [title, setTitle] = useState("All Vendors");
-states.unshift("All");
+// states.unshift("All");
 
 
 const SellerList = () => {
@@ -21,6 +20,8 @@ const SellerList = () => {
   const [userList, setUserList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [severity, setSeverity] = useState("");
+  // const [title, setTitle] = useState("All Vendors");
+
   const [alert, setAlert] = useState("");
   const dialog = useDialog();
   const [state, setState] = useState("ALL")
@@ -32,27 +33,27 @@ const SellerList = () => {
     {
       type: "ALL",
       value: "ALL",
-      name: "All Agents",
+      name: "All Vendors",
     },
     {
       type: "PENDING",
       value: "PENDING",
-      name: "Pending Agents",
+      name: "Pending Vendors",
     },
     {
       type: "ACTIVE",
       value: "ACTIVE",
-      name: "Active Agents",
+      name: "Active Vendors",
     },
     {
       type: "SUSPENDED",
       value: "SUSPENDED",
-      name: "Suspended Agents",
+      name: "Suspended Vendors",
     },
     {
       type: "IN ACTIVE",
       value: "IN_ACTIVE",
-      name: "INACTIVE AGENTS",
+      name: "INACTIVE Vendors",
     },
   ];
 
