@@ -16,6 +16,7 @@ import Notification from "../../components/Notification";
 import { getAllSeller } from "./SellerService";
 import Loading from "matx/components/MatxLoadable/Loading";
 import { capitalize } from "utils";
+import Seller from "./Seller"
 // states.unshift("All");
 
 
@@ -241,10 +242,7 @@ const SellerList = () => {
     return <Notification alert={alert} severity={severity && severity} />;
   };
 
-  return (
-  
-
-    
+  return (   
     <div className="m-sm-30">
       <div className="details">
         <div>
@@ -265,6 +263,8 @@ const SellerList = () => {
           <p>Active</p>
         </div>
      </div>
+
+     <Seller />
       <div className="mb-sm-30">
         <Breadcrumb
           routeSegments={[
