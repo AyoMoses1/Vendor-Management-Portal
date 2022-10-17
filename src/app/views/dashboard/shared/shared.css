@@ -13,6 +13,9 @@
     display: flex;
     flex-wrap: nowrap;
     overflow-x: auto;
+    height: 160px;
+    width: 100%;
+    -webkit-overflow-scrolling: touch;
 }
 
 .scrolling-wrapper-flexbox .scrollable-item {
@@ -23,12 +26,6 @@
 .scrollable-item {
     border: 1px solid white;
     width: 180px;
-}
-
-.scrolling-wrapper-flexbox {
-    height: 160px;
-    width: 100%;
-    -webkit-overflow-scrolling: touch;
 }
 
 scrolling-wrapper-flexbox::-webkit-scrollbar {

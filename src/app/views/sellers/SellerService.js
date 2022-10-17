@@ -9,7 +9,7 @@ export const getAllSeller = (setLoading, setData, setAlert, setSeverity, state, 
 
   setLoading(true)
   
-  http.get('/afrimash/sellers/search/').then(({ data }) => {
+  http.get(statusOption === "ALL" ?  (state==="ALL" ? `/afrimash/sellers/search/`: `/afrimash/sellers/search?state=${state}`) : `/afrimash/sellers/search?status=${statusOption}&state=${state}`).then(({ data }) => {
     if (data instanceof Object) {
       setData(data.object.content)
       setLoading(false)

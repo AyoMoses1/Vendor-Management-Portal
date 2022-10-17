@@ -226,3 +226,40 @@ h5 {
   justify-content: space-between;
   align-items: center;
 }
+
+
+.flexbox {
+  display: flex;
+  flex-wrap: nowrap;
+  height: 110px;
+  width: 100%;
+}
+
+.flexbox .scrollable-item {
+  margin: 0px 3rem 2rem 1.5rem;
+}
+
+
+.card {
+  box-shadow: 0px 0px 13.0576px 1.30576px rgba(0, 0, 0, 0.05);
+  border-radius: 5.22302px;
+  height: 100px;
+  align-items: center;
+}
+
+.seller-top {
+  padding-top: 6px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.seller-top-content p {
+  font-size: 14px;
+  margin: 0
+}
+
+.seller-logo{
+  font-size: 50px !important;
+  color: #fff;
+  padding: 10px;
+}

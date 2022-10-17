@@ -244,36 +244,39 @@ const SellerList = () => {
 
   return (   
     <div className="m-sm-30">
-      <div className="details">
-        <div>
-          <h5>Ben Poultry farms</h5>
-          <p> Store Id: 123456789</p>
-          <Link className="store-link" to="" >Visit Store </Link>
+      <div class="MuiPaper-root MuiCard-root p-20 mb-24 MuiPaper-elevation1 MuiPaper-rounded">
+        <div className="details">
+          <div>
+            <h5>Ben Poultry farms</h5>
+            <p> Store Id: 123456789</p>
+            <Link className="store-link" to="" >Visit Store </Link>
+          </div>
+          {/* <div className="border-line"></div> */}
+          <div>
+            <h5>Contact</h5>
+            <p>Ben Ameh</p>
+            <p>Bennyfarms@gmail.com</p>
+            <p> 5, benny highway, ibadan, Oyo state </p>
+          </div>
+          {/* <div className="border-line"></div> */}
+          <div>
+            <h5> Status </h5>
+            <p>Active</p>
+          </div>
         </div>
-        {/* <div className="border-line"></div> */}
-        <div>
-          <h5>Contact</h5>
-          <p>Ben Ameh</p>
-          <p>Bennyfarms@gmail.com</p>
-          <p> 5, benny highway, ibadan, Oyo state </p>
-        </div>
-        {/* <div className="border-line"></div> */}
-        <div>
-          <h5> Status </h5>
-          <p>Active</p>
-        </div>
-     </div>
+      </div>
 
      <Seller />
-      <div className="mb-sm-30">
+
+      {/* <div className="mb-sm-30">
         <Breadcrumb
           routeSegments={[
             { name: "Vendors", path: "/vendors" },
             { name: "Vendors" },
           ]}
         />
-      </div>
-      {severity === "error" && notification()}
+      </div> */}
+      {/* {severity === "error" && notification()} */}
       <div className="overflow-auto">
         <div className="min-w-750 vendor-table">
           {loading ? (

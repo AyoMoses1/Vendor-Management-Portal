@@ -295,7 +295,7 @@ const SellerList = () => {
                         margin="normal"
                         select
                         fullWidth
-                        value={status}
+                        value={statusOption}
                         onChange={(e) => {
                           setStatusOption(e.target.value);
                           handleTitle(e.target.value)
