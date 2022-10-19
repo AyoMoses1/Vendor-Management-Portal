@@ -5,9 +5,14 @@ import Box from 'app/components/Box';
 import SellerChart from './SellerChart';
 import SellerGraph from './SellerGraph';
 import StoreProducts from './StoreProducts';
+import { useLocation } from 'react-router-dom/cjs/react-router-dom';
 
 
 function SellerStore() {
+    const location = useLocation()
+    const State = location.state
+    const { id } = State;
+    
   return (
     <>
         <div className='container'>
@@ -42,7 +47,7 @@ function SellerStore() {
                 </Grid>
             </div>  
         </div>
-        <StoreProducts vendorId={2}/>
+        <StoreProducts vendorId={id}/>
      </>
   )
 }

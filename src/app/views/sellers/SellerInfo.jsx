@@ -235,7 +235,6 @@ const SellerList = ({ id }) => {
     return <Notification alert={alert} severity={severity && severity} />;
   };
 
-  console.log(orders, "*********************************");
 
   return (
     <div className="m-sm-30">
@@ -295,9 +294,32 @@ const SellerList = ({ id }) => {
           <div>
             <h5>Ben Poultry farms</h5>
             <p> Store Id: 123456789</p>
-            <Link className="store-link" to="">
-              Visit Store{" "}
-            </Link>
+            {/* 
+              <Link
+                  to={{
+                    pathname: "/product/details",
+                    state: {
+                      id: product?.id,
+                    },
+                  }}
+                  className="ml-3 mr-4"
+                >
+                  {product?.name.slice(0, 10) + "..."}
+                </Link>
+            
+            */}
+
+                <Link
+                  to={{
+                    pathname: "/vendor/store",
+                    state: {
+                      id,
+                    },
+                  }}
+                  className="ml-3 mr-4"
+                >
+                  Visit Store
+                </Link>
           </div>
           {/* <div className="border-line"></div> */}
           <div>
