@@ -38,7 +38,7 @@ const sellers = [
 const Seller = ({ theme }) => {
 
   return (
-    // <Card className=" p-20 mb-24">
+    <Card className=" p-20 mb-24">
       <Grid container >
         <div className="flexbox">
           {sellers.map((seller) => (
@@ -52,7 +52,7 @@ const Seller = ({ theme }) => {
         <Grid item xs={12} md={12}>
         </Grid>
       </Grid>
-    // </Card>
+    </Card>
   );
 }
 

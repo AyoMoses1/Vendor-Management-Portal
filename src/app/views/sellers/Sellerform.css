@@ -233,10 +233,12 @@ h5 {
   flex-wrap: nowrap;
   height: 110px;
   width: 100%;
+  align-items: center;
 }
 
 .flexbox .scrollable-item {
-  margin: 0px 3rem 2rem 1.5rem;
+  margin-right:  2rem ;
+  margin-left: 1rem;
 }
 
 
@@ -245,6 +247,7 @@ h5 {
   border-radius: 5.22302px;
   height: 100px;
   align-items: center;
+  width: 300px;
 }
 
 .seller-top {

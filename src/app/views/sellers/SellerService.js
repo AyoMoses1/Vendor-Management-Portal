@@ -5,6 +5,11 @@ export const getSellerById = (id) => {
     .get(`/afrimash/sellers/${id}`)
 }
 
+export const getSellerOrders = ( id) => {
+  return http.get(`https://api.afrimash.com/afrimash/orders/order-items/${id}`)    
+  
+}
+
 export const getAllSeller = (setLoading, setData, setAlert, setSeverity, state, statusOption) => {
 
   setLoading(true)

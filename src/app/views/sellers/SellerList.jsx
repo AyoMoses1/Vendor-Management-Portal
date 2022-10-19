@@ -20,7 +20,6 @@ const SellerList = () => {
   const [userList, setUserList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [severity, setSeverity] = useState("");
-  // const [title, setTitle] = useState("All Vendors");
 
   const [alert, setAlert] = useState("");
   const dialog = useDialog();

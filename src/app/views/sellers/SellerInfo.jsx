@@ -13,30 +13,44 @@ import { Link } from "react-router-dom";
 import { useDialog } from "muibox";
 import "./Sellerform.css";
 import Notification from "../../components/Notification";
-import { getAllSeller } from "./SellerService";
 import Loading from "matx/components/MatxLoadable/Loading";
 import { capitalize } from "utils";
-import Seller from "./Seller"
+import {
+  Divider,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+} from "@material-ui/core";
+import { SimpleCard } from "matx";
+import { getSellerById, getSellerOrders } from "./SellerService";
+import Seller from "./Seller";
 // states.unshift("All");
 
-
-
-
-
-
-const SellerList = () => {
+const SellerList = ({ id }) => {
   const [isAlive, setIsAlive] = useState(true);
-  const [userList, setUserList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [severity, setSeverity] = useState("");
   // const [title, setTitle] = useState("All Vendors");
 
   const [alert, setAlert] = useState("");
   const dialog = useDialog();
-  const [state, setState] = useState("ALL");
-  const [status, setStatus] = useState("ALL");
-  const [statusOption, setStatusOption] = useState("ALL");
   const [title, setTitle] = useState("All Vendors");
+  const [state, setState] = useState([]);
+  const [orders, setOrders] = useState([]);
+  const [statusOption, setStatusOption] = useState("ALL");
+  console.log(id);
+  useEffect(() => {
+    getSellerById(id).then(({ data }) => {
+      setState(data?.object);
+    });
+  }, [id]);
+
+  useEffect(() => {
+    getSellerOrders(id).then(({ data }) => {
+      setOrders(data.object.content);
+    });
+  }, [id]);
 
   const statusList = [
     {
@@ -66,20 +80,6 @@ const SellerList = () => {
     },
   ];
 
-  useEffect(() => {
-    getAllSeller(
-      setLoading,
-      setUserList,
-      setAlert,
-      setSeverity,
-      state,
-      statusOption
-    );
-    return () => setIsAlive(false);
-  }, [isAlive, state, statusOption]);
-
-  
-
   const columns = [
     {
       name: "id", // field name in the row object
@@ -87,7 +87,7 @@ const SellerList = () => {
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
-          let user = userList[dataIndex];
+          let user = orders[dataIndex];
 
           return (
             <div className="flex items-center vendor__id">
@@ -108,13 +108,13 @@ const SellerList = () => {
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
-          let user = userList[dataIndex];
+          let user = orders[dataIndex];
 
           return (
             <div className="flex items-center vendor__date">
               <div className="ml-3">
                 <span className="my-0 text-15">{`${
-                  user?.dateregistered || "-------"
+                  user?.orderId.createDate || "-------"
                 }`}</span>
               </div>
             </div>
@@ -124,18 +124,18 @@ const SellerList = () => {
     },
 
     {
-      name: "name", // field name in the row object
-      label: "Name", // column title that will be shown in table
+      name: "quantity", // field name in the row object
+      label: "Quantity", // column title that will be shown in table
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
-          let user = userList[dataIndex];
+          let user = orders[dataIndex];
 
           return (
             <div className="flex items-center vendor__name">
               <div className="ml-3">
                 <span className="my-0 text-15">{`${
-                  user?.name || "-------"
+                  user?.itemQuantity || "-------"
                 }`}</span>
               </div>
             </div>
@@ -143,7 +143,6 @@ const SellerList = () => {
         },
       },
     },
-
 
     {
       name: "status",
@@ -151,7 +150,7 @@ const SellerList = () => {
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
-          let user = userList[dataIndex];
+          let user = orders[dataIndex];
           return (
             <div className={`flex`}>
               <div className={`ml-3 VENDOR ${user?.status}`}>
@@ -172,20 +171,20 @@ const SellerList = () => {
       },
     },
 
-   
     {
       name: "amount",
       label: "Amount",
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
-          let user = userList[dataIndex];
+          let user = orders[dataIndex];
           return (
             <div className="flex items-center vendor__amount">
-              <div
-                className="ml-3"
-              >
-                <span className="my-0 text-15"> {user.amount || "-----"}</span>
+              <div className="ml-3">
+                <span className="my-0 text-15">
+                  {" "}
+                  {user.itemPrice || "-----"}
+                </span>
               </div>
             </div>
           );
@@ -199,15 +198,13 @@ const SellerList = () => {
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
-          let user = userList[dataIndex];
+          let user = orders[dataIndex];
           return (
             <div className="flex items-center vendor__product">
-              <div
-                className="ml-3"
-              >
+              <div className="ml-3">
                 <span className="my-0 text-15">
                   {" "}
-                  {user.product || "-----"}
+                  {user.productId.name || "-----"}
                 </span>
               </div>
             </div>
@@ -222,12 +219,10 @@ const SellerList = () => {
       options: {
         filter: true,
         customBodyRenderLite: (dataIndex) => {
-          let user = userList[dataIndex];
+          let user = orders[dataIndex];
           return (
             <div className="flex items-center vendor__store">
-              <div
-                className="ml-3"
-              >
+              <div className="ml-3">
                 <span className="my-0 text-15"> {user.selller || "-----"}</span>
               </div>
             </div>
@@ -235,21 +230,74 @@ const SellerList = () => {
         },
       },
     },
-
-    
   ];
   const notification = () => {
     return <Notification alert={alert} severity={severity && severity} />;
   };
 
-  return (   
+  console.log(orders, "*********************************");
+
+  return (
     <div className="m-sm-30">
-      <div class="MuiPaper-root MuiCard-root p-20 mb-24 MuiPaper-elevation1 MuiPaper-rounded">
+      {/* <SimpleCard className='pt-6'>
+      <div className='flex-column items-center mb-6'>
+        <h5 className='mt-4 mb-2'>{state?.name}</h5>
+      </div>
+
+      <Divider />
+      <Table className='mb-4'>
+        <TableBody>
+          <TableRow>
+            <TableCell className='pl-4'>Email</TableCell>
+            <TableCell  className='result'>
+              <div>{state?.email}</div>
+            </TableCell>
+          </TableRow>
+
+          <TableRow>
+            <TableCell className='pl-4'>Phone Number</TableCell>
+            <TableCell>
+              <div className='result'>{state?.mobileNo}</div>
+            </TableCell>
+          </TableRow>
+
+          <TableRow>
+            <TableCell className='pl-4'>City</TableCell>
+            <TableCell>
+              <div className='result'>{state?.city}</div>
+            </TableCell>
+          </TableRow>
+
+          <TableRow>
+            <TableCell className='pl-4'>State</TableCell>
+            <TableCell>
+              <div className='result'>{state?.state}</div>
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className='pl-4'>Address</TableCell>
+            <TableCell>
+              <div className='result'>{state?.address || '-----'}</div>
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className='pl-4'>Country</TableCell>
+            <TableCell>
+              <div className='result'>{state?.country}</div>
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </SimpleCard> */}
+
+      <div className="MuiPaper-root MuiCard-root p-20 mb-24 MuiPaper-elevation1 MuiPaper-rounded">
         <div className="details">
           <div>
             <h5>Ben Poultry farms</h5>
             <p> Store Id: 123456789</p>
-            <Link className="store-link" to="" >Visit Store </Link>
+            <Link className="store-link" to="">
+              Visit Store{" "}
+            </Link>
           </div>
           {/* <div className="border-line"></div> */}
           <div>
@@ -266,7 +314,7 @@ const SellerList = () => {
         </div>
       </div>
 
-     <Seller />
+      <Seller />
 
       {/* <div className="mb-sm-30">
         <Breadcrumb
@@ -284,7 +332,7 @@ const SellerList = () => {
           ) : (
             <MUIDataTable
               title="Recent Orders"
-              data={userList}
+              data={orders}
               columns={columns}
               options={{
                 onRowsDelete: (data) =>
@@ -297,11 +345,11 @@ const SellerList = () => {
                 filterType: "textField",
                 responsive: "standard",
                 elevation: 0,
-                search:false,
-                download:false,
-                print:false,
-                filter:false,
-                viewColumns:false,
+                search: false,
+                download: false,
+                print: false,
+                filter: false,
+                viewColumns: false,
                 rowsPerPageOptions: [10, 20, 40, 80, 100],
                 customSearchRender: (
                   searchText,
@@ -322,7 +370,7 @@ const SellerList = () => {
                           style: {
                             paddingRight: 0,
                           },
-                          
+
                           endAdornment: (
                             <IconButton onClick={hideSearch}>
                               <Icon fontSize="small">clear</Icon>
