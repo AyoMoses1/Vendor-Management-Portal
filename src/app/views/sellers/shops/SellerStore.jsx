@@ -42,7 +42,7 @@ function SellerStore() {
                 </Grid>
             </div>  
         </div>
-        <StoreProducts/>
+        <StoreProducts vendorId={2}/>
      </>
   )
 }

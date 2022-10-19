@@ -12,8 +12,9 @@ import CircleIcon from '@mui/icons-material/Circle';
 import '../../products/products-view.css'
 import { debounce } from "lodash";
 import { capitalize } from 'utils';
+import { getStoreProducts } from './shop-service';
 
-const StoreProducts = () => {
+const StoreProducts = ({vendorId}) => {
   const [isAlive, setIsAlive] = useState(true);
   const [loading, setLoading] = useState(false);
   const [products, setProducts] = useState([]);
@@ -49,7 +50,7 @@ const StoreProducts = () => {
 
   useEffect(() => {
     const fetchAllProducts = async () => {
-      const response = await getAllResults(page, size, query)
+      const response = await getStoreProducts(page, size, vendorId)
       setProducts(response?.content)
       setCount(response?.totalElements)
     }

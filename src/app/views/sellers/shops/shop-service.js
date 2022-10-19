@@ -31,3 +31,10 @@ export const getShops = (id, isLoading, setShops) => {
     }
   })
 }
+export const getStoreProducts = (page, size, id) => {
+  return http.get(`afrimash/products?search?page=${page}&size=${size}&vendorId=${id}`).then(({ data }) => {
+    if (data instanceof Object) {
+      return data.object
+    }
+  })
+}
