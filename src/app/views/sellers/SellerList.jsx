@@ -12,18 +12,18 @@ import Loading from "matx/components/MatxLoadable/Loading";
 import { debounce } from "lodash";
 import { states } from "../../../utils/states";
 import { capitalize } from "utils";
-states.unshift("All");
+// states.unshift("All");
+
 
 const SellerList = () => {
   const [isAlive, setIsAlive] = useState(true);
   const [userList, setUserList] = useState([]);
   const [loading, setLoading] = useState(false);
-
   const [severity, setSeverity] = useState("");
-  const [alert, setAlert] = useState("");
 
+  const [alert, setAlert] = useState("");
   const dialog = useDialog();
-  const [state, setState] = useState("All");
+  const [state, setState] = useState("ALL")
   const [status, setStatus] = useState("ALL");
   const [statusOption, setStatusOption] = useState("ALL")
   const [title, setTitle] = useState("All Vendors")
@@ -32,27 +32,27 @@ const SellerList = () => {
     {
       type: "ALL",
       value: "ALL",
-      name: "All Agents",
+      name: "All Vendors",
     },
     {
       type: "PENDING",
       value: "PENDING",
-      name: "Pending Agents",
+      name: "Pending Vendors",
     },
     {
       type: "ACTIVE",
       value: "ACTIVE",
-      name: "Active Agents",
+      name: "Active Vendors",
     },
     {
       type: "SUSPENDED",
       value: "SUSPENDED",
-      name: "Suspended Agents",
+      name: "Suspended Vendors",
     },
     {
       type: "IN ACTIVE",
       value: "IN_ACTIVE",
-      name: "INACTIVE AGENTS",
+      name: "INACTIVE Vendors",
     },
   ];
 
@@ -208,14 +208,12 @@ const SellerList = () => {
       name: "status",
       label: "Status",
       options: {
-        filter: true,
-        setCellHeaderProps: () => {
-          return { width: "75px" };
-        },
+      filter: true,
         customBodyRenderLite: (dataIndex) => {
           let user = userList[dataIndex];
           return (
-            <div className={`items-center VENDOR ${user?.status}`}>
+            <div className={`flex`}>
+            <div className={`ml-3 VENDOR ${user?.status}`}>
               <Link
                 to={{
                   pathname: "/vendor/details",
@@ -223,12 +221,10 @@ const SellerList = () => {
                     id: user.id,
                   },
                 }}
-                className="ml-3"
               >
-                <span className="my-0 text-15">
-                  {capitalize(user.status || "-----")}
-                </span>
+                  {capitalize(user?.status || "-----")}
               </Link>
+            </div>
             </div>
           );
         },
@@ -266,6 +262,8 @@ const SellerList = () => {
   const notification = () => {
     return <Notification alert={alert} severity={severity && severity} />;
   };
+
+  
   return (
     <div className="m-sm-30">
       <div className="mb-sm-30">
@@ -285,7 +283,7 @@ const SellerList = () => {
             <MUIDataTable
               title={
                 <div>
-                  <h4 className="mt-4 mb-0">All Vendors</h4>    
+                  <h4 className="mt-4 mb-0">{title}</h4>    
                   <div className="w-full flex">
                     <div className="w-220 flex-end sources">
                       <TextField
@@ -296,7 +294,7 @@ const SellerList = () => {
                         margin="normal"
                         select
                         fullWidth
-                        value={status}
+                        value={statusOption}
                         onChange={(e) => {
                           setStatusOption(e.target.value);
                           handleTitle(e.target.value)

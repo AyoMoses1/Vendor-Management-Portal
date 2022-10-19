@@ -147,8 +147,9 @@
 
 
 .ACTIVE {
-  border-color: #008a16 !important;
-  font-family: 'Overpass', sans-serif;
+  color: #27AE60;
+  background-color: rgba(39, 174, 96, 0.1);
+  font-family:'Overpass', sans-serif;
   font-weight: 600;
 }
 
@@ -160,9 +161,9 @@
 }
 
 .VERIFIED {
-  color: #27AE60;
-  background-color: rgba(39, 174, 96, 0.1);
-  font-family: 'Overpass', sans-serif;
+  background-color: #5589ed;
+  color: #ffffff;
+  font-family:'Overpass', sans-serif;
   font-weight: 600;
 }
 
@@ -177,7 +178,7 @@
   padding: 5px 8px;
   width: fit-content;
   border-radius: 6px;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 500px;
 }
 
@@ -208,4 +209,60 @@ h5 {
 .vendor-form .card-subtitle{
   margin: 0px!important;
 
+}
+
+.border-line {
+  position: absolute;
+  width: 104.09px;
+  height: 0px;
+  left: 447px;
+  top: 167.09px;
+  border: 1px solid rgba(210, 213, 219, 0.5);
+  transform: rotate(-90deg);
+}
+
+.details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+.flexbox {
+  display: flex;
+  flex-wrap: nowrap;
+  height: 110px;
+  width: 100%;
+  align-items: center;
+}
+
+.flexbox .scrollable-item {
+  margin-right:  2rem ;
+  margin-left: 1rem;
+}
+
+
+.card {
+  box-shadow: 0px 0px 13.0576px 1.30576px rgba(0, 0, 0, 0.05);
+  border-radius: 5.22302px;
+  height: 100px;
+  align-items: center;
+  width: 300px;
+}
+
+.seller-top {
+  padding-top: 6px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.seller-top-content p {
+  font-size: 14px;
+  margin: 0
+}
+
+.seller-logo{
+  font-size: 50px !important;
+  color: #fff;
+  padding: 10px;
 }

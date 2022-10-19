@@ -18,11 +18,17 @@
   text-transform: uppercase;
 }
 
-// .SUSPENDED {
-//   background-color: #008a16;
-//   color: #fff;
-// }
+.SUSPENDED {
+  background-color: #ed1515;
+  color: #fff;
+  font-family: 'Overpass', sans-serif;
+  font-weight: 600;
+
+}
 
 .ACTIVE {
-  border-color: #008a16 !important;
+  color: #27AE60;
+  background-color: rgba(39, 174, 96, 0.1);
+  font-family:'Overpass', sans-serif;
+  font-weight: 600;
 }
