@@ -11,7 +11,8 @@ import { useLocation } from 'react-router-dom/cjs/react-router-dom';
 function SellerStore() {
     const location = useLocation()
     const State = location.state
-    const { id } = State;
+    // const { id } = State;
+    const id = 2
     
   return (
     <>

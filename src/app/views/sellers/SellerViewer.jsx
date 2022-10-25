@@ -5,7 +5,8 @@ import SellerInfo from './SellerInfo'
 import SellerShop from "../sellers/shops/SellerShop"
 
 const SellerViewer = ({location}) => {
-    const {id} = location.state
+    // const {id} = location.state
+    const id = 2
     const [tabIndex, setTabIndex] = useState(0)
 
     const handleTabChange = (e, value) => {

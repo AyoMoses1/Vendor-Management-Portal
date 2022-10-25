@@ -27,7 +27,8 @@ import { getSellerById, getSellerOrders } from "./SellerService";
 import Seller from "./Seller";
 // states.unshift("All");
 
-const SellerList = ({ id }) => {
+const SellerList = () => {
+  const id = 2;
   const [isAlive, setIsAlive] = useState(true);
   const [loading, setLoading] = useState(false);
   const [severity, setSeverity] = useState("");
