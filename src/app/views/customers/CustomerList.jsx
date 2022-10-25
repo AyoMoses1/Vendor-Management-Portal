@@ -307,6 +307,7 @@ const CustomerList = () => {
       label: 'AOV',
       options: {
         filter: true,
+        download:true,
         customBodyRenderLite: (dataIndex) => {
           let user = userList[dataIndex]
           return (

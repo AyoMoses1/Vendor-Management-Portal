@@ -72,14 +72,13 @@ const USSDProductCategoriesComponent = () => {
 
   const handleTitle = (value) => {
     console.log(value, "source")
-    
     setSource(value)
   }
 
 
   useEffect(() => {
-    dispatcher(getProductCategories({}));
-  }, []);
+    dispatcher(getProductCategories({source:source}));
+  }, [source]);
 
   const columns = [
     {
