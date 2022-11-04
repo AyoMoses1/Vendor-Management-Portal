@@ -115,7 +115,7 @@ const SellerList = () => {
             <div className="flex items-center vendor__date">
               <div className="ml-3">
                 <span className="my-0 text-15">{`${
-                  user?.orderId.createDate || "-------"
+                  user?.orderId?.createDate || "-------"
                 }`}</span>
               </div>
             </div>

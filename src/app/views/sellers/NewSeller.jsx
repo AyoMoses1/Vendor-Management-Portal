@@ -8,10 +8,10 @@ function NewSeller() {
       <div className="mb-sm-30">
         <Breadcrumb
           routeSegments={[
-            { name: "Seller", path: "/vendor" },
-            { name: "New Seller" },
+              { name: 'Vendors', path: '/vendors' },
+              { name: 'View Vendor' },
           ]}
-        />
+      />
       </div>
       <SimpleCard title="">
         <SellerForm isNewSeller={true} />

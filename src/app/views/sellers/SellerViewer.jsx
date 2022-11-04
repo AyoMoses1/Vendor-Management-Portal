@@ -16,10 +16,10 @@ const SellerViewer = ({location}) => {
     return (
         <div className="m-sm-30">
             <div className="mb-sm-30">
-                <Breadcrumb
+            <Breadcrumb
                     routeSegments={[
-                        { name: 'Sellers', path: '/vendors' },
-                        { name: 'View Seller' },
+                        { name: 'Vendors', path: '/vendors' },
+                        { name: 'View Vendor' },
                     ]}
                 />
             </div>
